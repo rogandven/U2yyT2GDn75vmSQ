@@ -1,0 +1,70 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{Dedicatoria}{5}{chapter*.5}%
+\contentsline {section}{Agradecimientos}{6}{chapter*.6}%
+\contentsline {section}{Resumen}{7}{chapter*.7}%
+\contentsline {section}{Introducción}{8}{chapter*.8}%
+\contentsline {chapter}{\numberline {1}Estudio del Problema}{9}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Definiciones, Siglas y Abreviaciones}{9}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Contexto del Problema}{9}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Diagrama de Situación Actual}{9}{subsection.1.2.1}%
+\contentsline {section}{\numberline {1.3}Oportunidades de Mejora o Problemáticas}{10}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Propuesta de Solución}{10}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Soluciones Similares Disponibles}{10}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Aplicación Similar}{10}{subsection.1.5.1}%
+\contentsline {section}{\numberline {1.6}Justificación del Proyecto}{10}{section.1.6}%
+\contentsline {chapter}{\numberline {2}Proyecto}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Objetivo General del Proyecto}{11}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Objetivos Específicos del Proyecto}{11}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Metodología de Desarrollo}{11}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Técnicas y Notaciones}{12}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Estándares de Documentación}{12}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Software, Frameworks y Lenguajes Utilizados}{12}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Factibilidad}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Factibilidad Técnica}{14}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Conocimientos de los Usuarios}{14}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Disponibilidad Profesional}{14}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Despliegue y Servidor}{15}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Factibilidad Operativa}{15}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Factibilidad Económica}{15}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Tablas de Costos}{15}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Flujo de Caja}{16}{subsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.2.1}Contexto e Indicadores Económicos}{16}{subsubsection.3.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.3.2.2}Puesta en Marcha}{16}{subsubsection.3.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.3.2.3}Cálculo del Valor Actual Neto}{17}{subsubsection.3.3.2.3}%
+\contentsline {section}{\numberline {3.4}Conclusión de Factibilidad}{18}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Requerimientos del Software}{19}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Límites}{19}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Caracterización de los Usuarios}{19}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Objetivo General del Software}{19}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Objetivos Específicos del Software}{19}{subsection.4.3.1}%
+\contentsline {section}{\numberline {4.4}Requerimientos Funcionales del Software}{19}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Requerimientos No Funcionales del Software}{20}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Interfaces Internas de Salida}{21}{section.4.6}%
+\contentsline {section}{\numberline {4.7}Interfaces Externas de Salida}{21}{section.4.7}%
+\contentsline {chapter}{\numberline {5}Análisis Funcional}{22}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Actores}{22}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Casos de Uso}{22}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Diagramas de Casos de Uso}{22}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Especificación de los Casos de Uso}{22}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Detalle de los Casos de Uso}{23}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Modelo de Datos}{23}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Esquema de la Base de Datos}{24}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Diseño de Interfaz}{24}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Paleta de Colores y Tipografía}{24}{subsection.5.5.1}%
+\contentsline {section}{\numberline {5.6}Diseño de Arquitectura}{24}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Estructura del Código}{24}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}Estándres de Codificación}{24}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}Backend}{24}{subsection.5.7.2}%
+\contentsline {subsection}{\numberline {5.7.3}Frontend}{25}{subsection.5.7.3}%
+\contentsline {chapter}{\numberline {6}Plan de Capacitación, Implantación y Puesta en Marcha}{26}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Estado del Proyecto}{26}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Implantación y Puesta en Marcha}{26}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Plan de Capacitación}{26}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Conclusión del Proyecto}{27}{chapter.7}%
+\contentsline {chapter}{\numberline {8}Anexos}{28}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Anexo Estimación de Casos de Uso}{28}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Anexos de Recopilación de Información}{30}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Anexo Aspectos de Gestión de Proyectos}{30}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Anexo Resumen de Esfuerzo}{30}{subsection.8.3.1}%
+\contentsline {section}{\numberline {8.4}Anexos Retrospectiva del Proyecto}{31}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Anexo Iteraciones en el Desarrollo}{31}{subsection.8.4.1}%
