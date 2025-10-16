@@ -1,8 +1,5 @@
 node_modules
 .env
-<<<<<<< HEAD
-database.sqlite
-=======
 database.sqlite
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -17,4 +14,3 @@ database.sqlite
 *.cb
 *.cb2
 .*.lb
->>>>>>> wiki
