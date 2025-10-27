@@ -1,4 +1,4 @@
-import "@styles/profile.css";
+// import "@styles/profile.css";
 import profilePic from "@assets/profilePic.jpg";
 
 const ProfileCard = ({ user }) => {

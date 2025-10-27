@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
 import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
-import "@styles/Sidebar.css";
+// import "@styles/Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import LoginRegisterForm from "@components/LoginRegisterForm"
 import { registerService } from '@services/auth.service.js'
-import '@styles/loginRegister.css'
-import luckyCat from "@assets/LuckyCat.png"
+// import '@styles/loginRegister.css'
+// import luckyCat from "@assets/LuckyCat.png"
 
 const Register = () => {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Register = () => {
     return (
         <main className="page-root">
       <div className="lucky-cat-container">
-        <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" />
+        {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>
       <div className="login-register-container">
         <LoginRegisterForm mode="register" onSubmit={registerSubmit} />

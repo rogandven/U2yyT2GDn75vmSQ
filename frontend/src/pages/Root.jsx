@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import "@styles/root.css";
+// import "@styles/root.css";
 import { AuthProvider } from "@context/AuthContext";
 import Sidebar from "../components/Sidebar";
 
