@@ -10,6 +10,7 @@ import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import { getAllowedRoles } from '@services/admin.service.js'
+import '@styles/global.css'
 
 const router = createBrowserRouter([
   {
