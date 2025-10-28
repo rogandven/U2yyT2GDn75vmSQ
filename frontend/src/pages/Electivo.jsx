@@ -1,11 +1,11 @@
 import "@styles/users.css";
-import GetElectivos from "@hooks/users/GetElectivos.jsx";
+import GetElectivo from "@hooks/users/GetElectivo.jsx";
 import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";
 import { useEffect } from "react";
 
 const Electivo = () => {
-  const { electivos, fetchElectivos } = GetElectivos();
+  const { electivos, fetchElectivos } = GetElectivo();
   const { handleDeleteElectivos } = DeleteElectivo(fetchElectivos);
   const { handleEditElectivos } = EditElectivo(fetchElectivos);
 

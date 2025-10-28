@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
 import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
+import { SiBookstack } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
 import "@styles/Sidebar.css";
 
@@ -38,7 +39,7 @@ const Sidebar = () => {
           )}
           <li>
             <NavLink to="/electivo">
-            <FaElectivo className="icon"/> Electivos
+            <SiBookstack className="icon"/> Electivos
             </NavLink>
           </li>
           <li>
