@@ -147,7 +147,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit }) => {
           )}
         </div>
 
-        <button className={""} type="submit">
+        <button className="du-btn" type="submit">
           {mode === "login" ? "Entrar" : "Registrarse"}
         </button>
       </form>
