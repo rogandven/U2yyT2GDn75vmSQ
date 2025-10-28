@@ -28,7 +28,7 @@ const Login = () => {
       <div className="lucky-cat-container">
         {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>
-      <div className="login-register-container">
+      <div className="login-register-container card">
         <LoginRegisterForm mode="login" onSubmit={loginSubmit} loginError={loginError} />
       </div>
     </main>

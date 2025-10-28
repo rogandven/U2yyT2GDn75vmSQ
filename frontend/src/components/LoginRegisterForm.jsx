@@ -26,7 +26,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   };
 
   return (
-    <div className="login-register-form">
+    <div className="login-register-form card-body">
       <h2 className="form-title">
         {mode === "login" ? "Iniciar sesión" : "Registrarse"}
       </h2>

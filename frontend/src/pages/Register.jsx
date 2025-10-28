@@ -24,7 +24,7 @@ const Register = () => {
       <div className="lucky-cat-container">
         {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>
-      <div className="login-register-container">
+      <div className="login-register-container card">
         <LoginRegisterForm mode="register" onSubmit={registerSubmit} />
       </div>
     </main>
