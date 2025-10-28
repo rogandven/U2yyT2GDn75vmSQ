@@ -138,7 +138,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           )}
         </div>
 
-        <button type="submit">
+        <button type="submit" className="btn">
           {mode === "login" ? "Entrar" : "Registrarse"}
         </button>
       </form>
