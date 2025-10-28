@@ -27,7 +27,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
   return (
     <div className="login-register-form card-body">
-      <h2 className="form-title">
+      <h2 className="form-title card-title">
         {mode === "login" ? "Iniciar sesión" : "Registrarse"}
       </h2>
       
@@ -42,6 +42,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           <div className="form-group">
             <label>Nombre de usuario:</label>
             <input
+              className="input"
               type="text"
               min={3}
               {...register("username", {
@@ -73,6 +74,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         <div className="form-group">
           <label>Correo:</label>
           <input
+            className="input"
             type="email"
             {...register("email", {
               required: "El correo es obligatorio",
@@ -100,6 +102,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           <div className="form-group">
             <label>Rut:</label>
             <input
+              className="input"
               type="text"
               {...register("rut", {
                 required: "El rut es obligatorio",
@@ -116,8 +119,13 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         )}
 
         <div className="form-group">
-          <label>Contraseña:</label>
+          {/* <label className="input">
+            <span class="label">https://</span>
+            <input type="text" placeholder="URL" />
+          </label> */}          
+          <span className="label">Contraseña:</span>
           <input
+            className="input"
             type="password"
             {...register("password", {
               required: "La contraseña es obligatoria",
