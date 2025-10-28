@@ -1,7 +1,13 @@
 import { useForm } from "react-hook-form";
+import { titleStyles, labelStyles, buttonStyles, textboxStyles, mainTextStyles, linkStyles, errorStyles} from "../styles/TailwindStyles.jsx";
+
 // import "@styles/LoginRegisterForm.css";
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
+  const exists = (value) => {
+    return !!value;
+  }
+  
   const {
     register,
     handleSubmit,
@@ -27,21 +33,22 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
   return (
     <div className="login-register-form">
-      <h2 className="form-title">
+      <h2 className={"form-title " + titleStyles}>
         {mode === "login" ? "Iniciar sesión" : "Registrarse"}
       </h2>
       
-      {mode === "login" && (Object.values(errors).length > 0 || loginError) && (
+      {/* mode === "login" && (Object.values(errors).length > 0 || loginError) && (
         <div className="form-error-container">
           <p>{errors.email?.message || errors.password?.message || loginError}</p>
         </div>
-      )}
+      ) */}
 
       <form onSubmit={handleSubmit(onFormSubmit)}>
         {mode === "register" && (
-          <div className="form-group">
-            <label>Nombre de usuario:</label>
+          <div className={"form-group"}>
+            <label className={labelStyles}>Nombre de usuario:</label>
             <input
+              className={textboxStyles}
               type="text"
               min={3}
               {...register("username", {
@@ -63,16 +70,17 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 },
               })}
             />
-            {errors.username && (
+            {/* errors.username && (
               <span className="form-error-container">
                 {errors.username.message}
               </span>
-            )}
+            ) */}
           </div>
         )}
-        <div className="form-group">
-          <label>Correo:</label>
+        <div className="form-group ">
+          <label className={labelStyles}>Correo:</label>
           <input
+            className={textboxStyles}
             type="email"
             {...register("email", {
               required: "El correo es obligatorio",
@@ -92,14 +100,15 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             })}
           />
           {errors.email && (
-            <span className="form-error-container">{errors.email.message}</span>
+            <span className={"form-error-container" + errorStyles}>{errors.email.message}</span>
           )}
         </div>
 
         {mode === "register" && (
           <div className="form-group">
-            <label>Rut:</label>
+            <label className={labelStyles}>Rut:</label>
             <input
+              className={textboxStyles}
               type="text"
               {...register("rut", {
                 required: "El rut es obligatorio",
@@ -109,15 +118,16 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 },
               })}
             />
-            {errors.rut && (
+            {exists(errors.rut) && (
               <span className="form-error-container">{errors.rut.message}</span>
             )}
           </div>
         )}
 
         <div className="form-group">
-          <label>Contraseña:</label>
+          <label className={labelStyles}>Contraseña:</label>
           <input
+            className={textboxStyles}
             type="password"
             {...register("password", {
               required: "La contraseña es obligatoria",
@@ -131,26 +141,26 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
               },
             })}
           />
-          {errors.password && (
-            <span className="form-error-container">
+          {exists(errors.password) && (
+            <span className={"form-error-container" + errorStyles}>
               {errors.password.message}
             </span>
           )}
         </div>
 
-        <button type="submit">
+        <button className={buttonStyles} type="submit">
           {mode === "login" ? "Entrar" : "Registrarse"}
         </button>
       </form>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div className={""}>
         {mode === "login" ? (
-          <p>
-            ¿No tienes cuenta? <a href="/register">Regístrate</a>
+          <p className={mainTextStyles}>
+            ¿No tienes cuenta? <a href="/register" className={linkStyles}>Regístrate</a>
           </p>
         ) : (
-          <p>
-            ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
+          <p className={mainTextStyles}>
+            ¿Ya tienes cuenta? <a href="/login" className={linkStyles}>Inicia sesión</a>
           </p>
         )}
       </div>

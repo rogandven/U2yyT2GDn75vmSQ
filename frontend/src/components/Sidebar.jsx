@@ -41,7 +41,7 @@ const Sidebar = () => {
               <CgProfile className="icon"/> Perfil
             </NavLink>
           </li>
-          <li style={{ height: "70%" }}/>
+          <li className=""/>
           <li className="logout">
             <NavLink to="/login" onClick={logoutSubmit}>
               <FaSignOutAlt className="icon"/> Cerrar Sesión
