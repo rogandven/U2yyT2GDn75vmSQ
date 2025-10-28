@@ -1,2 +1,4 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@source "../node_modules/@acmecorp/ui-lib";
+
