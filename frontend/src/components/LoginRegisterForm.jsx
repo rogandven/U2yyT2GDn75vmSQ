@@ -97,6 +97,11 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             <span className="form-error-container">{errors.email.message}</span>
           )}
         </div>
+          {/* ------ CLASE BASE ------ */}
+          {/* <label className="input">
+            <span class="label">https://</span>
+            <input type="text" placeholder="URL" />
+          </label> */}  
 
         {mode === "register" && (
           <div className="form-group">
@@ -118,11 +123,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           </div>
         )}
 
-        <div className="form-group">
-          {/* <label className="input">
-            <span class="label">https://</span>
-            <input type="text" placeholder="URL" />
-          </label> */}          
+        <div className="form-group">        
           <span className="label">Contraseña:</span>
           <input
             className="input"
