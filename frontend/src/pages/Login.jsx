@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoginRegisterForm from "@components/LoginRegisterForm";
 import { loginService } from "@services/auth.service.js";
+import { backgroundStyles } from "../styles/TailwindStyles.jsx";
 // import luckyCat from "@assets/LuckyCat.png";
 // import "@styles/loginRegister.css";
-// import { LoginRegisterContainerStyles } from "../styles/TailwindStyles.jsx";
+// import { LoginRegisterformformContainerStyles } from "../styles/TailwindStyles.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const Login = () => {
   };
 
   return (
-    <main className="page-root">
+    <main className={"page-root" + backgroundStyles}>
       <div className="lucky-cat-container">
         {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { titleStyles, labelStyles, buttonStyles, textboxStyles, mainTextStyles, linkStyles, errorStyles} from "../styles/TailwindStyles.jsx";
+import { formContainerStyles, titleStyles, labelStyles, buttonStyles, textboxStyles, mainTextStyles, linkStyles, errorStyles} from "../styles/TailwindStyles.jsx";
 
 // import "@styles/LoginRegisterForm.css";
 
@@ -32,7 +32,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   };
 
   return (
-    <div className="login-register-form">
+    <div className={"login-register-form" + formContainerStyles}>
       <h2 className={"form-title " + titleStyles}>
         {mode === "login" ? "Iniciar sesión" : "Registrarse"}
       </h2>
@@ -71,9 +71,9 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
               })}
             />
             {/* errors.username && (
-              <span className="form-error-container">
+              <p className="form-error-container">
                 {errors.username.message}
-              </span>
+              </p>
             ) */}
           </div>
         )}
@@ -100,7 +100,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             })}
           />
           {errors.email && (
-            <span className={"form-error-container" + errorStyles}>{errors.email.message}</span>
+            <p className={"form-error-container" + errorStyles}>{errors.email.message}</p>
           )}
         </div>
 
@@ -119,7 +119,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
               })}
             />
             {exists(errors.rut) && (
-              <span className="form-error-container">{errors.rut.message}</span>
+              <p className="form-error-container">{errors.rut.message}</p>
             )}
           </div>
         )}
@@ -142,9 +142,9 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             })}
           />
           {exists(errors.password) && (
-            <span className={"form-error-container" + errorStyles}>
+            <p className={"form-error-container" + errorStyles}>
               {errors.password.message}
-            </span>
+            </p>
           )}
         </div>
 
