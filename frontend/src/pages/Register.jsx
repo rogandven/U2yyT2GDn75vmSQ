@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import LoginRegisterForm from "@components/LoginRegisterForm"
 import { registerService } from '@services/auth.service.js'
-import { backgroundStyles } from "../styles/TailwindStyles.jsx";
 
 // import '@styles/loginRegister.css'
 // import luckyCat from "@assets/LuckyCat.png"
@@ -22,7 +21,7 @@ const Register = () => {
         }
     }
     return (
-        <main className={"page-root" + backgroundStyles}>
+        <main className={"page-root"}>
       <div className="lucky-cat-container">
         {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 // import "@styles/root.css";
 import { AuthProvider } from "@context/AuthContext";
 import Sidebar from "../components/Sidebar";
-import { sidebarContainerStyles } from "../styles/TailwindStyles.jsx";
 
 function Root() {
   return (
@@ -14,7 +13,7 @@ function Root() {
 
 function PageRoot() {
   return (
-    <div className={" page-root " + sidebarContainerStyles }>
+    <div className={"page-root"}>
       <Sidebar />
       <div className="page-content">
         <Outlet />
