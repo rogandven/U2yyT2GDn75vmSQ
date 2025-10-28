@@ -37,6 +37,11 @@ const Sidebar = () => {
             </li>
           )}
           <li>
+            <NavLink to="/electivo">
+            <FaElectivo className="icon"/> Electivos
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/profile">
               <CgProfile className="icon"/> Perfil
             </NavLink>
