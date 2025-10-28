@@ -70,11 +70,11 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 },
               })}
             />
-            {/* errors.username && (
-              <p className="form-error-container">
+            {exists(errors.username) && (
+              <p className={"form-error-container" + errorStyles}>
                 {errors.username.message}
               </p>
-            ) */}
+            )}
           </div>
         )}
         <div className="form-group ">
@@ -119,7 +119,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
               })}
             />
             {exists(errors.rut) && (
-              <p className="form-error-container">{errors.rut.message}</p>
+              <p className={"form-error-container" + errorStyles}>{errors.rut.message}</p>
             )}
           </div>
         )}
