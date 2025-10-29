@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 // import "@styles/LoginRegisterForm.css";
+import { DUErrorMessage } from "./ui/DUErrorMessage.jsx";
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
@@ -72,10 +73,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 })}
               />
             </label>
-            {errors.username && (
-              <span className="form-error-container">
-                {errors.username.message}
-              </span>
+            {errors.username && (       
+              <DUErrorMessage error={errors.username}></DUErrorMessage>
             )}
           </div>
         )}
@@ -104,7 +103,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             />
           </label>
           {errors.email && (
-            <span className="form-error-container">{errors.email.message}</span>
+            <DUErrorMessage error={errors.email}></DUErrorMessage>
           )}
         </div>
 
@@ -124,8 +123,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                   })}
                 />
             </label>
-            {errors.rut && (
-              <span className="form-error-container">{errors.rut.message}</span>
+            {errors.rut && console.log(errors.rut) && (
+              <DUErrorMessage error={errors.rut}></DUErrorMessage>
             )}
           </div>
         )}
@@ -150,9 +149,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             />
           </label>
           {errors.password && (
-            <span className="form-error-container">
-              {errors.password.message}
-            </span>
+            <DUErrorMessage error={errors.password}></DUErrorMessage>
           )}
         </div>
 
