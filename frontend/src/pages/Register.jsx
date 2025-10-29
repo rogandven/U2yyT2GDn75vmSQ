@@ -3,6 +3,7 @@ import LoginRegisterForm from "@components/LoginRegisterForm"
 import { registerService } from '@services/auth.service.js'
 // import '@styles/loginRegister.css'
 // import luckyCat from "@assets/LuckyCat.png"
+import { DEFAULT_LOGIN_REGISTER_STYLES } from "../../constants/TailwindConstants.jsx";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Register = () => {
       <div className="lucky-cat-container">
         {/* <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" /> */}
       </div>
-      <div className="login-register-container card">
+      <div className={DEFAULT_LOGIN_REGISTER_STYLES}>
         <LoginRegisterForm mode="register" onSubmit={registerSubmit} />
       </div>
     </main>
