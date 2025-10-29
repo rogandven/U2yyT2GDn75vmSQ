@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 // import "@styles/LoginRegisterForm.css";
+import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
@@ -72,11 +73,13 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 })}
               />
             </label>
-            {errors.username && (
-              <span className="form-error-container">
-                {errors.username.message}
-              </span>
-            )}
+            {errors.username && /* (
+                <span className="form-error-container">
+                  {errors.username.message}
+                </span>
+              ) */ 
+              <DUErrorAlert message={errors.username.message}></DUErrorAlert>
+            }
           </div>
         )}
         <div className="form-group">
@@ -104,7 +107,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             />
           </label>
           {errors.email && (
-            <span className="form-error-container">{errors.email.message}</span>
+            /* <span className="form-error-container">{errors.email.message}</span> */
+            <DUErrorAlert message={errors.email.message}></DUErrorAlert>
           )}
         </div>
 
@@ -125,7 +129,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 />
             </label>
             {errors.rut && (
-              <span className="form-error-container">{errors.rut.message}</span>
+              <DUErrorAlert message={errors.rut.message}></DUErrorAlert>
+              /* <span className="form-error-container">{errors.rut.message}</span> */
             )}
           </div>
         )}
@@ -150,9 +155,10 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             />
           </label>
           {errors.password && (
-            <span className="form-error-container">
+            <DUErrorAlert message={errors.password.message}></DUErrorAlert>
+            /* <span className="form-error-container">
               {errors.password.message}
-            </span>
+            </span> */
           )}
         </div>
 
