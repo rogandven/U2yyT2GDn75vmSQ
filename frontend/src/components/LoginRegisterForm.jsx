@@ -31,39 +31,47 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         {mode === "login" ? "Iniciar sesión" : "Registrarse"}
       </h2>
       
-      {mode === "login" && (Object.values(errors).length > 0 || loginError) && (
+      {/*mode === "login" && (Object.values(errors).length > 0 || loginError) && (
         <div className="form-error-container">
           <p>{errors.email?.message || errors.password?.message || loginError}</p>
         </div>
       )}
 
+      {/* ------ CLASE BASE ------ */}
+      {/* <label className="input">
+        <span class="label">https://</span>
+        <input type="text" placeholder="URL" />
+      </label> */}  
+
       <form onSubmit={handleSubmit(onFormSubmit)}>
         {mode === "register" && (
           <div className="form-group">
-            <label>Nombre de usuario:</label>
-            <input
-              className="input"
-              type="text"
-              min={3}
-              {...register("username", {
-                required: "El nombre de usuario es obligatorio",
-                minLength: {
-                  value: 3,
-                  message:
-                    "El nombre de usuario debe tener al menos 3 caracteres",
-                },
-                maxLength: {
-                  value: 30,
-                  message:
-                    "El nombre de usuario debe tener como máximo 30 caracteres",
-                },
-                pattern: {
-                  value: /^[a-zA-Z0-9_]+$/,
-                  message:
-                    "El usuario sólo puede contener letras, números y guiones bajos",
-                },
-              })}
-            />
+            <label className="input">
+              <span class="label">Nombre de usuario:</span>
+              <input
+                
+                type="text"
+                min={3}
+                {...register("username", {
+                  required: "El nombre de usuario es obligatorio",
+                  minLength: {
+                    value: 3,
+                    message:
+                      "El nombre de usuario debe tener al menos 3 caracteres",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message:
+                      "El nombre de usuario debe tener como máximo 30 caracteres",
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9_]+$/,
+                    message:
+                      "El usuario sólo puede contener letras, números y guiones bajos",
+                  },
+                })}
+              />
+            </label>
             {errors.username && (
               <span className="form-error-container">
                 {errors.username.message}
@@ -72,74 +80,75 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           </div>
         )}
         <div className="form-group">
-          <label>Correo:</label>
-          <input
-            className="input"
-            type="email"
-            {...register("email", {
-              required: "El correo es obligatorio",
-              minLength: {
-                value: 15,
-                message: "El correo debe tener al menos 15 caracteres",
-              },
-              maxLength: {
-                value: 50,
-                message: "El correo debe tener como máximo 50 caracteres",
-              },
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@gmail\.(com|cl)$/,
-                message:
-                  "El correo debe ser un correo de Gmail válido (@gmail.com o @gmail.cl)",
-              },
-            })}
-          />
+          <label className="input">
+            <span class="label">Correo:</span>
+            <input
+              
+              type="email"
+              {...register("email", {
+                required: "El correo es obligatorio",
+                minLength: {
+                  value: 15,
+                  message: "El correo debe tener al menos 15 caracteres",
+                },
+                maxLength: {
+                  value: 50,
+                  message: "El correo debe tener como máximo 50 caracteres",
+                },
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@gmail\.(com|cl)$/,
+                  message:
+                    "El correo debe ser un correo de Gmail válido (@gmail.com o @gmail.cl)",
+                },
+              })}
+            />
+          </label>
           {errors.email && (
             <span className="form-error-container">{errors.email.message}</span>
           )}
         </div>
-          {/* ------ CLASE BASE ------ */}
-          {/* <label className="input">
-            <span class="label">https://</span>
-            <input type="text" placeholder="URL" />
-          </label> */}  
 
         {mode === "register" && (
           <div className="form-group">
-            <label>Rut:</label>
-            <input
-              className="input"
-              type="text"
-              {...register("rut", {
-                required: "El rut es obligatorio",
-                pattern: {
-                  value: /^\d{2}\.\d{3}\.\d{3}-[\dkK]$/,
-                  message: "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
-                },
-              })}
-            />
+            <label className="input">
+                <span class="label">Rut:</span>
+                <input
+                  
+                  type="text"
+                  {...register("rut", {
+                    required: "El rut es obligatorio",
+                    pattern: {
+                      value: /^\d{2}\.\d{3}\.\d{3}-[\dkK]$/,
+                      message: "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
+                    },
+                  })}
+                />
+            </label>
             {errors.rut && (
               <span className="form-error-container">{errors.rut.message}</span>
             )}
           </div>
         )}
 
-        <div className="form-group">        
-          <span className="label">Contraseña:</span>
-          <input
-            className="input"
-            type="password"
-            {...register("password", {
-              required: "La contraseña es obligatoria",
-              minLength: {
-                value: 8,
-                message: "La contraseña debe tener al menos 8 caracteres",
-              },
-              maxLength: {
-                value: 26,
-                message: "La contraseña debe tener como máximo 26 caracteres",
-              },
-            })}
-          />
+        <div className="form-group">
+          <label className="input">     
+            <span className="label">Contraseña:</span>
+            <input
+              
+              type="password"
+              {...register("password", {
+                required: "La contraseña es obligatoria",
+                minLength: {
+                  value: 8,
+                  message: "La contraseña debe tener al menos 8 caracteres",
+                },
+                maxLength: {
+                  value: 26,
+                  message: "La contraseña debe tener como máximo 26 caracteres",
+                },
+              })}
+            />
+          </label>
           {errors.password && (
             <span className="form-error-container">
               {errors.password.message}
