@@ -21,7 +21,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <DUSidebarBody></DUSidebarBody>
+      <DUSidebarBody PageContent={undefined} logoutSubmit={logoutSubmit}></DUSidebarBody>
       {/* <h2>Metodología de Desarrollo</h2>
       <nav>
         <ul>
