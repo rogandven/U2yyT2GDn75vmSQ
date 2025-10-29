@@ -1,6 +1,8 @@
 import DUSidebarItem from "./DUSidebarItem";
+import { DEFAULT_ICON_MARGIN_STYLES } from "../../../../constants/TailwindConstants.jsx";
 
 import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
 
 export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
     return (
@@ -16,11 +18,32 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
                 <DUSidebarItem 
-                    label={"minecraft"} 
-                    destination={"www.youtube.com"} 
-                    icon={<FaHome></FaHome>} 
+                    label={"Inicio"} 
+                    destination={"/home"} 
+                    icon={<FaHome className={DEFAULT_ICON_MARGIN_STYLES}></FaHome>} 
                     logoutSubmit={undefined}>
                 </DUSidebarItem>
+
+                <DUSidebarItem 
+                    label={"Usuarios"} 
+                    destination={"/users"} 
+                    icon={<FaUsers className={DEFAULT_ICON_MARGIN_STYLES}></FaUsers>} 
+                    logoutSubmit={undefined}>
+                </DUSidebarItem>
+
+                <DUSidebarItem 
+                    label={"Perfil"} 
+                    destination={"/profile"} 
+                    icon={<CgProfile className={DEFAULT_ICON_MARGIN_STYLES}></CgProfile>} 
+                    logoutSubmit={undefined}>
+                </DUSidebarItem>
+
+                <DUSidebarItem 
+                    label={"Cerrar Sesión"} 
+                    destination={"/logout"} 
+                    icon={<FaSignOutAlt className={DEFAULT_ICON_MARGIN_STYLES}></FaSignOutAlt>} 
+                    logoutSubmit={logoutSubmit}>
+                </DUSidebarItem>                                    
             </ul>
 
             {/* button to open/close drawer */}

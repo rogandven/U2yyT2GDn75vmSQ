@@ -13,12 +13,15 @@ function Root() {
 }
 
 function PageRoot() {
-  return (
-    <div className="page-root">
-      <Sidebar />
+  const PageContent = (
       <div className="page-content">
         <Outlet />
       </div>
+  );
+
+  return (
+    <div className="page-root">
+      <Sidebar PageContent={PageContent}/>
     </div>
   );
 }
