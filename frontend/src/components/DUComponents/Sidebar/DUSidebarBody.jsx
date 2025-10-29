@@ -12,42 +12,42 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
             {PageContent}
         </div>
 
-        <div className="drawer-side is-drawer-close:overflow-visible">
+        <div className="drawer-side is-drawer-close:overflow-visible shadow-sm">
             <label htmlFor="my-drawer-4" aria-label="close sidebar" className="drawer-overlay"></label>
-            <div className="is-drawer-close:w-14 is-drawer-open:w-64 bg-base-200 flex flex-col items-start min-h-full">
+            <div className="is-drawer-close:w-14 is-drawer-open:w-64 bg-base-200 flex flex-col items-start min-h-full shadow-sm">
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
                 <DUSidebarItem 
                     label={"Inicio"} 
                     destination={"/home"} 
-                    icon={<FaHome className={DEFAULT_ICON_MARGIN_STYLES}></FaHome>} 
+                    icon={<FaHome />} 
                     logoutSubmit={undefined}>
                 </DUSidebarItem>
 
                 <DUSidebarItem 
                     label={"Usuarios"} 
                     destination={"/users"} 
-                    icon={<FaUsers className={DEFAULT_ICON_MARGIN_STYLES}></FaUsers>} 
+                    icon={<FaUsers />} 
                     logoutSubmit={undefined}>
                 </DUSidebarItem>
 
                 <DUSidebarItem 
                     label={"Perfil"} 
                     destination={"/profile"} 
-                    icon={<CgProfile className={DEFAULT_ICON_MARGIN_STYLES}></CgProfile>} 
+                    icon={<CgProfile />} 
                     logoutSubmit={undefined}>
                 </DUSidebarItem>
 
                 <DUSidebarItem 
                     label={"Cerrar Sesión"} 
-                    destination={"/logout"} 
-                    icon={<FaSignOutAlt className={DEFAULT_ICON_MARGIN_STYLES}></FaSignOutAlt>} 
+                    destination={"/login"} 
+                    icon={<FaSignOutAlt />} 
                     logoutSubmit={logoutSubmit}>
                 </DUSidebarItem>                                    
             </ul>
 
             {/* button to open/close drawer */}
-            <div className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Open">
+            <div className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Abrir">
                 <label htmlFor="my-drawer-4" className="btn btn-ghost btn-circle drawer-button is-drawer-open:rotate-y-180">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor" className="inline-block size-4 my-1.5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>
                 </label>
