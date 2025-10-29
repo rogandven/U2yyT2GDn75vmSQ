@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
-import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import DUSidebarBody from "./DUComponents/Sidebar/DUSidebarBody.jsx";
 // import "@styles/Sidebar.css";
 
 const Sidebar = () => {
@@ -21,7 +21,8 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2>Metodología de Desarrollo</h2>
+      <DUSidebarBody></DUSidebarBody>
+      {/* <h2>Metodología de Desarrollo</h2>
       <nav>
         <ul>
           <li>
@@ -49,6 +50,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
+      */}
     </div>
   );
 };
