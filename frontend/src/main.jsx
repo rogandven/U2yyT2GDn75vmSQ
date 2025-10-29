@@ -11,6 +11,9 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import { getAllowedRoles } from '@services/admin.service.js'
 
+//importo la página de electivos
+import Electivos from "@pages/Electivos";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +24,12 @@ const router = createBrowserRouter([
         path: "/home",
         element: <Home />,
       },
+      
+      {
+        path: "/electivos",
+        element: <Electivos />,
+      },
+
       {
         path: "/users",
         element: (
