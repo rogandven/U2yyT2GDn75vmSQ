@@ -4,10 +4,15 @@ import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";
 import { useEffect } from "react";
 
+const esDocente = () => {
+  // ESTA FUNCION NO HACE NADA TODAVÍA
+  return true;
+}
+
 const Electivo = () => {
   const { electivos, fetchElectivos } = GetElectivo();
-  const { handleDeleteElectivos } = DeleteElectivo(fetchElectivos);
-  const { handleEditElectivos } = EditElectivo(fetchElectivos);
+  const { handleDeleteElectivo } = DeleteElectivo(fetchElectivos);
+  const { handleEditElectivo } = EditElectivo(fetchElectivos);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -25,7 +30,9 @@ const Electivo = () => {
             <th>Descripcion</th>
             <th>Cupos</th>
             <th>Creditos</th>
-            <th>Acciones</th>
+            { esDocente() &&
+              (<th>Acciones</th>)
+            }
           </tr>
         </thead>
         <tbody>
@@ -38,8 +45,8 @@ const Electivo = () => {
                 <td>{user.cupos}</td>
                 <td>{user.creditos}</td>
                 <td>
-                  <button className="edit" onClick={() => handleEditElectivos(user.id, user)}>Editar</button>
-                  <button className="delete" onClick={() => handleDeleteElectivos(user.id)}>Eliminar</button>
+                  <button className="edit" onClick={() => handleEditElectivo(user.id, user)}>Editar</button>
+                  <button className="delete" onClick={() => handleDeleteElectivo(user.id)}>Eliminar</button>
                 </td>
               </tr>
             ))

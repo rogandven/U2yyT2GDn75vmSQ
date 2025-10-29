@@ -1,5 +1,7 @@
+import { CANTIDAD_MAXIMA_DE_CREDITOS } from "../../constants/ElectivoConstants";
+import { CANTIDAD_MAXIMA_DE_CUPOS } from "../../constants/ElectivoConstants.jsx";
 import { editElectivo } from "../../services/electivo.service";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"
 
 async function editElectivoInfo(electivos) {
   const { value: formValues } = await Swal.fire({
@@ -63,6 +65,23 @@ async function editElectivoInfo(electivos) {
         );
         return false;
       }
+
+      if (cupos != 0 || cupos < CANTIDAD_MAXIMA_DE_CUPOS){
+        Swal.showValidationMessage(
+          "Ingrese los cupos del electivo (máximo 60):"
+        );
+      }else if(isNaN(cupos)){
+        Swal.showValidationMessage("Por favor ingrese un número de cupos válido");
+      }
+
+      if (creditos != 0 ||  creditos < CANTIDAD_MAXIMA_DE_CREDITOS){
+        Swal.showValidationMessage(
+          "Ingrese los créditos correspondientes al ramo (máximo 7):"
+        );
+      }else if(isNaN(creditos)){
+        Swal.showValidationMessage("Por favor ingrese un número válido de créditos");
+      }
+
       return { nombre, profesor, cupos, creditos };
     },
   });
@@ -88,7 +107,6 @@ export const EditElectivo = (fetchElectivos) => {
       console.error("Error al editar electivo:", error);
     }
   };
-
   return { handleEditElectivo };
 };
 

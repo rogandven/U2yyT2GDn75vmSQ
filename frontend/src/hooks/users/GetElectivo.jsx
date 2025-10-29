@@ -17,11 +17,20 @@ export const GetElectivo = () => {
     const dataLogged = (data) => {
         try {
             const { nombre } = JSON.parse(sessionStorage.getItem("electivo"));
+            console.log("DATA TAL CUAL: ");
+            console.log(data);
             for (let i = 0; i < data.length; i++) {
-                if(data[i].nombre === nombre) {
-                    data.splice(i, 1);
-                    break;
+                console.log("DATA SUB " + String(i) + ": ");
+                console.log(data[i]);
+                try {
+                    if(data[i].nombre === nombre) {
+                        data.splice(i, 1);
+                        break;
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
+
             }
         } catch (error) {
             console.error("Error procesando datos de electivo:", error);

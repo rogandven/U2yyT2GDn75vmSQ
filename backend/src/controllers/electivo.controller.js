@@ -88,7 +88,7 @@ export async function deleteElectivoById(req, res) {
   }
 }
 
-export async function getElectivo(req, res) {
+export async function getElectivos(req, res) {
   try {
     // Obtener el repositorio de electivos y buscar el perfil del electivo autenticado
     const ElectivoEntityRepository = AppDataSource.getRepository(ElectivoEntity);
