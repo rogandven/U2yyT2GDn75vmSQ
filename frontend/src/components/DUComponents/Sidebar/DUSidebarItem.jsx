@@ -6,7 +6,7 @@ const nullLogOut = () => {
 }
 
 export const DUSidebarItem = ({label, destination, icon, logoutSubmit}) => {
-    console.log(icon);
+    // console.log(icon);
     return (
         <li>
             <NavLink to={destination} onClick={logoutSubmit ? logoutSubmit : nullLogOut}>
