@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 // import "@styles/LoginRegisterForm.css";
 import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
+import { DEFAULT_MARGIN_STYLES } from "../../constants/TailwindConstants.jsx";
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
@@ -28,7 +29,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
   return (
     <div className="card bg-base-100 w-96 shadow-sm">
-      <div className="login-register-form card-body">
+      <div className="login-register-form card-body align-middle items-center">
         <h2 className="form-title card-title">
           {mode === "login" ? "Iniciar sesión" : "Registrarse"}
         </h2>
@@ -36,10 +37,10 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         <form onSubmit={handleSubmit(onFormSubmit)}>
           {mode === "register" && (
             <div className="form-group">
-              <label className="input">
-                <span class="label">Nombre de usuario:</span>
+              <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+                <span className="label">Nombre de usuario:</span>
                 <input
-                  
+                  className={DEFAULT_MARGIN_STYLES}
                   type="text"
                   min={3}
                   {...register("username", {
@@ -72,8 +73,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             </div>
           )}
           <div className="form-group">
-            <label className="input">
-              <span class="label">Correo:</span>
+            <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+              <span className="label">Correo:</span>
               <input
                 
                 type="email"
@@ -103,8 +104,8 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
           {mode === "register" && (
             <div className="form-group">
-              <label className="input">
-                  <span class="label">Rut:</span>
+              <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+                  <span className="label">Rut:</span>
                   <input
                     
                     type="text"
@@ -125,7 +126,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
           )}
 
           <div className="form-group">
-            <label className="input">     
+            <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>     
               <span className="label">Contraseña:</span>
               <input
                 
@@ -151,19 +152,19 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             )}
           </div>
 
-          <button type="submit" className="btn">
+          <button type="submit" className={"btn w-full " + DEFAULT_MARGIN_STYLES}>
             {mode === "login" ? "Entrar" : "Registrarse"}
           </button>
         </form>
 
-        <div style={{ marginTop: "1rem" }}>
+        <div>
           {mode === "login" ? (
             <p>
-              ¿No tienes cuenta? <a href="/register">Regístrate</a>
+              ¿No tienes cuenta? <a class="link link-primary" href="/register">Regístrate</a>
             </p>
           ) : (
             <p>
-              ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
+              ¿Ya tienes cuenta? <a class="link link-primary" href="/login">Inicia sesión</a>
             </p>
           )}
         </div>
