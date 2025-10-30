@@ -6,11 +6,11 @@ export const PreinscripcionEntity = new EntitySchema({
     name: "Preinscripcion",
     tableName: "preinscripciones",
     columns: {
-        userId: {
+        user: {
             type: Number,
             primary: true,
         },
-        electivoId: {
+        electivo: {
             type: Number,
             primary: true,
         },
@@ -18,10 +18,24 @@ export const PreinscripcionEntity = new EntitySchema({
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
         },
-        semestreId: {
+        semestre: {
             type: String,
             primary: true,
         },
+    },
+    relations: {
+        user: {
+            type: 'many-to-one',
+            target: 'user',
+            inverseSide: 'user',
+            joinColumn: true
+        },
+        electivo: {
+            type: 'many-to-one',
+            target: 'electivo',
+            inverseSide: 'electivo',
+            joinColumn: true
+        },     
     },
 });
 

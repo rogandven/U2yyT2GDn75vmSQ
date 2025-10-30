@@ -44,6 +44,14 @@ export const UserEntity = new EntitySchema({
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
     },
+    relations: {
+        preinscripcion: {
+            type: 'one-to-many',
+            target: 'preinscripcion',
+            inverseSide: 'preinscripcion',
+            joinColumn: true
+        },
+    },
 });
 
 export default UserEntity;

@@ -15,6 +15,14 @@ export const ElectivoEntity = new EntitySchema({
             nullable: false,
         }
     },
+    relations: {
+        preinscripcion: {
+            type: 'one-to-many',
+            target: 'preinscripcion',
+            inverseSide: 'preinscripcion',
+            joinColumn: true
+        },
+    },
 });
 
 export default ElectivoEntity;
