@@ -2,9 +2,9 @@
 
 import { EntitySchema } from "typeorm";
 
-export const PreinscripcionEntity = new EntitySchema({
-    name: "preinscripcion",
-    tableName: "preinscripciones",
+export const InscripcionEntity = new EntitySchema({
+    name: "inscripcion",
+    tableName: "inscripciones",
     columns: {
         userId: {
             type: Number,
@@ -39,4 +39,4 @@ export const PreinscripcionEntity = new EntitySchema({
     },
 });
 
-export default PreinscripcionEntity;
+export default InscripcionEntity;
