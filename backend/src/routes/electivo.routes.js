@@ -1,6 +1,6 @@
 "use strict";
 import { Router } from "express";
-import { getElectivo,getElectivos, getElectivoById, updateElectivoById, deleteElectivoById } from "../controllers/electivo.controller.js";
+import { getElectivo,getElectivos, getElectivoById, updateElectivoById, deleteElectivoById, createElectivo } from "../controllers/electivo.controller.js";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
 import { isAdmin } from "../middleware/authorization.middleware.js";
 
@@ -14,6 +14,7 @@ router.get("/electivos", getElectivos);
 
 // Rutas para obtener usuarios
 router.get("/", getElectivo);
+router.post("/", createElectivo);
 router.get("/:id", getElectivoById);
 router.put("/:id", updateElectivoById);
 router.delete("/:id", deleteElectivoById);

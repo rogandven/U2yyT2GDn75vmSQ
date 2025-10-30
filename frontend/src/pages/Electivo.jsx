@@ -45,6 +45,7 @@ const Electivo = () => {
                 <td>{user.cupos}</td>
                 <td>{user.creditos}</td>
                 <td>
+                  {/*<button className="create" onClick={() => handleCreateElectivo(user.id, user)}>Crear</button>*/}
                   <button className="edit" onClick={() => handleEditElectivo(user.id, user)}>Editar</button>
                   <button className="delete" onClick={() => handleDeleteElectivo(user.id)}>Eliminar</button>
                 </td>
