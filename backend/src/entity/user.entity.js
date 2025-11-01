@@ -11,6 +11,11 @@ export const UserEntity = new EntitySchema({
             primary: true,
             generated: true,
         },
+        full_name: {
+            type: String,
+            unique: true,
+            nullable: false,
+        },
         username: {
             type: String,
             unique: true,

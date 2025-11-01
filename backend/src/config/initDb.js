@@ -15,6 +15,7 @@ export async function createUsers() {
         const users = [
             {
                 username: "Administrador",
+                full_name: "John Doe",
                 rut: "12345678-9",
                 email: "admin@gmail.com",
                 password: await encryptPassword("admin123"),
@@ -22,6 +23,7 @@ export async function createUsers() {
             },
             {
                 username: "Usuario",
+                full_name: "Jane Doe",
                 rut: "98765432-1",
                 email: "usuario@gmail.com",
                 password: await encryptPassword("usuario123"),
