@@ -15,6 +15,10 @@ export async function createClase(data) {
   return await claseRepository.save(newClase);
 }
 
+export async function findAllClases() {
+  return await claseRepository.find();
+}
+
 export async function findClaseById_electivo(id_electivo) {
   return await claseRepository.findOneBy({ id_electivo });
 }
@@ -35,12 +39,12 @@ export async function updateClaseById_Electivo(id_electivo, updateData) {
 
 export async function deleteClaseById_Electivo(id_electivo) {
   console.log(id_electivo);
-  const user = await claseRepository.findOneBy({  id_electivo });
+  const clase = await claseRepository.findOneBy({  id_electivo });
 
   if (!clase) {
-    throw new Error("Usuario no encontrado");
+    throw new Error("Clase no encontrada");
   }
   // console.log(user);
-  // await userRepository.delete(user); 
-  await claseRepository.delete({id_electivo: user.id_electivo});
+  // await userRepository.delete(user);
+  await claseRepository.delete({id_electivo: clase.id_electivo});
 }
