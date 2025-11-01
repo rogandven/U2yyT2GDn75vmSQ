@@ -3,15 +3,20 @@
 import { EntitySchema } from "typeorm";
 
 export const ScheduleEntity = new EntitySchema({
-    name: "Schedule",
+    name: "schedule",
     tableName: "schedules",
     columns: {
+        id: {
+            type: Number,
+            generated: true,
+            primary: true,
+        },
         start_time: {
-            type: "time",
+            type: "timestamp",
             nullable: false,
         },
         end_time: {
-            type: "time",
+            type: "timestamp",
             nullable: false,
         },
         classroom: {
@@ -22,8 +27,8 @@ export const ScheduleEntity = new EntitySchema({
     relations: {
         subject: {
             type: 'many-to-one',
-            target: 'subject',
-            inverseSide: 'subject',
+            target: 'subjects',
+            inverseSide: 'subjects',
             joinColumn: true
         },     
     },

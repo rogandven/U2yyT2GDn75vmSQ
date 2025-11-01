@@ -2,6 +2,11 @@
 import { DataSource } from "typeorm"
 import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD } from "./configEnv.js";
 import UserEntity from "../entity/user.entity.js";
+import CareerEntity from "../entity/career.entity.js";
+import InscriptionEntity from "../entity/inscription.entity.js";
+import PreinscriptionEntity from "../entity/preinscription.entity.js";
+import ScheduleEntity from "../entity/schedule.entity.js";
+import SubjectEntity from "../entity/subject.entity.js";
 
 // Configuración de la conexión a la base de datos
 export const AppDataSource = new DataSource({
@@ -11,9 +16,9 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [UserEntity],
+    entities: [UserEntity, CareerEntity, InscriptionEntity, PreinscriptionEntity, ScheduleEntity, SubjectEntity],
     synchronize: true,
-    logging: false,
+    logging: true,
 });
 
 // Función para conectar a la base de datos

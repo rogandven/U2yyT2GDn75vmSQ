@@ -3,7 +3,7 @@
 import { EntitySchema } from "typeorm";
 
 export const CareerEntity = new EntitySchema({
-    name: "Career",
+    name: "career",
     tableName: "careers",
     columns: {
         acronym: {
@@ -21,7 +21,9 @@ export const CareerEntity = new EntitySchema({
             type: 'many-to-many',
             target: 'subject',
             inverseSide: 'subject',
-            joinColumn: true
+            joinColumn: {
+                name: 'career-subject',
+            }
         },     
     },
 });

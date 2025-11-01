@@ -3,7 +3,7 @@
 import { EntitySchema } from "typeorm";
 
 export const UserEntity = new EntitySchema({
-    name: "User",
+    name: "user",
     tableName: "users",
     columns: {
         id: {
@@ -41,7 +41,8 @@ export const UserEntity = new EntitySchema({
         },
         generation: {
             type: "timestamp",
-            ullable: false,
+            nullable: false,
+            default: () => "CURRENT_TIMESTAMP",
         },        
         createdAt: {
             type: "timestamp",

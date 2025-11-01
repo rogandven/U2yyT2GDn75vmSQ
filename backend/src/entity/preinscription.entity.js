@@ -3,7 +3,7 @@
 import { EntitySchema } from "typeorm";
 
 export const PreinscriptionEntity = new EntitySchema({
-    name: "Preinscription",
+    name: "preinscription",
     tableName: "preinscriptions",
     columns: {
         id: {

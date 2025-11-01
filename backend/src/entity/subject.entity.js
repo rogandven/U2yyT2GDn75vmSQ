@@ -3,7 +3,7 @@
 import { EntitySchema } from "typeorm";
 
 export const SubjectEntity = new EntitySchema({
-    name: "Subject",
+    name: "subject",
     tableName: "subjects",
     columns: {
         id: {
@@ -39,12 +39,14 @@ export const SubjectEntity = new EntitySchema({
             type: 'many-to-many',
             target: 'career',
             inverseSide: 'career',
-            joinColumn: true
+            joinColumn: {
+                name: 'career-subject',
+            }
         },    
         schedule: {
             type: 'one-to-many',
-            target: 'schedule',
-            inverseSide: 'schedule',
+            target: 'schedules',
+            inverseSide: 'schedules',
             joinColumn: true
         },     
     },
