@@ -39,7 +39,7 @@ export const SubjectEntity = new EntitySchema({
             type: 'many-to-many',
             target: 'career',
             inverseSide: 'career',
-            joinColumn: {
+            joinTable: {
                 name: 'career-subject',
             }
         },    
