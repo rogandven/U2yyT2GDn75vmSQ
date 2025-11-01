@@ -21,6 +21,11 @@ export const UserEntity = new EntitySchema({
             unique: true,
             nullable: false,
         },
+        full_name: {
+            type: String,
+            unique: true,
+            nullable: false,
+        },
         email: {
             type: String,
             unique: true,
