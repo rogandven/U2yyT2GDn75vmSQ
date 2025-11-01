@@ -4,7 +4,7 @@ import { EntitySchema } from "typeorm";
 
 export const ScheduleEntity = new EntitySchema({
     name: "schedule",
-    tableName: "schedules",
+    tableName: "schedule",
     columns: {
         id: {
             type: Number,
@@ -22,13 +22,13 @@ export const ScheduleEntity = new EntitySchema({
         classroom: {
             type: String,
             nullable: false,
-        }
+        },
     },
     relations: {
         subject: {
             type: 'many-to-one',
-            target: 'subjects',
-            inverseSide: 'subjects',
+            target: 'subject',
+            inverseSide: 'subject',
             joinColumn: true
         },     
     },

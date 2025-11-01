@@ -4,7 +4,7 @@ import { EntitySchema } from "typeorm";
 
 export const PreinscriptionEntity = new EntitySchema({
     name: "preinscription",
-    tableName: "preinscriptions",
+    tableName: "preinscription",
     columns: {
         id: {
             type: Number,
@@ -20,6 +20,20 @@ export const PreinscriptionEntity = new EntitySchema({
             type: String,
             nullable: false,
         }
+    },
+    relations: {
+        user: {
+            type: 'many-to-one',
+            target: 'user',
+            inverseSide: 'user',
+            joinTable: true,
+        },
+        subject: {
+            type: 'many-to-one',
+            target: 'user',
+            inverseSide: 'user',
+            joinTable: true,
+        },                         
     },
 });
 

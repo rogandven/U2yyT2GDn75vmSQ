@@ -1,10 +1,10 @@
 "use strict";
 
-import { EntitySchema } from "typeorm";
+import { EntitySchema, JoinColumn } from "typeorm";
 
 export const InscriptionEntity = new EntitySchema({
     name: "inscription",
-    tableName: "inscriptions",
+    tableName: "inscription",
     columns: {
         id: {
             type: Number,
@@ -20,6 +20,20 @@ export const InscriptionEntity = new EntitySchema({
             type: String,
             nullable: false,
         }
+    },
+    relations: {
+        user: {
+            type: 'many-to-one',
+            target: 'user',
+            inverseSide: 'user',
+            joinTable: true,
+        },
+        subject: {
+            type: 'many-to-one',
+            target: 'user',
+            inverseSide: 'user',
+            joinTable: true,
+        },
     },
 });
 

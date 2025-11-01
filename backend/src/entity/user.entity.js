@@ -1,10 +1,10 @@
 "use strict";
 
-import { EntitySchema } from "typeorm";
+import { EntitySchema, JoinColumn } from "typeorm";
 
 export const UserEntity = new EntitySchema({
     name: "user",
-    tableName: "users",
+    tableName: "user",
     columns: {
         id: {
             type: Number,
@@ -53,6 +53,30 @@ export const UserEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
+    },
+    relations: {
+        career: {
+            type: 'many-to-one',
+            target: 'career',
+            inverseSide: 'career',
+            joinColumn: true
+        },
+        subject: {
+            type: 'many-to-many',
+            target: 'subject',
+            inverseSide: 'subject',
+            joinTable: true
+        },    
+        preinscription: {
+            type: 'one-to-many',
+            target: 'preinscription',
+            inverseSide: 'preinscription'
+        },
+        inscription: {
+            type: 'one-to-many',
+            target: 'inscription',
+            inverseSide: 'inscription'
+        },        
     },
 });
 
