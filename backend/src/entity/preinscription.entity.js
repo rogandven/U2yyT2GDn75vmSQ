@@ -30,8 +30,8 @@ export const PreinscriptionEntity = new EntitySchema({
         },
         subject: {
             type: 'many-to-one',
-            target: 'user',
-            inverseSide: 'user',
+            target: 'subject',
+            inverseSide: 'subject',
             joinTable: true,
         },                         
     },
