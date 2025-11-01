@@ -1,41 +1,46 @@
 "use strict";
 
-import Clase from "@entity/clase.entity.js";
-import { AppDataSource } from "@config/configDb.js";
-import { findClaseById_electivo, updateClaseById_Electivo } from "@services/clase.service.js";
-import { assignationValidation } from "@validations/clase.validation";
+import ClaseEntity from "../entity/clase.entity.js";
+import { AppDataSource } from "../config/configDb.js";
+import { findClaseById_electivo, updateClaseById_Electivo } from "../services/clase.service.js";
+import { assignationValidation, updateValidation } from "../validations/clase.validation.js";
 
+const isValidTimeFormat = (timeStr) => {
+    const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
+    if (!regex.test(timeStr)) return false;
+    
+    const [hours, minutes] = timeStr.split(':').map(Number);
+    return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
+};
 
 export async function asignarClase(req, res) {
   try {
     
-    const claseRepository = AppDataSource.getRepository(Clase);
-    const { sala,horario,fecha_inicio_clases} = req.body;
+    const claseRepository = AppDataSource.getRepository(ClaseEntity);
+    const { sala,horario, cupos, nombreEl, profesor} = req.body;
     const { error } = assignationValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
 
-    const existingHorario = await claseRepository.findOne({
-      where: { horario },
+    const existingHorarioSala = await claseRepository.findOne({
+      where: { horario, sala },
     });
-    if (existingHorario)
-      return res.status(409).json({ message: "Horaio ya registrado." });
-
-    const existingSala = await claseRepository.findOne({ where: { sala } });
-    if (existingSala)
-      return res.status(409).json({ message: "Sala ya registrado." });
+    if (existingHorarioSala)
+      return res.status(409).json({ message: "Horario y sala ya registrado." });
 
 
     
     const newClase = claseRepository.create({
       sala,
       horario,
-      fecha_inicio_clases
+      cupos,
+      nombreEl,
+      profesor
     });
     await claseRepository.save(newClase);
 
     res
       .status(201)
-      .json({ message: "Horario registrado exitosamente!", data: dataClase });
+      .json({ message: "Horario registrado exitosamente!", data: newClase });
   } catch (error) {
     console.error("Error en auth.controller.js -> register(): ", error);
     return res.status(500).json({ message: "Error al registrar el curso" });
@@ -52,7 +57,7 @@ export async function getClases(req, res) {
   const clase = req.clase;
   // console.log(user);
   // console.log(JSON.stringify(user));
-  const additionalData = await findClaseById_electivo((clase && Clase.id_electivo) || "");
+  const additionalData = await findClaseById_electivo((clase && ClaseEntity.id_electivo) || "");
   if (!additionalData) {
     return handleErrorClient(res, 400, "Clase no encontrado");
   }
@@ -66,14 +71,12 @@ export async function getClases(req, res) {
 
 export async function patchClase(req, res) {
   const claseId = req.clase.sub; 
-  const { sala, horario, fecha_inicio_clases } = req.body;
-
-  if (!sala && !horario && !fecha_inicio_clases) {
-    return handleErrorClient(res, 400, "Debes proporcionar al menos un campo para actualizar.");
-  }
+  const { sala, horario, cupos } = req.body;
+  const { error } = updateValidation.validate(req.body);
+  if (error) return res.status(400).json({ message: error.message });
 
   try {
-    const updatedClase = await updateClaseById_Electivo(claseId, { sala, horario, fecha_inicio_clases });
+    const updatedClase = await updateClaseById_Electivo(claseId, { sala, horario, cupos });
     handleSuccess(res, 200, "Clase actualizada exitosamente", updatedClase);
   } catch (error) {
     handleErrorClient(res, 500, "Error al actualizar la clase.", error.message);
@@ -91,4 +94,6 @@ export async function deleteClase(req, res) {
     handleErrorServer(res, 500, "Error al eliminar la clase", error.message);
   }
 }
+
+
 

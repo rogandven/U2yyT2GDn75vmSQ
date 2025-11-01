@@ -1,8 +1,8 @@
 import { AppDataSource } from "../config/configDb.js";
-import clase from "@entities/clase.entity.js";
+import ClaseEntity from "../entity/clase.entity.js";
 import bcrypt from "bcrypt";
 
-const claseRepository = AppDataSource.getRepository(clase);
+const claseRepository = AppDataSource.getRepository(ClaseEntity);
 
 export async function createClase(data) {
 

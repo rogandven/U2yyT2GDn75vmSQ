@@ -11,30 +11,30 @@ export const ClaseEntity = new EntitySchema({
             primary: true,
             generated: true,
         },
-
         
         profesor: {
             type: String,
-            unique: true,
             nullable: false,
         },
         nombreEl: {
             type: String,
-            unique: true,
             nullable: false,
         },
         sala: {
             type: String,
-            unique: true,
             nullable: false,
         },
         horario: {
-            type: String,
+            type: "varchar",
             nullable: false,
         },
-        fecha_inicio_clases: {
-            type: String,
+        cupos: {
+            type: Number,
             nullable:false
+        },
+        status: {
+            type: "varchar",
+            default: "scheduled",
         },
         createdAt: {
             type: "timestamp",
@@ -45,6 +45,7 @@ export const ClaseEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
+        
     },
 });
 
