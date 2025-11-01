@@ -6,15 +6,18 @@ export const CareerEntity = new EntitySchema({
     name: "Career",
     tableName: "careers",
     columns: {
-        acronym: {
-            type: String,
-            primary: true,
+        start_time: {
+            type: "time",
             nullable: false,
         },
-        name: {
-            type: String,
+        end_time: {
+            type: "time",
             nullable: false,
         },
+        classroom: {
+            type: String,
+            nullable: false,
+        }
     },
 });
 
