@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
     database: `${DATABASE}`,
     entities: [UserEntity, CareerEntity, InscriptionEntity, PreinscriptionEntity, ScheduleEntity, SubjectEntity],
     synchronize: true,
-    logging: true,
+    logging: false,
 });
 
 // Función para conectar a la base de datos
