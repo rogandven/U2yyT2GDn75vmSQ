@@ -34,6 +34,20 @@ export const SubjectEntity = new EntitySchema({
             nullable: true,
         },
     },
+    relations: {
+        career: {
+            type: 'many-to-many',
+            target: 'career',
+            inverseSide: 'career',
+            joinColumn: true
+        },    
+        schedule: {
+            type: 'one-to-many',
+            target: 'schedule',
+            inverseSide: 'schedule',
+            joinColumn: true
+        },     
+    },
 });
 
 export default SubjectEntity;

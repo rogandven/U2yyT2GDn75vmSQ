@@ -16,6 +16,14 @@ export const CareerEntity = new EntitySchema({
             nullable: false,
         },
     },
+    relations: {
+        subject: {
+            type: 'many-to-many',
+            target: 'subject',
+            inverseSide: 'subject',
+            joinColumn: true
+        },     
+    },
 });
 
 export default CareerEntity;
