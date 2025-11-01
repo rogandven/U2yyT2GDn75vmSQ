@@ -45,7 +45,8 @@ const Electivo = () => {
                 <td>{user.cupos}</td>
                 <td>{user.creditos}</td>
                 <td>
-                  {/*<button className="create" onClick={() => handleCreateElectivo(user.id, user)}>Crear</button>*/}
+                  {/*Ahora edita el boton crear para que le pongas tus funciones que le diste en tu backend y en el hook*/
+                  /*<button className="create" onClick={() => handleCreateElectivo(user.id, user)}>Crear</button>*/}
                   <button className="edit" onClick={() => handleEditElectivo(user.id, user)}>Editar</button>
                   <button className="delete" onClick={() => handleDeleteElectivo(user.id)}>Eliminar</button>
                 </td>

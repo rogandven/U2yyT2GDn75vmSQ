@@ -6,14 +6,6 @@ import Joi from "joi";
 }; */
 
 export const createValidation = Joi.object({
-    id: Joi.number().integer().min(1).required().messages({
-      "number.min": "ID negativo o cero",
-      "number.integer": "El ID debe ser entero",
-      "number.base": "El ID debe ser un numero",
-      "number.infinity": "El ID no puede ser infinito",
-      "any.required": "El ID es obligatorio",
-    }),
-
     nombre: Joi.string().min(1).max(50).required().messages({
       "any.required": "El nombre del electivo es obligatorio",
       "string.base": "El nombre del electivo debe ser una cadena",
@@ -57,14 +49,6 @@ export const createValidation = Joi.object({
   });
   
 export const updateValidation = Joi.object({
-    id: Joi.number().integer().min(1).required().messages({
-      "number.min": "ID negativo o cero",
-      "number.integer": "El ID debe ser entero",
-      "number.base": "El ID debe ser un numero",
-      "number.infinity": "El ID no puede ser infinito",
-      "any.required": "El ID es obligatorio",
-    }),
-
     nombre: Joi.string().min(1).max(50).required().messages({
       "any.required": "El nombre del electivo es obligatorio",
       "string.base": "El nombre del electivo debe ser una cadena",

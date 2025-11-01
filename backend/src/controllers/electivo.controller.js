@@ -110,7 +110,7 @@ export async function deleteElectivoById(req, res) {
     }
 
     // Eliminar el usuario de la base de datos
-    await ElectivoEntityRepository.remove(user);
+    await ElectivoEntityRepository.remove(electivos);
 
     res.status(200).json({ message: "Electivo eliminado exitosamente." });
   } catch (error) {

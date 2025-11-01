@@ -8,33 +8,49 @@ async function editElectivoInfo(electivos) {
     title: "Editar Electivo",
     html: `
     <div>
-      <label for="swal2-input1">Nombre de electivo</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Nombre de electivo" value = "${electivos.nombre}">
+      <label for="swal2-input0">Nombre de electivo</label>  
+      <input id="swal2-input0" class="swal2-input" placeholder="Nombre de electivo" value = "${electivos.nombre}">
     </div>
+    <div>
+      <label for="swal2-input1">Descripcion</label>  
+      <input id="swal2-input1" class="swal2-input" placeholder="Descripcion" value = "${electivos.descripcion}">
+    </div>    
     <div>
       <label for="swal2-input2">Nombre del profesor</label>
       <input id="swal2-input2" class="swal2-input" placeholder="Nombre del profesor" value = "${electivos.profesor}">
     </div>
     <div>
-      <label for="swal2-input1">Numero de cupos</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Numero de cupos" value = "${electivos.cupos}">
+      <label for="swal2-input3">Numero de cupos</label>  
+      <input id="swal2-input3" class="swal2-input" placeholder="Numero de cupos" value = "${electivos.cupos}">
     </div>
     <div>
-      <label for="swal2-input2">Numero de creditos</label>
-      <input id="swal2-input2" class="swal2-input" placeholder="Numero de creditos" value = "${electivos.creditos}">
+      <label for="swal2-input4">Numero de creditos</label>
+      <input id="swal2-input4" class="swal2-input" placeholder="Numero de creditos" value = "${electivos.creditos}">
     </div>
         `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
     preConfirm: () => {
-      const nombre = document.getElementById("swal2-input1").value;
+      const nombre = document.getElementById("swal2-input0").value;
+      const descripcion = document.getElementById("swal2-input1").value;
       const profesor = document.getElementById("swal2-input2").value;
-      const cupos = document.getElementById("swal2-input1").value;
-      const creditos = document.getElementById("swal2-input2").value;
+      const cupos = document.getElementById("swal2-input3").value;
+      const creditos = document.getElementById("swal2-input4").value;
+
+      console.log("NOMBRE: " + String(nombre));
+      console.log("DESCRIPCION: " + String(descripcion));
+      console.log("PROFESOR: " + String(profesor));
+      console.log("CUPOS: " + String(cupos));
+      console.log("CREDITOS: " + String(creditos));
 
       if (!nombre || !profesor) {
         Swal.showValidationMessage("Por favor, completa todos los campos");
+        return false;
+      }
+
+      if (!descripcion) {
+        Swal.showValidationMessage("La descripción es obligatoria");
         return false;
       }
 
@@ -66,7 +82,7 @@ async function editElectivoInfo(electivos) {
         return false;
       }
 
-      if (cupos != 0 || cupos < CANTIDAD_MAXIMA_DE_CUPOS){
+      if (cupos == 0 || cupos > CANTIDAD_MAXIMA_DE_CUPOS){
         Swal.showValidationMessage(
           "Ingrese los cupos del electivo (máximo 60):"
         );
@@ -74,7 +90,7 @@ async function editElectivoInfo(electivos) {
         Swal.showValidationMessage("Por favor ingrese un número de cupos válido");
       }
 
-      if (creditos != 0 ||  creditos < CANTIDAD_MAXIMA_DE_CREDITOS){
+      if (creditos == 0 ||  creditos > CANTIDAD_MAXIMA_DE_CREDITOS){
         Swal.showValidationMessage(
           "Ingrese los créditos correspondientes al ramo (máximo 7):"
         );
@@ -82,13 +98,16 @@ async function editElectivoInfo(electivos) {
         Swal.showValidationMessage("Por favor ingrese un número válido de créditos");
       }
 
-      return { nombre, profesor, cupos, creditos };
+      return { nombre, descripcion, profesor, cupos, creditos };
     },
   });
   if (formValues) {
     return {
       nombre: formValues.nombre,
+      descripcion: formValues.descripcion,
       profesor: formValues.profesor,
+      cupos: formValues.cupos,
+      creditos: formValues.creditos
     };
   }
 }

@@ -13,22 +13,22 @@ export const ElectivoEntity = new EntitySchema({
         },
         nombre: {
             type: String,
-            unique: true,
+            unique: false,
             nullable: false,
         },
         profesor: {
             type: String,
-            unique: true,
+            unique: false,
             nullable: false,
         },
         cupos: {
             type: Number,
-            unique: true,
+            unique: false,
             nullable: false,
         },
         creditos: {
             type: Number,
-            unique: true,
+            unique: false,
             nullable: false
         },
         descripcion: {
