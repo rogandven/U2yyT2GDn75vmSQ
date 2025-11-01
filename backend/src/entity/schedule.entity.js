@@ -2,9 +2,9 @@
 
 import { EntitySchema } from "typeorm";
 
-export const CareerEntity = new EntitySchema({
-    name: "Career",
-    tableName: "careers",
+export const ScheduleEntity = new EntitySchema({
+    name: "Schedule",
+    tableName: "schedules",
     columns: {
         start_time: {
             type: "time",
@@ -21,4 +21,4 @@ export const CareerEntity = new EntitySchema({
     },
 });
 
-export default CareerEntity;
+export default ScheduleEntity;
