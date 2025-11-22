@@ -1,11 +1,13 @@
 "use strict";
 import { DataSource } from "typeorm"
 import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD, DB_HOST } from "./configEnv.js";
+/*
 import ElectivoEntity from "../entity/electivo.entity.js";
 import ClaseEntity from "../entity/clase.entity.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
 import UserEntity from "../entity/user.entity.js";
 import PreinscriptionEntity from "../entity/preinscription.entity.js";
+*/
 
 // import UserEntity from "../entity/user.entity.js";
 // import ElectivoEntity from "../entity/electivo.entity.js";
@@ -17,7 +19,7 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [ElectivoEntity, ClaseEntity, InscripcionEntity, UserEntity, PreinscriptionEntity],
+    // entities: [ElectivoEntity, ClaseEntity, InscripcionEntity, UserEntity, PreinscriptionEntity],
     synchronize: true,
     logging: false,
 });

@@ -1,16 +1,16 @@
 "use strict";
 
-import User from "../entity/user.entity.js";
-import ElectivoEntity from "../entity/electivo.entity.js";
+// import User from "../entity/user.entity.js";
+// import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { encryptPassword } from "../helpers/bcrypt.helper.js";
+// import { encryptPassword } from "../helpers/bcrypt.helper.js";
 
 
 if (!AppDataSource.isInitialized) {
   await AppDataSource.initialize();
   console.log("Conexión con la base de datos inicializada correctamente (initBd).");
 }
-
+/*
 export async function createUsers() {
   try {
     const userRepository = AppDataSource.getRepository(User);
@@ -59,7 +59,9 @@ export async function createUsers() {
     process.exit(1);
   }
 }
+*/
 
+/*
 export async function createElectivos() {
     try {
     const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
@@ -176,3 +178,4 @@ export async function createElectivos() {
     console.error("Error al insertar electivos:", error);
   }
 }
+*/
