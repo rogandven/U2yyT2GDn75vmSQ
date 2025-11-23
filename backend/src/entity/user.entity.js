@@ -11,6 +11,10 @@ export const UserEntity = new EntitySchema({
             primary: true,
             generated: true,
         },
+        fullname: {
+            type: String,
+            nullable: false,
+        },
         username: {
             type: String,
             unique: true,
@@ -32,7 +36,10 @@ export const UserEntity = new EntitySchema({
         },
         role: {
             type: String,
-            default: "user",
+            nullable: false,
+        },
+        generation: {
+            type: String,
         },
         createdAt: {
             type: "timestamp",
