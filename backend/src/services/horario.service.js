@@ -1,5 +1,5 @@
 import { AppDataSource } from "../config/configDb.js";
-import HorarioEntity from "../entity/clase.entity.js";
+import HorarioEntity from "../entity/horario.entity.js";
 import bcrypt from "bcrypt";
 
 const horarioRepository = AppDataSource.getRepository(HorarioEntity);

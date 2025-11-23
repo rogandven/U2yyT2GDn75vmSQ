@@ -28,7 +28,7 @@ export const ElectivoEntity = new EntitySchema({
       default: 0,
     },
     semestre_minimo:{
-      type: "string",
+      type: "varchar",
       length: 10,
     },
     estado:{

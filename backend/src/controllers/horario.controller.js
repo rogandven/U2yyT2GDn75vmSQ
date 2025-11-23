@@ -1,6 +1,6 @@
 "use strict";
 
-import HorarioEntity from "../entity/clase.entity.js";
+import HorarioEntity from "../entity/horario.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
 import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";

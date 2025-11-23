@@ -2,12 +2,12 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
-import ClaseEntity from "../entity/clase.entity.js";
+import electivoEntity from "../entity/electivo.entity.js";
 
 export async function CreateInscripciones(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const claseRepository = AppDataSource.getRepository(ClaseEntity);
+    const electivoRepository = AppDataSource.getRepository(electivoEntity);
     
     const { electivoId } = req.body;
     const userId = req.user.id;
@@ -16,7 +16,7 @@ export async function CreateInscripciones(req, res) {
       return res.status(400).json({ message: "El ID del electivo es obligatorio" });
     }
 
-    const electivo = await claseRepository.findOne({ where: { id_electivo: electivoId } });
+    const electivo = await electivoRepository.findOne({ where: { id_electivo: electivoId } });
     if (!electivo) {
       return res.status(404).json({ message: "Electivo no encontrado" });
     }
@@ -58,7 +58,7 @@ export async function CreateInscripciones(req, res) {
 
    
     const nuevaInscripcion = inscripcionRepository.create({
-      electivoNombre: electivo.nombreEl,
+      electivoNombre: electivo.nombre,
       userId: userId,
       electivoId: electivoId,
       estado: "en_espera",
@@ -112,7 +112,7 @@ export async function getInscripciones(req, res) {
 export async function DeleteInscripciones(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const electivoRepository = AppDataSource.getRepository(ClaseEntity);
+    const electivoRepository = AppDataSource.getRepository(electivoEntity);
     const { inscripcionId } = req.params;
     const { motivo } = req.body;
     const userId = req.user.id; 
@@ -141,7 +141,7 @@ export async function DeleteInscripciones(req, res) {
     }
 
   
-    const electivo = await electivoRepository.findOne({ where: { id_electivo: inscripcion.electivoId } });
+    const electivo = await electivoRepository.findOne({ where: { id: inscripcion.electivoId } });
     
     if (electivo && electivo.fechaFinRetiro && inscripcion.estado === "activa") {
       const ahora = new Date();

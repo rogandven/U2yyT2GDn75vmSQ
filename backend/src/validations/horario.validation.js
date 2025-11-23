@@ -39,18 +39,18 @@ export const integrityValidation = Joi.object({
 export const assignationValidation = Joi.object({
   horario_inicio: Joi.any().required().messages({
         "any.required": HORA_INICIO_OBLIGATORIA,
-        "any.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`
     }),
 
   horario_termino: Joi.any().required().messages({
         "any.required": HORA_TERMINO_OBLIGATORIA, 
     }),
 
-  sala: Joi.any().min(MIN_STRING).max(MAX_STRING).required().pattern(SALA_PATTERN).messages({
+  sala: Joi.any().required().messages({
       "any.required": SALA_OBLIGATORIA,
     }),
   dia: Joi.any().required().messages({
       "any.required": DIA_OBLIGATORIO,
+      "any.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
     }),
 })
   .unknown(false)
