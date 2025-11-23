@@ -3,7 +3,7 @@
 import HorarioEntity from "../entity/clase.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
-import { assignationValidation, updateValidation } from "../validations/clase.validation.js";
+import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 
 const isValidTimeFormat = (timeStr) => {
@@ -31,8 +31,15 @@ export async function asignarHorario(req, res) {
     }
     
     const {hora_inicio, hora_termino, sala, dia } = req.body;
-    const { error } = assignationValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
+
+    let result = assignationValidation.validate(req.body);
+    if (result.error) {
+      return res.status(400).json({ message: result.error.message });
+    }
+    result=integrityValidation.validate(req.body);
+    if (result.error) {
+      return res.status(400).json({ message: result.error.message });
+    }
         
     const existingHorarioSala = await horarioRepository.findOne({
       where: { hora_inicio,hora_termino, sala },

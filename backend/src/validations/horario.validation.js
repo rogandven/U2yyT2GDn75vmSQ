@@ -1,6 +1,6 @@
 "use strict";
 import Joi from "joi";
-import { HORARIO_PATTERN, SALA_PATTERN,MIN_STRING,MAX_STRING } from "../constants/horarioConstants.js";
+import { HORARIO_PATTERN, SALA_PATTERN, MIN_STRING, MAX_STRING, SALA_OBLIGATORIA, DIA_OBLIGATORIO, HORA_INICIO_OBLIGATORIA, HORA_TERMINO_OBLIGATORIA, CAMPOS_ADICIONALES, DIAS_SEMANA } from "../constants/horarioConstants.js";
 
 export const integrityValidation = Joi.object({
   horario_inicio: Joi.string().pattern(HORARIO_PATTERN).messages({
@@ -38,40 +38,34 @@ export const integrityValidation = Joi.object({
 // Esquema de validación para el registro de usuarios
 export const assignationValidation = Joi.object({
   horario_inicio: Joi.any().required().messages({
-        "any.required": "La hora de inicio es obligatoria", 
+        "any.required": HORA_INICIO_OBLIGATORIA,
+        "any.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`
     }),
 
   horario_termino: Joi.any().required().messages({
-        "any.required": "La hora de termino es obligatoria", 
+        "any.required": HORA_TERMINO_OBLIGATORIA, 
     }),
 
   sala: Joi.any().min(MIN_STRING).max(MAX_STRING).required().pattern(SALA_PATTERN).messages({
-      "any.required": "La SALA es obligatoria",
+      "any.required": SALA_OBLIGATORIA,
     }),
   dia: Joi.any().required().messages({
-      "any.required": "El día es obligatorio.",
+      "any.required": DIA_OBLIGATORIO,
     }),
 })
   .unknown(false)
   .messages({
-    "object.unknown": "No se permiten campos adicionales",
+    "object.unknown": CAMPOS_ADICIONALES,
   });
 
 export const updateValidation = Joi.object({
-   horario_inicio: Joi.string().pattern(HORARIO_PATTERN).messages({
-        "string.base": "La hora de inicio debe estar adentro de una cadena de caracteres",
-        "any.required": "La hora de inicio es obligatoria",
-        "string.pattern": "El formato de la hora de inicio es incorrecto" 
-    }),
-
-     horario_termino: Joi.any(),
-
-    sala: Joi.any(),
-
-    dia: Joi.any(),
+   horario_inicio: Joi.any(),
+  horario_termino: Joi.any(),
+  sala: Joi.any(),
+  dia: Joi.any(),
 }).min(1).unknown(false).messages({
     "object.min": "Se requiere al menos un campo para actualizar",
-    "object.unknown": "No se permiten campos adicionales",
+    "object.unknown": CAMPOS_ADICIONALES,
 });
 
 //MINUTO 5:04 VIDEO ROGER
