@@ -1,17 +1,18 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
+import { getUsersFromService } from "../service/user.service.js";
+
 
 export async function getUsers(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const users = await userRepository.find();
-
-    res.status(200).json({ message: "Usuarios encontrados: ", data: users });
-  } catch (error) {
-    console.error("Error en user.controller.js -> getUsers(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  const users = await getUsersFromService();
+  if (users.error) {
+    return res.status(500).json(users);
   }
+  if (users.length <= 0) {
+    return res.status(204).json(users);
+  }  
+  return res.status(200).json(users);
 }
 
 export async function getUserById(req, res) {
