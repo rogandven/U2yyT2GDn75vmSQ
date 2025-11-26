@@ -1,3 +1,7 @@
+export const BASE_CASE = 500;
+export const MIN_ERROR_CODE = 100;
+export const MAX_ERROR_CODE = 600;
+
 export const getErrorMessage = (error) => {
     if (!error) {
         return UNKNOWN_ERROR;
@@ -6,7 +10,6 @@ export const getErrorMessage = (error) => {
 }
 
 export const getResultLength = (result) => {
-    const BASE_CASE = 0;
     if (!result) {
         return BASE_CASE;
     }
@@ -21,20 +24,23 @@ export const getResultLength = (result) => {
     }
 }
 
+/*
 export const parseErrorCode = (errorCode) => {
     if (!errorCode) {
-        return 500;
+        return BASE_CASE;
     }
     if (typeof errorCode !== "number" || isNaN(errorCode)) {
-        return 500;
+        return BASE_CASE;
+    }
+    if (errorCode < MIN_ERROR_CODE || errorCode > MAX_ERROR_CODE) {
+        return BASE_CASE;
     }
     return Math.abs(Math.round(errorCode));
-}
+} */
 
-export const createResponseBlueprint = (error, errorCode, data, details, length) => {
+export const getServiceResult = (error, data, details, length) => {
     return {
         error: Boolean(error),
-        errorCode: parseErrorCode(errorCode),
         data: Object(data),
         details: String(details),
         length: parseInt(length)
