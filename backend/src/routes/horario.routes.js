@@ -6,7 +6,7 @@ import { authenticateJwt } from "../middleware/authentication.middleware.js";
 const router = Router();
 
 router.use(authenticateJwt);
-router.post("/asignar", asignarHorario);
+router.post("/asignar/:id_electivo", asignarHorario);
 router.get("/", getHorarios);
 router.patch("/:id", patchHorario);
 router.delete("/:id", deleteHorario);

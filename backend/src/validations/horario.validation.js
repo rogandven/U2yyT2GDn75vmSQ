@@ -2,13 +2,21 @@
 import Joi from "joi";
 import { HORARIO_PATTERN, SALA_PATTERN, MIN_STRING, MAX_STRING, SALA_OBLIGATORIA, DIA_OBLIGATORIO, HORA_INICIO_OBLIGATORIA, HORA_TERMINO_OBLIGATORIA, CAMPOS_ADICIONALES, DIAS_SEMANA } from "../constants/horarioConstants.js";
 
+
+export const validateDay = (value, helpers) => {
+  if (!DIAS_SEMANA.includes(value.toLowerCase())) {
+    return helpers.message("El día debe ser uno de los siguientes: " + DIAS_SEMANA.join(", "));
+  }
+  return value;
+};
+
 export const integrityValidation = Joi.object({
-  horario_inicio: Joi.string().pattern(HORARIO_PATTERN).messages({
+  hora_inicio: Joi.string().pattern(HORARIO_PATTERN).messages({
         "string.base": "La hora de inicio debe estar adentro de una cadena de caracteres",
         "string.pattern": "El formato de la hora es incorrecto" 
     }),
 
-  horario_termino: Joi.string().pattern(HORARIO_PATTERN).messages({
+  hora_termino: Joi.string().pattern(HORARIO_PATTERN).messages({
         "string.base": "La hora de termino debe estar adentro de una cadena de caracteres",
         "string.pattern": "El formato de la hora es incorrecto" 
     }),
@@ -26,7 +34,7 @@ export const integrityValidation = Joi.object({
   dia: Joi.string()
     .min(MIN_STRING)
     .max(MAX_STRING)
-    .pattern(SALA_PATTERN)
+    .custom(validateDay)
     .messages({
       "string.pattern.base":
         "La sala solo puede contener letras, números y guiones bajos.",
@@ -37,11 +45,11 @@ export const integrityValidation = Joi.object({
 
 // Esquema de validación para el registro de usuarios
 export const assignationValidation = Joi.object({
-  horario_inicio: Joi.any().required().messages({
+  hora_inicio: Joi.any().required().messages({
         "any.required": HORA_INICIO_OBLIGATORIA,
     }),
 
-  horario_termino: Joi.any().required().messages({
+  hora_termino: Joi.any().required().messages({
         "any.required": HORA_TERMINO_OBLIGATORIA, 
     }),
 
@@ -59,8 +67,8 @@ export const assignationValidation = Joi.object({
   });
 
 export const updateValidation = Joi.object({
-   horario_inicio: Joi.any(),
-  horario_termino: Joi.any(),
+   hora_inicio: Joi.any(),
+  hora_termino: Joi.any(),
   sala: Joi.any(),
   dia: Joi.any(),
 }).min(1).unknown(false).messages({

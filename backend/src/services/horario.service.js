@@ -23,8 +23,8 @@ export async function findClaseById_electivo(id_electivo) {
   return await horarioRepository.findOneBy({ id_electivo });
 }
 
-export async function updateHorarioById_Electivo(id_electivo, updateData) {
-  const horario = await horarioRepository.findOneBy({ id_electivo } );
+export async function updateHorarioById_Electivo(id_horario, updateData) {
+  const horario = await horarioRepository.findOneBy({ id_horario } );
   // console.log(clase);
 
   if (!horario) {
@@ -37,14 +37,14 @@ export async function updateHorarioById_Electivo(id_electivo, updateData) {
   return await horarioRepository.save(horario);
 }
 
-export async function deleteHorarioById_Electivo(id_electivo) {
+export async function deleteHorarioById_Electivo(id_horario) {
   // console.log(id_electivo);
-  const horario = await horarioRepository.findOneBy({  id_electivo });
+  const horario = await horarioRepository.findOneBy({  id_horario });
 
   if (!horario) {
     throw new Error("Horario no encontrado");
   }
   // // console.log(user);
   // await userRepository.delete(user);
-  await horarioRepository.delete({id_electivo: horario.id_electivo});
+  await horarioRepository.delete({id_horario: horario.id_horario});
 }

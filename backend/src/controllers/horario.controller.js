@@ -1,6 +1,7 @@
 "use strict";
 
 import HorarioEntity from "../entity/horario.entity.js";
+import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
 import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";
@@ -19,16 +20,19 @@ export async function asignarHorario(req, res) {
     
     const horarioRepository = AppDataSource.getRepository(HorarioEntity);
     const electivoRepository= AppDataSource.getRepository(ElectivoEntity);
-    const { id } = req.params;
-
-    if (!id) {
+    const { id_electivo } = req.params;
+    // console.log(id_electivo);
+    if (!id_electivo) {
       return res.status(400).json({ message: "El ID del electivo es obligatorio" });
     }
 
-    const electivo = await electivoRepository.findOneBy({ id_electivo: id });
+
+    const electivo = await electivoRepository.findOneBy({ id: id_electivo});
     if (!electivo) {
       return res.status(404).json({ message: "Electivo no encontrado" });
     }
+
+    
     
     const {hora_inicio, hora_termino, sala, dia } = req.body;
 
@@ -42,7 +46,7 @@ export async function asignarHorario(req, res) {
     }
         
     const existingHorarioSala = await horarioRepository.findOne({
-      where: { hora_inicio,hora_termino, sala },
+      where: { hora_inicio,hora_termino, sala, dia },
     });
     if (existingHorarioSala)
       return res.status(409).json({ message: "Horario y sala ya registrado." });
@@ -50,11 +54,11 @@ export async function asignarHorario(req, res) {
 
     
     const newHorario = horarioRepository.create({
+      id_electivo: Number(id_electivo),
       hora_inicio,
       hora_termino,
       sala,
       dia 
-      
     });
     await horarioRepository.save(newHorario);
 
@@ -104,14 +108,20 @@ export async function patchHorario(req, res) {
     return res.status(400).json({ message: "El ID del horario es obligatorio" });
   }
   const { hora_inicio, hora_termino,sala, dia } = req.body;
+
   const { error } = updateValidation.validate(req.body);
- 
   if (error) return res.status(400).json({ message: error.message });
+
+  const result=integrityValidation.validate(req.body);
+  if (result.error) {
+    return res.status(400).json({ message: result.error.message });
+  }
+
   const existingHorarioSala = await horarioRepository.findOne({
-      where: { hora_inicio, hora_termino, sala },
+      where: { hora_inicio, hora_termino, sala, dia },
     });
-    // console.log(existingHorarioSala);
-    if (existingHorarioSala && existingHorarioSala.id_electivo != id)
+    console.log(existingHorarioSala);
+    if (existingHorarioSala && existingHorarioSala.id_horario != id)
       return res.status(409).json({ message: "Horario y sala ya registrado." });
 
   try {

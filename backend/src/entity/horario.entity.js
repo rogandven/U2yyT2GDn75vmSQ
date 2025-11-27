@@ -6,19 +6,15 @@ export const HorarioEntity = new EntitySchema({
     name: "HorarioEntity",
     tableName: "horarios",
     columns: {
+        id_horario: {
+            type: Number,
+            generated: true,
+            primary: true,
+        },
         id_electivo: {
             type: Number,
-            primary: true,
-            generated: true,
-        },
-        
-        profesor: {
-            type: String,
-            nullable: false,
-        },
-        nombreEl: {
-            type: String,
-            nullable: false,
+            primary: false,
+            generated: false,
         },
         hora_inicio: {
             type: String,
@@ -29,7 +25,7 @@ export const HorarioEntity = new EntitySchema({
             nullable: false,
         },
         sala: {
-            type: Number,
+            type: String,
             nullable:false
         },
         dia: {

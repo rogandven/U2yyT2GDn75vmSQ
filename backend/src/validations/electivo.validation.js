@@ -46,6 +46,13 @@ export const createValidation = Joi.object({
       "number.min": "Los creditos deben ser al menos 2",
       "number.max": "Los creditos no pueden exceder 8",
     }),
+    semestre_minimo: Joi.string().min(1).max(10).required().messages({
+      "any.required": "El semestre mínimo es obligatorio",
+      "string.base": "El semestre mínimo debe ser una cadena",
+      "string.min": "El semestre mínimo no debe estar vacío",
+      "string.max": "El semestre mínimo no puede exceder los 10 caracteres",
+      "string.empty": "El semestre mínimo no debe estar vacío",
+    }),
   });
   
 export const updateValidation = Joi.object({

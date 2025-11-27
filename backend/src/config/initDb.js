@@ -57,6 +57,7 @@ export async function createElectivos() {
             nombre: "Desarrollo Web Avanzado",
             cupos: 30,
             inscritos: 22,
+            semestre_minimo: "5 semestre",
             apertura: "2025-03-01",
             cierre: "2025-03-15",
             area: "Desarrollo",
@@ -67,6 +68,7 @@ export async function createElectivos() {
             nombre: "Investigación en Inteligencia Artificial",
             cupos: 25,
             inscritos: 20,
+            semestre_minimo: "4 semestre",
             apertura: "2025-04-10",
             cierre: "2025-04-30",
             area: "Investigación",
@@ -77,6 +79,7 @@ export async function createElectivos() {
             nombre: "Comunicación y Liderazgo",
             cupos: 40,
             inscritos: 33,
+            semestre_minimo: "3 semestre",
             apertura: "2025-05-05",
             cierre: "2025-05-20",
             area: "Habilidades Sociales",
@@ -89,7 +92,7 @@ export async function createElectivos() {
             /* await electivoRepo.save((
                 electivoRepo.create(electivo)
             ));
-            console.log(`Elecitvo '${electivo.nombre}' creado exitosamente.`); */
+            console.log(`Electivo '${electivo.nombre}' creado exitosamente.`); */
         }
 
     await electivoRepo.save(electivosIniciales);
