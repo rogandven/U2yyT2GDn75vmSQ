@@ -1,103 +1,98 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { getUsersFromService } from "../service/user.service.js";
-
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService } from "../service/user.service.js";
+import { getControllerResult } from "./utils/utils.controller.js";
+import { idValidation } from "../validations/modules/id.validation.js";
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
   if (users.error) {
-    return res.status(500).json(users);
+    return res.status(500).json(getControllerResult("Error en el servidor", users));
   }
   if (users.length <= 0) {
-    return res.status(204).json(users);
+    return res.status(404).json(getControllerResult("No hay usuarios", users));
   }  
-  return res.status(200).json(users);
+  return res.status(200).json(getControllerResult("Usuarios encontrados con éxito", users));
 }
 
 export async function getUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    res.status(200).json({ message: "Usuario encontrado: ", data: user });
-  } catch (error) {
-    console.error("Error en user.controller.js -> getUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
   }
+
+  const user = await getUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult(user.details, user));
 }
 
 export async function updateUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const { username, email, rut } = req.body;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
+  const newData = req.body;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    user.username = username || user.username;
-    user.email = email || user.email;
-    user.rut = rut || user.rut;
-
-    await userRepository.save(user);
-
-    res
-      .status(200)
-      .json({ message: "Usuario actualizado exitosamente.", data: user });
-  } catch (error) {
-    console.error("Error en user.controller.js -> updateUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
   }
+  const editedUser = await updateUserByIdFromService(id, newData);
+  if (editedUser.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", editedUser));
+  }
+  if (editedUser.length <= 0) {
+    editedUser.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", editedUser));
+  }
+  return res.status(200).json(getControllerResult(editedUser.details, editedUser));
 }
 
 export async function deleteUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    await userRepository.remove(user);
-
-    res.status(200).json({ message: "Usuario eliminado exitosamente." });
-  } catch (error) {
-    console.error("Error en user.controller.js -> deleteUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
   }
+
+  const user = await deleteUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult(user.details, user));
 }
 
 export async function getProfile(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const userEmail = req.user.email;
-    const user = await userRepository.findOne({ where: { email: userEmail } });
-    
-    if (!user) {
-      return res.status(404).json({ message: "Perfil no encontrado." });
-    }
-
-    const formattedUser = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      rut: user.rut,
-      role: user.role
-    };
-
-    res.status(200).json({ message: "Perfil encontrado: ", data: formattedUser });
-  } catch (error) {
-    console.error("Error en user.controller -> getProfile(): ", error);
-    res.status(500).json({ message: "Error interno del servidor"})
+  const id = req.user.id;
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
   }
+
+  const user = await getUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult("Perfil encontrado con éxito", user));
 }

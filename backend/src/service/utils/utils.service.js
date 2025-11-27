@@ -1,4 +1,6 @@
 export const BASE_CASE = 500;
+export const BASE_LENGTH = 0;
+export const OBJECT_LENGTH = 1;
 export const MIN_ERROR_CODE = 100;
 export const MAX_ERROR_CODE = 600;
 
@@ -11,16 +13,16 @@ export const getErrorMessage = (error) => {
 
 export const getResultLength = (result) => {
     if (!result) {
-        return BASE_CASE;
+        return BASE_LENGTH;
     }
     try {
-        const resultLength = Number(result.length());
-        if (isNaN(resultLength)) {
-            return BASE_CASE;
+        if (Array.isArray(result)) {
+            return Number(result.length);
         }
-        return resultLength;
+        return OBJECT_LENGTH;
     } catch (error) {
-        return BASE_CASE;
+        console.log(error);
+        return BASE_LENGTH;
     }
 }
 

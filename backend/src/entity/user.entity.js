@@ -13,7 +13,7 @@ export const UserEntity = new EntitySchema({
         },
         fullname: {
             type: String,
-            nullable: false,
+            nullable: true,
         },
         username: {
             type: String,
@@ -40,6 +40,7 @@ export const UserEntity = new EntitySchema({
         },
         generation: {
             type: String,
+            nullable: true
         },
         createdAt: {
             type: "timestamp",
