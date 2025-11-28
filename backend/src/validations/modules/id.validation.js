@@ -1,13 +1,16 @@
 "use strict";
 import Joi from "joi";
+import { MIN_ID, MAX_ID } from "../../constants/global.constants.js";
 
 export const idValidation = Joi.object({
-    id: Joi.number().required().integer().positive().messages({
+    id: Joi.number().integer().positive().min(MIN_ID).max(MAX_ID).messages({
         "any.required": "El ID es obligatorio",
         "number.required": "El ID es obligatorio",
         "number.base": "El ID tiene que ser un número",
         "number.integer": "El ID tiene que ser un entero",
-        "number.positive": "El ID tiene que ser positivo"
+        "number.positive": "El ID tiene que ser positivo",
+        "number.min":`El ID debe ser mayor que ${MIN_ID - 1}`,
+        "number.max":`El ID debe ser menor que ${MAX + 1}`,
     }),
 }).unknown(false)
     .messages({

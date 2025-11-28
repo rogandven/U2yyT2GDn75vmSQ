@@ -1,8 +1,6 @@
 "use strict";
-import User from "../entity/user.entity.js";
-import { AppDataSource } from "../config/configDb.js";
 import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService } from "../service/user.service.js";
-import { getControllerResult } from "./utils/utils.controller.js";
+import { getControllerResult, fullNameProcessor } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 
 export async function getUsers(req, res) {
@@ -19,6 +17,9 @@ export async function getUsers(req, res) {
 export async function getUserById(req, res) {
   const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  }
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
@@ -41,6 +42,13 @@ export async function updateUserById(req, res) {
   const { id } = req.params;
   const newData = req.body;
 
+  if (newData.fullname) {
+    newData.fullname = fullNameProcessor(fullname);
+  }
+  
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  }
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
@@ -59,6 +67,9 @@ export async function updateUserById(req, res) {
 export async function deleteUserById(req, res) {
   const { id } = req.params;
 
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  } 
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
@@ -78,7 +89,11 @@ export async function deleteUserById(req, res) {
 }
 
 export async function getProfile(req, res) {
-  const id = req.user.id;
+  const id = req.user? (req.user.id || null) : null;
+
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  }  
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
