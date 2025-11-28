@@ -1,7 +1,7 @@
 "use strict";
 import Joi from "joi";
 import { idValidation } from "./modules/id.validation.js";
-import { MAX_FULLNAME, MIN_FULLNAME } from "../constants/user.constants.js";
+import { MAX_FULLNAME, MIN_FULLNAME, VALID_EMAIL_DOMAINS, VALID_ROLES } from "../constants/user.constants.js";
 /*
         id
         fullname
@@ -16,16 +16,30 @@ import { MAX_FULLNAME, MIN_FULLNAME } from "../constants/user.constants.js";
         id_carrera
 */
 
+const emailDomainValidationFunction = (value, helpers) => {
+    for (const domain in VALID_EMAIL_DOMAINS) {
+        if (value.endsWith && value.endsWith(domain)) {
+            return true;
+        }
+    }
+    return helpers.message(`Solo se permiten los siguientes dominios: ${VALID_EMAIL_DOMAINS.join(", ")}`);
+}
+
+const roleValidationFunction = (value, helpers)  => {
+    for (const role in VALID_ROLES) {
+        if (value === role) {
+            return true;
+        }
+    }
+    return helpers.message(`Solo se permiten los siguientes roles: ${VALID_ROLES.join(", ")}`);
+}
+
 export const idValidationFunction = (value, helpers) => {
     const result = idValidation.validate({id: value});
     if (result.error) {
         return helpers.message(result.error.message ? result.error.message : "El ID no es válido");
     }
     return true;
-}
-
-export const fullNameValidationFunction = (value, helpers) => {
-    
 }
 
 export const integrityValidation = Joi.object({
@@ -42,5 +56,24 @@ export const integrityValidation = Joi.object({
         "string.min": `El nombre de usuario debe al menos ser de ${MIN_FULLNAME} caracteres`,
         "string.max": `El nombre de usuario no puede tener más de ${MAX_FULLNAME} caracteres`,
     }),
-    password: Joi.string().min(1) 
+    email: Joi.string().email().custom(emailDomainValidationFunction).messages({
+        "string.base": "El correo debe ser un string",
+        "string.email": "Correo malformado",
+    }),
+    password: Joi.string().min(1).messages({
+        "string.base": "La contraseña debe ser un string",
+        "string.min": "La contraseña no puede ser vacía",
+    }),
+    role: Joi.string().min(1).custom(roleValidationFunction).messages({
+        "string.base": "El rol debe ser un string",
+        "string.min": "El rol no puede ser vacío",
+    }),
+    generation: Joi.string().min(1).pattern(/[1-9]*-[1-2]/).custom().messages({
+        "string.base": "La generación debe ser un string",
+        "string.min": "La generación no puede ser vacía",
+        "string.pattern.base": "Generación malformada",
+    }),
+    createdAt:
+    updatedAt:
+    id_carrera:
 });
