@@ -42,6 +42,25 @@ export const idValidationFunction = (value, helpers) => {
     return true;
 }
 
+export const validateTimeStamp = (timestamp) => {
+    try {
+        if (!timestamp) {
+            return false;
+        }
+        if (typeof(timestamp) !== "string") {
+            return false;
+        }
+        timestamp = timestamp.split(".")[0];
+        const result = Date.parse(timestamp, "yyyy-MM-dd HH:mm:ss");
+        if (result === null || !result) {
+            return false;
+        }        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 export const integrityValidation = Joi.object({
     id: Joi.any().custom(idValidationFunction),
     fullname: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).pattern(FULLNAME_REGEX).messages({
