@@ -1,7 +1,8 @@
 import { getErrorMessage, getResultLength, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import UserEntity from "../entity/user.entity.js";
-
+import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
+import { JWT_SECRET } from "../config/configEnv.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -38,12 +39,15 @@ export async function getUserByIdFromService(id) {
 export async function updateUserByIdFromService(id, newData) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
-        var oldData = null;
-        oldData = await userRepository.findOne({ where: { id } });
+        const oldData = await userRepository.findOne({ where: { id } });
         if (!oldData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         }
+        if (newData.password) {
+            newData.password = encryptPassword(newData.password);
+        }
         /* fullname, username, rut, email, password, role, generation */
+        oldData.id = id;
         oldData.fullname = newData.fullname || oldData.fullname;
         oldData.username = newData.username || oldData.username;
         oldData.rut = newData.rut || oldData.rut;
@@ -51,6 +55,7 @@ export async function updateUserByIdFromService(id, newData) {
         oldData.password = newData.password || oldData.password;
         oldData.role = newData.role || oldData.role;
         oldData.generation = newData.generation || oldData.generation;
+        oldData.id_carrera = newData.id_carrera || oldData.id_carrera;
 
         await userRepository.save(oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
@@ -81,49 +86,88 @@ export async function deleteUserByIdFromService(id) {
     }
 }
 
+export async function checkIfUserExists(userRepository, newData) {
+    try {
+        const existingEmailUser = await userRepository.findOne({where: { email: newData.email }});
+        if (existingEmailUser) {
+            return getServiceResult(false, null, "Correo ya registrado", 0);
+        }
+        const existingRutUser = await userRepository.findOne({ where: { rut: newData.rut } });
+        if (existingRutUser) {
+            return getServiceResult(false, null, "RUT ya registrado", 0);
+        }
+        const existingUsernameUser = await userRepository.findOne({ where: { username: newData.username } });
+        if (existingUsernameUser) {
+            return getServiceResult(false, null, "Nombre de usuario ya registrado", 0);
+        }
+        return null;
+    } catch (error) {
+        return getServiceResult(false, null, "Error desconocido", 0);
+    }
+}
+
 export async function registerUserFromService(newData) {
-    // TODO!!! TODO!!! TODO!!! TODO!!!TODO!!! TODO!!!TODO!!! TODO!!!TODO!!! TODO!!!
     /* fullname, username, rut, email, password, role, generation */
     try {
-        // Obtener el repositorio de usuarios y validar los datos de entrada
         const userRepository = AppDataSource.getRepository(UserEntity);
+        const result = await checkIfUserExists(userRepository, newData);
+        if (result !== null) {
+            return result;
+        }
 
-        // Verificar si el usuario ya existe verificando email, rut y username
-        const existingEmailUser = await userRepository.findOne({
-        where: { email },
-        });
-        if (existingEmailUser)
-        return res.status(409).json({ message: "Correo ya registrado." });
+        newData.password = await encryptPassword(newData.password);
 
-        const existingRutUser = await userRepository.findOne({ where: { rut } });
-        if (existingRutUser)
-        return res.status(409).json({ message: "Rut ya registrado." });
-
-        const existingUsernameUser = await userRepository.findOne({
-        where: { username },
-        });
-        if (existingUsernameUser)
-        return res
-            .status(409)
-            .json({ message: "Nombre de usuario ya registrado." });
-
-        // Crear un nuevo usuario y guardar en la base de datos
-        const newUser = userRepository.create({
-        username,
-        email,
-        rut,
-        password: await encryptPassword(password),
-        });
+        const newUser = userRepository.create(newData);
         await userRepository.save(newUser);
 
         // Excluir la contraseña del objeto de respuesta
         const { contraseña, ...dataUser } = newUser;
-
-        res
-        .status(201)
-        .json({ message: "Usuario registrado exitosamente!", data: dataUser });
+        return getServiceResult(false, dataUser, "Usuario registrado exitosamente!", 1);
     } catch (error) {
         console.error("Error en auth.controller.js -> register(): ", error);
-        return res.status(500).json({ message: "Error al registrar el usuario" });
+        return getServiceResult(true, null, "Error al registrar usuario", 0);
     }
+}
+
+export async function loginUserFromService(data) {
+    const GENERIC_ERROR = "Usuario o clave incorrectos";
+
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+
+        const userFound = await userRepository.findOne({ where: { email: data.email } });
+        // Correo no existe
+        if (!userFound) {
+            return getServiceResult(false, null, GENERIC_ERROR, 0);
+        }
+        const isMatch = await comparePassword(password, userFound.password);
+        // Contraseña incorrecta
+        if (!isMatch) {
+            return getServiceResult(false, null, GENERIC_ERROR, 0);
+        }
+
+        const payload = {
+            id : userFound.id,
+            username: userFound.username,
+            email: userFound.email,
+            rut: userFound.rut,
+            rol: userFound.role,
+        };
+        const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+
+        return getServiceResult(false, { token: accessToken }, "Inicio de sesión exitoso!", 1);
+    } catch (error) {
+        console.error("Error en auth.controller.js -> login(): ", error);
+        return getServiceResult(true, null, "Error al iniciar sesión", 0);
+    }
+}
+
+export async function logoutUserFromService(clearCookieFunction) {
+  try {
+    clearCookieFunction("jwt", { httpOnly: true });
+    return getServiceResult(false, null, "Sesión cerrada exitosamente", 0);
+  } catch (error) {
+    console.error("Error en auth.controller.js -> login(): ", error);
+    return getServiceResult(true, null, "Error al cerrar sesión", 0);
+  }
 }

@@ -1,5 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService } from "../service/user.service.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService } from "../service/user.service.js";
 import { getControllerResult, fullNameProcessor } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 
@@ -42,12 +42,11 @@ export async function updateUserById(req, res) {
   const { id } = req.params;
   const newData = req.body;
 
-  if (newData.fullname) {
-    newData.fullname = fullNameProcessor(fullname);
-  }
-  
   if (!id) {
     return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  }
+  if (newData.fullname) {
+    newData.fullname = fullNameProcessor(fullname);
   }
   const result = idValidation.validate({id: id});
   if (result.error) {
@@ -113,53 +112,44 @@ export async function getProfile(req, res) {
 }
 
 export async function register(req, res) {
-  
+  if (!req.body) {
+    return res.status(400).json(getControllerResult("No se ha proporcionado ningún dato", null));
+  }
+
+  req.body.fullname = fullNameProcessor(req.body.fullname);
+
+  const user = await registerUserFromService(req.body);
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  } 
+  if (user.data === null) {
+    user.error = true;
+    if (user.details && user.details.endsWith("ya registrado")) {
+      return res.status(409).json(getControllerResult(user.details, user));
+    }
+    return res.status(400).json(getControllerResult(user.details ? user.details : "Error al registrar usuario", user));
+  }
+  return res.status(201).json(getControllerResult(user.details, user));
 }
 
 export async function login(req, res) {
-  try {
-    // Obtener el repositorio de usuarios y validar los datos de entrada
-    const userRepository = AppDataSource.getRepository(User);
-    const { email, password } = req.body;
-    const { error } = loginValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
-
-    // Verificar si el usuario existe y si la contraseña es correcta
-    const userFound = await userRepository.findOne({ where: { email } });
-    if (!userFound)
-      return res
-        .status(404)
-        .json({ message: "El correo electrónico no está registrado" });
-
-    const isMatch = await comparePassword(password, userFound.password);
-    if (!isMatch)
-      return res
-        .status(401)
-        .json({ message: "La contraseña ingresada no es correcta" });
-
-    // Generar un token JWT y enviarlo al cliente
-    const payload = {
-      id : userFound.id,
-      username: userFound.username,
-      email: userFound.email,
-      rut: userFound.rut,
-      rol: userFound.role,
-    };
-    const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
-
-    res.status(200).json({ message: "Inicio de sesión exitoso", accessToken });
-  } catch (error) {
-    console.error("Error en auth.controller.js -> login(): ", error);
-    return res.status(500).json({ message: "Error al iniciar sesión" });
+  const result = await loginUserFromService(req.body);
+  if (result.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", result));
   }
+  if (result.data === null) {
+    result.error = true;
+    return res.status(400).json(getControllerResult(result.details || "Error al iniciar sesión", result));
+  }
+  return res.status(200).json(getControllerResult("Sesión iniciada con éxito", result));
 }
 
 export async function logout(req, res) {
   // Eliminar la cookie de sesión del cliente
-  try {
-    res.clearCookie("jwt", { httpOnly: true });
-    res.status(200).json({ message: "Sesión cerrada exitosamente" });
-  } catch (error) {
-    return res.status(500).json({ message: "Error al cerrar sesión" });
+  const result = logoutUserFromService(res.clearCookie);
+  if (result.error) {
+    return res.status(200).json(getControllerResult("Sesión cerrada exitosamente", result));
+  } else {
+    return res.status(500).json(getControllerResult("Error al cerrar sesión", result));
   }
 }
