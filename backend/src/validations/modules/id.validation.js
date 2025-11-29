@@ -16,3 +16,11 @@ export const idValidation = Joi.object({
     .messages({
         "object.unknown": "No se permiten campos adicionales",
 });
+
+export const idValidationFunction = (value, helpers) => {
+    const result = idValidation.validate({id: value});
+    if (result.error) {
+        return helpers.message(result.error.message ? result.error.message : "El ID no es válido");
+    }
+    return true;
+}

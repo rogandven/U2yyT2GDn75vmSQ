@@ -1,7 +1,10 @@
 "use strict";
 import Joi from "joi";
-import { idValidation } from "./modules/id.validation.js";
-import { MAX_FULLNAME, MIN_FULLNAME, VALID_EMAIL_DOMAINS, VALID_ROLES } from "../constants/user.constants.js";
+import { idValidationFunction } from "./modules/id.validation.js";
+import { timestampValidationFunction } from "./modules/timestamp.validation.js";
+import { emailDomainValidationFunction } from "./modules/email.validation.js";
+import { roleValidationFunction } from "./modules/role.validation.js"; 
+import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX } from "../constants/user.constants.js";
 /*
         id
         fullname
@@ -15,63 +18,6 @@ import { MAX_FULLNAME, MIN_FULLNAME, VALID_EMAIL_DOMAINS, VALID_ROLES } from "..
         updatedAt
         id_carrera
 */
-
-export const GENERATION_REGEX = /[1-9]*-[1-2]/;
-
-const emailDomainValidationFunction = (value, helpers) => {
-    for (const domain in VALID_EMAIL_DOMAINS) {
-        if (value.endsWith && value.endsWith(domain)) {
-            return true;
-        }
-    }
-    return helpers.message(`Solo se permiten los siguientes dominios: ${VALID_EMAIL_DOMAINS.join(", ")}`);
-}
-
-const roleValidationFunction = (value, helpers)  => {
-    for (const role in VALID_ROLES) {
-        if (value === role) {
-            return true;
-        }
-    }
-    return helpers.message(`Solo se permiten los siguientes roles: ${VALID_ROLES.join(", ")}`);
-}
-
-export const idValidationFunction = (value, helpers) => {
-    const result = idValidation.validate({id: value});
-    if (result.error) {
-        return helpers.message(result.error.message ? result.error.message : "El ID no es válido");
-    }
-    return true;
-}
-
-export const timestampValidationHelper = (timestamp) => {
-    try {
-        if (!timestamp) {
-            return false;
-        }
-        if (typeof(timestamp) !== "string") {
-            return false;
-        }
-        timestamp = timestamp.split(".")[0];
-        const result = Date.parse(timestamp, "yyyy-MM-dd HH:mm:ss");
-        if (result === null || !result) {
-            return false;
-        }        
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
-
-    return true;
-}
-
-export const timestampValidationFunction = (value, helpers) => {
-    const result = timestampValidationHelper(value);
-    if (!result) {
-        return helpers.message('La fecha no es válida');
-    }
-    return true;
-}
 
 export const integrityValidation = Joi.object({
     id: Joi.any().custom(idValidationFunction),
