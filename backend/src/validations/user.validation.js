@@ -16,6 +16,8 @@ import { MAX_FULLNAME, MIN_FULLNAME, VALID_EMAIL_DOMAINS, VALID_ROLES } from "..
         id_carrera
 */
 
+export const GENERATION_REGEX = /[1-9]*-[1-2]/;
+
 const emailDomainValidationFunction = (value, helpers) => {
     for (const domain in VALID_EMAIL_DOMAINS) {
         if (value.endsWith && value.endsWith(domain)) {
@@ -42,7 +44,7 @@ export const idValidationFunction = (value, helpers) => {
     return true;
 }
 
-export const validateTimeStamp = (timestamp) => {
+export const timestampValidationHelper = (timestamp) => {
     try {
         if (!timestamp) {
             return false;
@@ -59,6 +61,16 @@ export const validateTimeStamp = (timestamp) => {
         console.log(error);
         return false;
     }
+
+    return true;
+}
+
+export const timestampValidationFunction = (value, helpers) => {
+    const result = timestampValidationHelper(value);
+    if (!result) {
+        return helpers.message('La fecha no es válida');
+    }
+    return true;
 }
 
 export const integrityValidation = Joi.object({
@@ -87,12 +99,18 @@ export const integrityValidation = Joi.object({
         "string.base": "El rol debe ser un string",
         "string.min": "El rol no puede ser vacío",
     }),
-    generation: Joi.string().min(1).pattern(/[1-9]*-[1-2]/).custom().messages({
+    generation: Joi.string().min(1).pattern(GENERATION_REGEX).messages({
         "string.base": "La generación debe ser un string",
         "string.min": "La generación no puede ser vacía",
         "string.pattern.base": "Generación malformada",
     }),
-    createdAt:
-    updatedAt:
-    id_carrera:
+    createdAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
+        "string.base": "La fecha de creación debe ser un string",
+        "string.min": "La fecha de creación no puede ser vacía",
+    }),
+    updatedAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
+        "string.base": "La fecha de actualización debe ser un string",
+        "string.min": "La fecha de actualización no puede ser vacía",
+    }),
+    id_carrera: Joi.any().custom(idValidationFunction),
 });
