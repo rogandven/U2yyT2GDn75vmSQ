@@ -111,3 +111,55 @@ export async function getProfile(req, res) {
 
   return res.status(200).json(getControllerResult("Perfil encontrado con éxito", user));
 }
+
+export async function register(req, res) {
+  
+}
+
+export async function login(req, res) {
+  try {
+    // Obtener el repositorio de usuarios y validar los datos de entrada
+    const userRepository = AppDataSource.getRepository(User);
+    const { email, password } = req.body;
+    const { error } = loginValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    // Verificar si el usuario existe y si la contraseña es correcta
+    const userFound = await userRepository.findOne({ where: { email } });
+    if (!userFound)
+      return res
+        .status(404)
+        .json({ message: "El correo electrónico no está registrado" });
+
+    const isMatch = await comparePassword(password, userFound.password);
+    if (!isMatch)
+      return res
+        .status(401)
+        .json({ message: "La contraseña ingresada no es correcta" });
+
+    // Generar un token JWT y enviarlo al cliente
+    const payload = {
+      id : userFound.id,
+      username: userFound.username,
+      email: userFound.email,
+      rut: userFound.rut,
+      rol: userFound.role,
+    };
+    const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
+
+    res.status(200).json({ message: "Inicio de sesión exitoso", accessToken });
+  } catch (error) {
+    console.error("Error en auth.controller.js -> login(): ", error);
+    return res.status(500).json({ message: "Error al iniciar sesión" });
+  }
+}
+
+export async function logout(req, res) {
+  // Eliminar la cookie de sesión del cliente
+  try {
+    res.clearCookie("jwt", { httpOnly: true });
+    res.status(200).json({ message: "Sesión cerrada exitosamente" });
+  } catch (error) {
+    return res.status(500).json({ message: "Error al cerrar sesión" });
+  }
+}
