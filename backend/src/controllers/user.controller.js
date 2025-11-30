@@ -3,6 +3,7 @@ import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService,
 import { getControllerResult, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
+import { STUDENT_ROLE } from "../constants/user.constants.js";
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -124,7 +125,7 @@ export async function getProfile(req, res) {
   return res.status(200).json(getControllerResult("Perfil encontrado con éxito", user));
 }
 
-export async function register(req, res) {
+export async function registerPrivate(req, res) {
   if (!req.body) {
     return res.status(400).json(getControllerResult("No se ha proporcionado ningún dato", null));
   }
@@ -152,6 +153,17 @@ export async function register(req, res) {
     return res.status(400).json(getControllerResult(user.details ? user.details : "Error al registrar usuario", user));
   }
   return res.status(201).json(getControllerResult(user.details, user));
+}
+
+export async function registerPublic(req, res) {
+  if (!req || !(req.body)) {
+    return res.status(400).json(getControllerResult("Ningún dato proporcionado"), null);
+  }
+  if (req.body.role) {
+    return res.status(401).json(getControllerResult("No se puede autoasignar un rol"), null);
+  }
+  req.body.role = STUDENT_ROLE;
+  return await registerPrivate(req, res);
 }
 
 export async function login(req, res) {
