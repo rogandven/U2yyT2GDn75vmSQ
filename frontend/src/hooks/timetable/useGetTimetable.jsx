@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getTimetables } from "@services/clase.service.js";
+import { getTimetables } from "@services/horario.service.js";
 
 const useGetTimetable = () => {
     const [horarioData, setHorarioData] = useState([]);

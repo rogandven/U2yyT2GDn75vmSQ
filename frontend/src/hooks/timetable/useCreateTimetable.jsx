@@ -1,4 +1,4 @@
-import { assignTimetable } from "@services/horario.service";
+import { assignTimetable } from "@services/horario.service.js";
 import Swal from "sweetalert2";
 
 async function CreateTimetable() {

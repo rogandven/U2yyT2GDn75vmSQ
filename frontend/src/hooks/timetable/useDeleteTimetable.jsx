@@ -1,5 +1,5 @@
 import Swal from "sweetalert2";
-import { deleteTimetable } from "@services/horario.service";
+import { deleteTimetable } from "@services/horario.service.js";
 
 async function confirmDeleteTimetable() {
   const result = await Swal.fire({

@@ -1,4 +1,4 @@
-import axios from 'services/root.service';
+import axios from '@services/root.service.js';
 
 export const getTimetables = async () => {
     try {
