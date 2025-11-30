@@ -3,6 +3,7 @@ import { AppDataSource } from "../config/configDb.js";
 import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
+import jwt from 'jsonwebtoken';
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -140,7 +141,7 @@ export async function loginUserFromService(data) {
         if (!userFound) {
             return getServiceResult(false, null, GENERIC_ERROR, 0);
         }
-        const isMatch = await comparePassword(password, userFound.password);
+        const isMatch = await comparePassword(data.password, userFound.password);
         // Contraseña incorrecta
         if (!isMatch) {
             return getServiceResult(false, null, GENERIC_ERROR, 0);

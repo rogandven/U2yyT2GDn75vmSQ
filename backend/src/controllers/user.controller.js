@@ -167,14 +167,14 @@ export async function registerPublic(req, res) {
 }
 
 export async function login(req, res) {
-  var validationResult = integrityValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }
-  validationResult = loginValidation.validate(req.body);
+  var validationResult = loginValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }   
+  validationResult = integrityValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
 
   const result = await loginUserFromService(req.body);
   if (result.error) {
