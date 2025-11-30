@@ -1,9 +1,7 @@
 "use strict";
-import User from "../entity/user.entity.js";
-import { AppDataSource } from "../config/configDb.js";
-import { getMiddlewareResponse, getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
+import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
 import { isAdminFromService } from "../service/authorization.service.js";
-import { VALID_ADMIN_ROLES, VALID_SUPERADMIN_ROLES } from "../constants/user.constants.js";
+import { VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
