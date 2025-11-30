@@ -44,7 +44,7 @@ export const getServiceResult = (error, data, details, length) => {
     return {
         error: Boolean(error),
         data: Object(data),
-        details: String(details),
-        length: parseInt(length)
+        details: String(details || "Error desconocido"),
+        length: parseInt(length || 0)
     };
 }
