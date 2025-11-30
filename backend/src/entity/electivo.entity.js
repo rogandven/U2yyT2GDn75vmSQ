@@ -9,6 +9,10 @@ export const ElectivoEntity=new EntitySchema({
       type: "int",
       generated: true,
     },
+    codigo: {
+      type: "varchar",
+      length: 255,
+    },
     nombre: {
       type: "varchar",
       length: 255,
