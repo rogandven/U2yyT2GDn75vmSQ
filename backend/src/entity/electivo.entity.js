@@ -22,6 +22,10 @@ export const ElectivoEntity=new EntitySchema({
     creditos_requeridos: {
       type: "int",
     },
+    generacion_minima: {
+      type: "varchar",
+      length: 255,
+    },
     inscritos: {
       type: "int",
       default: 0,
