@@ -1,7 +1,8 @@
 "use strict";
 import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService } from "../service/user.service.js";
-import { getControllerResult, fullNameProcessor } from "./utils/utils.controller.js";
+import { getControllerResult, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
+import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -48,10 +49,22 @@ export async function updateUserById(req, res) {
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(fullname);
   }
+
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
   }
+
+  var validationResult = integrityValidation.validate(newData);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+
+  validationResult = updateValidation.validate(newData);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }  
+
   const editedUser = await updateUserByIdFromService(id, newData);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult("Error interno del servidor", editedUser));
@@ -118,6 +131,15 @@ export async function register(req, res) {
 
   req.body.fullname = fullNameProcessor(req.body.fullname);
 
+  var validationResult = integrityValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+  validationResult = createValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }   
+
   const user = await registerUserFromService(req.body);
   if (user.error) {
     return res.status(500).json(getControllerResult("Error interno del servidor", user));
@@ -133,6 +155,15 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
+  var validationResult = integrityValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+  validationResult = loginValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }   
+
   const result = await loginUserFromService(req.body);
   if (result.error) {
     return res.status(500).json(getControllerResult("Error interno del servidor", result));

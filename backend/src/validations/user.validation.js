@@ -4,6 +4,7 @@ import { idValidationFunction } from "./modules/id.validation.js";
 import { timestampValidationFunction } from "./modules/timestamp.validation.js";
 import { emailDomainValidationFunction } from "./modules/email.validation.js";
 import { roleValidationFunction } from "./modules/role.validation.js"; 
+import { rutValidationFunction } from "./modules/rut.validation.js";
 import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX } from "../constants/user.constants.js";
 /*
         id
@@ -33,6 +34,9 @@ export const integrityValidation = Joi.object({
         "string.min": `El nombre de usuario debe al menos ser de ${MIN_FULLNAME} caracteres`,
         "string.max": `El nombre de usuario no puede tener más de ${MAX_FULLNAME} caracteres`,
     }),
+    rut: Joi.string().custom(rutValidationFunction).messages({
+        "string.base": "El RUT debe ser un string",
+    }),
     email: Joi.string().email().custom(emailDomainValidationFunction).messages({
         "string.base": "El correo debe ser un string",
         "string.email": "Correo malformado",
@@ -59,4 +63,70 @@ export const integrityValidation = Joi.object({
         "string.min": "La fecha de actualización no puede ser vacía",
     }),
     id_carrera: Joi.any().custom(idValidationFunction),
+}).unknown(false).messages({
+    "any.unknown":"No se permiten campos adicionales",
+    "object.unknown":"No se permiten campos adicionales",
+});
+
+export const updateValidation = Joi.object({
+    fullname: Joi.any(),
+    username: Joi.any(),
+    rut: Joi.any(),
+    email: Joi.any(),
+    password: Joi.any(),
+    role: Joi.any(),
+    generation: Joi.any(),
+    id_carrera: Joi.any(),
+}).min(1).unknown(false).messages({
+    "object.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.unknown":"No se permiten campos adicionales",
+    "object.unknown":"No se permiten campos adicionales",    
+});
+
+export const createValidation = Joi.object({
+    fullname: Joi.any().required().messages({
+        "any.required":"El nombre completo es obligatrio"
+    }),
+    username: Joi.any().required().messages({
+        "any.required":"El nombre de usuario es obligatrio"
+    }),
+    rut: Joi.any().required().messages({
+        "any.required":"El RUT es obligatrio"
+    }),
+    email: Joi.any().required().messages({
+        "any.required":"El correo electrónico es obligatrio"
+    }),
+    password: Joi.any().required().messages({
+        "any.required":"La contraseña es obligatria"
+    }),
+    role: Joi.any().required().messages({
+        "any.required":"El rol es obligatrio"
+    }),
+    generation: Joi.any().required().messages({
+        "any.required":"El nombre completo es obligatrio"
+    }),
+    id_carrera: Joi.any().required().messages({
+        "any.required":"El nombre completo es obligatrio"
+    }),
+}).min(1).unknown(false).messages({
+    "object.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.unknown":"No se permiten campos adicionales",
+    "object.unknown":"No se permiten campos adicionales",    
+});
+
+
+export const loginValidation = Joi.object({
+    email: Joi.any().required().messages({
+        "any.required":"El correo electrónico es obligatrio"
+    }),
+    password: Joi.any().required().messages({
+        "any.required":"La contraseña es obligatria"
+    }),
+}).min(1).unknown(false).messages({
+    "object.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.min":"Debe proporcionar al menos un campo para actualizar",
+    "any.unknown":"No se permiten campos adicionales",
+    "object.unknown":"No se permiten campos adicionales",    
 });

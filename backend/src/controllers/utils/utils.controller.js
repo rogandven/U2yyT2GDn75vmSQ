@@ -16,3 +16,13 @@ export const fullNameProcessor = (string) => {
     const newString = string.replace(/ {2,}/g, " ");
     return newString.trim().toUpperCase();
 }
+
+export const robustErrorMessage = (a, b) => {
+    if (!b || (typeof(b) !== "string")) {
+        throw Error("Datos no proporcionados correctamente");
+    }
+    if (!a) {
+        return String(b);
+    }
+    return String(a);
+}
