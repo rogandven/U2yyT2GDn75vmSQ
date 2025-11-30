@@ -10,7 +10,7 @@ export const idValidation = Joi.object({
         "number.integer": "El ID tiene que ser un entero",
         "number.positive": "El ID tiene que ser positivo",
         "number.min":`El ID debe ser mayor que ${MIN_ID - 1}`,
-        "number.max":`El ID debe ser menor que ${MAX + 1}`,
+        "number.max":`El ID debe ser menor que ${MAX_ID + 1}`,
     }),
 }).unknown(false)
     .messages({

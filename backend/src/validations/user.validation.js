@@ -5,7 +5,7 @@ import { timestampValidationFunction } from "./modules/timestamp.validation.js";
 import { emailDomainValidationFunction } from "./modules/email.validation.js";
 import { roleValidationFunction } from "./modules/role.validation.js"; 
 import { rutValidationFunction } from "./modules/rut.validation.js";
-import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX } from "../constants/user.constants.js";
+import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX } from "../constants/user.constants.js";
 /*
         id
         fullname
