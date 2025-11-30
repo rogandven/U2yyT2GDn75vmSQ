@@ -7,7 +7,7 @@ import { VALID_ADMIN_ROLES, VALID_SUPERADMIN_ROLES } from "../constants/user.con
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
-  const result = await isAdminFromService(VALID_ADMIN_ROLES, email);
+  const result = await isAdminFromService(ALLOWED_ROLES, email);
 
   if (result === null) {
     next();
