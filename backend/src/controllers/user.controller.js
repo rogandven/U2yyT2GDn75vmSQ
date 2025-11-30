@@ -145,7 +145,7 @@ export async function registerPrivate(req, res) {
   if (user.error) {
     return res.status(500).json(getControllerResult("Error interno del servidor", user));
   } 
-  if (user.data === null) {
+  if (user.length === 0) {
     user.error = true;
     if (user.details && user.details.endsWith("ya registrado")) {
       return res.status(409).json(getControllerResult(user.details, user));

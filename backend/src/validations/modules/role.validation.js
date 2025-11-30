@@ -1,6 +1,8 @@
+import { VALID_ROLES } from "../../constants/user.constants.js";
+
 export const roleValidationFunction = (value, helpers)  => {
     for (const role in VALID_ROLES) {
-        if (value === role) {
+        if (value === VALID_ROLES[role]) {
             return true;
         }
     }

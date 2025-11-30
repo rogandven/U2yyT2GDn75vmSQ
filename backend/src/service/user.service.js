@@ -119,10 +119,10 @@ export async function registerUserFromService(newData) {
 
         const newUser = userRepository.create(newData);
         await userRepository.save(newUser);
+        newUser.password = undefined;
 
         // Excluir la contraseña del objeto de respuesta
-        const { contraseña, ...dataUser } = newUser;
-        return getServiceResult(false, dataUser, "Usuario registrado exitosamente!", 1);
+        return getServiceResult(false, newUser, "Usuario registrado exitosamente!", 1);
     } catch (error) {
         console.error("Error en auth.controller.js -> register(): ", error);
         return getServiceResult(true, null, "Error al registrar usuario", 0);

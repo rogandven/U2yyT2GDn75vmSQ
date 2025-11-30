@@ -24,6 +24,7 @@ export const integrityValidation = Joi.object({
     id: Joi.any().custom(idValidationFunction),
     fullname: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).pattern(FULLNAME_REGEX).messages({
         "string.base": "El nombre debe ser un string",
+        "string.empty": "El nombre no puede ser vacío",
         "string.min": `El nombre debe al menos ser de ${MIN_FULLNAME} caracteres`,
         "string.max": `El nombre no puede tener más de ${MAX_FULLNAME} caracteres`,
         "string.pattern.base": "El nombre solo puede tener letras y espacios"
@@ -31,36 +32,46 @@ export const integrityValidation = Joi.object({
     username: Joi.string().alphanum().min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
         "string.base": "El nombre de usuario debe ser un string",
         "string.alphanum": "El nombre de usuario debe ser alfanumerico",
+        "string.empty": "El nombre de usuario no puede ser vacío",
         "string.min": `El nombre de usuario debe al menos ser de ${MIN_FULLNAME} caracteres`,
         "string.max": `El nombre de usuario no puede tener más de ${MAX_FULLNAME} caracteres`,
     }),
-    rut: Joi.string().custom(rutValidationFunction).messages({
+    rut: Joi.string().min(1).custom(rutValidationFunction).messages({
+        "string.empty": "El RUT no puede ser vacío",
+        "string.min": "El RUT no puede ser vacío",
         "string.base": "El RUT debe ser un string",
     }),
-    email: Joi.string().email().custom(emailDomainValidationFunction).messages({
+    email: Joi.string().email().min(1).custom(emailDomainValidationFunction).messages({
         "string.base": "El correo debe ser un string",
+        "string.min": "El correo no puede ser vacío",
+        "string.empty": "El correo no puede ser vacío",
         "string.email": "Correo malformado",
     }),
     password: Joi.string().min(1).messages({
         "string.base": "La contraseña debe ser un string",
         "string.min": "La contraseña no puede ser vacía",
+        "string.empty": "La contraseña no puede ser vacía",
     }),
     role: Joi.string().min(1).custom(roleValidationFunction).messages({
         "string.base": "El rol debe ser un string",
         "string.min": "El rol no puede ser vacío",
+        "string.empty": "El rol no puede ser vacío",
     }),
     generation: Joi.string().min(1).pattern(GENERATION_REGEX).messages({
         "string.base": "La generación debe ser un string",
         "string.min": "La generación no puede ser vacía",
         "string.pattern.base": "Generación malformada",
+        "string.empty": "La generación no puede ser vacía",
     }),
     createdAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
         "string.base": "La fecha de creación debe ser un string",
         "string.min": "La fecha de creación no puede ser vacía",
+        "string.empty": "La fecha de creación no puede ser vacía",
     }),
     updatedAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
         "string.base": "La fecha de actualización debe ser un string",
         "string.min": "La fecha de actualización no puede ser vacía",
+        "string.empty": "La fecha de actualización no puede ser vacía",
     }),
     id_carrera: Joi.any().custom(idValidationFunction),
 }).unknown(false).messages({
@@ -86,28 +97,28 @@ export const updateValidation = Joi.object({
 
 export const createValidation = Joi.object({
     fullname: Joi.any().required().messages({
-        "any.required":"El nombre completo es obligatrio"
+        "any.required":"El nombre completo es obligatorio"
     }),
     username: Joi.any().required().messages({
-        "any.required":"El nombre de usuario es obligatrio"
+        "any.required":"El nombre de usuario es obligatorio"
     }),
     rut: Joi.any().required().messages({
-        "any.required":"El RUT es obligatrio"
+        "any.required":"El RUT es obligatorio"
     }),
     email: Joi.any().required().messages({
-        "any.required":"El correo electrónico es obligatrio"
+        "any.required":"El correo electrónico es obligatorio"
     }),
     password: Joi.any().required().messages({
         "any.required":"La contraseña es obligatria"
     }),
     role: Joi.any().required().messages({
-        "any.required":"El rol es obligatrio"
+        "any.required":"El rol es obligatorio"
     }),
     generation: Joi.any().required().messages({
-        "any.required":"El nombre completo es obligatrio"
+        "any.required":"La generación es obligatoria"
     }),
     id_carrera: Joi.any().required().messages({
-        "any.required":"El nombre completo es obligatrio"
+        "any.required":"La carrera es obligatoria"
     }),
 }).min(1).unknown(false).messages({
     "object.min":"Debe proporcionar al menos un campo para actualizar",
@@ -119,7 +130,7 @@ export const createValidation = Joi.object({
 
 export const loginValidation = Joi.object({
     email: Joi.any().required().messages({
-        "any.required":"El correo electrónico es obligatrio"
+        "any.required":"El correo electrónico es obligatorio"
     }),
     password: Joi.any().required().messages({
         "any.required":"La contraseña es obligatria"
