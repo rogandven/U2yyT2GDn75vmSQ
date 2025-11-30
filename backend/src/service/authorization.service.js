@@ -1,5 +1,6 @@
 import UserEntity from "../entity/user.entity.js";
 import { getServiceResult } from "./utils/utils.service.js";
+import { AppDataSource } from "../config/configDb.js";
 
 export async function isAdminFromService(VALID_ADMIN_ROLES, email) {
   try {
@@ -20,13 +21,14 @@ export async function isAdminFromService(VALID_ADMIN_ROLES, email) {
 
     const rolUser = userFound.role;
 
-    for(var i = 0; i < VALID_ADMIN_ROLES.length(); i++) {
+    for(var i = 0; i < VALID_ADMIN_ROLES.length; i++) {
+        console.log(VALID_ADMIN_ROLES[i]);
         if (rolUser === VALID_ADMIN_ROLES[i]) {
             return null;
         }
     }
 
-    return getServiceResult(false, null, `Solo se permiten los siguientes roles: ${VALID_ADMIN_ROLES.join(", ")}`);
+    return getServiceResult(false, null, `Solo se permiten los siguientes roles: ${VALID_ADMIN_ROLES.join(", ")}`, 0);
   } catch (error) {
     console.error(error);
     return getServiceResult(true, null, "Error interno del servidor", 0);

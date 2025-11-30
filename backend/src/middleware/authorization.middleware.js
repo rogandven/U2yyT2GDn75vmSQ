@@ -6,7 +6,7 @@ import { VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
   const result = await isAdminFromService(ALLOWED_ROLES, email);
-
+  // console.log(result);
   if (result === null) {
     next();
     return;
