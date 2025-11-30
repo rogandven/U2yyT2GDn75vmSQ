@@ -5,7 +5,7 @@ import { timestampValidationFunction } from "./modules/timestamp.validation.js";
 import { emailDomainValidationFunction } from "./modules/email.validation.js";
 import { roleValidationFunction } from "./modules/role.validation.js"; 
 import { rutValidationFunction } from "./modules/rut.validation.js";
-import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX } from "../constants/user.constants.js";
+import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX, MIN_CREDITOS, MAX_CREDITOS } from "../constants/user.constants.js";
 /*
         id
         fullname
@@ -74,6 +74,12 @@ export const integrityValidation = Joi.object({
         "string.empty": "La fecha de actualización no puede ser vacía",
     }),
     id_carrera: Joi.any().custom(idValidationFunction),
+    creditos: Joi.number().integer().min(MIN_CREDITOS).min(MAX_CREDITOS).messages({
+        "number.base": "El número de créditos debe ser un número",
+        "number.integer": "El número de créditos debe ser un entero",
+        "number.min": "El número de créditos debe ser un número natural",
+        "number.max": `El número de créditos debe ser menor que ${MAX_CREDITOS}`,
+    }),
 }).unknown(false).messages({
     "any.unknown":"No se permiten campos adicionales",
     "object.unknown":"No se permiten campos adicionales",

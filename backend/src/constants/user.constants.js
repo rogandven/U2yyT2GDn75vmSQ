@@ -13,3 +13,5 @@ export const VALID_ADMIN_ROLES = [TEACHER_ROLE, ADMIN_ROLE, CAREER_HEAD_ROLE];
 export const VALID_SUPERADMIN_ROLES = [ADMIN_ROLE, CAREER_HEAD_ROLE];
 
 export const VALID_EMAIL_DOMAINS = ['@ubiobio.cl', '@alumnos.ubiobio.cl', '@gmail.com'];
+export const MIN_CREDITOS = 0;
+export const MAX_CREDITOS = 10000;

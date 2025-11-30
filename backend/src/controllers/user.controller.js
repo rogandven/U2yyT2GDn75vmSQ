@@ -162,7 +162,11 @@ export async function registerPublic(req, res) {
   if (req.body.role) {
     return res.status(401).json(getControllerResult("No se puede autoasignar un rol"), null);
   }
+  if (req.body.creditos) {
+    return res.status(401).json(getControllerResult("No se puede autoasignar la cantidad de créditos"), null);
+  }
   req.body.role = STUDENT_ROLE;
+  req.body.creditos = 0;
   return await registerPrivate(req, res);
 }
 

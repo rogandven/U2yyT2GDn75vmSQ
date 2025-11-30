@@ -13,7 +13,13 @@ export const ElectivoEntity=new EntitySchema({
       type: "varchar",
       length: 255,
     },
-    cupos: {
+    descripcion: {
+      type: "text",
+    },    
+    cupos_por_carrera: {
+      type: "int",
+    },
+    creditos_requeridos: {
       type: "int",
     },
     inscritos: {
@@ -29,9 +35,6 @@ export const ElectivoEntity=new EntitySchema({
     area: {
       type: "varchar",
       length: 100,
-    },
-    descripcion: {
-      type: "text",
     },
   },
 });

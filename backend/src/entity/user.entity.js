@@ -54,6 +54,10 @@ export const UserEntity = new EntitySchema({
         id_carrera: {
             type: Number,
             nullable: true
+        },
+        creditos: {
+            type: Number,
+            nullable: true
         }
     },
 });
