@@ -1,7 +1,25 @@
 
 "use strict";
 import Joi from "joi";
+import { timeValidationFunction } from "./modules/timestamp.validation.js";
+import { FULLNAME_REGEX } from "../constants/user.constants.js";
 
+// TODO TODO TODO TODO
+export const getElectivosValidation = Joi.object({
+  filtro: Joi.string().pattern(FULLNAME_REGEX).messages({
+  }),
+  area: Joi.string().custom().messages({
+    
+  }),
+  apertura: Joi.string().custom(timeValidationFunction).messages({
+
+  }),
+  cierre: Joi.string().custom(timeValidationFunction).messages({
+
+  }),
+});
+
+/*
 export const createValidation = Joi.object({
   nombre: Joi.string()
     .min(3)
@@ -111,13 +129,9 @@ export const updateValidation = Joi.object({
   .messages({
     "object.min": "Debe proporcionar al menos un campo para actualizar.",
   });
-"use strict";
-// import Joi from "joi";
+*/
 
-/* export const electivoCreationValidation = ({ data }) => {
-  return;
-}; */
-
+/*
 export const createValidation_OLD = Joi.object({
     nombre: Joi.string().min(1).max(50).required().messages({
       "any.required": "El nombre del electivo es obligatorio",
@@ -205,3 +219,4 @@ export const updateValidation_OLD = Joi.object({
   });
 
 export default createValidation;
+*/

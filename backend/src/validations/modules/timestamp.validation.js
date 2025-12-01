@@ -19,8 +19,23 @@ export const timestampValidationHelper = (timestamp) => {
     return true;
 }
 
+export const timeValidationHelper = (time) => {
+    if (!time || typeof(time) !== "string") {
+        return false;
+    }
+    return timestampValidationHelper(String(time) + " 00:00:00");
+}
+
 export const timestampValidationFunction = (value, helpers) => {
     const result = timestampValidationHelper(value);
+    if (!result) {
+        return helpers.message('La fecha no es válida');
+    }
+    return true;
+}
+
+export const timeValidationFunction = (value, helpers) => {
+    const result = timeValidationHelper(value);
     if (!result) {
         return helpers.message('La fecha no es válida');
     }

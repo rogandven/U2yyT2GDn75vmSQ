@@ -14,7 +14,7 @@ const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 export async function getElectivos(req, res) {
   
 
-  const serviceResult = await getElectivosFromService()
+  const serviceResult = await getElectivosFromService();
 }
 
 export async function createElectivo(req, res) {
