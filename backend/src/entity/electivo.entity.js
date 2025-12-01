@@ -4,12 +4,12 @@ export const ElectivoEntity=new EntitySchema({
   name: "Electivo",
   tableName: "electivos",
   columns: {
-    id: {
+    id_instancia: {
       primary: true,
       type: "int",
       generated: true,
     },
-    codigo: {
+    id: {
       type: "varchar",
       length: 255,
     },
