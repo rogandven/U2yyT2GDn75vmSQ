@@ -2,7 +2,7 @@ import { EntitySchema } from "typeorm";
 
 export const ElectivoEntity=new EntitySchema({
   name: "Electivo",
-  tableName: "electivos",
+  tableName: "electivo",
   columns: {
     id_instancia: {
       primary: true,
