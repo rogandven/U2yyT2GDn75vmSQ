@@ -1,34 +1,37 @@
+import { getServiceResult } from "./utils/utils.service.js";
+
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
-export async function getElectivosFromService(req, res) {
-  try {
-    const { filtro, area, apertura, cierre } = req.query;
+export async function getElectivosFromService(data) {
+    try {
+        let query = electivoRepo.createQueryBuilder("electivo");
+        if (data.filtro) {
+            query = query.andWhere(
+                "(electivo.nombre ILIKE :filtro OR electivo.descripcion ILIKE :filtro)",
+                { filtro: `%${data.filtro}%` }
+            );
+        }
+        if (data.area) {
+            query = query.andWhere("electivo.area ILIKE :area", { area });
+        }
+        if (data.apertura) {
+            query = query.andWhere("DATE(electivo.apertura) = :apertura", {
+                apertura,
+            });
+        }
+        if (data.cierre) {
+            query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
+        }
+        
+        const resultados = await query.getMany();
 
-    let query = electivoRepo.createQueryBuilder("electivo");
+        if (!Array.isArray(resultados)) {
+            throw Error("No se pudieron parsear los electivos como arreglo");
+        }
 
-    if (filtro) {
-      query = query.andWhere(
-        "(electivo.nombre ILIKE :filtro OR electivo.descripcion ILIKE :filtro)",
-        { filtro: `%${filtro}%` }
-      );
+        return getServiceResult(false, resultados, "Electivos obtenidos correctamente", resultados.length ? resultados.length : 0);
+    } catch (error) {
+        console.error("Error al listar electivos:", error);
+        return getServiceResult(true, null, error.message ? error.message : "Error al listar electivos", 0);
     }
-
-    if (area) query = query.andWhere("electivo.area ILIKE :area", { area });
-    if (apertura)
-      query = query.andWhere("DATE(electivo.apertura) = :apertura", {
-        apertura,
-      });
-    if (cierre)
-      query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
-
-    const resultados = await query.getMany();
-
-    res.status(200).json({
-      message: "Electivos obtenidos correctamente",
-      data: resultados,
-    });
-  } catch (error) {
-    console.error("Error al listar electivos:", error);
-    res.status(500).json({ message: "Error al listar electivos" });
-  }
 }
