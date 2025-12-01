@@ -57,6 +57,7 @@ export async function updateUserByIdFromService(id, newData) {
         oldData.role = newData.role || oldData.role;
         oldData.generation = newData.generation || oldData.generation;
         oldData.id_carrera = newData.id_carrera || oldData.id_carrera;
+        oldData.creditos = newData.creditos || oldData.creditos;
 
         await userRepository.save(oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
