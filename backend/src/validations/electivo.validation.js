@@ -3,13 +3,22 @@
 import Joi from "joi";
 import { timeValidationFunction } from "./modules/timestamp.validation.js";
 import { FULLNAME_REGEX } from "../constants/user.constants.js";
+import { MIN_FULLNAME, MAX_FULLNAME } from "../constants/user.constants.js";
+import { fullnameRegexMessageGenerator } from "../constants/user.constants.js";
 
 // TODO TODO TODO TODO
 export const getElectivosValidation = Joi.object({
-  filtro: Joi.string().pattern(FULLNAME_REGEX).messages({
+  filtro: Joi.string().pattern(FULLNAME_REGEX).min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
+    "string.base":"El filtro debe ser un string",
+    "string.min": `El filtro debe ser de ${MIN_FULLNAME} caracteres o más`,
+    "string.max": `El filtro debe ser de ${MAX_FULLNAME} caracteres o menos`,
+    "string.pattern.base": fullnameRegexMessageGenerator('El', 'filtro'),
   }),
-  area: Joi.string().custom().messages({
-    
+  area: Joi.string().pattern(FULLNAME_REGEX).min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
+    "string.base":"El área debe ser un string",
+    "string.min": `El área debe ser de ${MIN_FULLNAME} caracteres o más`,
+    "string.max": `El área debe ser de ${MAX_FULLNAME} caracteres o menos`,
+    "string.pattern.base": fullnameRegexMessageGenerator('El', 'área'),
   }),
   apertura: Joi.string().custom(timeValidationFunction).messages({
 
