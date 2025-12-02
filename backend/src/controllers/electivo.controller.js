@@ -1,98 +1,70 @@
 
 "use strict";
 
-import { AppDataSource } from "../config/configDb.js";
-import ElectivoEntity from "../entity/electivo.entity.js";
 import {
   createValidation,
   updateValidation,
 } from "../validations/electivo.validation.js";
-import { getElectivosFromService } from "../service/electivo.service.js";
-
-const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService } from "../service/electivo.service.js";
+import { getControllerResult } from "./utils/utils.controller.js";
 
 export async function getElectivos(req, res) {
-  
-
-  const serviceResult = await getElectivosFromService();
+  // TODO ADD VALIDATION
+  const serviceResult = await getElectivosFromService(req.query);
+  // TODO ADD ERROR HANDLING
+  return res.status(200).json(getControllerResult("foo", serviceResult));
 }
 
 export async function createElectivo(req, res) {
-  try {
+    // TODO REDO VALIDATION
     const { error } = createValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
-
-    const nuevoElectivo = electivoRepo.create(req.body);
-    await electivoRepo.save(nuevoElectivo);
-
-    res.status(201).json({
-      message: "Electivo creado correctamente",
-      data: nuevoElectivo,
-    });
-  } catch (error) {
-    console.error("Error al crear electivo:", error);
-    res.status(500).json({ message: "Error al crear electivo" });
-  }
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    } 
+    // TODO ADD ERROR HANDLING
+    const serviceResult = await createElectivoFromService(req.body);
+    return res.status(200).json(getControllerResult("foo", serviceResult));
 };
 
 export async function getElectivoById(req, res) {
-  try {
-    // Obtener el repositorio de electivos y buscar un electivo por ID
-    const ElectivoEntityRepository = AppDataSource.getRepository(ElectivoEntity);
+    // TODO ADD ID VALIDATION
     const { id } = req.params;
-    const electivos = await ElectivoEntityRepository.findOne({ where: { id } });
-
-    
-    // Si no se encuentra el electivo, devolver un error 404
-    if (!electivos) {
-      return res.status(404).json({ message: "Electivo no encontrado." });
-    }
-
-    res.status(200).json({ message: "Electivo encontrado: ", data: electivos });
-  } catch (error) {
-    console.error("Error en electivo.controller.js -> getUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
+    // TODO ADD ERROR HANDLING
+    const serviceResult = getElectivoByIdFromService(id);
+    return res.status(200).json(getControllerResult("foo", serviceResult));
 }
 
 export async function updateElectivo(req, res) {
   try {
+    // TODO ADD ID VALIDATION
     const { id } = req.params;
-    const electivo = await electivoRepo.findOneBy({ id });
-
-    if (!electivo)
-      return res.status(404).json({ message: "Electivo no encontrado" });
-
+    
+    // TODO REDO VALIDATION
     const { error } = updateValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
+    if (error) {
+      return res.status(400).json(getControllerResult(error.message ? error.message : "Datos inválidos", null));
+    }
 
-    Object.assign(electivo, req.body);
-    await electivoRepo.save(electivo);
-
-    res.status(200).json({
-      message: "Electivo actualizado correctamente",
-      data: electivo,
-    });
+    const serviceResult = await updateElectivoFromService(id);
+    // TODO ADD ERROR HANDLING
+    return res.status(200).json(getControllerResult("foo", serviceResult));
   } catch (error) {
-    console.error("Error al actualizar electivo:", error);
-    res.status(500).json({ message: "Error al actualizar electivo" });
+    console.error("Error al actualizar electivo", error);
+    return res.status(500).json(getControllerResult("Error al actualizar electivo", null));
   }
 }
 
 export async function deleteElectivo(req, res) {
   try {
+    // TODO ADD ID VALIDATION
     const { id } = req.params;
-    const electivo = await electivoRepo.findOneBy({ id });
-
-    if (!electivo)
-      return res.status(404).json({ message: "Electivo no encontrado" });
-
-    await electivoRepo.remove(electivo);
-
-    res.status(200).json({ message: "Electivo eliminado correctamente" });
+    
+    const serviceResult = deleteElectivoFromService(id);
+    // TODO ADD ERROR HANDLING
+    return res.status(200).json(getControllerResult("foo", serviceResult));
   } catch (error) {
-    console.error("Error al eliminar electivo:", error);
-    res.status(500).json({ message: "Error al eliminar electivo" });
+    console.error("Error al eliminar electivo", error);
+    return res.status(500).json(getControllerResult("Error al eliminar electivo", null));
   }
 }
 

@@ -35,3 +35,63 @@ export async function getElectivosFromService(data) {
         return getServiceResult(true, null, error.message ? error.message : "Error al listar electivos", 0);
     }
 }
+
+export async function createElectivoFromService(data) {
+  try {
+    const nuevoElectivo = electivoRepo.create(data);
+    await electivoRepo.save(nuevoElectivo);
+    return getServiceResult(false, nuevoElectivo, "Electivo creado correctamente", 1);
+  } catch (error) {
+    console.error("Error al crear electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al crear electivo", 0);
+  }
+}
+
+export async function getElectivoByIdFromService(id_instancia) {
+try {
+    const electivos = await ElectivoEntityRepository.findOne({ where: { id_instancia } });
+
+    if (!electivos) {
+        return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+
+    return getServiceResult(false, electivos, "Electivo encontrado", 1);
+  } catch (error) {
+    console.error("Error en electivo.controller.js -> getUserById(): ", error);
+    return getServiceResult(true, null, error.message? error.message : "Error al encontrar electivo", 0);
+  }
+}
+
+export async function updateElectivoFromService(id_instancia) {
+  try {
+    const electivo = await electivoRepo.findOneBy({ id_instancia });
+
+    if (!electivo) {
+        return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+
+    Object.assign(electivo, req.body);
+    await electivoRepo.save(electivo);
+
+    return getServiceResult(false, electivo, "Electivo actualizado correctamente", 1);
+  } catch (error) {
+    console.error("Error al actualizar electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al actualizar electivo", 0);
+  }
+}
+
+export async function deleteElectivoFromService(id_instancia) {
+  try {
+    const electivo = await electivoRepo.findOneBy({ id_instancia });
+
+    if (!electivo) {
+        return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+
+    await electivoRepo.remove(electivo);
+    return getServiceResult(false, null, "Electivo eliminado correctamente", 0);
+  } catch (error) {
+    console.error("Error al eliminar electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al eliminar electivo", 0);
+  }
+}
