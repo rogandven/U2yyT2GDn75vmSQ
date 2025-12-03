@@ -7,7 +7,7 @@ import {
   integrityValidation,
   updateValidation,
 } from "../validations/electivo.validation.js";
-import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService } from "../service/electivo.service.js";
+import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, approveElectivoFromService } from "../service/electivo.service.js";
 import { getControllerResult } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -120,7 +120,7 @@ export async function approveElectivo(req, res) {
     if (validationResult.error) {
       return res.status(400).json(getControllerResult(validationResult.error.message, null));
     }
-    const serviceResult = await approveElectivo(id);
+    const serviceResult = await approveElectivoFromService(id);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult("Error interno del servidor", serviceResult));
     }
