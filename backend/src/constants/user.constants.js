@@ -16,6 +16,9 @@ export const VALID_EMAIL_DOMAINS = ['@ubiobio.cl', '@alumnos.ubiobio.cl', '@gmai
 export const MIN_CREDITOS = 0;
 export const MAX_CREDITOS = 10000;
 
+export const MIN_DATE_LENGTH = 1;
+export const MAX_DATE_LENGTH = 200;
+
 export const caseConverter = (string) => {
     if (!string || typeof(string) !== "string" || (string = string.trim()).length <= 1) {
         return "Error";

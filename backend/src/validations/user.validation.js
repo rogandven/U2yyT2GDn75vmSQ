@@ -6,6 +6,7 @@ import { emailDomainValidationFunction } from "./modules/email.validation.js";
 import { roleValidationFunction } from "./modules/role.validation.js"; 
 import { rutValidationFunction } from "./modules/rut.validation.js";
 import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX, MIN_CREDITOS, MAX_CREDITOS } from "../constants/user.constants.js";
+import { MIN_DATE_LENGTH, MAX_DATE_LENGTH } from "../constants/user.constants.js";
 /*
         id
         fullname
@@ -63,15 +64,17 @@ export const integrityValidation = Joi.object({
         "string.pattern.base": "Generación malformada",
         "string.empty": "La generación no puede ser vacía",
     }),
-    createdAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
+    createdAt: Joi.string().min(MIN_DATE_LENGTH).max(MAX_DATE_LENGTH).custom(timestampValidationFunction).messages({
         "string.base": "La fecha de creación debe ser un string",
         "string.min": "La fecha de creación no puede ser vacía",
         "string.empty": "La fecha de creación no puede ser vacía",
+        "string.max": `La fecha debe ser de menos de ${MAX_DATE_LENGTH}`,
     }),
-    updatedAt: Joi.string().min(1).custom(timestampValidationFunction).messages({
+    updatedAt: Joi.string().min(MIN_DATE_LENGTH).max(MAX_DATE_LENGTH).custom(timestampValidationFunction).messages({
         "string.base": "La fecha de actualización debe ser un string",
         "string.min": "La fecha de actualización no puede ser vacía",
         "string.empty": "La fecha de actualización no puede ser vacía",
+        "string.max": `La fecha debe ser de menos de ${MAX_DATE_LENGTH}`,        
     }),
     id_carrera: Joi.any().custom(idValidationFunction),
     creditos: Joi.number().integer().min(MIN_CREDITOS).min(MAX_CREDITOS).messages({
