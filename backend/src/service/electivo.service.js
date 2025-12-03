@@ -36,6 +36,21 @@ export async function getElectivosFromService(data) {
     }
 }
 
+export async function getElectivosSinAprobarFromService() {
+  try {
+      const resultados = await electivoRepo.find({where: {aprobado: false}});
+
+      if (!Array.isArray(resultados)) {
+          throw Error("No se pudieron parsear los electivos como arreglo");
+      }
+
+      return getServiceResult(false, resultados, "Electivos obtenidos correctamente", resultados.length ? resultados.length : 0);
+  } catch (error) {
+      console.error("Error al listar electivos:", error);
+      return getServiceResult(true, null, error.message ? error.message : "Error al listar electivos", 0);
+  }
+}
+
 export async function createElectivoFromService(data) {
   try {
     const nuevoElectivo = electivoRepo.create(data);

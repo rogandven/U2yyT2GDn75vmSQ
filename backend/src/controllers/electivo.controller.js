@@ -7,7 +7,7 @@ import {
   integrityValidation,
   updateValidation,
 } from "../validations/electivo.validation.js";
-import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, approveElectivoFromService } from "../service/electivo.service.js";
+import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, approveElectivoFromService, getElectivosSinAprobarFromService } from "../service/electivo.service.js";
 import { getControllerResult } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -30,6 +30,14 @@ export async function getElectivos(req, res) {
     return res.status(500).json(getControllerResult("Error al obtener electivos", serviceResult));
   }
   return res.status(200).json(getControllerResult("Electivos encontrados con éxito", serviceResult));
+}
+
+export async function getElectivosSinAprobar(req, res) {
+  const serviceResult = await getElectivosSinAprobarFromService();
+  if (serviceResult.error) {
+    return res.status(500).json(getControllerResult("Error al obtener electivos", serviceResult));
+  }
+  return res.status(200).json(getControllerResult("Electivos encontrados con éxito", serviceResult)); 
 }
 
 
