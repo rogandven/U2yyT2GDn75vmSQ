@@ -1,7 +1,7 @@
 "use strict";
 import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
 import { isAdminFromService } from "../service/authorization.service.js";
-import { VALID_ADMIN_ROLES } from "../constants/user.constants.js";
+import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
@@ -15,6 +15,7 @@ const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
     return res.status(500).json(getTrueMiddlewareResponse("Error interno del servidor", result));
   }
   if (result.length <= 0) {
+    result.error = true;
     return res.status(403).json(getTrueMiddlewareResponse("Acceso denegado", result));
   }
 }
@@ -25,6 +26,10 @@ export async function isAdmin(req, res, next) {
 
 export async function isAdminOrProfesor(req, res, next) {
   return await isAdminHelper(req, res, next, VALID_ADMIN_ROLES);
+}
+
+export async function isJefeDeCarrera(req, res, next) {
+  return await isAdminHelper(req, res, next, [CAREER_HEAD_ROLE]);
 }
 
 export function authorizeRoles(rolesPermitidos) {

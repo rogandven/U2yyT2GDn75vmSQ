@@ -32,30 +32,44 @@ export async function getElectivos(req, res) {
   return res.status(200).json(getControllerResult("Electivos encontrados con éxito", serviceResult));
 }
 
-export async function createElectivo(req, res) {
-    // TODO REDO VALIDATION
-    let result = createValidation.validate(req.body);
-    if (result.error) {
-      return res.status(400).json({ message: result.error.message });
-    } 
-    result = integrityValidation.validate(req.body);
-    if (result.error) {
-      return res.status(400).json({ message: result.error.message });
-    }   
-    result = dateCreationValidation.validate(req.body);
-    if (result.error) {
-      return res.status(400).json({ message: result.error.message });
-    }           
-    // TODO ADD ERROR HANDLING
-    const serviceResult = await createElectivoFromService(req.body);
-    if (serviceResult.error) {
-      return res.status(500).json(getControllerResult("Error interno del servidor", serviceResult));
-    }
-    if (serviceResult.length <= 0) {
-      serviceResult.error = true;
-      return res.status(401).json(getControllerResult("Error al crear electivo", serviceResult));
-    }
-    return res.status(200).json(getControllerResult("Electivo creado con éxito", serviceResult));
+
+const createElectivoHelper = async (req, res, estado) => {
+  if (!req || !req.body) {
+    return res.status(400).json(getControllerResult("Datos no proporcionados", null));
+  }
+
+  req.body.estado = estado;
+
+  let result = createValidation.validate(req.body);
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  } 
+  result = integrityValidation.validate(req.body);
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  }
+  result = dateCreationValidation.validate(req.body);
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  }
+
+  const serviceResult = await createElectivoFromService(req.body);
+  if (serviceResult.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", serviceResult));
+  }
+  if (serviceResult.length <= 0) {
+    serviceResult.error = true;
+    return res.status(401).json(getControllerResult("Error al crear electivo", serviceResult));
+  }
+  return res.status(200).json(getControllerResult("Electivo creado con éxito", serviceResult));
+}
+
+export async function createElectivoProfesor(req, res) {
+  return await createElectivoHelper(req, res, false);
+};
+
+export async function createElectivoJefeDeCarrera(req, res) {
+  return await createElectivoHelper(req, res, true);
 };
 
 export async function getElectivoById(req, res) {

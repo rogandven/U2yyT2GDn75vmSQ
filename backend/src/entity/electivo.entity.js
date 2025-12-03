@@ -44,6 +44,11 @@ export const ElectivoEntity=new EntitySchema({
       type: "varchar",
       length: 100,
     },
+    aprobado: {
+      type: Boolean,
+      nullable: false,
+      default: false
+    },
   },
 });
 

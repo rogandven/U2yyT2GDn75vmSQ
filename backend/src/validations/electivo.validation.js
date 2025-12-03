@@ -77,6 +77,9 @@ export const integrityValidation = Joi.object({
       "string.min": `La descripción debe tener al menos ${MIN_FULLNAME} caracteres.`,
       "string.max": `La descripción no puede superar los ${MAX_FULLNAME} caracteres.`,
     }),
+  aprobado: Joi.boolean().messages({
+      "boolean.base":"El estado debe ser un booleano",
+  }),
 });
 
 
@@ -99,6 +102,11 @@ export const createValidation = Joi.object({
   descripcion: Joi.any().required().messages({
     "any.required": "La descripción es obligatoria",
   }),
+  aprobado: Joi.any().required().messages({
+    "any.required": "El estado es obligatorio",
+  }),
+}).unknown(false).messages({
+    "any.unknown": "No se permiten campos adicionales"
 });
 
 export const updateValidation = Joi.object({
