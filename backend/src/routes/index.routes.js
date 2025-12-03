@@ -28,8 +28,9 @@ const router = new Router();
 
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
-/* 
 router.use("/electivos", electivoRoutes);
+/* 
+
 router.use("/clases", claseRoutes);
 router.use("/electivos3", nowRoutes);
 router.use("/Inscripciones",inscripcionRoutes);
