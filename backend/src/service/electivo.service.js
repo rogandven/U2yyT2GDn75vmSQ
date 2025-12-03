@@ -62,7 +62,7 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia) {
+export async function updateElectivoFromService(id_instancia, data) {
   try {
     const electivo = await electivoRepo.findOneBy({ id_instancia });
 
@@ -70,13 +70,34 @@ export async function updateElectivoFromService(id_instancia) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);
     }
 
-    Object.assign(electivo, req.body);
+    Object.assign(electivo, data);
     await electivoRepo.save(electivo);
 
     return getServiceResult(false, electivo, "Electivo actualizado correctamente", 1);
   } catch (error) {
     console.error("Error al actualizar electivo:", error);
     return getServiceResult(true, null, error.message ? error.message : "Error al actualizar electivo", 0);
+  }
+}
+
+export async function approveElectivoFromService(id_instancia) {
+  try {
+    const electivo = await electivoRepo.findOneBy({ id_instancia });
+
+    if (!electivo) {
+      return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+    if (electivo.aprobado) {
+      return getServiceResult(false, null, "Electivo ya aprobado", 0);
+    }
+
+    Object.assign(electivo, { aprobado: true });
+    await electivoRepo.save(electivo);
+
+    return getServiceResult(false, electivo, "Electivo aprobado correctamente", 1);
+  } catch (error) {
+    console.error("Error al aprobar electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al aprobar electivo", 0);
   }
 }
 

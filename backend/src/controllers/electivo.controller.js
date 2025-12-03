@@ -98,7 +98,7 @@ export async function updateElectivo(req, res) {
       return res.status(400).json(getControllerResult(error.message ? error.message : "Datos inválidos", null));
     }
 
-    const serviceResult = await updateElectivoFromService(id);
+    const serviceResult = await updateElectivoFromService(id, req.body);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult("Error interno del servidor", serviceResult));
     }
@@ -106,10 +106,32 @@ export async function updateElectivo(req, res) {
       serviceResult.error = true;
       return res.status(401).json(getControllerResult(serviceResult.details, serviceResult));
     }
-    return res.status(200).json(getControllerResult("Electivo creado con éxito", serviceResult));
+    return res.status(200).json(getControllerResult("Electivo actualizado con éxito", serviceResult));
   } catch (error) {
     console.error("Error al actualizar electivo", error);
     return res.status(500).json(getControllerResult("Error al actualizar electivo", null));
+  }
+}
+
+export async function approveElectivo(req, res) {
+  try {
+    const { id } = req.params;
+    const validationResult = idValidation.validate(id);
+    if (validationResult.error) {
+      return res.status(400).json(getControllerResult(validationResult.error.message, null));
+    }
+    const serviceResult = await approveElectivo(id);
+    if (serviceResult.error) {
+      return res.status(500).json(getControllerResult("Error interno del servidor", serviceResult));
+    }
+    if (serviceResult.length <= 0) {
+      serviceResult.error = true;
+      return res.status(401).json(getControllerResult(serviceResult.details, serviceResult));
+    }
+    return res.status(200).json(getControllerResult("Electivo aprobado con éxito", serviceResult));
+  } catch (error) {
+    console.error("Error al actualizar electivo", error);
+    return res.status(500).json(getControllerResult("Error al aprobar electivo", null));
   }
 }
 
