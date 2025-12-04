@@ -6,9 +6,9 @@ async function editTimetableInfo(horario) {
         title: 'Editar Horario',
         html: `
             <div>
-                <label for="swal2-input2">Hora de Inicio:</label>
-                <label for="swal2-input2">Tiene que estar en formato 24 horas HH:MM</label>
-                <input id="swal2-input2" class="swal2-input" placeholder="HH:MM" value="${horario.hora_inicio}">
+                <label for="swal2-input1">Hora de Inicio:</label>
+                <label for="swal2-input1">Tiene que estar en formato 24 horas HH:MM</label>
+                <input id="swal2-input1" class="swal2-input" placeholder="HH:MM" value="${horario.hora_inicio}">
             </div>
 
             <div>
@@ -35,7 +35,7 @@ async function editTimetableInfo(horario) {
         confirmButtonText: 'Editar',
         preConfirm: () => {
             
-            const hora_inicio = document.getElementById('swal2-input2').value;
+            const hora_inicio = document.getElementById('swal2-input1').value;
             const hora_termino = document.getElementById('swal2-input2').value;
             const sala = document.getElementById('swal2-input3').value;
             const dia = document.getElementById('swal2-input4').value;
@@ -55,11 +55,11 @@ async function editTimetableInfo(horario) {
             hora_termino: formValues.hora_termino,
             sala: formValues.sala,
             dia: formValues.dia,
-        };
+        };     
     }
 }
 
-export const editTimetable=(fetchTimetables)=> {
+export const editTimetable=(fetchTimetable)=> {
     const handleEditTimetable = async (id_horario,horario) => {
         try {
             const formValues= await editTimetableInfo(horario);
@@ -72,10 +72,10 @@ export const editTimetable=(fetchTimetables)=> {
                     icon:"success",
                     confirmButtonText:"Aceptar"
                 })
-                    await fetchTimetables();
+                    await fetchTimetable();
                 }
 
-                await fetchTimetables();
+                await fetchTimetable();
         }
          catch (error) {
             console.error('Error al actualizar el horario:', error);
