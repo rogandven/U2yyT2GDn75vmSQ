@@ -26,7 +26,7 @@ export const GetElectivo = () => {
                         break;
                     }
                 } catch (error) {
-                    // console.log(error);
+                    // console.error(error);
                 }
             }
         } catch (error) {

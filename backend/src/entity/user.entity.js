@@ -57,7 +57,7 @@ export const UserEntity = new EntitySchema({
         },
         creditos: {
             type: Number,
-            nullable: true
+            default: 0
         }
     },
 });

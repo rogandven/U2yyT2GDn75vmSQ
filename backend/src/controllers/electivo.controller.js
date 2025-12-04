@@ -20,7 +20,7 @@ export async function getElectivos(req, res) {
     req.query.filtro = String(req.query.filtro).toUpperCase();
   }
 
-  const { error } = getElectivosIntegrityValidation(req.query);
+  const { error } = getElectivosIntegrityValidation.validate(req.query);
   if (error) {
     return res.status(400).json(getControllerResult(error.message, null));
   }

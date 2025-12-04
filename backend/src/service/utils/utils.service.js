@@ -21,7 +21,7 @@ export const getResultLength = (result) => {
         }
         return OBJECT_LENGTH;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return BASE_LENGTH;
     }
 }

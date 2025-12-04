@@ -16,9 +16,10 @@ router.use("/electivos", electivoRoutes);
 */
 "use strict";
 import { Router } from "express";
-import authRoutes from "./auth.routes.js"
+import authRoutes from "./auth.routes.js";
 import userRoutes from "./user.routes.js";
-/* import electivoRoutes from "./electivo.routes.js"
+import electivoRoutes from "./electivo.routes.js";
+/*
 import claseRoutes from "./clase.routes.js";
 import preinscriptionRoutes from "./preinscription.routes.js";
 

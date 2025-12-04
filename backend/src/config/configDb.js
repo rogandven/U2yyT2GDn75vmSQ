@@ -10,7 +10,7 @@ import PreinscriptionEntity from "../entity/preinscription.entity.js";
 */
 
 import UserEntity from "../entity/user.entity.js";
-// import ElectivoEntity from "../entity/electivo.entity.js";
+import ElectivoEntity from "../entity/electivo.entity.js";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -19,7 +19,7 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [UserEntity],
+    entities: [UserEntity, ElectivoEntity],
     // entities: [ElectivoEntity, ClaseEntity, InscripcionEntity, UserEntity, PreinscriptionEntity],
     synchronize: true,
     logging: false,

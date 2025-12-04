@@ -77,10 +77,10 @@ export const integrityValidation = Joi.object({
         "string.max": `La fecha debe ser de menos de ${MAX_DATE_LENGTH}`,        
     }),
     id_carrera: Joi.any().custom(idValidationFunction),
-    creditos: Joi.number().integer().min(MIN_CREDITOS).min(MAX_CREDITOS).messages({
+    creditos: Joi.number().integer().min(MIN_CREDITOS).max(MAX_CREDITOS).messages({
         "number.base": "El número de créditos debe ser un número",
         "number.integer": "El número de créditos debe ser un entero",
-        "number.min": "El número de créditos debe ser un número natural",
+        "number.min": `El número de créditos debe ser mayor o igual a ${MIN_CREDITOS}`,
         "number.max": `El número de créditos debe ser menor que ${MAX_CREDITOS}`,
     }),
 }).unknown(false).messages({
@@ -129,6 +129,9 @@ export const createValidation = Joi.object({
     id_carrera: Joi.any().required().messages({
         "any.required":"La carrera es obligatoria"
     }),
+    creditos: Joi.any().required().messages({
+        "any.required":"Los créditos son obligatorios"
+    })
 }).min(1).unknown(false).messages({
     "object.min":"Debe proporcionar al menos un campo para actualizar",
     "any.min":"Debe proporcionar al menos un campo para actualizar",

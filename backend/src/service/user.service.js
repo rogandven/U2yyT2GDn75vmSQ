@@ -18,7 +18,7 @@ export async function getUsersFromService() {
         const users = await userRepository.find();
         return getServiceResult(false, users, "Usuarios encontrado con éxito", getResultLength(users));
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return getServiceResult(true, null, getErrorMessage(error), 0);
     }
 }
@@ -32,7 +32,7 @@ export async function getUserByIdFromService(id) {
         }        
         return getServiceResult(false, user, "Usuario encontrado con éxito", getResultLength(user));
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return getServiceResult(true, null, getErrorMessage(error), 0);
     }
 }
@@ -62,7 +62,7 @@ export async function updateUserByIdFromService(id, newData) {
         await userRepository.save(oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return getServiceResult(true, null, getErrorMessage(error), 0);
     }
 }
@@ -80,7 +80,7 @@ export async function deleteUserByIdFromService(id) {
         await queryRunner.commitTransaction();
         return getServiceResult(false, user, "Usuario eliminado con éxito", getResultLength(user));
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (queryRunner.rollbackTransaction) {
             queryRunner.rollbackTransaction();
         }

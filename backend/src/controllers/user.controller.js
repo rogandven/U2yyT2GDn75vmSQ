@@ -132,6 +132,8 @@ export async function registerPrivate(req, res) {
 
   req.body.fullname = fullNameProcessor(req.body.fullname);
 
+  // console.log(req.body);
+
   var validationResult = integrityValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
@@ -166,7 +168,9 @@ export async function registerPublic(req, res) {
     return res.status(401).json(getControllerResult("No se puede autoasignar la cantidad de créditos"), null);
   }
   req.body.role = STUDENT_ROLE;
+  // console.log(req.body.role);
   req.body.creditos = 0;
+  // console.log(req.body.creditos);
   return await registerPrivate(req, res);
 }
 

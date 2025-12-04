@@ -1,4 +1,6 @@
 import { getServiceResult } from "./utils/utils.service.js";
+import { AppDataSource } from "../config/configDb.js";
+import ElectivoEntity from "../entity/electivo.entity.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
