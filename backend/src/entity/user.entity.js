@@ -1,13 +1,14 @@
 "use strict";
 
 import { EntitySchema } from "typeorm";
+import { USER_ID_TYPE } from "../constants/entity.constants.js";
 
 export const UserEntity = new EntitySchema({
     name: "User",
     tableName: "users",
     columns: {
         id: {
-            type: Number,
+            type: USER_ID_TYPE,
             primary: true,
             generated: true,
         },

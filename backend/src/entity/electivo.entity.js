@@ -1,4 +1,5 @@
 import { EntitySchema } from "typeorm";
+import { ELECTIVO_ID_TYPE } from "../constants/entity.constants.js";
 
 export const ElectivoEntity=new EntitySchema({
   name: "Electivo",
@@ -6,11 +7,11 @@ export const ElectivoEntity=new EntitySchema({
   columns: {
     id_instancia: {
       primary: true,
-      type: "int",
+      type: ELECTIVO_ID_TYPE,
       generated: true,
     },
     id: {
-      type: "varchar",
+      type: "int",
       length: 255,
     },
     nombre: {
