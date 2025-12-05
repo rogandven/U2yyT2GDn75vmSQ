@@ -47,6 +47,27 @@ const findCopy = async (userId, electivoId) => {
   }
 } 
 
+const findCopyEdit = async (inscripcionId, userId, electivoId) => {
+  const BASE_CASE = [];
+  try {
+    if ((!inscripcionId || isNaN(inscripcionId)) || (!userId || isNaN(userId)) || (!electivoId || isNaN(electivoId))) {
+      return BASE_CASE;
+    }
+    let array = await inscripcionRepo.find({where: {user_id: userId, id_electivo: electivoId}});
+    if (!array || !(array.filter)) {
+      console.log("La consulta retornó algo que no tiene método filter()");
+      return BASE_CASE;
+    }
+    array = array.filter((element) => {
+      return element.id_inscripcion !== inscripcionId;
+    });
+    return array;
+  } catch (error) {
+    console.error(error);
+    return BASE_CASE;
+  }
+}
+
 const findInscripcionesByUser = async (userId) => {
   const BASE_CASE = [];
   try {
@@ -176,8 +197,32 @@ export async function createInscripcionPrivateFromService(data) {
     return getServiceResult(false, inscripcionNueva, "Inscripción creada con éxito", 1);
   } catch (error) {
     console.error("Error al crear inscripcion:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al crear inscripción", 0);
+  }  
+}
+
+export async function updateInscripcionPrivateFromService(id, data) {
+  if (!data || !id || isNaN(id)) {
+    return getServiceResult(true, null, "Datos no proporcionados", 0);
+  }
+
+  try {
+    const checkResult = await findCopyEdit(id, data.user_id, data.id_electivo);
+    if (checkResult.length > 0) {
+      return getServiceResult(false, null, "Ya existe esta inscripción", 0);
+    }
+    /* const checkResult = await checkForExistingData(data.user_id, data.id_electivo);
+    if (checkResult) {
+      return checkResult;
+    }
+    const inscripcionNueva = inscripcionRepo.create(data);
+    await inscripcionRepo.save(inscripcionNueva); */
+    return getServiceResult(false, inscripcionNueva, "Inscripción creada con éxito", 1);
+  } catch (error) {
+    console.error("Error al crear inscripcion:", error);
     return getServiceResult(true, null, error.message ? error.message : "Error al listar inscripciones", 0);
   }  
 }
+
 
 // TODO UPDATE DELETE
