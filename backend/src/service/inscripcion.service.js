@@ -182,7 +182,7 @@ const checkForExistingData = async (userId, electivoId) => {
     return null;
 }
 
-export async function createInscripcionPrivateFromService(data) {
+export async function createInscripcionFromService(data) {
   if (!data) {
     return getServiceResult(true, null, "Datos no proporcionados", 0);
   }
@@ -201,7 +201,7 @@ export async function createInscripcionPrivateFromService(data) {
   }  
 }
 
-export async function updateInscripcionPrivateFromService(id, data) {
+export async function updateInscripcionFromService(id, data) {
   if (!data || !id || isNaN(id)) {
     return getServiceResult(true, null, "Datos no proporcionados", 0);
   }
@@ -209,20 +209,20 @@ export async function updateInscripcionPrivateFromService(id, data) {
   try {
     const checkResult = await findCopyEdit(id, data.user_id, data.id_electivo);
     if (checkResult.length > 0) {
-      return getServiceResult(false, null, "Ya existe esta inscripción", 0);
+      return getServiceResult(false, checkResult, "Ya existe esta inscripción", checkResult.length);
     }
-    /* const checkResult = await checkForExistingData(data.user_id, data.id_electivo);
-    if (checkResult) {
-      return checkResult;
+    let inscripcionEditada = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
+    if (!inscripcionEditada) {
+      return getServiceResult(false, null, "Inscripción no encontrada", 0);
     }
-    const inscripcionNueva = inscripcionRepo.create(data);
-    await inscripcionRepo.save(inscripcionNueva); */
-    return getServiceResult(false, inscripcionNueva, "Inscripción creada con éxito", 1);
+    inscripcionEditada = Object.assign(inscripcionEditada, data);
+    await inscripcionRepo.save(inscripcionEditada);
+    return getServiceResult(false, inscripcionEditada, "Inscripción editada con éxito", 1);
   } catch (error) {
-    console.error("Error al crear inscripcion:", error);
-    return getServiceResult(true, null, error.message ? error.message : "Error al listar inscripciones", 0);
+    console.error("Error al editar inscripción:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al editar inscripciones", 0);
   }  
 }
 
 
-// TODO UPDATE DELETE
+// TODO DELETE
