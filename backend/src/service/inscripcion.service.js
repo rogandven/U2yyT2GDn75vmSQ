@@ -224,5 +224,20 @@ export async function updateInscripcionFromService(id, data) {
   }  
 }
 
+export async function deleteInscripcionFromService(id) {
+  if (!id || isNaN(id)) {
+    return getServiceResult(false, null, "Datos no proporcionados", 0);
+  }
 
-// TODO DELETE
+  try {
+    const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
+    if (!inscripcion) {
+      return getServiceResult(false, null, "Inscripción no encontrada", 0);
+    }
+    await inscripcionRepo.delete(inscripcion);
+    return getServiceResult(false, inscripcion, "Inscripción eliminada con éxito", 1);
+  } catch (error) {
+    console.error("Error al eliminar inscripción");
+    return getServiceResult(true, null, error.message ? error.message : "Error al eliminar inscripción", 0);
+  }
+}
