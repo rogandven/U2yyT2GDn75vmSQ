@@ -65,3 +65,11 @@ export const updateValidation = Joi.object({
     "object.unknown": "No se permiten campos adicionales",
     "object.min": "Debe proporcionar un campo para actualizar",
 });
+
+export const findValidation = Joi.object({
+    id_inscripcion: Joi.any().required().custom(idValidationFunction)
+}).unknown({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.unknown": "No se permiten campos adicionales",
+    "any.required": "El ID es obligatorio",
+});

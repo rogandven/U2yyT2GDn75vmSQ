@@ -135,7 +135,7 @@ export async function getInscripcionesSinAprobarFromService() {
     }
 }
 
-export async function getInscripcionesByUser(user_id) {
+export async function getInscripcionesByUserFromService(user_id) {
     const genericFailure = () => {
       return getServiceResult(false, inscripcionesFiltradas, "No hay inscripciones para mostrar", 0);
     };
@@ -239,5 +239,51 @@ export async function deleteInscripcionFromService(id) {
   } catch (error) {
     console.error("Error al eliminar inscripción");
     return getServiceResult(true, null, error.message ? error.message : "Error al eliminar inscripción", 0);
+  }
+}
+
+export async function publicDeleteInscripcionFromService(id, userId) {
+  try {
+    const result = await checkIfUserMadeInscripcion(userId, id);
+    if (result) {
+      return await deleteInscripcionFromService(id);
+    }
+    return getServiceResult(false, null, "Acceso denegado", 0);
+  } catch (error) {
+    return getServiceResult(true, null, error.message ? error.message : "Error al eliminar inscripción", 0);
+  }
+}
+
+export async function publicUpdateInscripcionFromService(id, userId, data) {
+  try {
+    const result = await checkIfUserMadeInscripcion(userId, id);
+    if (result) {
+      return await updateInscripcionFromService(id, data);
+    }
+    return getServiceResult(false, null, "Acceso denegado", 0);
+  } catch (error) {
+    return getServiceResult(true, null, error.message ? error.message : "Error al eliminar inscripción", 0);
+  }
+}
+
+const checkIfUserMadeInscripcion = async (userId, inscripcionId) => {
+  const NOT_FOUND = Error("Inscripción no encontrada");
+
+  if (!userId || !inscripcionId || isNaN(userId) || isNaN(inscripcionId)) {
+    throw Error("Datos no proporcionados");
+  }
+
+  try {
+    const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: inscripcionId}});
+    if (!inscripcion) {
+      throw NOT_FOUND;
+    }
+    if (inscripcion.id_usuario === userId) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error al encontrar inscripción: ", error.message ? error.message : "Mensaje desconocido", error);
+    throw NOT_FOUND;
   }
 }
