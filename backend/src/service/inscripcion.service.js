@@ -109,7 +109,7 @@ export async function getInscripcionesFromService() {
     try {
       let inscripciones = await inscripcionRepo.find();
       if (!inscripciones || inscripciones.length <= 0) {
-        return getServiceResult(false, inscripcionesFiltradas, "No hay inscripciones para mostrar", 0);
+        return getServiceResult(false, [], "No hay inscripciones para mostrar", 0);
       }
       const inscripcionesFiltradas = await parsearInscripciones(inscripciones);
 
@@ -124,7 +124,7 @@ export async function getInscripcionesSinAprobarFromService() {
     try {
       let inscripciones = await inscripcionRepo.find({where: {estado: AWAITING}});
       if (!inscripciones || inscripciones.length <= 0) {
-        return getServiceResult(false, inscripcionesFiltradas, "No hay inscripciones para mostrar", 0);
+        return getServiceResult(false, [], "No hay inscripciones para mostrar", 0);
       }
       const inscripcionesFiltradas = await parsearInscripciones(inscripciones);
 
@@ -137,7 +137,7 @@ export async function getInscripcionesSinAprobarFromService() {
 
 export async function getInscripcionesByUserFromService(user_id) {
     const genericFailure = () => {
-      return getServiceResult(false, inscripcionesFiltradas, "No hay inscripciones para mostrar", 0);
+      return getServiceResult(false, [], "No hay inscripciones para mostrar", 0);
     };
 
     if (!user_id || isNaN(user_id)) {
@@ -242,7 +242,7 @@ export async function deleteInscripcionFromService(id) {
   }
 }
 
-export async function publicDeleteInscripcionFromService(id, userId) {
+export async function public_deleteInscripcionFromService(id, userId) {
   try {
     const result = await checkIfUserMadeInscripcion(userId, id);
     if (result) {
@@ -254,7 +254,7 @@ export async function publicDeleteInscripcionFromService(id, userId) {
   }
 }
 
-export async function publicUpdateInscripcionFromService(id, userId, data) {
+export async function public_updateInscripcionFromService(id, userId, data) {
   try {
     const result = await checkIfUserMadeInscripcion(userId, id);
     if (result) {
