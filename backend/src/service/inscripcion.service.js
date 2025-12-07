@@ -268,12 +268,10 @@ export async function public_updateInscripcionFromService(id, userId, data) {
 
 const checkIfUserMadeInscripcion = async (userId, inscripcionId) => {
   const NOT_FOUND = Error("Inscripción no encontrada");
-
-  if (!userId || !inscripcionId || isNaN(userId) || isNaN(inscripcionId)) {
-    throw Error("Datos no proporcionados");
-  }
-
   try {
+    if (!userId || !inscripcionId || isNaN(userId) || isNaN(inscripcionId)) {
+      throw Error("Datos no proporcionados");
+    }
     const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: inscripcionId}});
     if (!inscripcion) {
       throw NOT_FOUND;
@@ -285,5 +283,24 @@ const checkIfUserMadeInscripcion = async (userId, inscripcionId) => {
   } catch (error) {
     console.error("Error al encontrar inscripción: ", error.message ? error.message : "Mensaje desconocido", error);
     throw NOT_FOUND;
+  }
+}
+
+export async function getInscripcionFromService(id, userId, checksEnabled) {
+  try {
+    if (!id || !userId || !checksEnabled) {
+      throw Error("Dato no proporcionado");
+    }
+    const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
+    if (!inscripcion) {
+      return getServiceResult(false, null, "Inscripción no encontrada", 0);
+    }
+    if ((inscripcion.id_usuario !== userId) && checksEnabled) {
+      return getServiceResult(false, null, "Acceso denegado", 0);
+    }
+    return getServiceResult(false, inscripcion, "Inscripción encontrada con éxito", 1);
+  } catch (error) {
+    console.error("Error al encontrar inscripción: ", error.message ? error.message : "Mensaje desconocido", error);
+    return getServiceResult(true, null, "Error interno del servidor", 0);
   }
 }

@@ -1,8 +1,8 @@
 "use strict";
-import { getInscripcionesByUserFromService, getInscripcionesSinAprobarFromService, getInscripcionesFromService, createInscripcionFromService } from "../service/inscripcion.service.js";
-import { findValidation } from "../validations/modules/id.validation.js";
+import { getInscripcionesByUserFromService, getInscripcionesSinAprobarFromService, getInscripcionesFromService, createInscripcionFromService, updateInscripcionFromService, public_updateInscripcionFromService, deleteInscripcionFromService, public_deleteInscripcionFromService, getInscripcionFromService } from "../service/inscripcion.service.js";
+import { findValidation, idValidation } from "../validations/modules/id.validation.js";
 import { getControllerResult } from "./utils/utils.controller.js";
-import { createValidation, integrityValidation } from "../validations/inscripcion.validation.js";
+import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
 
 export async function private_getInscripcionesByUser(req, res) {
@@ -80,7 +80,6 @@ const createInscripcionHelper = async (req, res) => {
     return res.status(201).json(getControllerResult(serviceResult.details, serviceResult));
 }
 
-
 export async function private_createInscripcion(req, res) {
     if (!req.body) {
         return res.status(400).json(getControllerResult("Datos no proporcionados", null));
@@ -105,4 +104,96 @@ export async function public_createInscripcion(req, res) {
     req.body.estado = AWAITING;
     req.body.id_usuario = req.user.id;
     return createInscripcionHelper(req, res);
+}
+
+const updateInscriptionHelper = async (req, res, updateFunction) => {
+    if (!updateFunction) {
+        throw Error("Falta pasar la función como argumento");
+    }
+    let result = updateValidation(req.body);
+    if (result.error) {
+        return res.status(400).json(getControllerResult(result.error.message ? result.error.message : "Datos faltantes"));
+    }
+    result = integrityValidation(req.body);
+    if (result.error) {
+        return res.status(400).json(getControllerResult(result.error.message ? result.error.message : "Datos inválidos"));
+    }
+    const serviceResult = await updateFunction(req.params.id, req.body);
+    if (serviceResult.error) {
+        return res.status(500).json(getControllerResult(serviceResult.details || "Error interno del servidor", serviceResult));
+    }
+    if (serviceResult.length <= 0) {
+        serviceResult.error = true;
+        return res.status(400).json(getControllerResult(serviceResult.details || "Error al actualizar la inscripción", serviceResult));
+    }
+    return res.status(200).json(getControllerResult(serviceResult.details || "Inscripción actualizada con éxito", serviceResult));
+}
+
+export async function public_updateInscripcion(req, res) {
+    if (req.body.id_usuario) {
+        return res.status(401).json(getControllerResult("No se puede editar la inscripción de otro usuario", null));
+    }
+    if (req.body.estado) {
+        return res.status(401).json(getControllerResult("No se puede cambiar un estado arbitrariamente", null));
+    }
+    let result = idValidation.validate({id: req.params.id});
+    if (result.error) {
+        return res.status(400).json(getControllerResult(result.error.message || "ID inválido", null));
+    }
+    req.body.id_usuario = req.user.id;
+    req.body.estado = AWAITING;
+    return await updateInscriptionHelper(req, res, public_updateInscripcionFromService);
+}
+
+export async function private_updateInscripcion(req, res) {
+    let result = idValidation.validate({id: req.params.id});
+    if (result.error) {
+        return res.status(400).json(getControllerResult(result.error.message || "ID inválido", null));
+    }
+    return await updateInscriptionHelper(req, res, updateInscripcionFromService);
+}
+
+const deleteInscriptionHelper = async (id, deleteFunction) => {
+    const result = await deleteFunction(id);
+    if (result.error) {
+        return res.status(500).json(getControllerResult(result.details || "Error al eliminar inscripción", result));
+    }
+    if (result.length <= 0) {
+        return res.status(400).json(getControllerResult(result.details, result));
+    }
+    return res.status(200).json(getControllerResult(result.details, result));
+}
+
+export async function private_deleteInscripcion(req, res) {
+    const id = req.params.id || null;
+    const validationResult = idValidation.validate({id: id});
+    if (validationResult.error) {
+        return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
+    }
+    return await deleteInscriptionHelper(id, deleteInscripcionFromService);
+}
+
+export async function public_deleteInscripcion(req, res) {
+    const id = req.params.id || null;
+    const validationResult = idValidation.validate({id: id});
+    if (validationResult.error) {
+        return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
+    }
+    return await deleteInscriptionHelper(id, public_deleteInscripcionFromService);
+}
+
+export async function public_getInscripcion(req, res) {
+    const id = req.params.id || null;
+    const validationResult = idValidation.validate({id: id});
+    if (validationResult.error) {
+        return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
+    }
+    const inscripcion = await getInscripcionFromService(id, req.user.id, true);
+    if (inscripcion.error) {
+        return res.status(500).json(getControllerResult(inscripcion.details || "Error interno del servidor", inscripcion));
+    }
+    if (inscripcion.length <= 0) {
+        return res.status(400).json(getControllerResult(inscripcion.details || "Mensaje desconocido", inscripcion));
+    }
+    return res.status(200).json(getControllerResult("Inscripción encontrada con éxito", inscripcion));
 }
