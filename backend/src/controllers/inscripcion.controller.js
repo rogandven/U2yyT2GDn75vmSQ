@@ -1,17 +1,18 @@
 "use strict";
 import { getInscripcionesByUserFromService, getInscripcionesSinAprobarFromService, getInscripcionesFromService, createInscripcionFromService, updateInscripcionFromService, public_updateInscripcionFromService, deleteInscripcionFromService, public_deleteInscripcionFromService, getInscripcionFromService } from "../service/inscripcion.service.js";
-import { findValidation, idValidation } from "../validations/modules/id.validation.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+import { findValidation } from "../validations/inscripcion.validation.js";
 import { getControllerResult } from "./utils/utils.controller.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { APPROVED, AWAITING, REJECTED, VALID_STATUS_ARRAY } from "../constants/inscripcion.constants.js";
 
 export async function private_getInscripcionesByUser(req, res) {
-    const result = findValidation.validate(req.query);
+    const result = findValidation.validate(req.params);
     if (result.error) {
         const message1 = result.error.message ? result.error.message : "ID inválido";
         return res.status(400).json(getControllerResult(message1, null));
     }
-    const inscripciones = await getInscripcionesByUserFromService(req.query.id);
+    const inscripciones = await getInscripcionesByUserFromService(req.params.id);
     const message2 = inscripciones.details ? inscripciones.details : "Error al obtener inscripciones";
     if (inscripciones.error) {
         return res.status(500).json(getControllerResult(message2, inscripciones));
@@ -28,7 +29,7 @@ export async function public_getInscripcionesByUser(req, res) {
         return res.status(500).json(getControllerResult("No se pudo procesar el ID", null));
     }
     req.query = newReqQuery;
-    return await getInscripcionesByUser(req, res);
+    return await private_getInscripcionesByUser(req, res);
 }
 
 export async function private_getInscripcionesSinAprobar(req, res) {
