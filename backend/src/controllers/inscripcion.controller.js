@@ -3,7 +3,7 @@ import { getInscripcionesByUserFromService, getInscripcionesSinAprobarFromServic
 import { findValidation, idValidation } from "../validations/modules/id.validation.js";
 import { getControllerResult } from "./utils/utils.controller.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
-import { APPROVED, AWAITING, REJECTED } from "../constants/inscripcion.constants.js";
+import { APPROVED, AWAITING, REJECTED, VALID_STATUS_ARRAY } from "../constants/inscripcion.constants.js";
 
 export async function private_getInscripcionesByUser(req, res) {
     const result = findValidation.validate(req.query);
@@ -216,6 +216,9 @@ export async function private_getInscripcion(req, res) {
 
 const changeInscriptionStatusHelper = async (req, res, status) => {
     const newStatus = String(status);
+    if (!(VALID_STATUS_ARRAY.includes(status))) {
+        return res.status(400).json(getControllerResult("Estado no válido", null));
+    }
     const id = req.params.id || null;
     const validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
@@ -229,10 +232,10 @@ const changeInscriptionStatusHelper = async (req, res, status) => {
     if (length <= 0 || !data) {
         return res.status(400).json(getControllerResult(details, data));
     }
-    if (data.estado === APPROVED) {
+    if (data.estado === status) {
         return res.status(400).json(getControllerResult(`La inscripción ${id} ya está ${newStatus.toLowerCase().replace("_", " ")}`));
     }
-    const newBody = { estado: APPROVED };
+    const newBody = { estado: newStatus };
     req.body = newBody;
     return await private_updateInscripcion(req, res);
 }
