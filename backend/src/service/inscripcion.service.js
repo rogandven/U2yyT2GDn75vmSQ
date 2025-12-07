@@ -295,7 +295,7 @@ export async function getInscripcionFromService(id, userId, checksEnabled) {
     if (!inscripcion) {
       return getServiceResult(false, null, "Inscripción no encontrada", 0);
     }
-    if ((inscripcion.id_usuario !== userId) && checksEnabled) {
+    if (checksEnabled && (inscripcion.id_usuario !== userId)) {
       return getServiceResult(false, null, "Acceso denegado", 0);
     }
     return getServiceResult(false, inscripcion, "Inscripción encontrada con éxito", 1);

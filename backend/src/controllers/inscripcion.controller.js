@@ -3,7 +3,7 @@ import { getInscripcionesByUserFromService, getInscripcionesSinAprobarFromServic
 import { findValidation, idValidation } from "../validations/modules/id.validation.js";
 import { getControllerResult } from "./utils/utils.controller.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
-import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
+import { APPROVED, AWAITING, REJECTED } from "../constants/inscripcion.constants.js";
 
 export async function private_getInscripcionesByUser(req, res) {
     const result = findValidation.validate(req.query);
@@ -196,4 +196,52 @@ export async function public_getInscripcion(req, res) {
         return res.status(400).json(getControllerResult(inscripcion.details || "Mensaje desconocido", inscripcion));
     }
     return res.status(200).json(getControllerResult("Inscripción encontrada con éxito", inscripcion));
+}
+
+export async function private_getInscripcion(req, res) {
+    const id = req.params.id || null;
+    const validationResult = idValidation.validate({id: id});
+    if (validationResult.error) {
+        return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
+    }
+    const inscripcion = await getInscripcionFromService(id, null, false);
+    if (inscripcion.error) {
+        return res.status(500).json(getControllerResult(inscripcion.details || "Error interno del servidor", inscripcion));
+    }
+    if (inscripcion.length <= 0) {
+        return res.status(400).json(getControllerResult(inscripcion.details || "Mensaje desconocido", inscripcion));
+    }
+    return res.status(200).json(getControllerResult("Inscripción encontrada con éxito", inscripcion));
+}
+
+const changeInscriptionStatusHelper = async (req, res, status) => {
+    const newStatus = String(status);
+    const id = req.params.id || null;
+    const validationResult = idValidation.validate({id: id});
+    if (validationResult.error) {
+        return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
+    }
+    const { data, error, details, length } = await getInscripcionFromService(id, null, false);
+
+    if (error) {
+        return res.status(500).json(getControllerResult(details, data));
+    }
+    if (length <= 0 || !data) {
+        return res.status(400).json(getControllerResult(details, data));
+    }
+    if (data.estado === APPROVED) {
+        return res.status(400).json(getControllerResult(`La inscripción ${id} ya está ${newStatus.toLowerCase().replace("_", " ")}`));
+    }
+    const newBody = { estado: APPROVED };
+    req.body = newBody;
+    return await private_updateInscripcion(req, res);
+}
+
+
+export async function private_approveInscripcion(req, res) {
+    return await changeInscriptionStatusHelper(req, res, APPROVED);
+}
+
+export async function private_rejectInscripcion(req, res) {
+    return await changeInscriptionStatusHelper(req, res, REJECTED);
 }
