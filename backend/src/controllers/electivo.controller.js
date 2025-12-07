@@ -91,22 +91,28 @@ export async function updateElectivoById(req, res) {
       .json({ message: "Electivo actualizado exitosamente.", data: electivos });
   } catch (error) {
     console.error("Error en electivo.controller.js -> updateElectivoById(): ", error);
-"use strict" ;
+  }
+}
+/*"use strict" ;
 import Electivo from "../entity/electivo.entity.js";
-import { AppDataSource } from "../config/configDb.js";
+import { AppDataSource } from "../config/configDb.js"; */
 
 export async function getElectivos(req, res) {
   try {
    
     const electivoRepository = AppDataSource.getRepository(Electivo);
     const electivos = await electivoRepository.find();
+    if (electivos.length <= 0) {
+      return res.status(204).json({ message: "No hay electivos para mostrar.", data: null});
+    }
+
     res.status(200).json({ message: "Electivos encontrados: ", data: electivos });
     } catch (error) {
     console.error("Error en electivo.controller.js -> getElectivos(): ", error);
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
-export async function createElectivo(req, res) {
+export async function createElectivo2(req, res) {
   try {
   
     const electivoRepository = AppDataSource.getRepository(Electivo);
@@ -148,7 +154,7 @@ export async function deleteElectivoById(req, res) {
   }
 }
 
-export async function getElectivos(req, res) {
+export async function getElectivos2(req, res) {
   try {
     // Obtener el repositorio de electivos y buscar el perfil del electivo autenticado
     const ElectivoEntityRepository = AppDataSource.getRepository(ElectivoEntity);
@@ -195,6 +201,7 @@ export async function deleteElectivo(req, res) {
   }
   
 }
+
 export async function updateElectivo(req, res) {
     try {
       
@@ -217,5 +224,4 @@ export async function updateElectivo(req, res) {
         console.error("Error en electivo.controller.js -> updateElectivoById(): ", error);
         res.status(500).json({ message: "Error interno del servidor." });
     }
-};
-
+}
