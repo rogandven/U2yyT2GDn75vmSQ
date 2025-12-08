@@ -47,9 +47,9 @@ export async function isRoleHelper(roleArray, req, res, next) {
 
 // Función middleware para verificar si el usuario es administrador
 export async function isAdmin(req, res, next) {
-  return await isRoleHelper([ADMINISTRADOR, JEFE_DE_CARRERA]);
+  return await isRoleHelper([ADMINISTRADOR, JEFE_DE_CARRERA], req, res, next);
 }
 
 export async function isJefe(req, res, next) {
-  return await isRoleHelper([JEFE_DE_CARRERA]);
+  return await isRoleHelper([JEFE_DE_CARRERA], req, res, next);
 }

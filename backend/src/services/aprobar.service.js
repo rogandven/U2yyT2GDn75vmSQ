@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
-import electivoRepository from "../controllers/electivo.controller.js";
+// import electivoRepository from "../controllers/electivo.controller.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 
 const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
