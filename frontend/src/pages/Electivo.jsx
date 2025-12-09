@@ -2,8 +2,8 @@ import "@styles/users.css";
 import GetElectivo from "@hooks/users/GetElectivo.jsx";
 import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";
-import { AprobarElectivo } from "../hooks/users/EvaluarElectivo2.jsx";
-import { RechazarElectivo } from "../hooks/users/EvaluarElectivo2.jsx";
+import { AprobarElectivo } from "../hooks/users/EvaluarElectivo.jsx";
+import { RechazarElectivo } from "../hooks/users/EvaluarElectivo.jsx";
 import { ELECTIVO_APROBADO, ELECTIVO_RECHAZADO } from "../constants/ElectivoConstants.jsx";
 
 import { useEffect } from "react";
@@ -47,9 +47,6 @@ const Electivo = () => {
     }
     return false;
   }
-
-
-  console.log(user);
 
   const { electivos, fetchElectivos } = GetElectivo();
   const { handleDeleteElectivo } = DeleteElectivo(fetchElectivos);
