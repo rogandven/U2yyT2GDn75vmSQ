@@ -60,7 +60,7 @@ const formatEstado = (estado) => {
 
 const cambiarEstadoHelper = async (id_electivo, nuevoEstado) => {
   const nuevoEstadoParseado = String(nuevoEstado);
-  const Electivo = await electivoRepository.findOneBy({ id_electivo });
+  const Electivo = await electivoRepository.findOneBy({ id: id_electivo });
   if (!Electivo) {
     throw Error("Electivo no encontrado", {code: 404});
   }

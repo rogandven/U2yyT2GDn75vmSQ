@@ -227,36 +227,26 @@ export async function updateElectivo(req, res) {
     }
 }
 
-export async function aprobarElectivo(req, res) {
+const cambiarEstadoHelper = async (funcion, texto, req, res) => {
     let code = 500;
     try {
-        const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
         const { id } = req.params;
-        const { nombre, descripcion, creditos } = req.body;
         
-        const resultado = await aprobarElectivoById_Electivo(id);
+        const resultado = await funcion(id);
         code = resultado.code || 200;
-        res.status(code).json({ message: "Electivo actualizado exitosamente.", data: (resultado.result || null) });
+        res.status(code).json({ message: `Electivo ${texto} exitosamente.`, data: (resultado.result || null) });
     } catch (error) {
         code = error.code ? error.code : 500;
+        console.log(code);
         console.error("Error en electivo.controller.js -> updateElectivoById(): ", error);
         res.status(code).json({ message: "Error interno del servidor." });
     }
 }
 
+export async function aprobarElectivo(req, res) {
+  return await cambiarEstadoHelper(aprobarElectivoById_Electivo, "aprobado", req, res);
+}
+
 export async function rechazarElectivo(req, res) {
-    let code = 500;
-    try {
-        const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
-        const { id } = req.params;
-        const { nombre, descripcion, creditos } = req.body;
-        
-        const resultado = await rechazarElectivoById_Electivo(id);
-        code = resultado.code || 200;
-        res.status(code).json({ message: "Electivo actualizado exitosamente.", data: (resultado.result || null) });
-    } catch (error) {
-        code = error.code ? error.code : 500;
-        console.error("Error en electivo.controller.js -> updateElectivoById(): ", error);
-        res.status(code).json({ message: "Error interno del servidor." });
-    }
+  return await cambiarEstadoHelper(rechazarElectivoById_Electivo, "rechazado", req, res);
 }
