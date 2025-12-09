@@ -234,7 +234,7 @@ const changeInscriptionStatusHelper = async (req, res, status) => {
         return res.status(400).json(getControllerResult(details, data));
     }
     if (data.estado === status) {
-        return res.status(400).json(getControllerResult(`La inscripción ${id} ya está ${newStatus.toLowerCase().replace("_", " ")}`));
+        return res.status(400).json(getControllerResult(`La inscripción ${id} ya está ${newStatus.toLowerCase().replaceAll("_", " ")}`));
     }
     const newBody = { estado: newStatus };
     req.body = newBody;
