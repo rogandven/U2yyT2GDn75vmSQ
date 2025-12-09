@@ -2,7 +2,17 @@ import "@styles/users.css";
 import GetElectivo from "@hooks/users/GetElectivo.jsx";
 import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";
+import { AprobarElectivo } from "../hooks/users/EvaluarElectivo2.jsx";
+import { RechazarElectivo } from "../hooks/users/EvaluarElectivo2.jsx";
+import { ELECTIVO_APROBADO, ELECTIVO_RECHAZADO } from "../constants/ElectivoConstants.jsx";
+
 import { useEffect } from "react";
+import { useAuth } from "@context/AuthContext.jsx";
+import { JEFE_DE_CARRERA } from "../constants/ElectivoConstants.jsx";
+
+const esJefe = (rol) => {
+  return (rol) === JEFE_DE_CARRERA;
+}
 
 const esDocente = () => {
   // ESTA FUNCION NO HACE NADA TODAVÍA
@@ -10,9 +20,42 @@ const esDocente = () => {
 }
 
 const Electivo = () => {
+  const user = useAuth();
+
+  const getRole = (user) => {
+    let rol = null;
+    if (user && user.user && (rol = (user.user.role || user.user.rol))) {
+      return rol;
+    }
+    return null;
+  }
+
+  const isEvaluated = (electivo) => {
+    // console.log(JSON.stringify(electivo));
+    // console.log(electivo.estado);
+    if (electivo.estado && (electivo.estado === ELECTIVO_APROBADO || electivo.estado === ELECTIVO_RECHAZADO)){
+      // console.log("verdadero");
+      return true;
+    }
+    // console.log("falso");
+    return false;
+  }
+
+  const isRejected = (electivo) => {
+    if (electivo.estado && (electivo.estado === ELECTIVO_RECHAZADO)) {
+      return true;
+    }
+    return false;
+  }
+
+
+  console.log(user);
+
   const { electivos, fetchElectivos } = GetElectivo();
   const { handleDeleteElectivo } = DeleteElectivo(fetchElectivos);
   const { handleEditElectivo } = EditElectivo(fetchElectivos);
+  const { handleAprobarElectivo } = AprobarElectivo(fetchElectivos);
+  const { handleRechazarElectivo } = RechazarElectivo(fetchElectivos);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -37,18 +80,20 @@ const Electivo = () => {
         </thead>
         <tbody>
           {Array.isArray(electivos) && electivos.length > 0 ? (
-            electivos.map((user) => (
-              <tr key={user.id}>
-                <td>{user.nombre}</td>
-                <td>{user.profesor}</td>
-                <td>{user.descripcion}</td>
-                <td>{user.cupos}</td>
-                <td>{user.creditos}</td>
+            electivos.map((electivo) => !isRejected(electivo) && (
+              <tr key={electivo.id}>
+                <td>{electivo.nombre}</td>
+                <td>{electivo.profesor}</td>
+                <td>{electivo.descripcion}</td>
+                <td>{electivo.cupos}</td>
+                <td>{electivo.creditos}</td>
                 <td>
                   {/*Ahora edita el boton crear para que le pongas tus funciones que le diste en tu backend y en el hook*/
                   /*<button className="create" onClick={() => handleCreateElectivo(user.id, user)}>Crear</button>*/}
-                  <button className="edit" onClick={() => handleEditElectivo(user.id, user)}>Editar</button>
-                  <button className="delete" onClick={() => handleDeleteElectivo(user.id)}>Eliminar</button>
+                  <button className="edit" onClick={() => handleEditElectivo(electivo.id, electivo)}>Editar</button>
+                  <button className="delete" onClick={() => handleDeleteElectivo(electivo.id)}>Eliminar</button>
+                  { esJefe(getRole(user)) && !isEvaluated(electivo) && (<button className="approve" onClick={() => handleAprobarElectivo(electivo.id)}>Aprobar</button>)}
+                  { esJefe(getRole(user)) && !isEvaluated(electivo) && (<button className="reject" onClick={() => handleRechazarElectivo(electivo.id)}>Rechazar</button>)}
                 </td>
               </tr>
             ))

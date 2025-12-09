@@ -9,6 +9,25 @@ export async function getElectivos() {
     }
 }
 
+const cambiarEstadoHelper = async (verbo, id) => {
+    try {
+        const response = await axios.post(`/electivos/${id}/${verbo}`);
+        // console.log(response);
+        return {data: response.data, code: response.status || 500};
+    } catch (error) {
+        console.error("Error al aprobar el electivo: ", error);
+        return null;
+    }
+}
+
+export async function aprobarElectivos(id) {
+    return await cambiarEstadoHelper('aprobar', id);
+}
+
+export async function rechazarElectivos(id) {
+    return await cambiarEstadoHelper('rechazar', id);
+}
+
 export async function editElectivo(electivoId, electivoData) { 
     try {
         const response = await axios.put(`/electivos/${electivoId}`, electivoData);
