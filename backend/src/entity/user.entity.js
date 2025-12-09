@@ -1,3 +1,4 @@
+/*
 "use strict";
 
 import { EntitySchema } from "typeorm";
@@ -44,6 +45,76 @@ export const UserEntity = new EntitySchema({
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
     },
+});
+
+export default UserEntity;
+*/
+
+"use strict";
+
+import { EntitySchema } from "typeorm";
+
+export const UserEntity = new EntitySchema({
+  name: "User",
+  tableName: "users",
+
+  columns: {
+    id: {
+      type: "int",
+      primary: true,
+      generated: true,
+    },
+
+    rut: {
+      type: "varchar",
+      unique: true,
+      nullable: false,
+    },
+
+    username: {
+      type: "varchar",
+      nullable: true, 
+    },
+
+    nombre: {
+      type: "varchar",
+      nullable: true,
+    },
+
+    email: {
+      type: "varchar",
+      unique: true,
+      nullable: false,
+    },
+
+    password: {
+      type: "varchar",
+      nullable: false,
+    },
+
+    role: {
+      type: "varchar",
+      default: "alumno",
+    },
+
+    generacion: {
+      type: "int",
+      nullable: true,
+    },
+
+    createdAt: {
+      type: "timestamp",
+      default: () => "CURRENT_TIMESTAMP",
+    },
+
+    updatedAt: {
+      type: "timestamp",
+      default: () => "CURRENT_TIMESTAMP",
+      onUpdate: "CURRENT_TIMESTAMP",
+    },
+  },
+
+  relations: {},
 });
 
 export default UserEntity;

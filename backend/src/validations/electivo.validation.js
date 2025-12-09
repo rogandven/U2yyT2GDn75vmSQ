@@ -2,6 +2,19 @@
 "use strict";
 import Joi from "joi";
 
+const AREAS_PERMITIDAS = [
+  "Desarrollo de Software",
+  "Bases de Datos y Sistemas de Información",
+  "Ciencias de la Computación",
+  "Inteligencia Artificial y Ciencia de Datos",
+  "Redes y Telecomunicaciones",
+  "Ciberseguridad",
+  "Ingeniería de Software y Gestión TI",
+  "Sistemas Operativos e Infraestructura",
+  "Desarrollo Móvil e Interfaces",
+  "Innovación y Habilidades Blandas"
+];
+
 export const createElectivoValidation = Joi.object({
   nombre: Joi.string()
     .min(3)
@@ -50,14 +63,11 @@ export const createElectivoValidation = Joi.object({
     }),
 
   area: Joi.string()
-    .min(3)
-    .max(100)
+    .valid(...AREAS_PERMITIDAS)
     .required()
     .messages({
-      "string.empty": "El área del electivo es obligatoria.",
-      "string.min": "El área debe tener al menos 3 caracteres.",
-      "string.max": "El área no puede exceder los 100 caracteres.",
-      "any.required": "Debe ingresar el área del electivo.",
+      "any.only": "El área seleccionada no es válida.",
+      "any.required": "Debe seleccionar un área.",
     }),
 
   descripcion: Joi.string()

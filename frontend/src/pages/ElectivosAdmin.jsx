@@ -53,9 +53,17 @@ useEffect(() => {
           onChange={(e) => setFiltroArea(e.target.value)}
         >
           <option value="">Todas las áreas</option>
-          <option value="Desarrollo">Desarrollo</option>
-          <option value="Investigación">Investigación</option>
-          <option value="Habilidades Sociales">Habilidades Sociales</option>
+          <option value="Desarrollo de Software">Desarrollo de Software</option>
+          <option value="Bases de Datos y Sistemas de Información">Bases de Datos y Sistemas de Información</option>
+          <option value="Ciencias de la Computación">Ciencias de la Computación</option>
+          <option value="Inteligencia Artificial y Ciencia de Datos">Inteligencia Artificial y Ciencia de Datos</option>
+          <option value="Redes y Telecomunicaciones">Redes y Telecomunicaciones</option>
+          <option value="Ciberseguridad">Ciberseguridad</option>
+          <option value="Ingeniería de Software y Gestión TI">Ingeniería de Software y Gestión TI</option>
+          <option value="Sistemas Operativos e Infraestructura">Sistemas Operativos e Infraestructura</option>
+          <option value="Desarrollo Móvil e Interfaces">Desarrollo Móvil e Interfaces</option>
+        <option value="Innovación y Habilidades Blandas">Innovación y Habilidades Blandas</option>
+
         </select>
         {(busqueda || filtroArea) && (
           <button className="solicitud-limpiar-btn" onClick={limpiarFiltros}>
