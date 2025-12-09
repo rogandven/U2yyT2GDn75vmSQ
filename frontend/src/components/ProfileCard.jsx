@@ -1,6 +1,13 @@
 import "@styles/profile.css";
 import profilePic from "@assets/profilePic.jpg";
 
+const parseRole = (role) => {
+  if (!role || typeof(role) !== "string") {
+    return "Rol desconocido";
+  }
+  return role.toUpperCase().replaceAll("_", " ");
+}
+
 const ProfileCard = ({ user }) => {
   return (
     <div className="profile-card">
@@ -17,7 +24,7 @@ const ProfileCard = ({ user }) => {
             <strong>Correo:</strong> {user.email}
           </p>
           <p>
-            <strong>Rol:</strong> {user.role}
+            <strong>Rol:</strong> {parseRole(user.role)}
           </p>
         </div>
       </div>
