@@ -32,11 +32,6 @@ export async function CreateInscripciones(req, res) {
     // console.log(inscripcionExistente);
 
     if (inscripcionExistente) {
-      if (inscripcionExistente.estado === "rechazada" || inscripcionExistente.estado === "retirada") {
-        return res.status(400).json({ 
-          message: "Ya tienes una solicitud rechazada o retirada para este electivo"
-        });
-      }
       return res.status(400).json({ 
         message: "Ya tienes una solicitud de inscripción para este electivo",
         estado: inscripcionExistente.estado
