@@ -10,6 +10,19 @@ import {
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
+const AREAS_PERMITIDAS = [
+  "Desarrollo de Software",
+  "Bases de Datos y Sistemas de Información",
+  "Ciencias de la Computación",
+  "Inteligencia Artificial y Ciencia de Datos",
+  "Redes y Telecomunicaciones",
+  "Ciberseguridad",
+  "Ingeniería de Software y Gestión TI",
+  "Sistemas Operativos e Infraestructura",
+  "Desarrollo Móvil e Interfaces",
+  "Innovación y Habilidades Blandas"
+];
+
 export async function getElectivos(req, res) {
   try {
     const { filtro, area, apertura, cierre } = req.query;
@@ -47,6 +60,12 @@ export async function createElectivo(req, res) {
   try {
     const { error } = createValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
+
+    if (!AREAS_PERMITIDAS.includes(req.body.area)) {
+      return res.status(400).json({
+        message: "Área no permitida. Debe seleccionar un área válida.",
+      });
+    }
 
     const nuevoElectivo = electivoRepo.create(req.body);
     await electivoRepo.save(nuevoElectivo);
@@ -91,6 +110,12 @@ export async function updateElectivo(req, res) {
 
     const { error } = updateValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
+
+    if (req.body.area && !AREAS_PERMITIDAS.includes(req.body.area)) {
+      return res.status(400).json({
+        message: "Área no permitida. Debe seleccionar un área válida.",
+      });
+    }
 
     Object.assign(electivo, req.body);
     await electivoRepo.save(electivo);
