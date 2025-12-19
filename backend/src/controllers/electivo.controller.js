@@ -4,8 +4,8 @@
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import {
-  createElectivoValidation,
-  updateElectivoValidation,
+  createValidation,
+  updateValidation,
 } from "../validations/electivo.validation.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
@@ -58,7 +58,7 @@ export async function getElectivos(req, res) {
 
 export async function createElectivo(req, res) {
   try {
-    const { error } = createElectivoValidation.validate(req.body);
+    const { error } = createValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
 
     if (!AREAS_PERMITIDAS.includes(req.body.area)) {
@@ -78,6 +78,26 @@ export async function createElectivo(req, res) {
     console.error("Error al crear electivo:", error);
     res.status(500).json({ message: "Error al crear electivo" });
   }
+};
+
+export async function getElectivoById(req, res) {
+  try {
+    // Obtener el repositorio de electivos y buscar un electivo por ID
+    const ElectivoEntityRepository = AppDataSource.getRepository(ElectivoEntity);
+    const { id } = req.params;
+    const electivos = await ElectivoEntityRepository.findOne({ where: { id } });
+
+    
+    // Si no se encuentra el electivo, devolver un error 404
+    if (!electivos) {
+      return res.status(404).json({ message: "Electivo no encontrado." });
+    }
+
+    res.status(200).json({ message: "Electivo encontrado: ", data: electivos });
+  } catch (error) {
+    console.error("Error en electivo.controller.js -> getUserById(): ", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
 }
 
 export async function updateElectivo(req, res) {
@@ -88,7 +108,7 @@ export async function updateElectivo(req, res) {
     if (!electivo)
       return res.status(404).json({ message: "Electivo no encontrado" });
 
-    const { error } = updateElectivoValidation.validate(req.body);
+    const { error } = updateValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
 
     if (req.body.area && !AREAS_PERMITIDAS.includes(req.body.area)) {
