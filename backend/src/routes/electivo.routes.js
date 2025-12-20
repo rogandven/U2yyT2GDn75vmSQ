@@ -14,10 +14,10 @@ router.get("/electivos", getElectivos);
 
 // Rutas para obtener electivos
 router.get("/", getElectivo);
-router.post("/", createElectivo);
-router.get("/:id", getElectivoById);
-router.put("/:id", updateElectivoById);
-router.delete("/:id", deleteElectivoById);
+router.post("/", isAuthenticated, isAdminOrProfesor, createElectivo);
+router.get("/:id", isAuthenticated, isAdminOrProfesor, getElectivoById);
+router.put("/:id", isAuthenticated, isAdminOrProfesor, updateElectivoById);
+router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivoById);
 
 router.post("/:id/aprobar", isJefe, aprobarElectivo);
 router.post("/:id/rechazar", isJefe, rechazarElectivo);
@@ -46,6 +46,7 @@ router.delete("/:id", isAuthenticated, isAdmin, deleteElectivo);
 export default router;
 */
 
+/*
 "use strict";
 
 import { Router } from "express";
@@ -69,3 +70,4 @@ router.put("/:id", isAuthenticated, isAdminOrProfesor, updateElectivo);
 router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivo);
 
 export default router;
+*/
