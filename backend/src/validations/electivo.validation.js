@@ -21,6 +21,16 @@ const AREAS_PERMITIDAS = [
   "Innovación y Habilidades Blandas"
 ];
 
+const getAllowedAreasInUppercase = () => {
+  const array = [];
+  for (let i = 0; i < AREAS_PERMITIDAS.length; i++) {
+    array.push(String(AREAS_PERMITIDAS[i].toUpperCase().trim()));
+  }
+  return array;
+}
+
+const AREAS_PERMITIDAS_EN_MAYUSCULA = getAllowedAreasInUppercase();
+
 export const getElectivosIntegrityValidation = Joi.object({
   filtro: Joi.string().pattern(FULLNAME_REGEX).min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
     "string.base":"El filtro debe ser un string",
@@ -75,12 +85,14 @@ export const integrityValidation = Joi.object({
   area: Joi.string()
     .min(MIN_FULLNAME)
     .max(MAX_FULLNAME)
-    .required()
+    .valid(...getAllowedAreasInUppercase())
     .messages({
       "string.empty": "El área del electivo es obligatoria.",
       "string.min": `El área debe tener al menos ${MIN_FULLNAME} caracteres.`,
       "string.max": `El área no puede exceder los ${MAX_FULLNAME} caracteres.`,
       "any.required": "Debe ingresar el área del electivo.",
+      "any.valid": `Solo se permiten las siguientes áreas: ${AREAS_PERMITIDAS_EN_MAYUSCULA.join(", ")}`,
+      "string.valid": `Solo se permiten las siguientes áreas: ${AREAS_PERMITIDAS_EN_MAYUSCULA.join(", ")}`,
     }),
   descripcion: Joi.string()
     .min(MIN_FULLNAME)
