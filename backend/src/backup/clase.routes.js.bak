@@ -1,6 +1,6 @@
 "use strict";
 import { Router } from "express";
-import { asignarClase, getClases, patchClase,deleteClase } from "../controllers/clase.controller.js";
+import { asignarClase, getClases, patchClase,deleteClase } from "../backup/clase.controller.js.bak/index.js";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
 
 const router = Router();
