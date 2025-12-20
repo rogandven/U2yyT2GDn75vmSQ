@@ -2,7 +2,7 @@ javascriptreactconst CreateInscripcion = (fetchMisInscripciones) => {
   
   const handleCreateInscripcion = async (electivoId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/Crear', {
+      const response = await fetch(`http://localhost:3000/api/Inscripciones/Crear`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

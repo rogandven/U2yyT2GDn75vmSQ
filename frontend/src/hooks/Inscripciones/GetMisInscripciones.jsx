@@ -3,7 +3,7 @@ const GetMisInscripciones = () => {
   
   const fetchMisInscripciones = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/Obtener');
+      const response = await fetch(`http://localhost:3000/api/Inscripciones/Obtener`);
       const data = await response.json();
       
       if (response.ok) {

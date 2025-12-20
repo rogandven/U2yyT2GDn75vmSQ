@@ -2,7 +2,7 @@
 const DeleteInscripcion = (fetchMisInscripciones) => {
   const handleDeleteInscripcion = async (inscripcionId, motivo) => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/Eliminar/' + inscripcionId, {
+      const response = await fetch(`http://localhost:3000/api/Inscripciones/Eliminar/` + inscripcionId, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

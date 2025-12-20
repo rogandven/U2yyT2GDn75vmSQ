@@ -2,7 +2,7 @@ const GetNotificaciones = () => {
   
   const fetchNotificaciones = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/notificar');
+      const response = await fetch(`http://localhost:3000/api/Inscripciones/notificar`);
       
       const data = await response.json();
       

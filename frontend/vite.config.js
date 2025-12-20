@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,6 +11,9 @@ const PORT = 443;
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  define: {
+    'process.env.API_BASE_URL': JSON.stringify(process.env.)
+  },
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, './src/assets'),
