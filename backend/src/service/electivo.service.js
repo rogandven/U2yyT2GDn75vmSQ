@@ -1,6 +1,7 @@
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
+import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
@@ -40,11 +41,18 @@ export async function getElectivosFromService(data) {
 
 export async function getElectivosSinAprobarFromService() {
   try {
-      const resultados = await electivoRepo.find({where: {aprobado: false}});
+      let resultados = await electivoRepo.find();
 
       if (!Array.isArray(resultados)) {
           throw Error("No se pudieron parsear los electivos como arreglo");
       }
+
+      resultados = resultados.filter((value) => {
+        if (value && value.estado && value.estado !== ESTADOS_VALIDOS.APROBADO) {
+          return true;
+        }
+        return false;
+      })
 
       return getServiceResult(false, resultados, "Electivos obtenidos correctamente", resultados.length ? resultados.length : 0);
   } catch (error) {
