@@ -168,6 +168,48 @@ export async function createElectivos() {
             "El electivo entrega herramientas psicológicas y prácticas de mindfulness para mejorar la concentración y la eficiencia laboral.",
         },
       ];
+        const electivosIniciales = [
+            {
+            nombre: "Desarrollo Web Avanzado",
+            cupos: 30,
+            inscritos: 22,
+            semestre_minimo: "5 semestre",
+            apertura: "2025-03-01",
+            cierre: "2025-03-15",
+            area: "Desarrollo",
+            descripcion:
+                "Este electivo profundiza en frameworks modernos como React, Node y prácticas DevOps básicas.",
+            },
+            {
+            nombre: "Investigación en Inteligencia Artificial",
+            cupos: 25,
+            inscritos: 20,
+            semestre_minimo: "4 semestre",
+            apertura: "2025-04-10",
+            cierre: "2025-04-30",
+            area: "Investigación",
+            descripcion:
+                "En este electivo se revisan metodologías de investigación aplicadas al machine learning y deep learning.",
+            },
+            {
+            nombre: "Comunicación y Liderazgo",
+            cupos: 40,
+            inscritos: 33,
+            semestre_minimo: "3 semestre",
+            apertura: "2025-05-05",
+            cierre: "2025-05-20",
+            area: "Habilidades Sociales",
+            descripcion:
+                "El curso desarrolla habilidades interpersonales, trabajo en equipo y liderazgo efectivo.",
+            },
+        ];
+        for (const electivo of electivosIniciales) {
+            // console.log(JSON.stringify(electivo));
+            /* await electivoRepo.save((
+                electivoRepo.create(electivo)
+            ));
+            console.log(`Electivo '${electivo.nombre}' creado exitosamente.`); */
+        }
 
       await electivoRepo.save(electivosIniciales);
       console.log("Electivos insertados correctamente.");
