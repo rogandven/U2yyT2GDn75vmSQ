@@ -48,16 +48,7 @@ export async function updateUserByIdFromService(id, newData) {
             newData.password = encryptPassword(newData.password);
         }
         /* fullname, username, rut, email, password, role, generation */
-        oldData.id = id;
-        oldData.fullname = newData.fullname || oldData.fullname;
-        oldData.username = newData.username || oldData.username;
-        oldData.rut = newData.rut || oldData.rut;
-        oldData.email = newData.email || oldData.email;
-        oldData.password = newData.password || oldData.password;
-        oldData.role = newData.role || oldData.role;
-        oldData.generation = newData.generation || oldData.generation;
-        oldData.id_carrera = newData.id_carrera || oldData.id_carrera;
-        oldData.creditos = newData.creditos || oldData.creditos;
+        Object.assign(oldData, newData);
 
         await userRepository.save(oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
