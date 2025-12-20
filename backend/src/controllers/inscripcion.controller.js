@@ -18,7 +18,7 @@ export async function CreateInscripciones(req, res) {
 
     const electivo = await claseRepository.findOne({ where: { id_electivo: electivoId } });
     console.log(electivo);
-    const electivo = await electivoRepository.findOne({ where: { id_electivo: electivoId } });
+    // const electivo = await electivoRepository.findOne({ where: { id_electivo: electivoId } });
     if (!electivo) {
       return res.status(404).json({ message: "Electivo no encontrado" });
     }

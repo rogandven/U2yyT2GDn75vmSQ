@@ -216,11 +216,8 @@ export const updateValidation_OLD = Joi.object({
 
 export default createValidation;
 "use strict";
-import Joi from "joi";
 
-/* export const electivoCreationValidation = ({ data }) => {
-  return;
-}; */
+/* import Joi from "joi";
 
 export const createValidation = Joi.object({
     nombre: Joi.string().min(1).max(50).required().messages({
@@ -316,3 +313,4 @@ export const updateValidation = Joi.object({
   });
 
 export default createValidation;
+*/

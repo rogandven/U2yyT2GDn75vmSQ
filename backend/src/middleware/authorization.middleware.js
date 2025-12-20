@@ -4,6 +4,7 @@ import { AppDataSource } from "../config/configDb.js";
 
 const ADMINISTRADOR = 'administrador';
 const JEFE_DE_CARRERA = 'jefe_de_carrera';
+const PROFESOR = 'profesor';
 
 export async function isRoleHelper(roleArray, req, res, next) {
   try {
@@ -54,10 +55,14 @@ export async function isJefe(req, res, next) {
   return await isRoleHelper([JEFE_DE_CARRERA], req, res, next);
 }
 
-"use strict";
-import User from "../entity/user.entity.js";
-import { AppDataSource } from "../config/configDb.js";
+export async function isAdminOrProfesor(req, res, next) {
+  return await isRoleHelper([ADMINISTRADOR, JEFE_DE_CARRERA, PROFESOR], req, res, next);
+}
+// "use strict";
+//  import User from "../entity/user.entity.js";
+// import { AppDataSource } from "../config/configDb.js";
 
+/*
 export async function isAdmin(req, res, next) {
   try {
     const userRepository = AppDataSource.getRepository(User);
@@ -81,7 +86,9 @@ export async function isAdmin(req, res, next) {
     res.status(500).json({ message: "Error interno del servidor", error });
   }
 }
+*/
 
+/*
 export function authorizeRoles(rolesPermitidos) {
   return async (req, res, next) => {
     try {
@@ -127,3 +134,4 @@ export async function isAdminOrProfesor(req, res, next) {
     res.status(500).json({ message: "Error interno en autorización", error });
   }
 }
+*/

@@ -1,7 +1,7 @@
 "use strict";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { createValidation, updateValidation } from "../validations/electivo.validation.js";
+import { createElectivoValidation as createValidation, updateValidation } from "../validations/electivo.validation.js";
 import { aprobarElectivoById_Electivo, rechazarElectivoById_Electivo } from "../services/aprobar.service.js";
 
 export async function createElectivo(req, res) {
@@ -400,9 +400,10 @@ export async function deleteElectivo(req, res) {
   }
 }
 */
-import { AppDataSource } from "../config/configDb.js";
-import { ElectivoEntity } from "../entity/electivo.entity.js";
+// import { AppDataSource } from "../config/configDb.js";
+// import { ElectivoEntity } from "../entity/electivo.entity.js";
 
+/*
 // Repositorio TypeORM
 const electivoRepository = AppDataSource.getRepository("Electivo");
 
@@ -494,7 +495,6 @@ export async function updateElectivo(req, res) {
     descripcion: {
       type: "text",
     },  
-    */
 
     // Validar que al menos uno de los campos a actualizar esté presente
     electivos.id = id;
@@ -553,3 +553,4 @@ export async function deleteElectivo(req, res) {
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
+  */
