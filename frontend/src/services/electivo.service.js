@@ -47,7 +47,7 @@ export async function deleteElectivo(electivoId) {
 }
 
 
-import axios from "@services/root.service.js";
+// import axios from "@services/root.service.js";
 /* import axios from "@services/root.service.js";
 
 
@@ -94,7 +94,7 @@ export async function deleteElectivo(id) {
 */
 
 // import axios from '@services/root.service.js';
-
+/*
 export async function getElectivos() {
     try {
         const response = await axios.get('/electivos');
@@ -121,3 +121,4 @@ export async function deleteElectivo(electivoId) {
         console.error("Error al eliminar el electivo:", error);
     }
 }
+    */

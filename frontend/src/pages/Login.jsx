@@ -6,13 +6,16 @@ import luckyCat from "@assets/LuckyCat.png";
 import "@styles/loginRegister.css";
 
 const Login = () => {
+  
+
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
 
   const loginSubmit = async (data) => {
     try {
+      console.log(import.meta.env.API_URL || import.meta.env.VITE_API_URL);
       const response = await loginService(data);
-      if (response.request.status === 200) {
+      if (response && response.request && response.request.status === 200) {
         navigate("/home");
       } else {
         setLoginError("Usuario o contraseña incorrectos");

@@ -1,8 +1,10 @@
+import { API_URL } from "../../config/env.config.js";
+
 const GetNotificaciones = () => {
   
   const fetchNotificaciones = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/notificar');
+      const response = await fetch(`${API_URL}/api/Inscripciones/notificar`);
       
       const data = await response.json();
       

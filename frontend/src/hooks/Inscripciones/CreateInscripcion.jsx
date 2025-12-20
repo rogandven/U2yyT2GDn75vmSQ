@@ -1,8 +1,10 @@
-javascriptreactconst CreateInscripcion = (fetchMisInscripciones) => {
+import { API_URL } from "../../config/env.config.js";
+
+const CreateInscripcion = (fetchMisInscripciones) => {
   
   const handleCreateInscripcion = async (electivoId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/Inscripciones/Crear', {
+      const response = await fetch(`${API_URL}/api/Inscripciones/Crear`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
