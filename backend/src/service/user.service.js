@@ -65,11 +65,16 @@ export async function deleteUserByIdFromService(id) {
         queryRunner = AppDataSource.createQueryRunner();
         await queryRunner.startTransaction();
 
-        const result = await userRepository.remove({ where: { id } });
-        console.log(result);
-
+        const userData = await userRepository.findOne({ where: { id } });
+        if (!userData) {
+            return getServiceResult(false, null, "Usuario no encontrado", 0);
+        } 
+        const result = await userRepository.remove(userData);
+        if (result.affected && result.affected !== 1) {
+            throw new Error("No se pudo eliminar el usuario");
+        }
         await queryRunner.commitTransaction();
-        return getServiceResult(false, user, "Usuario eliminado con éxito", getResultLength(user));
+        return getServiceResult(false, userData, "Usuario eliminado con éxito", 1);
     } catch (error) {
         console.error(error);
         if (queryRunner.rollbackTransaction) {
