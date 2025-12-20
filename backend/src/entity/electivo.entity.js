@@ -214,7 +214,7 @@ export const ElectivoEntity = new EntitySchema({
       length: 10,
     },
     estado:{
-      type: "boolean",
+      type: String,
       default: true,
     },
     apertura: {

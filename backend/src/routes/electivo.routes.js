@@ -1,8 +1,8 @@
 "use strict";
 import { Router } from "express";
 import { getElectivo,getElectivos, getElectivoById, updateElectivoById, deleteElectivoById, createElectivo, aprobarElectivo, rechazarElectivo } from "../controllers/electivo.controller.js";
-import { authenticateJwt } from "../middleware/authentication.middleware.js";
-import { isAdmin } from "../middleware/authorization.middleware.js";
+import { authenticateJwt as isAuthenticated, authenticateJwt as authenticateJwt} from "../middleware/authentication.middleware.js";
+import { isAdminOrProfesor } from "../middleware/authorization.middleware.js";
 import { isJefe } from "../middleware/authorization.middleware.js";
 const router = Router();
 

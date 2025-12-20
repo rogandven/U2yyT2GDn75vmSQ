@@ -24,12 +24,12 @@ export const AppDataSource = new DataSource({
 // Función para conectar a la base de datos
 export async function connectDB() {
     try {
-        if (!AppDataSource.isInitialized) {
+        // if (!AppDataSource.isInitialized()) {
             await AppDataSource.initialize();
             console.log("Conexión con la base de datos exitosa!");
-        } else {
-            throw Error("AppDataSource already initialized");
-        }
+        // } else {
+            // throw Error("AppDataSource already initialized");
+        // }
     } catch (error) {
         console.error("Error al conectar con la base de datos:", error);
         process.exit(1);

@@ -214,7 +214,7 @@ export const updateValidation_OLD = Joi.object({
     })
   });
 
-export default createValidation;
+export default createElectivoValidation;
 "use strict";
 
 /* import Joi from "joi";
