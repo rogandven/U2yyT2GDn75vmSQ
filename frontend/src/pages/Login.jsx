@@ -4,6 +4,7 @@ import LoginRegisterForm from "@components/LoginRegisterForm";
 import { loginService } from "@services/auth.service.js";
 import luckyCat from "@assets/LuckyCat.png";
 import "@styles/loginRegister.css";
+import { API_URL } from "../config/env.config.js";
 
 const Login = () => {
   
@@ -13,7 +14,7 @@ const Login = () => {
 
   const loginSubmit = async (data) => {
     try {
-      console.log(import.meta.env.API_URL || import.meta.env.VITE_API_URL);
+      console.log(API_URL);
       const response = await loginService(data);
       if (response && response.request && response.request.status === 200) {
         navigate("/home");
