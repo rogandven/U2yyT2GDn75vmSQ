@@ -16,7 +16,7 @@ router.get("/electivos", getElectivos);
 router.get("/", getElectivo);
 router.post("/", isAuthenticated, isAdminOrProfesor, createElectivo);
 router.get("/:id", isAuthenticated, isAdminOrProfesor, getElectivoById);
-router.put("/:id", isAuthenticated, isAdminOrProfesor, updateElectivoById);
+router.patch("/:id", isAuthenticated, isAdminOrProfesor, updateElectivoById);
 router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivoById);
 
 router.post("/:id/aprobar", isJefe, aprobarElectivo);
@@ -40,7 +40,7 @@ const router = Router();
 router.get("/", isAuthenticated, getElectivos);
 
 router.post("/", isAuthenticated, isAdmin, createElectivo);
-router.put("/:id", isAuthenticated, isAdmin, updateElectivo);
+router.patch("/:id", isAuthenticated, isAdmin, updateElectivo);
 router.delete("/:id", isAuthenticated, isAdmin, deleteElectivo);
 
 export default router;
@@ -66,7 +66,7 @@ router.get("/", isAuthenticated, getElectivos);
 
 //Solo administrador o profesor pueden crear, actualizar o eliminar electivos
 router.post("/", isAuthenticated, isAdminOrProfesor, createElectivo);
-router.put("/:id", isAuthenticated, isAdminOrProfesor, updateElectivo);
+router.patch("/:id", isAuthenticated, isAdminOrProfesor, updateElectivo);
 router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivo);
 
 export default router;

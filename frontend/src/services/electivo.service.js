@@ -30,7 +30,7 @@ export async function rechazarElectivos(id) {
 
 export async function editElectivo(electivoId, electivoData) { 
     try {
-        const response = await axios.put(`/electivos/${electivoId}`, electivoData);
+        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
         return response.data;
     } catch (error) {
         console.error("Error al editar el electivo:", error);
@@ -73,7 +73,7 @@ export async function createElectivo(electivoData) {
 
 export async function updateElectivo(id, electivoData) {
   try {
-    const response = await axios.put(`/electivos/${id}`, electivoData);
+    const response = await axios.patch(`/electivos/${id}`, electivoData);
     return response.data.data || response.data;
   } catch (error) {
     console.error("Error al actualizar electivo:", error);
@@ -106,7 +106,7 @@ export async function getElectivos() {
 
 export async function editElectivo(electivoId, electivoData) { 
     try {
-        const response = await axios.put(`/electivos/${electivoId}`, electivoData);
+        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
         return response.data;
     } catch (error) {
         console.error("Error al editar el electivo:", error);

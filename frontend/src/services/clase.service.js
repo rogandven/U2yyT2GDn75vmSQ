@@ -23,7 +23,7 @@ export const assignClass = async (classData) => {
 
 export const updateClass = async (classId, updatedData) => {
     try {
-        const response = await axios.put(`/api/clases/${classId}`, updatedData);
+        const response = await axios.patch(`/api/clases/${classId}`, updatedData);
         return response.data;
     } catch (error) {
         // console.log(JSON.stringify(error));

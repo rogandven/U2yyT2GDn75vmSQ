@@ -18,7 +18,7 @@ router.use(isAdmin);
 // Rutas para obtener usuarios
 router.get("/", getUsers);
 router.get("/:id", getUserById);
-router.put("/:id", updateUserById);
+router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
 router.post("/", registerPrivate);
 

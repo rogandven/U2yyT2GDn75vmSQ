@@ -14,6 +14,6 @@ router.get("/ObtenerUna/:inscripcionId", authenticateJwt, getInscripcion);
 router.delete("/Eliminar/:inscripcionId", authenticateJwt, DeleteInscripciones);
 
 router.get("/admin/en-espera", authenticateJwt, isAdmin, getInscripcionesEnEspera);
-router.put("/gestionar/:inscripcionId",authenticateJwt,isAdmin,gestionarInscripcion);
+router.patch("/gestionar/:inscripcionId",authenticateJwt,isAdmin,gestionarInscripcion);
 
 export default router;
