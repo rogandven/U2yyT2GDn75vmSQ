@@ -66,7 +66,7 @@ export async function createElectivos() {
     const count = await electivoRepo.count();
 
     if (count === 0) {
-      const electivosIniciales = [
+      /* const electivosIniciales = [
         {
           nombre: "Desarrollo Web Avanzado",
           cupos: 30,
@@ -167,7 +167,7 @@ export async function createElectivos() {
           descripcion:
             "El electivo entrega herramientas psicológicas y prácticas de mindfulness para mejorar la concentración y la eficiencia laboral.",
         },
-      ];
+      ]; */
         const electivosIniciales = [
             {
             nombre: "Desarrollo Web Avanzado",
@@ -203,13 +203,13 @@ export async function createElectivos() {
                 "El curso desarrolla habilidades interpersonales, trabajo en equipo y liderazgo efectivo.",
             },
         ];
-        for (const electivo of electivosIniciales) {
+        // for (const electivo of electivosIniciales) {
             // console.log(JSON.stringify(electivo));
             /* await electivoRepo.save((
                 electivoRepo.create(electivo)
             ));
             console.log(`Electivo '${electivo.nombre}' creado exitosamente.`); */
-        }
+        // }
 
       await electivoRepo.save(electivosIniciales);
       console.log("Electivos insertados correctamente.");
