@@ -1,8 +1,9 @@
+/*
 "use strict"
 
 import { Router } from "express";
 import { createElectivo,getElectivos,deleteElectivo,updateElectivo } from "../controllers/electivo.controller.js";
-import { authenticateJwt } from "../middleware/authentication.middleware.js";
+import { authenticateJwt } from "../authentication.middleware.js";
 
 const router = Router();
 
@@ -12,3 +13,4 @@ router.delete("/Eliminar/:id",authenticateJwt,deleteElectivo);
 router.put("/Actualizar/:id",authenticateJwt,updateElectivo);
 
 export default router;
+*/

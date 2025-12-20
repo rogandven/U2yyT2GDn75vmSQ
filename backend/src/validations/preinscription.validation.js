@@ -1,6 +1,6 @@
 "use strict";
 import Joi from "joi";
-import { validateTimeStamp } from "./modules/timestamp.validation.js";
+import { timestampValidationFunction as validateTimeStamp } from "./modules/timestamp.validation.js";
 import { validateStatus } from "./modules/status.validation.js";
 
 // Esquema de validación para el registro de usuarios

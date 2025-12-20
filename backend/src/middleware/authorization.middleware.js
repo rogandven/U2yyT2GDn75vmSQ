@@ -1,92 +1,46 @@
 "use strict";
-import User from "../entity/user.entity.js";
-import { AppDataSource } from "../config/configDb.js";
+import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
+import { isAdminFromService } from "../service/authorization.service.js";
+import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
-const ADMINISTRADOR = 'administrador';
-const JEFE_DE_CARRERA = 'jefe_de_carrera';
-const PROFESOR = 'profesor';
-
-export async function isRoleHelper(roleArray, req, res, next) {
-  try {
-    if (!roleArray || !(Array.isArray(roleArray))) {
-      throw Error("Valores no proporcionados");
-    }
-
-    // Buscar el usuario en la base de datos
-    const userRepository = AppDataSource.getRepository(User);
-    const userFound = await userRepository.findOneBy({
-      email: req.user?.email,
-    });
-    if (!userFound) return res.status(404).json("Usuario no encontrado");
-
-    // Verificar el rol del usuario
-    const rolUser = userFound.role;
-
-    // Si el rol no es administrador, devolver un error 403
-    let allowed = false;
-    for (let i = 0; i < roleArray.length; i++) {
-      if (String(rolUser).toUpperCase() === String(roleArray[i]).toUpperCase()) {
-        allowed = true;
-        break;
-      }
-    }
-
-    if (!allowed) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "Error al acceder al recurso. Se requiere un rol de administrador para realizar esta acción.",
-        });
-    }
-    // Si el rol es administrador, continuar
+const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
+  const email = (req && req.user && req.user.email) || null;
+  const result = await isAdminFromService(ALLOWED_ROLES, email);
+  // console.log(result);
+  if (result === null) {
     next();
-  } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor", error });
+    return;
+  }
+  if (result.error) {
+    return res.status(500).json(getTrueMiddlewareResponse("Error interno del servidor", result));
+  }
+  if (result.length <= 0) {
+    result.error = true;
+    return res.status(403).json(getTrueMiddlewareResponse("Acceso denegado", result));
   }
 }
 
-// Función middleware para verificar si el usuario es administrador
 export async function isAdmin(req, res, next) {
-  return await isRoleHelper([ADMINISTRADOR, JEFE_DE_CARRERA], req, res, next);
-}
-
-export async function isJefe(req, res, next) {
-  return await isRoleHelper([JEFE_DE_CARRERA], req, res, next);
+  return await isAdminHelper(req, res, next, VALID_ADMIN_ROLES);
 }
 
 export async function isAdminOrProfesor(req, res, next) {
-  return await isRoleHelper([ADMINISTRADOR, JEFE_DE_CARRERA, PROFESOR], req, res, next);
+  return await isAdminHelper(req, res, next, VALID_ADMIN_ROLES);
 }
-// "use strict";
-//  import User from "../entity/user.entity.js";
-// import { AppDataSource } from "../config/configDb.js";
 
-/*
-export async function isAdmin(req, res, next) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const userFound = await userRepository.findOneBy({
-      email: req.user?.email,
-    });
-    if (!userFound) return res.status(404).json({message: "Usuario no encontrado"});
-
-    const rolUser = userFound.role;
-
-    if (rolUser !== "administrador")
-      return res
-        .status(403)
-        .json({
-          message:
-            "Error al acceder al recurso. Se requiere un rol de administrador para realizar esta acción.",
-        });
-
-    next();
-  } catch (error) {
-    res.status(500).json({ message: "Error interno del servidor", error });
-  }
+export async function isJefeDeCarrera(req, res, next) {
+  return await isAdminHelper(req, res, next, [CAREER_HEAD_ROLE]);
 }
-*/
+
+export async function isJefe(req, res, next) {
+  return await isJefeDeCarrera(req, res, next);
+}
+
+export function authorizeRoles(rolesPermitidos) {
+  return async (req, res, next) => {
+    return await isAdminHelper(req, res, next, rolesPermitidos);
+  };
+}
 
 /*
 export function authorizeRoles(rolesPermitidos) {
@@ -96,12 +50,57 @@ export function authorizeRoles(rolesPermitidos) {
       const user = await userRepository.findOneBy({ email: req.user?.email });
 
       if (!user)
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).json(getMiddlewareResponse("Usuario no encontrado"));
 
       if (!rolesPermitidos.includes(user.role)) {
-        return res.status(403).json({
-          message: `Acceso denegado. Se requiere uno de los siguientes roles: ${rolesPermitidos.join(", ")}`,
-        });
+        return res.status(403).json(
+          getMiddlewareResponse(`Acceso denegado. Se requiere uno de los siguientes roles: ${rolesPermitidos.join(", ")}`)
+        );
+      }
+
+      next();
+    } catch (error) {
+      res.status(500).json({ message: "Error interno en autorización", error });
+    }
+  };
+}
+
+/*
+export async function isAdmin(req, res, next) {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const userFound = await userRepository.findOneBy({
+      email: req.user?.email,
+    });
+    if (!userFound) return res.status(404).json(getMiddlewareResponse("Usuario no encontrado"));
+
+    const rolUser = userFound.role;
+
+    if (rolUser !== "administrador")
+      return res
+        .status(403)
+        .json(getMiddlewareResponse("Error al acceder al recurso. Se requiere un rol de administrador para realizar esta acción."));
+
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(getMiddlewareResponse("Error interno del servidor"));
+  }
+}
+
+export function authorizeRoles(rolesPermitidos) {
+  return async (req, res, next) => {
+    try {
+      const userRepository = AppDataSource.getRepository(User);
+      const user = await userRepository.findOneBy({ email: req.user?.email });
+
+      if (!user)
+        return res.status(404).json(getMiddlewareResponse("Usuario no encontrado"));
+
+      if (!rolesPermitidos.includes(user.role)) {
+        return res.status(403).json(
+          getMiddlewareResponse(`Acceso denegado. Se requiere uno de los siguientes roles: ${rolesPermitidos.join(", ")}`)
+        );
       }
 
       next();

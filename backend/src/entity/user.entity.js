@@ -1,16 +1,20 @@
-/*
 "use strict";
 
 import { EntitySchema } from "typeorm";
+import { USER_ID_TYPE } from "../constants/entity.constants.js";
 
 export const UserEntity = new EntitySchema({
     name: "User",
     tableName: "users",
     columns: {
         id: {
-            type: Number,
+            type: USER_ID_TYPE,
             primary: true,
             generated: true,
+        },
+        fullname: {
+            type: String,
+            nullable: true,
         },
         username: {
             type: String,
@@ -33,7 +37,11 @@ export const UserEntity = new EntitySchema({
         },
         role: {
             type: String,
-            default: "user",
+            nullable: false,
+        },
+        generation: {
+            type: String,
+            nullable: true
         },
         createdAt: {
             type: "timestamp",
@@ -44,77 +52,15 @@ export const UserEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
+        id_carrera: {
+            type: Number,
+            nullable: true
+        },
+        creditos: {
+            type: Number,
+            default: 0
+        }
     },
-});
-
-export default UserEntity;
-*/
-
-"use strict";
-
-import { EntitySchema } from "typeorm";
-
-export const UserEntity = new EntitySchema({
-  name: "User",
-  tableName: "users",
-
-  columns: {
-    id: {
-      type: "int",
-      primary: true,
-      generated: true,
-    },
-
-    rut: {
-      type: "varchar",
-      unique: true,
-      nullable: false,
-    },
-
-    username: {
-      type: "varchar",
-      nullable: true, 
-    },
-
-    nombre: {
-      type: "varchar",
-      nullable: true,
-    },
-
-    email: {
-      type: "varchar",
-      unique: true,
-      nullable: false,
-    },
-
-    password: {
-      type: "varchar",
-      nullable: false,
-    },
-
-    role: {
-      type: "varchar",
-      default: "alumno",
-    },
-
-    generacion: {
-      type: "int",
-      nullable: true,
-    },
-
-    createdAt: {
-      type: "timestamp",
-      default: () => "CURRENT_TIMESTAMP",
-    },
-
-    updatedAt: {
-      type: "timestamp",
-      default: () => "CURRENT_TIMESTAMP",
-      onUpdate: "CURRENT_TIMESTAMP",
-    },
-  },
-
-  relations: {},
 });
 
 export default UserEntity;

@@ -1,102 +1,206 @@
 "use strict";
-import User from "../entity/user.entity.js";
-import { AppDataSource } from "../config/configDb.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService } from "../service/user.service.js";
+import { getControllerResult, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
+import { STUDENT_ROLE } from "../constants/user.constants.js";
 
 export async function getUsers(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const users = await userRepository.find();
-
-    res.status(200).json({ message: "Usuarios encontrados: ", data: users });
-  } catch (error) {
-    console.error("Error en user.controller.js -> getUsers(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  const users = await getUsersFromService();
+  if (users.error) {
+    return res.status(500).json(getControllerResult("Error en el servidor", users));
   }
+  if (users.length <= 0) {
+    return res.status(404).json(getControllerResult("No hay usuarios", users));
+  }  
+  return res.status(200).json(getControllerResult("Usuarios encontrados con éxito", users));
 }
 
 export async function getUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    res.status(200).json({ message: "Usuario encontrado: ", data: user });
-  } catch (error) {
-    console.error("Error en user.controller.js -> getUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
   }
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  }
+
+  const user = await getUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult(user.details, user));
 }
 
 export async function updateUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const { username, email, rut } = req.body;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
+  const newData = req.body;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    user.username = username || user.username;
-    user.email = email || user.email;
-    user.rut = rut || user.rut;
-
-    await userRepository.save(user);
-
-    res
-      .status(200)
-      .json({ message: "Usuario actualizado exitosamente.", data: user });
-  } catch (error) {
-    console.error("Error en user.controller.js -> updateUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
   }
+  if (newData.fullname) {
+    newData.fullname = fullNameProcessor(fullname);
+  }
+
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  }
+
+  var validationResult = integrityValidation.validate(newData);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+
+  validationResult = updateValidation.validate(newData);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }  
+
+  const editedUser = await updateUserByIdFromService(id, newData);
+  if (editedUser.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", editedUser));
+  }
+  if (editedUser.length <= 0) {
+    editedUser.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", editedUser));
+  }
+  return res.status(200).json(getControllerResult(editedUser.details, editedUser));
 }
 
 export async function deleteUserById(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { id } = req.params;
-    const user = await userRepository.findOne({ where: { id } });
+  const { id } = req.params;
 
-    if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    await userRepository.remove(user);
-
-    res.status(200).json({ message: "Usuario eliminado exitosamente." });
-  } catch (error) {
-    console.error("Error en user.controller.js -> deleteUserById(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  } 
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
   }
+
+  const user = await deleteUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult(user.details, user));
 }
 
 export async function getProfile(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const userEmail = req.user.email;
-    const user = await userRepository.findOne({ where: { email: userEmail } });
-    
-    if (!user) {
-      return res.status(404).json({ message: "Perfil no encontrado." });
+  const id = req.user? (req.user.id || null) : null;
+
+  if (!id) {
+    return res.status(400).json(getControllerResult("El ID es obligatorio", null));
+  }  
+  const result = idValidation.validate({id: id});
+  if (result.error) {
+    return res.status(400).json(getControllerResult(result.error.message, null));
+  }
+
+  const user = await getUserByIdFromService(id);
+
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  }
+  if (user.length <= 0) {
+    user.error = true;
+    return res.status(404).json(getControllerResult("Usuario no encontrado", user));
+  }
+
+  return res.status(200).json(getControllerResult("Perfil encontrado con éxito", user));
+}
+
+export async function registerPrivate(req, res) {
+  if (!req.body) {
+    return res.status(400).json(getControllerResult("No se ha proporcionado ningún dato", null));
+  }
+
+  req.body.fullname = fullNameProcessor(req.body.fullname);
+
+  // console.log(req.body);
+
+  var validationResult = integrityValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+  validationResult = createValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }   
+
+  const user = await registerUserFromService(req.body);
+  if (user.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", user));
+  } 
+  if (user.length === 0) {
+    user.error = true;
+    if (user.details && user.details.endsWith("ya registrado")) {
+      return res.status(409).json(getControllerResult(user.details, user));
     }
+    return res.status(400).json(getControllerResult(user.details ? user.details : "Error al registrar usuario", user));
+  }
+  return res.status(201).json(getControllerResult(user.details, user));
+}
 
-    const formattedUser = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      rut: user.rut,
-      role: user.role
-    };
+export async function registerPublic(req, res) {
+  if (!req || !(req.body)) {
+    return res.status(400).json(getControllerResult("Ningún dato proporcionado"), null);
+  }
+  if (req.body.role) {
+    return res.status(401).json(getControllerResult("No se puede autoasignar un rol"), null);
+  }
+  if (req.body.creditos) {
+    return res.status(401).json(getControllerResult("No se puede autoasignar la cantidad de créditos"), null);
+  }
+  req.body.role = STUDENT_ROLE;
+  // console.log(req.body.role);
+  req.body.creditos = 0;
+  // console.log(req.body.creditos);
+  return await registerPrivate(req, res);
+}
 
-    res.status(200).json({ message: "Perfil encontrado: ", data: formattedUser });
-  } catch (error) {
-    console.error("Error en user.controller -> getProfile(): ", error);
-    res.status(500).json({ message: "Error interno del servidor"})
+export async function login(req, res) {
+  var validationResult = loginValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }   
+  validationResult = integrityValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }
+
+  const result = await loginUserFromService(req.body);
+  if (result.error) {
+    return res.status(500).json(getControllerResult("Error interno del servidor", result));
+  }
+  if (result.data === null) {
+    result.error = true;
+    return res.status(400).json(getControllerResult(result.details || "Error al iniciar sesión", result));
+  }
+  return res.status(200).json(getControllerResult("Sesión iniciada con éxito", result));
+}
+
+export async function logout(req, res) {
+  // Eliminar la cookie de sesión del cliente
+  const result = logoutUserFromService(res.clearCookie);
+  if (result.error) {
+    return res.status(200).json(getControllerResult("Sesión cerrada exitosamente", result));
+  } else {
+    return res.status(500).json(getControllerResult("Error al cerrar sesión", result));
   }
 }
