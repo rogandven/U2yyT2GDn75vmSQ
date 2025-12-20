@@ -1,3 +1,51 @@
+import axios from '@services/root.service.js';
+
+export async function getElectivos() {
+    try {
+        const response = await axios.get('/electivos');
+        return response.data.data;
+    } catch (error) {
+        console.error("Error al obtener electivos:", error);
+    }
+}
+
+const cambiarEstadoHelper = async (verbo, id) => {
+    try {
+        const response = await axios.post(`/electivos/${id}/${verbo}`);
+        // console.log(response);
+        return {data: response.data, code: response.status || 500};
+    } catch (error) {
+        console.error("Error al aprobar el electivo: ", error);
+        return null;
+    }
+}
+
+export async function aprobarElectivos(id) {
+    return await cambiarEstadoHelper('aprobar', id);
+}
+
+export async function rechazarElectivos(id) {
+    return await cambiarEstadoHelper('rechazar', id);
+}
+
+export async function editElectivo(electivoId, electivoData) { 
+    try {
+        const response = await axios.put(`/electivos/${electivoId}`, electivoData);
+        return response.data;
+    } catch (error) {
+        console.error("Error al editar el electivo:", error);
+    }
+}
+
+export async function deleteElectivo(electivoId) {
+    try {
+        const response = await axios.delete(`/electivos/${electivoId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al eliminar el electivo:", error);
+    }
+}
+
 
 import axios from "@services/root.service.js";
 /* import axios from "@services/root.service.js";
