@@ -54,6 +54,8 @@ async function setupAPI() {
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((error) => console.log("Error en index.js -> setupAPI(): ", error));
+
+/*
 "use strict"
 import cors from "cors";
 import express from "express";
@@ -63,7 +65,7 @@ import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createElectivos, createUsers } from "./src/config/initDb.js";
 /*import {createServer} from "http";
-import { Server } from 'socket.io';*/
+import { Server } from 'socket.io';
 
 
 async function setupServer() {
@@ -114,3 +116,5 @@ async function setupAPI() {
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((error) => console.log("Error en index.js -> setupAPI(): ", error));
+
+*/
