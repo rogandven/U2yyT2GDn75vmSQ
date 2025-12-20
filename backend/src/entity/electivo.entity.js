@@ -180,7 +180,7 @@ export const ElectivoEntity = new EntitySchema({
 
 export default ElectivoEntity;
 */
-import { EntitySchema } from "typeorm";
+// import { EntitySchema } from "typeorm";
 
 export const ElectivoEntity = new EntitySchema({
   name: "Electivo",
