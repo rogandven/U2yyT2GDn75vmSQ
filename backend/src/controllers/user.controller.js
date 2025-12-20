@@ -134,14 +134,15 @@ export async function registerPrivate(req, res) {
 
   // console.log(req.body);
 
+  validationResult = createValidation.validate(req.body);
+  if (validationResult.error) {
+    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  }     
   var validationResult = integrityValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }
-  validationResult = createValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }   
+
 
   const user = await registerUserFromService(req.body);
   if (user.error) {
