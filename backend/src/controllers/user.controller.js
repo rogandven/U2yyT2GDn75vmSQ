@@ -42,15 +42,16 @@ export async function getUserById(req, res) {
 
 export async function updateUserById(req, res) {
   const { id } = req.params;
-  const newData = req.body;
-
+  const newData = req.body || null;
+  if (!newData) {
+    return res.status(400).json(getControllerResult("Datos no proporcionados", null));
+  }
   if (!id) {
     return res.status(400).json(getControllerResult("El ID es obligatorio", null));
   }
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(fullname);
   }
-
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult(result.error.message, null));
