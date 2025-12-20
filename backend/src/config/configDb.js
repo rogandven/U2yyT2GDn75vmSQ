@@ -5,6 +5,8 @@ import ClaseEntity from "../entity/clase.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import InscripcionEntity from '../entity/inscripcion.entity.js';
 import UserEntity from '../entity/user.entity.js';
+import HorarioEntity from "../entity/horario.entity.js";
+import PreinscriptionEntity from "../entity/preinscription.entity.js";
 
 // Configuración de la conexión a la base de datos
 export const AppDataSource = new DataSource({
@@ -14,7 +16,7 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [ClaseEntity, ElectivoEntity, InscripcionEntity, UserEntity],
+    entities: [ClaseEntity, ElectivoEntity, InscripcionEntity, UserEntity, HorarioEntity, PreinscriptionEntity],
     synchronize: true,
     logging: false,
 });
@@ -22,8 +24,12 @@ export const AppDataSource = new DataSource({
 // Función para conectar a la base de datos
 export async function connectDB() {
     try {
-        await AppDataSource.initialize();
-        console.log("=> Conexión con la base de datos exitosa!");
+        if (!AppDataSource.isInitialized) {
+            await AppDataSource.initialize();
+            console.log("Conexión con la base de datos exitosa!");
+        } else {
+            throw Error("AppDataSource already initialized");
+        }
     } catch (error) {
         console.error("Error al conectar con la base de datos:", error);
         process.exit(1);
@@ -68,6 +74,7 @@ export async function connectDB() {
   }
 }
 */
+/*
 "use strict";
 import { DataSource } from "typeorm"
 import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD, DB_HOST } from "./configEnv.js";
@@ -100,3 +107,4 @@ export async function connectDB() {
         process.exit(1);
     }
 }
+*/
