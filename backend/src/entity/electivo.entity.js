@@ -11,7 +11,7 @@ import { arrayDeStringAArrayDeSQL } from "../helpers/sql.helpers.js";
 
 export const ARRAY_ESTADOS_VALIDOS = obtenerEstadosValidosComoArray();
 
-
+/*
 export const ElectivoEntity = new EntitySchema({
     name: "Electivo",
     tableName: "Electivo",
@@ -99,7 +99,7 @@ export const ElectivoEntity=new EntitySchema({
 
 export default ElectivoEntity;
 */
-
+/*
 "use strict";
 
 import { EntitySchema } from "typeorm";
@@ -179,6 +179,7 @@ export const ElectivoEntity = new EntitySchema({
 });
 
 export default ElectivoEntity;
+*/
 import { EntitySchema } from "typeorm";
 
 export const ElectivoEntity = new EntitySchema({
@@ -227,6 +228,9 @@ export const ElectivoEntity = new EntitySchema({
       length: 100,
     },
   },
+  checks: [
+      { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
+  ],
 });
 
 export default ElectivoEntity;
