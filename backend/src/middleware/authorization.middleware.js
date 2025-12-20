@@ -25,7 +25,7 @@ export async function isRoleHelper(roleArray, req, res, next) {
     // Si el rol no es administrador, devolver un error 403
     let allowed = false;
     for (let i = 0; i < roleArray.length; i++) {
-      if (rolUser === roleArray[i]) {
+      if (String(rolUser).toUpperCase() === String(roleArray[i]).toUpperCase()) {
         allowed = true;
         break;
       }
