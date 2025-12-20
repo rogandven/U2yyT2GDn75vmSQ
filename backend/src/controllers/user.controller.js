@@ -50,7 +50,7 @@ export async function updateUserById(req, res) {
     return res.status(400).json(getControllerResult("El ID es obligatorio", null));
   }
   if (newData.fullname) {
-    newData.fullname = fullNameProcessor(fullname);
+    newData.fullname = fullNameProcessor(newData.fullname);
   }
   const result = idValidation.validate({id: id});
   if (result.error) {
