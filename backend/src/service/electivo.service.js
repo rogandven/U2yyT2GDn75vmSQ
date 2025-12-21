@@ -107,7 +107,7 @@ export async function updateElectivoFromService(id_instancia, data) {
 
 export async function approveElectivoFromService(id_instancia) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id_instancia });
+    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
       return getServiceResult(false, null, "Electivo no encontrado", 0);
