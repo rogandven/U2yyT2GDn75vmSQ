@@ -85,6 +85,7 @@ export async function getHorarios(req, res) {
   if (!horarioData) {
     return handleErrorClient(res, 400, "Horarios no encontradas");
   }
+  // console.log(horarioData);
   return handleSuccess(res, 200, "Horarios obtenidas exitosamente", horarioData);
 }
   /* const additionalData = await findClaseById_electivo((clase && clase.id_electivo) || 0);

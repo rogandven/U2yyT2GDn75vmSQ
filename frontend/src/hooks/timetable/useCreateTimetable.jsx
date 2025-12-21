@@ -88,15 +88,46 @@ async function CreateTimetable() {
 }
 }
 
+const isPositive = (result) => {
+    if (!result || !result.status) {
+        return false;
+    }
+    return result.status >= 200 && result.status < 300;
+}
+
+const parseResponseMessage = (result) => {
+    if (!result || !result.data || !result.data.message) {
+        return String(isPositive(result) ? "¡Operación exitosa!" : "Error desconocido.");
+    }
+    return String(result.data.message);
+}
+
+const fireDynamicSwal = (result) => {
+    Swal.fire({
+        title: isPositive(result) ? "Éxito" : "Error",
+        text: parseResponseMessage(result),
+        icon: isPositive(result) ? "success" : "error",        
+    });
+}
+
+const fireErrorSwal = () => {
+    Swal.fire({
+        title: "Error",
+        text: "Ocurrió un error inesperado al crear el horario.",
+        icon: "error",
+    });
+}
+
 export const useCreateTimetable = () => {
     const handleCreateTimetable = async () => {
         try {
             const formValues = await CreateTimetable();
             if(!formValues) return;
-
-            await assignTimetable(formValues);
+            const result = await assignTimetable(formValues);
+            fireDynamicSwal(result);
         } catch (error) {
             console.error('Error creating timetable:', error);
+            fireErrorSwal();
         }
     };
 

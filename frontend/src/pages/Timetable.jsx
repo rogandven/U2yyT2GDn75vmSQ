@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const Timetable = () => {
+    const [placeholder, setPlaceholder] = useState("Cargando...");
+
     const mostrarHorarios = (data) => {
         if (Array.isArray(data) && data.length > 0) {
             return data.map((Timetable) => (
@@ -26,7 +28,8 @@ const Timetable = () => {
         } else {
             return (
                 <tr>
-                    <td colSpan="7">No hay horarios disponibles.</td>
+                    {/* <td colSpan="7">No hay horarios disponibles.</td> */}
+                    <td colSpan="7">{placeholder}</td>
                 </tr>
             )
         }
@@ -48,7 +51,7 @@ const Timetable = () => {
 
 
 
-    const [timetables, fetchTimetable] = useGetTimetable(horarioData, setHorarioData);
+    const [timetables, fetchTimetable] = useGetTimetable(horarioData, setHorarioData, setPlaceholder);
     /* console.log(timetables);
     console.log(typeof(timetables));
     try {
@@ -76,7 +79,7 @@ const Timetable = () => {
     } */
     
 
-    useEffect(() => {
+    useEffect(() => {            
         if (typeof(fetchTimetable) === 'function') {
             fetchTimetable();
         }

@@ -110,10 +110,6 @@ const router = createBrowserRouter([
         path: "/horarios",
         element: <Timetable />,
       },
-      {
-        path: "/chat-user",
-        element: <ChatUser />,
-      }
     ],
   },
   {
