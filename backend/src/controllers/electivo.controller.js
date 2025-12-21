@@ -102,7 +102,7 @@ export async function getElectivoById(req, res) {
 export async function updateElectivo(req, res) {
   try {
     const { id } = req.params;
-    const validationResult = idValidation.validate(id);
+    const validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json(getControllerResult(validationResult.error.message, null));
     }
