@@ -45,6 +45,9 @@ export async function getConflictingHorarios(hora_inicio, hora_termino, sala, di
 
 export async function createHorario(id_electivo, hora_inicio, hora_termino, sala, dia) {
   try {
+    if (!id_electivo || !hora_inicio || !hora_inicio || !sala || !dia) {
+      throw Error("Función mal llamada", {id_electivo, hora_inicio, hora_termino, sala, dia})
+    }
     const newHorario = horarioRepository.create({
       id_electivo: Number(id_electivo),
       hora_inicio,
@@ -55,6 +58,7 @@ export async function createHorario(id_electivo, hora_inicio, hora_termino, sala
     await horarioRepository.save(newHorario);
     return newHorario;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }

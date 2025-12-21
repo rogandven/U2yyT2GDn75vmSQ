@@ -4,7 +4,7 @@ import HorarioEntity from "../entity/horario.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 // import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
-import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";
+import { assignationValidation, integrityValidation, updateValidation, validateHourBusiness, validateHourIntegrity } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { electivoExists } from "../service/electivo.service.js";
@@ -20,9 +20,15 @@ const isValidTimeFormat = (timeStr) => {
 
 export async function asignarHorario(req, res) {
   try {
+    let newHorario = null;
+
     if (!req.body || !req.params) {
       return res.status(400).json({ message: "Datos no proporcionados"});
     }
+    if (req.body.dia) {
+      req.body.dia = String(req.body.dia).toLowerCase().trim();
+    }
+
 
     const { id_electivo } = req.params;
     let validationResult = idValidation.validate({id: id_electivo});
@@ -30,7 +36,6 @@ export async function asignarHorario(req, res) {
       return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
     }
 
-    const horarioRepository = AppDataSource.getRepository(HorarioEntity);
     const electivoReallyExists = (await electivoExists(id_electivo));
 
     if (electivoReallyExists === null) {
@@ -50,16 +55,33 @@ export async function asignarHorario(req, res) {
     if (result.error) {
       return res.status(400).json({ message: result.error.message });
     }
+
+    result = validateHourIntegrity(req.body.hora_inicio, "hora de inicio");
+    if (result) {
+      return res.status(400).json({ message: String(result)});
+    }
+    result = validateHourIntegrity(req.body.hora_termino, "hora de termino");
+    if (result) {
+      return res.status(400).json({ message: String(result)});
+    }
+    result = validateHourBusiness(hora_inicio, hora_termino);
+    if (result) {
+      return res.status(400).json({ message: String(result)});
+    }
         
     const existingHorarioSala = await getConflictingHorarios(hora_inicio, hora_termino, sala, dia);
     if (existingHorarioSala.length > 0) {
       return res.status(409).json({ message: "Horario y sala ya registrados.", conflicts: existingHorarioSala });
     }
     
-    if (createHorario(id_electivo, hora_inicio, hora_termino))
-    res
-      .status(201)
-      .json({ message: "Horario registrado exitosamente!", data: newHorario });
+    if (newHorario = await createHorario(id_electivo, hora_inicio, hora_termino, sala, dia)) {
+      return res
+        .status(201)
+        .json({ message: "Horario registrado exitosamente!", data: newHorario });
+    } else {
+      return res.status(500).json({message: "Error al registrar horario"});
+    }
+
   } catch (error) {
     console.error("Error en auth.controller.js -> register(): ", error);
     return res.status(500).json({ message: "Error al registrar el horario" });
