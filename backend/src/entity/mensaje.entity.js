@@ -1,4 +1,4 @@
-/*import { EntitySchema } from "typeorm";
+import { EntitySchema } from "typeorm";
 
 const MensajeSchema = new EntitySchema({
   name: "Mensaje",
@@ -38,4 +38,4 @@ const MensajeSchema = new EntitySchema({
   },
 });
 
-export default MensajeSchema;*/
+export default MensajeSchema;

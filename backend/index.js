@@ -6,20 +6,21 @@ import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createElectivos, createUsers } from "./src/config/initDb.js";
-/*import {createServer} from "http";
-import { Server } from 'socket.io';*/
+import {createServer} from "http";
+import { Server } from 'socket.io';
 
 
 async function setupServer() {
   // Crea la instancia de Express
   const app = express();
-  /*const io = new Server(httpServer, {
+  const httpServer = createServer(app);
+  const io = new Server(httpServer, {
   cors: {
-    origin: "<http://localhost:443>",
+    origin: "<http://localhost:3001>",
     methods: ["GET", "POST"],
     credentials: true
   }
-});*/
+});
   app.disable("x-powered-by");
   
 
@@ -41,8 +42,8 @@ async function setupServer() {
   app.use("/api", indexRoutes);
 
   // Configuración de Socket.IO
-/*io.on('connection', (socket) => {
-  console.log('Usuario conectado:', socket.id);
+  io.on('connection', (socket) => {
+    console.log('Usuario conectado:', socket.id);
 
   // Usuario se une a una sala
   socket.on('join-room', (data) => {
@@ -89,14 +90,12 @@ async function setupServer() {
     console.log('Usuario desconectado:', socket.id);
   });
 });
-
 // Iniciar servidor con Socket.IO backend 3000 socket.io 3001 80 de 4 backend
-/*const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
+  const PORT = process.env.PORT || 3001;
+  httpServer.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
   console.log(`Socket.IO habilitado en <http://localhost>:${PORT}`);
-});*/
-
+  });
   
 
   // Enciende el servidor

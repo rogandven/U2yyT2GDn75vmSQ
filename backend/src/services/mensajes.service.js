@@ -1,4 +1,4 @@
-/*import { AppDataSource } from '../config/configDb.js';
+import { AppDataSource } from '../config/configDb.js';
 import Mensaje from '../entity/mensaje.entity.js';
 
 export async function createMensaje(mensajeData) {
@@ -22,4 +22,4 @@ export async function getMensajesByUsuario2(id) {
     where: { id_usuario2: id },
     order: { fecha_envio: 'ASC' }
   });
-}*/
+}

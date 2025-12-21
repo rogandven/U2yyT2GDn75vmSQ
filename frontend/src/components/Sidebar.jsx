@@ -123,6 +123,11 @@ const Sidebar = () => {
             <SiBookstack className="icon"/> Horarios
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/chat-user">
+            <SiBookstack className="icon"/> Chat
+            </NavLink>
+          </li>
           <li style={{ height: "70%" }}/>
           <li className="logout">
             <NavLink to="/login" onClick={logoutSubmit}>

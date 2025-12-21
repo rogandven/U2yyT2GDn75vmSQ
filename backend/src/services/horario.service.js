@@ -6,13 +6,14 @@ const horarioRepository = AppDataSource.getRepository(HorarioEntity);
 
 export async function createHorario(data) {
 
-  const newClase = claseRepository.create({
+  /*const newHorario = horarioRepository.create({
+    id_electivo: data.id_electivo,
     sala,
     horario,
     fecha_inicio_clases
   });
 
-  return await claseRepository.save(newClase);
+  return await horarioRepository.save(newHorario);*/
 }
 
 export async function findAllHorarios() {

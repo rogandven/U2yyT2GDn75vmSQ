@@ -73,6 +73,7 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
+import ChatUser from "@pages/ChatUser";
 import { getAllowedRoles } from '@services/admin.service.js'
 
 const router = createBrowserRouter([
@@ -108,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: "/horarios",
         element: <Timetable />,
+      },
+      {
+        path: "/chat-user",
+        element: <ChatUser />,
       }
     ],
   },
