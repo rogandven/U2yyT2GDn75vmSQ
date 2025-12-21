@@ -17,7 +17,9 @@ const isValidTimeFormat = (timeStr) => {
 
 export async function asignarHorario(req, res) {
   try {
-    
+    if (!req.body || !req.params) {
+      return res.status(400).json({ message: "Datos no proporcionados"});
+    }
     const horarioRepository = AppDataSource.getRepository(HorarioEntity);
     const electivoRepository= AppDataSource.getRepository(ElectivoEntity);
     const { id_electivo } = req.params;
