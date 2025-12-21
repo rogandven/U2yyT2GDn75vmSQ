@@ -3,9 +3,12 @@
 import HorarioEntity from "../entity/horario.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
+// import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
 import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+import { electivoExists } from "../service/electivo.service.js";
+import { createHorario, getConflictingHorarios } from "../services/horario.service.js";
 
 const isValidTimeFormat = (timeStr) => {
     const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
@@ -20,23 +23,24 @@ export async function asignarHorario(req, res) {
     if (!req.body || !req.params) {
       return res.status(400).json({ message: "Datos no proporcionados"});
     }
-    const horarioRepository = AppDataSource.getRepository(HorarioEntity);
-    const electivoRepository= AppDataSource.getRepository(ElectivoEntity);
+
     const { id_electivo } = req.params;
-    // console.log(id_electivo);
-    if (!id_electivo) {
-      return res.status(400).json({ message: "El ID del electivo es obligatorio" });
+    let validationResult = idValidation.validate({id: id_electivo});
+    if (validationResult.error) {
+      return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
     }
 
+    const horarioRepository = AppDataSource.getRepository(HorarioEntity);
+    const electivoReallyExists = (await electivoExists(id_electivo));
 
-    const electivo = await electivoRepository.findOneBy({ id: id_electivo});
-    if (!electivo) {
+    if (electivoReallyExists === null) {
+      return res.status(500).json({ message: "Error interno del servidor" });
+    }
+    if (electivoReallyExists === false) {
       return res.status(404).json({ message: "Electivo no encontrado" });
     }
-
     
-    
-    const {hora_inicio, hora_termino, sala, dia } = req.body;
+    const { hora_inicio, hora_termino, sala, dia } = req.body;
 
     let result = assignationValidation.validate(req.body);
     if (result.error) {
@@ -47,29 +51,18 @@ export async function asignarHorario(req, res) {
       return res.status(400).json({ message: result.error.message });
     }
         
-    const existingHorarioSala = await horarioRepository.findOne({
-      where: { hora_inicio,hora_termino, sala, dia },
-    });
-    if (existingHorarioSala)
-      return res.status(409).json({ message: "Horario y sala ya registrado." });
-
-
+    const existingHorarioSala = await getConflictingHorarios(hora_inicio, hora_termino, sala, dia);
+    if (existingHorarioSala.length > 0) {
+      return res.status(409).json({ message: "Horario y sala ya registrados.", conflicts: existingHorarioSala });
+    }
     
-    const newHorario = horarioRepository.create({
-      id_electivo: Number(id_electivo),
-      hora_inicio,
-      hora_termino,
-      sala,
-      dia 
-    });
-    await horarioRepository.save(newHorario);
-
+    if (createHorario(id_electivo, hora_inicio, hora_termino))
     res
       .status(201)
       .json({ message: "Horario registrado exitosamente!", data: newHorario });
   } catch (error) {
     console.error("Error en auth.controller.js -> register(): ", error);
-    return res.status(500).json({ message: "Error al registrar el curso" });
+    return res.status(500).json({ message: "Error al registrar el horario" });
   }
 }
 

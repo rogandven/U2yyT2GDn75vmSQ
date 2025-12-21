@@ -141,3 +141,16 @@ export async function deleteElectivoFromService(id_instancia) {
     return getServiceResult(true, null, error.message ? error.message : "Error al eliminar electivo", 0);
   }
 }
+
+export async function electivoExists(id_instancia) {
+  try {
+    const electivo = await electivoRepo.findOneBy({ id: id_instancia});
+    if (!electivo) {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error al encontrar electivo: ", error);
+    return null;
+  }
+}
