@@ -16,7 +16,7 @@ const validateGenerationBusiness = (string) => {
     if (!string || typeof(string) !== "string" || (string = string.trim()).length <= 0) {
         return String("Generación no proporcionada");
     }
-    const stringArray = Array(string.split("-"));
+    const stringArray = string.split("\-");
     if (stringArray.length !== 2) {
         return String("La generación no está en formato XXXX-X");
     }
