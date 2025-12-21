@@ -2,7 +2,7 @@ export const MIN_FULLNAME = 3;
 export const MAX_FULLNAME = 500;
 export const FULLNAME_REGEX = /^[A-ZÁÉÍÓÚ ]*$/;
 
-export const GENERATION_REGEX = /[1-9]*-[1-2]/;
+export const GENERATION_REGEX = /[0-9]*\-[1-2]/;
 
 export const TEACHER_ROLE = 'PROFESOR';
 export const STUDENT_ROLE = 'ESTUDIANTE';

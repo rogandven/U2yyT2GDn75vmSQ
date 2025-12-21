@@ -59,6 +59,7 @@ const createElectivoHelper = async (req, res, estado) => {
   }
   result = dateCreationValidation.validate(req.body);
   if (result.error) {
+    throw result.error;
     return res.status(400).json(getControllerResult(result.error.message, null));
   }
 

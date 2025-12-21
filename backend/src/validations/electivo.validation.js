@@ -7,6 +7,7 @@ import { MIN_FULLNAME, MAX_FULLNAME } from "../constants/user.constants.js";
 import { fullnameRegexMessageGenerator } from "../constants/user.constants.js";
 import { MAX_CUPOS, MAX_INSCRITOS, MIN_CUPOS, MIN_INSCRITOS } from "../constants/electivo.constants.js";
 import validateGeneration from "./modules/generation.validation.js"; 
+import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 
 const AREAS_PERMITIDAS = [
   "Desarrollo de Software",
@@ -102,8 +103,12 @@ export const integrityValidation = Joi.object({
       "string.min": `La descripción debe tener al menos ${MIN_FULLNAME} caracteres.`,
       "string.max": `La descripción no puede superar los ${MAX_FULLNAME} caracteres.`,
     }),
-  aprobado: Joi.string().messages({
+  estado: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).valid(...ARRAY_ESTADOS_VALIDOS).messages({
+      "string.min": `El estado debe tener al menos ${MIN_FULLNAME} caracteres.`,
+      "string.max": `El estado no puede exceder los ${MAX_FULLNAME} caracteres.`,
       "string.base":"El estado debe ser una cadena de caracteres",
+      "string.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`,
+      "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
   semestre_minimo: Joi.custom(validateGeneration)
 });
@@ -128,9 +133,12 @@ export const createValidation = Joi.object({
   descripcion: Joi.any().required().messages({
     "any.required": "La descripción es obligatoria",
   }),
-  aprobado: Joi.any().required().messages({
+  estado: Joi.any().required().messages({
     "any.required": "El estado es obligatorio",
   }),
+  semestre_minimo: Joi.any().required().messages({
+    "any.required": "El semestre mínimo es obligatorio",
+  })
 }).unknown(false).messages({
     "any.unknown": "No se permiten campos adicionales"
 });
@@ -143,6 +151,7 @@ export const updateValidation = Joi.object({
   area: Joi.any(),
   descripcion: Joi.any(),
   aprobado: Joi.any(),
+  semestre_minimo: Joi.any(),
 }).min(1).messages({
   "object.min":"Debe proporcionar un campo para actualizar",
   "any.min":"Debe proporcionar un campo para actualizar",
@@ -157,7 +166,7 @@ export const dateCreationValidation = Joi.object({
       "date.base": "La fecha de cierre debe tener un formato válido (AAAA-MM-DD).",
       "date.min": "La fecha de cierre especificada ya pasó",
     }),
-});
+}).unknown(true);
 
 /*
 export const createElectivoValidation = Joi.object({
