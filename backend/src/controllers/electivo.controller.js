@@ -11,6 +11,7 @@ import { getElectivosFromService, createElectivoFromService, getElectivoByIdFrom
 import { getControllerResult } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
+import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 
 export async function getElectivos(req, res) {
   if (req.query && req.query.area && typeof(req.query.area) === "string") {
@@ -73,11 +74,11 @@ const createElectivoHelper = async (req, res, estado) => {
 }
 
 export async function createElectivoProfesor(req, res) {
-  return await createElectivoHelper(req, res, false);
+  return await createElectivoHelper(req, res, ESTADOS_VALIDOS.PENDIENTE);
 };
 
 export async function createElectivoJefeDeCarrera(req, res) {
-  return await createElectivoHelper(req, res, true);
+  return await createElectivoHelper(req, res, ESTADOS_VALIDOS.APROBADO);
 };
 
 export async function getElectivoById(req, res) {
