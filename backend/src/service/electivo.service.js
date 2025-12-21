@@ -74,7 +74,7 @@ export async function createElectivoFromService(data) {
 
 export async function getElectivoByIdFromService(id_instancia) {
 try {
-    const electivos = await ElectivoEntityRepository.findOne({ where: { id: id_instancia } });
+    const electivos = await electivoRepo.findOne({ where: { id: id_instancia } });
 
     if (!electivos) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);

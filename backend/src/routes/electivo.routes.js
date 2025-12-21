@@ -10,6 +10,7 @@ import {
   approveElectivo,
   getElectivosSinAprobar,
   rejectElectivo,
+  getElectivoById,
 } from "../controllers/electivo.controller.js";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../middleware/authorization.middleware.js"; 
@@ -18,6 +19,7 @@ const router = Router();
 
 //para todos los usuarios autenticados
 router.get("/", isAuthenticated, getElectivos);
+router.get("/:id", isAuthenticated, getElectivoById);
 router.get("/private", isAuthenticated, isJefeDeCarrera, getElectivosSinAprobar);
 
 //Solo administrador o profesor pueden crear, actualizar o eliminar electivos

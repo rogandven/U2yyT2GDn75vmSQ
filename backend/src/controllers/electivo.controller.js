@@ -88,15 +88,15 @@ export async function createElectivoJefeDeCarrera(req, res) {
 
 export async function getElectivoById(req, res) {
     const { id } = req.params;
-    const validationResult = idValidation.validate(id);
+    const validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json(getControllerResult(validationResult.error.message, null));
     }
     const serviceResult = await getElectivoByIdFromService(id);
     if (serviceResult.error) {
-      return res.status(500).json(getControllerResult(serviceResult.message, serviceResult));
+      return res.status(500).json(getControllerResult(serviceResult.details, serviceResult));
     }
-    return res.status(200).json(getControllerResult(serviceResult.message, serviceResult));
+    return res.status(200).json(getControllerResult(serviceResult.details, serviceResult));
 }
 
 export async function updateElectivo(req, res) {
@@ -173,9 +173,9 @@ export async function deleteElectivo(req, res) {
     
     const serviceResult = await deleteElectivoFromService(id);
     if (serviceResult.error) {
-      return res.status(500).json(getControllerResult(serviceResult.message, serviceResult));
+      return res.status(500).json(getControllerResult(serviceResult.details, serviceResult));
     }
-    return res.status(200).json(getControllerResult(serviceResult.message, serviceResult));
+    return res.status(200).json(getControllerResult(serviceResult.details, serviceResult));
   } catch (error) {
     console.error("Error al eliminar electivo", error);
     return res.status(500).json(getControllerResult("Error al eliminar electivo", null));
