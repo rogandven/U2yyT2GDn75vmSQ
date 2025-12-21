@@ -1,6 +1,6 @@
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
-import ElectivoEntity from "../entity/electivo.entity.js";
+import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
@@ -105,18 +105,18 @@ export async function updateElectivoFromService(id_instancia, data) {
   }
 }
 
-export async function approveElectivoFromService(id_instancia) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
       return getServiceResult(false, null, "Electivo no encontrado", 0);
     }
-    if (electivo.aprobado) {
+    if (electivo.estado === nuevo_estado) {
       return getServiceResult(false, null, "Electivo ya aprobado", 0);
     }
 
-    Object.assign(electivo, { aprobado: true });
+    Object.assign(electivo, { estado: nuevo_estado });
     await electivoRepo.save(electivo);
 
     return getServiceResult(false, electivo, "Electivo aprobado correctamente", 1);

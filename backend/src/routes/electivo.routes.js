@@ -22,7 +22,7 @@ router.get("/private", isAuthenticated, isJefeDeCarrera, getElectivosSinAprobar)
 //Solo administrador o profesor pueden crear, actualizar o eliminar electivos
 router.post("/", isAuthenticated, isAdminOrProfesor, createElectivoProfesor);
 router.post("/private", isAuthenticated, isJefeDeCarrera, createElectivoJefeDeCarrera);
-router.post("/private/approve", isAuthenticated, isJefeDeCarrera, approveElectivo);
+router.post("/private/approve/:id", isAuthenticated, isJefeDeCarrera, approveElectivo);
 router.patch("/:id", isAuthenticated, isAdminOrProfesor, updateElectivo);
 router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivo);
 
