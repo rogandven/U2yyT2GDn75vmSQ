@@ -74,7 +74,7 @@ export async function createElectivoFromService(data) {
 
 export async function getElectivoByIdFromService(id_instancia) {
 try {
-    const electivos = await ElectivoEntityRepository.findOne({ where: { id_instancia } });
+    const electivos = await ElectivoEntityRepository.findOne({ where: { id: id_instancia } });
 
     if (!electivos) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);
@@ -113,22 +113,22 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
       return getServiceResult(false, null, "Electivo no encontrado", 0);
     }
     if (electivo.estado === nuevo_estado) {
-      return getServiceResult(false, null, "Electivo ya aprobado", 0);
+      return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
     }
 
     Object.assign(electivo, { estado: nuevo_estado });
     await electivoRepo.save(electivo);
 
-    return getServiceResult(false, electivo, "Electivo aprobado correctamente", 1);
+    return getServiceResult(false, electivo, `Electivo ${nuevo_estado} correctamente`, 1);
   } catch (error) {
-    console.error("Error al aprobar electivo:", error);
-    return getServiceResult(true, null, error.message ? error.message : "Error al aprobar electivo", 0);
+    console.error(`Error al ${nuevo_estado} electivo:`, error);
+    return getServiceResult(true, null, error.message ? error.message : `Error al ${nuevo_estado} electivo`, 0);
   }
 }
 
 export async function deleteElectivoFromService(id_instancia) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id_instancia });
+    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);

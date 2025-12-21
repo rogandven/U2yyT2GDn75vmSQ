@@ -166,7 +166,7 @@ export async function rejectElectivo(req, res) {
 export async function deleteElectivo(req, res) {
   try {
     const { id } = req.params;
-    const validationResult = idValidation.validate(id);
+    const validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json(getControllerResult(validationResult.error.message, null));
     }
