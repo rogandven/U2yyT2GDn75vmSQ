@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/configDb.js";
 import HorarioEntity from "../entity/horario.entity.js";
+import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import bcrypt from "bcrypt";
 
 const horarioRepository = AppDataSource.getRepository(HorarioEntity);
@@ -72,18 +73,52 @@ export async function getHorario(id_horario) {
   }
 }
 
-export async function updateHorarioById_Electivo(id_horario, updateData) {
+export async function updateHorarioById_Electivo(horario) {
   try {
+    if (!horario) {
+      throw new Error("Función mal llamada");
+    }
+  /*
     const horario = await getHorario(id_horario);
     if (!horario) {
       return {data: null, message: "Horario no encontrado", error: null};
     }
     Object.assign(horario, updateData);
+    */
     return {data: await horarioRepository.save(horario), message: "Horario actualizado con éxito", error: null};
   } catch (error) {
     return {data: null, message: "Error al actualizar horario", error: error};
   }
+}
 
+export async function findAllHorarios() {
+  return await horarioRepository.find();
+}
+
+export async function deleteHorarioById_Electivo(id_horario) {
+  // console.log(id_electivo);
+  try {
+    const horario = await horarioRepository.findOne({where: { id_horario: id_horario }});
+
+    if (!horario) {
+      return {
+        result: null,
+        message: HORARIO_NO_ENCONTRADO
+      }
+    }
+    // // console.log(user);
+    // await userRepository.delete(user);
+    return {
+      result: (await horarioRepository.delete({id_horario: horario.id_horario})), 
+      message: "¡Horario eliminado exitosamente!"
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      result: null,
+      message: "Error al eliminar el horario"
+    };
+  }
 }
 
 /*

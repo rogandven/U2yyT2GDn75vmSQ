@@ -9,3 +9,4 @@ export const HORA_TERMINO_OBLIGATORIA="La hora de termino es obligatoria.";
 export const CAMPOS_ADICIONALES="No se permiten campos adicionales.";
 // export const DIAS_SEMANA=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 export const DIAS_SEMANA=["lunes","martes","miercoles","jueves","viernes","sabado"];
+export const HORARIO_NO_ENCONTRADO = "Horario no encontrado";
