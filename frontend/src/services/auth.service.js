@@ -30,12 +30,17 @@ export async function loginService(datauser) {
 
         const { status, data } = response;
         if (status === 200) {
-            const { username, email, rut, rol } = jwtDecode(data.accessToken);
-            const userData = { username, email, rut, rol };
-            sessionStorage.setItem('usuario', JSON.stringify(userData));
-            axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`;
-            cookies.set('jwt-auth', data.accessToken, { path: '/' });
-            return response;
+            let parsedToken = data.serviceResult && data.serviceResult.data && data.serviceResult.data.token;
+            if (parsedToken) {
+                const { username, email, rut, rol } = jwtDecode(parsedToken);
+                const userData = { username, email, rut, rol };
+                sessionStorage.setItem('usuario', JSON.stringify(userData));
+                axios.defaults.headers.common['Authorization'] = `Bearer ${parsedToken}`;
+                cookies.set('jwt-auth', parsedToken, { path: '/' });
+                return response;
+            } else {
+                throw new Error("Error al interpretar el token");
+            }
         }
     } catch (error) {
         console.error("Error en auth.service");
