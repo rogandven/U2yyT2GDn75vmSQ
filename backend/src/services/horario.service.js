@@ -63,7 +63,28 @@ export async function createHorario(id_electivo, hora_inicio, hora_termino, sala
   }
 }
 
+export async function getHorario(id_horario) {
+  try {
+    return await horarioRepository.findOne({where: {id_horario: id_horario}});
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
+export async function updateHorarioById_Electivo(id_horario, updateData) {
+  try {
+    const horario = await getHorario(id_horario);
+    if (!horario) {
+      return {data: null, message: "Horario no encontrado", error: null};
+    }
+    Object.assign(horario, updateData);
+    return {data: await horarioRepository.save(horario), message: "Horario actualizado con éxito", error: null};
+  } catch (error) {
+    return {data: null, message: "Error al actualizar horario", error: error};
+  }
+
+}
 
 /*
 export async function createHorario(data) {
