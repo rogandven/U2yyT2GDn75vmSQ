@@ -159,11 +159,10 @@ export async function getInscripcionesByUserFromService(user_id) {
 }
 
 const checkForExistingData = async (userId, electivoId) => {
-  const genericFailure = (message) => {
-    return getServiceResult(false, null, String(message) || "Error desconocido", 0);
-  }
-
-  const user = await findUser(userId || null);
+    const genericFailure = (message) => {
+      return getServiceResult(false, null, String(message) || "Error desconocido", 0);
+    }
+    const user = await findUser(userId || null);
     if (!user) {
       return genericFailure("Usuario no encontrado");
     }
@@ -188,7 +187,7 @@ export async function createInscripcionFromService(data) {
   }
 
   try {
-    const checkResult = await checkForExistingData(data.user_id, data.id_electivo);
+    const checkResult = await checkForExistingData(data.id_usuario, data.id_electivo);
     if (checkResult) {
       return checkResult;
     }
