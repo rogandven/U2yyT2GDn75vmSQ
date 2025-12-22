@@ -61,11 +61,14 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import indexRoutes from "./src/routes/index.routes.js";
-import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createElectivos, createUsers } from "./src/config/initDb.js";
-/*import {createServer} from "http";
+
+
+
+import {createServer} from "http";
 import { Server } from 'socket.io';
+
 
 
 async function setupServer() {
@@ -73,6 +76,7 @@ async function setupServer() {
   const app = express();
   
   app.disable("x-powered-by");
+  
 
   // Habilita el CORS para permitir solicitudes desde otros dominios (frontend)
   app.use(
@@ -91,10 +95,7 @@ async function setupServer() {
   // Configura las rutas de la API
   app.use("/api", indexRoutes);
 
-  // Enciende el servidor
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en ${HOST}:${PORT}`);
-  });
+ 
 }
 
 // Función para configurar la API

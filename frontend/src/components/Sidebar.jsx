@@ -132,6 +132,7 @@ const Sidebar = () => {
             <SiBookstack className="icon"/> Horarios
             </NavLink>
           </li>
+          
           <li style={{ height: "70%" }}/>
           <li className="logout">
             <NavLink to="/login" onClick={logoutSubmit}>

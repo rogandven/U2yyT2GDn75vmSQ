@@ -85,6 +85,7 @@ export async function getHorarios(req, res) {
   if (!horarioData) {
     return handleErrorClient(res, 400, "Horarios no encontradas");
   }
+  // console.log(horarioData);
   return handleSuccess(res, 200, "Horarios obtenidas exitosamente", horarioData);
 }
   /* const additionalData = await findClaseById_electivo((clase && clase.id_electivo) || 0);
@@ -118,14 +119,16 @@ export async function patchHorario(req, res) {
   }
 
   const existingHorarioSala = await horarioRepository.findOne({
-      where: { hora_inicio, hora_termino, sala, dia },
+      where: {  hora_inicio, hora_termino, sala, dia },
     });
-    console.log(existingHorarioSala);
-    if (existingHorarioSala && existingHorarioSala.id_horario != id)
-      return res.status(409).json({ message: "Horario y sala ya registrado." });
+    //console.log(existingHorarioSala);
+    if (existingHorarioSala && existingHorarioSala.id_horario != id){
+      return res.status(409).json({ message: "Horario y sala ya registrado." }); 
+    }
+      
 
   try {
-    const updatedHorario = await updateHorarioById_Electivo(id, { hora_inicio, hora_termino, sala, dia });
+    const updatedHorario = await updateHorarioById_Electivo(id, {  hora_inicio, hora_termino, sala, dia });
     handleSuccess(res, 200, "Horario actualizado exitosamente", updatedHorario)
     // console.log(profesor);
   } catch (error) {

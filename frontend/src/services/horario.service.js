@@ -2,6 +2,7 @@ import axios from '@services/root.service.js';
 
 export const getTimetables = async () => {
     try {
+        console.log(axios.defaults.baseURL);
         const response = await axios.get('/horarios');
         return response.data;
     } catch (error) {
@@ -10,15 +11,40 @@ export const getTimetables = async () => {
     }
 };
 
+const parseResponseCode = (error) => {
+    const DEFAULT_RESPONSE = 500;
+
+    if (error && error.response && error.response.status) {
+        if (isNaN(error.response.status)) {
+            return DEFAULT_RESPONSE;
+        }
+        return error.response.status;
+    }
+    return DEFAULT_RESPONSE;
+};
+
+const parseErrorData = (error) => {
+    if (!error) {
+        return null;
+    }
+    if (!(error.response)) {
+        return null;
+    }
+    if (!(error.response.data)) {
+        return null;
+    }
+    return error.response.data;
+}
+
 export const assignTimetable = async (horarioData) => {
     try {
         const idElectivo = horarioData.id_electivo;
         delete horarioData.id_electivo;
         const response = await axios.post('/horarios/asignar/' + String(idElectivo), horarioData);
-        return response.data;
+        return {data: response.data, error: null, status: response.status};
     } catch (error) {
         console.error('Error al asignar el horario:', error);
-        throw error;
+        return {data: parseErrorData(error), error: error, status: parseResponseCode(error)}
     }
 };
 
