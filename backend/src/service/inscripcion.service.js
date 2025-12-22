@@ -37,28 +37,30 @@ const findElectivo = async (id) => {
 const findCopy = async (userId, electivoId) => {
   try {
     if ((!userId || isNaN(userId)) || (!electivoId || isNaN(electivoId))) {
-      return null;
+      return {};
     }
-
-    return await inscripcionRepo.findOne({where: {user_id: userId, id_electivo: electivoId}});
+    return await inscripcionRepo.findOne({where: {id_usuario: userId, id_electivo: electivoId}});
   } catch (error) {
     console.error(error);
-    return null;
+    return {};
   }
 } 
 
 const findCopyEdit = async (inscripcionId, userId, electivoId) => {
-  const BASE_CASE = [];
+  const BASE_CASE = [{}];
   try {
     if ((!inscripcionId || isNaN(inscripcionId)) || (!userId || isNaN(userId)) || (!electivoId || isNaN(electivoId))) {
+      console.log("No se pasaron datos");
       return BASE_CASE;
     }
-    let array = await inscripcionRepo.find({where: {user_id: userId, id_electivo: electivoId}});
+    let array = await inscripcionRepo.find({where: {id_usuario: userId, id_electivo: electivoId}});
+    console.log(array);
     if (!array || !(array.filter)) {
       console.log("La consulta retornó algo que no tiene método filter()");
       return BASE_CASE;
     }
     array = array.filter((element) => {
+      console.log(element);
       return element.id_inscripcion !== inscripcionId;
     });
     return array;
@@ -69,7 +71,7 @@ const findCopyEdit = async (inscripcionId, userId, electivoId) => {
 }
 
 const findInscripcionesByUser = async (userId) => {
-  const BASE_CASE = [];
+  const BASE_CASE = [{}];
   try {
     if (isNaN(userId)) {
       return BASE_CASE;
@@ -206,7 +208,7 @@ export async function updateInscripcionFromService(id, data) {
   }
 
   try {
-    const checkResult = await findCopyEdit(id, data.user_id, data.id_electivo);
+    const checkResult = await findCopyEdit(id, data.id_usuario, data.id_electivo);
     if (checkResult.length > 0) {
       return getServiceResult(false, checkResult, "Ya existe esta inscripción", checkResult.length);
     }
@@ -215,7 +217,7 @@ export async function updateInscripcionFromService(id, data) {
       return getServiceResult(false, null, "Inscripción no encontrada", 0);
     }
     inscripcionEditada = Object.assign(inscripcionEditada, data);
-    await inscripcionRepo.save(inscripcionEditada);
+    await inscripcionRepo.update(inscripcionEditada);
     return getServiceResult(false, inscripcionEditada, "Inscripción editada con éxito", 1);
   } catch (error) {
     console.error("Error al editar inscripción:", error);
@@ -287,9 +289,9 @@ const checkIfUserMadeInscripcion = async (userId, inscripcionId) => {
 
 export async function getInscripcionFromService(id, userId, checksEnabled) {
   try {
-    console.log("id: " + id);
-    console.log("userId: " + userId);
-    console.log("checksEnabled: " + checksEnabled);
+    // console.log("id: " + id);
+    // console.log("userId: " + userId);
+    // console.log("checksEnabled: " + checksEnabled);
     if (id === undefined || userId === undefined || checksEnabled === undefined) {
       throw Error("Dato no proporcionado");
     }

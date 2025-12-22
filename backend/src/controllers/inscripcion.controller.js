@@ -106,14 +106,22 @@ const updateInscriptionHelper = async (req, res, updateFunction) => {
     if (!updateFunction) {
         throw Error("Falta pasar la función como argumento");
     }
-    let result = updateValidation(req.body);
+    let result = updateValidation.validate(req.body);
     if (result.error) {
         return res.status(400).json(getControllerResult(result.error.message ? result.error.message : "Datos faltantes"));
     }
-    result = integrityValidation(req.body);
+    result = integrityValidation.validate(req.body);
     if (result.error) {
         return res.status(400).json(getControllerResult(result.error.message ? result.error.message : "Datos inválidos"));
     }
+
+    let inscriptionToUpdate = await getInscripcionFromService(req.params.id, null, false);
+    inscriptionToUpdate = inscriptionToUpdate.data ? inscriptionToUpdate.data : null;
+    if (!inscriptionToUpdate || !(inscriptionToUpdate.id_inscripcion)) {
+        return res.status(404).json(getControllerResult("Inscripción no encontrada", null));
+    }
+    Object.assign(inscriptionToUpdate, req.body);
+    Object.assign(req.body, inscriptionToUpdate);
     const serviceResult = await updateFunction(req.params.id, req.body);
     if (serviceResult.error) {
         return res.status(500).json(getControllerResult(serviceResult.details || "Error interno del servidor", serviceResult));
