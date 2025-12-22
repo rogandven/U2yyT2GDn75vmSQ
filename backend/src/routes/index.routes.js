@@ -33,4 +33,5 @@ router.use("/horarios", horarioRoutes);
 // router.use("/electivos3", nowRoutes);
 router.use("/Inscripciones",inscripcionRoutes);
 router.use("/preinscriptions", preinscriptionRoutes);
+
 export default router;
