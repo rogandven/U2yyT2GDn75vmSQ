@@ -16,10 +16,13 @@ export async function CreateInscripciones(req, res) {
       return res.status(400).json({ message: "El ID del electivo es obligatorio" });
     }
 
-    const electivo = await electivoRepository.findOne({ where: { id_electivo: electivoId } });
+    const electivo = await claseRepository.findOne({ where: { id_electivo: electivoId } });
+    console.log(electivo);
+    // const electivo = await electivoRepository.findOne({ where: { id_electivo: electivoId } });
     if (!electivo) {
       return res.status(404).json({ message: "Electivo no encontrado" });
     }
+    
 
     const inscripcionExistente = await inscripcionRepository.findOne({
       where: { 
@@ -30,11 +33,6 @@ export async function CreateInscripciones(req, res) {
     // console.log(inscripcionExistente);
 
     if (inscripcionExistente) {
-      if (inscripcionExistente.estado === "rechazada" || inscripcionExistente.estado === "retirada") {
-        return res.status(400).json({ 
-          message: "Ya tienes una solicitud rechazada o retirada para este electivo"
-        });
-      }
       return res.status(400).json({ 
         message: "Ya tienes una solicitud de inscripción para este electivo",
         estado: inscripcionExistente.estado
@@ -114,6 +112,10 @@ export async function DeleteInscripciones(req, res) {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
     const electivoRepository = AppDataSource.getRepository(electivoEntity);
     const { inscripcionId } = req.params;
+    if (!req.body) {
+      return res.status(400).json({ message: "Pedido vacío" });
+    }
+
     const { motivo } = req.body;
     const userId = req.user.id; 
 

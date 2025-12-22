@@ -1,7 +1,8 @@
 import axios from 'axios';
 import cookies from 'js-cookie';
+import { API_URL as DEFAULT_URL } from '../config/env.config';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = `${DEFAULT_URL}/api`;
 
 const instance = axios.create({
     baseURL: API_URL,

@@ -11,7 +11,7 @@ export async function getUsers() {
 
 export async function editUser(userId, userData) { 
     try {
-        const response = await axios.put(`/users/${userId}`, userData);
+        const response = await axios.patch(`/users/${userId}`, userData);
         return response.data;
     } catch (error) {
         console.error("Error al editar usuario:", error);

@@ -4,16 +4,19 @@ import LoginRegisterForm from "@components/LoginRegisterForm";
 import { loginService } from "@services/auth.service.js";
 import luckyCat from "@assets/LuckyCat.png";
 import "@styles/loginRegister.css";
+import { API_URL } from "../config/env.config.js";
 
 const Login = () => {
+  
+
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
 
-  // Función que maneja el envío del formulario de inicio de sesión
   const loginSubmit = async (data) => {
     try {
+      console.log(API_URL);
       const response = await loginService(data);
-      if (response.request.status === 200) {
+      if (response && response.request && response.request.status === 200) {
         navigate("/home");
       } else {
         setLoginError("Usuario o contraseña incorrectos");

@@ -1,15 +1,20 @@
 "use strict";
 
 import { EntitySchema } from "typeorm";
+import { USER_ID_TYPE } from "../constants/entity.constants.js";
 
 export const UserEntity = new EntitySchema({
-    name: "UserEntity",
+    name: "User",
     tableName: "users",
     columns: {
         id: {
-            type: Number,
+            type: USER_ID_TYPE,
             primary: true,
             generated: true,
+        },
+        fullname: {
+            type: String,
+            nullable: true,
         },
         username: {
             type: String,
@@ -32,7 +37,11 @@ export const UserEntity = new EntitySchema({
         },
         role: {
             type: String,
-            default: "user",
+            nullable: false,
+        },
+        generation: {
+            type: String,
+            nullable: true
         },
         createdAt: {
             type: "timestamp",
@@ -43,6 +52,14 @@ export const UserEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
+        id_carrera: {
+            type: Number,
+            nullable: true
+        },
+        creditos: {
+            type: Number,
+            default: 0
+        }
     },
 });
 

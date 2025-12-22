@@ -13,6 +13,7 @@ import {
 
 // Controlador de autenticación
 
+/*
 export async function register(req, res) {
   try {
     // Obtener el repositorio de usuarios y validar los datos de entrada
@@ -108,3 +109,4 @@ export async function logout(req, res) {
     return res.status(500).json({ message: "Error al cerrar sesión" });
   }
 }
+*/

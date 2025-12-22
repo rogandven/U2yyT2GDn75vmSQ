@@ -10,7 +10,7 @@ const router = Router();
 router.post("/", authenticateJwt, isAdmin, createPreinscription);
 router.get("/", authenticateJwt, isAdmin, getPreinscriptions);
 router.get("/:id", authenticateJwt, isAdmin, getPreinscriptionById);
-router.put("/:id", authenticateJwt, isAdmin, updatePreinscription);
+router.patch("/:id", authenticateJwt, isAdmin, updatePreinscription);
 router.delete("/:id", authenticateJwt, isAdmin, deletePreinscription);
 
 export default router;

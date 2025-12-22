@@ -1,19 +1,22 @@
 /*
 "use strict";
+
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from '@pages/Root'
-import Home from '@pages/Home'
-import Login from '@pages/Login'
-import Register from '@pages/Register'
-import Error404 from '@pages/Error404'
-import Users from '@pages/Users'
-import Profile from '@pages/Profile'
-import ProtectedRoute from '@components/ProtectedRoute'
-import { getAllowedRoles } from '@services/admin.service.js'
 
-//importo la página de electivos
+import Root from "@pages/Root";
+import Home from "@pages/Home";
+import Login from "@pages/Login";
+import Register from "@pages/Register";
+import Error404 from "@pages/Error404";
+import Users from "@pages/Users";
+import Profile from "@pages/Profile";
+
+import ProtectedRoute from "@components/ProtectedRoute";
+import { getAllowedRoles } from "@services/admin.service.js";
+
 import Electivos from "@pages/Electivos";
+import ElectivosAdmin from "@pages/ElectivosAdmin";
 
 const router = createBrowserRouter([
   {
@@ -25,12 +28,18 @@ const router = createBrowserRouter([
         path: "/home",
         element: <Home />,
       },
-      
       {
         path: "/electivos",
         element: <Electivos />,
       },
-
+      {
+        path: "/admin/electivos",
+        element: (
+          <ProtectedRoute allowedRoles={["administrador", "profesor"]}>
+            <ElectivosAdmin />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "/users",
         element: (
@@ -42,7 +51,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
-      }
+      },
+      {
+        path: "*",
+        element: <Error404 />,
+      },
     ],
   },
   {
@@ -75,6 +88,8 @@ import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
 import ChatUser from "@pages/ChatUser";
 import { getAllowedRoles } from '@services/admin.service.js'
+import Inscripciones from '@pages/Inscripciones';
+
 
 const router = createBrowserRouter([
   {
@@ -97,6 +112,10 @@ const router = createBrowserRouter([
       {
         path: "/electivo",
         element: <Electivo/>,
+      },
+      {
+       path: "/inscripciones", 
+       element: <Inscripciones/>,
       },
       {
         path: "/electivos",
