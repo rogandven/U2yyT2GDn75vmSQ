@@ -1,50 +1,37 @@
-"use strict";
+import { EntitySchema } from "typeorm";
+import { ELECTIVO_ID_TYPE, USER_ID_TYPE } from "../constants/entity.constants.js";
+import { AWAITING, STATUS_TYPE_JOI } from "../constants/inscripcion.constants.js";
 
-import {EntitySchema} from "typeorm";
-
-export const InscripcionEntity = new EntitySchema({
-   name:"InscripcionEntity",
-   tableName:"inscripcion",
-   columns:{
-      id:{
-           type: Number,
-           primary: true,
-           generated: true,
-      },
-      createdAt: {
-          type: "timestamp",
-          default: () => "CURRENT_TIMESTAMP",
-      },
-      updatedAt: {
-            type: "timestamp",
-            default: () => "CURRENT_TIMESTAMP",
-            onUpdate: () => "CURRENT_TIMESTAMP",
-        },
-      estado: {
-        type: String,
-      },
-
-    estadoDetalle: {
-    type: String,
+export const InscripcionEntity=new EntitySchema({
+  name: "Inscripcion",
+  tableName: "inscripcion",
+  columns: {
+    id_inscripcion: {
+        primary: true,
+        type: "int",
+        generated: true,
+        nullable: false,
     },
-    periodo:{
-     type: String,
-     nullable: true
+    fecha_hora: {
+        primary: true,
+        type: "timestamp",
+        nullable: false,
+        default: () => "CURRENT_TIMESTAMP",        
     },
-    userId: {
-      type: "int",
-      nullable: false,
+    estado: {
+        type: STATUS_TYPE_JOI,
+        nullable: false,
+        default: AWAITING,
     },
-    electivoId: {
-      type: "int",
-      nullable: false,
+    id_usuario: {
+        type: USER_ID_TYPE,
+        nullable: false,
     },
-    electivoNombre:{
-     type: "varchar",
-     nullable: true,
+    id_electivo: {
+        type: ELECTIVO_ID_TYPE,
+        nullable: false,
     },
- }
-
+  },
 });
 
 export default InscripcionEntity;
