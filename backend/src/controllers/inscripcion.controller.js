@@ -33,12 +33,7 @@ export async function public_getInscripcionesByUser(req, res) {
 }
 
 export async function private_getInscripcionesSinAprobar(req, res) {
-    const result = findValidation.validate(req.query);
-    if (result.error) {
-        const message1 = result.error.message ? result.error.message : "ID inválido";
-        return res.status(400).json(getControllerResult(message1, null));
-    }
-    const inscripciones = await getInscripcionesSinAprobarFromService(req.query.id);
+    const inscripciones = await getInscripcionesSinAprobarFromService();
     const message2 = inscripciones.details ? inscripciones.details : "Error al obtener inscripciones";
     if (inscripciones.error) {
         return res.status(500).json(getControllerResult(message2, inscripciones));
