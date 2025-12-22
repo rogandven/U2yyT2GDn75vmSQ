@@ -4,7 +4,7 @@ export const inscriptionStatusValidationFunction = (value, helpers) => {
     if (!value || typeof(value) !== STATUS_TYPE_JS) {
         return helpers.message("Datos no proporcionados");
     }
-    for (let i = 0; i < VALID_STATUS_ARRAY; i++) {
+    for (let i = 0; i < VALID_STATUS_ARRAY.length; i++) {
         if (value === VALID_STATUS_ARRAY[i]) {
             return true;
         }
