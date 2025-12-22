@@ -7,7 +7,7 @@ import { createValidation, integrityValidation, updateValidation } from "../vali
 import { APPROVED, AWAITING, REJECTED, VALID_STATUS_ARRAY } from "../constants/inscripcion.constants.js";
 
 export async function private_getInscripcionesByUser(req, res) {
-    const result = findValidation.validate(req.params);
+    const result = idValidation.validate({id: req.params && req.params.id})
     if (result.error) {
         const message1 = result.error.message ? result.error.message : "ID inválido";
         return res.status(400).json(getControllerResult(message1, null));

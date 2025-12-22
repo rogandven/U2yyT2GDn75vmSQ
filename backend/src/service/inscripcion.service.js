@@ -145,7 +145,7 @@ export async function getInscripcionesByUserFromService(user_id) {
     }
 
     try {
-      let inscripciones = await inscripcionRepo.find({where: {user_id: user_id}});
+      let inscripciones = await inscripcionRepo.find({where: {id_usuario: user_id}});
       if (!inscripciones || inscripciones.length <= 0) {
         return genericFailure();
       }
@@ -288,7 +288,10 @@ const checkIfUserMadeInscripcion = async (userId, inscripcionId) => {
 
 export async function getInscripcionFromService(id, userId, checksEnabled) {
   try {
-    if (!id || !userId || !checksEnabled) {
+    console.log("id: " + id);
+    console.log("userId: " + userId);
+    console.log("checksEnabled: " + checksEnabled);
+    if (id === undefined || userId === undefined || checksEnabled === undefined) {
       throw Error("Dato no proporcionado");
     }
     const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
