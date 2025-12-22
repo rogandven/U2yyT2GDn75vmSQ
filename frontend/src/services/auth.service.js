@@ -20,10 +20,13 @@ export async function registerService(datauser) {
 
 export async function loginService(datauser) {
     try {
+        console.log(JSON.stringify(axios.defaults));
         const response = await axios.post('/auth/login', {
             email: datauser.email,
             password: datauser.password
         });
+        console.log("LA RESPUESTA: ");
+        console.log(response);
 
         const { status, data } = response;
         if (status === 200) {
