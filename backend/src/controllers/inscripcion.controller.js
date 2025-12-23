@@ -6,6 +6,9 @@ import { getControllerResult } from "./utils/utils.controller.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { APPROVED, AWAITING, REJECTED, VALID_STATUS_ARRAY } from "../constants/inscripcion.constants.js";
 
+
+
+/*
 export async function private_getInscripcionesByUser(req, res) {
     const result = idValidation.validate({id: req.params && req.params.id})
     if (result.error) {
@@ -289,3 +292,4 @@ export async function private_rejectInscripcion(req, res) {
     console.log(req.params.id);
     return await changeInscriptionStatusHelper(req, res, REJECTED);
 }
+*/
