@@ -6,9 +6,6 @@ import { userExists as _userExists } from "../service/utils/utils.inscription.se
 import { idValidation } from "../validations/modules/id.validation.js";
 
 /*
-private_getInscripcion);
-private_getInscripcionesSinAprobar);
-
 private_createInscripcion;
 private_updateInscripcion;
 private_deleteInscripcion;
