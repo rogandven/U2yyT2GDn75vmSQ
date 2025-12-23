@@ -47,6 +47,11 @@ const findCopy = async (userId, electivoId) => {
 } 
 
 export async function findCopyEdit(inscripcionId, userId, electivoId) {
+  console.log("INSCRIPCIONID: " + inscripcionId);
+  console.log("USERID: " + userId);
+  console.log("ELECTIVOID: " + electivoId);
+
+
   const BASE_CASE = [{}];
   try {
     if ((!inscripcionId || isNaN(inscripcionId)) || (!userId || isNaN(userId)) || (!electivoId || isNaN(electivoId))) {
@@ -58,8 +63,9 @@ export async function findCopyEdit(inscripcionId, userId, electivoId) {
       return BASE_CASE;
     }
     array = array.filter((element) => {
-      return element.id_inscripcion !== inscripcionId;
+      return Number(element.id_inscripcion) !== Number(inscripcionId);
     });
+    console.log(array);
     return array;
   } catch (error) {
     console.error(error);
@@ -199,13 +205,13 @@ export async function createInscripcionFromService(data) {
   }  
 }
 
-export async function updateInscripcionFromService(inscripcion) {
+export async function updateInscripcionFromService(inscripcion, id) {
   if (!inscripcion) {
     return getServiceResult(true, null, "Datos no proporcionados", 0);
-  }
-
+  } 
+  inscripcion.id_inscripcion = Number(id);
   try {
-    inscripcionRepo.save(inscripcion);
+    await inscripcionRepo.save(inscripcion);
     return getServiceResult(false, inscripcion, "Inscripción actualizada con éxito", 1);
   } catch (error) {
     console.error(error);

@@ -118,13 +118,13 @@ const validationFunctionHelper = (array, body) => {
     return null;
 }
 
-const updateInscriptionHelper = async (inscripcion, res) => {
+const updateInscriptionHelper = async (inscripcion, res, id) => {
     try {
         let validationResult = validationFunctionHelper([integrityValidation, updateValidation], inscripcion);
         if (validationResult) {
             return res.status(400).json(getControllerResult(validationResult, null));
         }
-        const updateResult = await updateInscripcionFromService(inscripcion);
+        const updateResult = await updateInscripcionFromService(inscripcion, id);
         if (updateResult.length >= 1) {
             return res.status(200).json(getControllerResult(updateResult.details, updateResult.data));
         } else {
@@ -182,7 +182,7 @@ export async function private_updateInscripcion(req, res) {
         return res.status(401).json(getControllerResult("Ya existe esta inscripción", copies));
     }
 
-    const updateResult = await updateInscripcionFromService(parsedInscripcion);
+    const updateResult = await updateInscripcionFromService(parsedInscripcion, req.params.id);
     if (updateResult.error) {
         return res.status(500).json(getControllerResult("Error interno del servidor", null));
     }
@@ -264,8 +264,8 @@ const changeInscriptionStatusHelper = async (req, res, status) => {
     if (validationResult.error) {
         return res.status(400).json(getControllerResult(validationResult.error.message || "Datos inválidos", null));
     }
-    const { data, error, details, length } = await getInscripcionFromService(id, null, false);
-
+    const result = await getInscripcionFromService(id, null, false);
+    const { data, details, error, length } = result;
     if (error) {
         return res.status(500).json(getControllerResult(details, data));
     }
@@ -286,5 +286,6 @@ export async function private_approveInscripcion(req, res) {
 }
 
 export async function private_rejectInscripcion(req, res) {
+    console.log(req.params.id);
     return await changeInscriptionStatusHelper(req, res, REJECTED);
 }
