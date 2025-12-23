@@ -8,7 +8,6 @@ import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 
 /*
-private_createInscripcion;
 private_updateInscripcion;
 private_deleteInscripcion;
 
@@ -127,10 +126,10 @@ export const private_createInscripcion = async (req, res) => {
             return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
         }
         const inscripcionCreada = await createInscripcion(req.body);
-        if (inscripcionCreada.data) {
+        if (inscripcionCreada && inscripcionCreada.data) {
             return res.status(200).json(inscripcionCreada);
         }
-        return res.status(500).json(inscripcionCreada);
+        return getGenericError(res);
     } catch (error) {
         console.error(error);
         return getGenericError(res);

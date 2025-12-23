@@ -56,7 +56,7 @@ export async function getInscripciones() {
 
 export async function getInscripcion(id) {
   const dynamicMessage = (inscripcion) => {
-    inscripcion ? "¡Inscripcion encontrada!" : "Inscripción no encontrada";
+    return inscripcion ? "¡Inscripcion encontrada!" : "Inscripción no encontrada";
   }
 
   try {
@@ -70,7 +70,7 @@ export async function getInscripcion(id) {
 
 export async function createInscripcion(data) {
   const dynamicMessage = (inscripcion) => {
-    inscripcion ? "¡Inscripcion creada!" : "No se pudo crear la inscripción";
+    return inscripcion ? "¡Inscripcion creada!" : "No se pudo crear la inscripción";
   }
 
   try {
@@ -86,7 +86,7 @@ export async function createInscripcion(data) {
 
 export async function updateInscripcion(data, inscripcion) {
   const dynamicMessage = (inscripcion) => {
-    inscripcion ? "¡Inscripcion editada!" : "No se pudo editar la inscripción";
+    return inscripcion ? "¡Inscripcion editada!" : "No se pudo editar la inscripción";
   }
 
   try {
@@ -101,7 +101,7 @@ export async function updateInscripcion(data, inscripcion) {
 
 export async function deleteInscripcion(inscripcion) {
   const dynamicMessage = (inscripcion) => {
-    inscripcion ? "¡Inscripcion eliminada!" : "No se pudo eliminar la inscripción";
+    return inscripcion ? "¡Inscripcion eliminada!" : "No se pudo eliminar la inscripción";
   }
 
   const queryRunner = AppDataSource.createQueryRunner();
