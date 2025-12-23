@@ -1,6 +1,6 @@
 "use strict";
 
-import { getInscripciones } from "../service/inscripcion.service.js";
+import { getInscripcion, getInscripciones, isInvalidInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 
@@ -77,6 +77,24 @@ export const private_getInscripcionesByUser = async (req, res) => {
         return getGenericError(res);
     }
 }   
+
+export const private_getInscripcion = async (req, res) => {
+    const idValidationResult = idValidation.validate(req.params);
+    if (idValidationResult.error) {
+        return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+    }
+
+    try {
+        let result = await getInscripcion(req.params.id);
+        if (!result || !(await isInvalidInscripcion(result.data))) {
+            return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
 
 /*
 export async function private_getInscripcionesByUser(req, res) {
