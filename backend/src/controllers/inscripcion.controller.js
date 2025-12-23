@@ -1,9 +1,9 @@
 "use strict";
 
 import { getInscripciones } from "../service/inscripcion.service";
+import { idValidation } from "../validations/modules/id.validation";
 
 /*
-private_getInscripcionesByUser);
 private_getInscripcion);
 private_getInscripcionesSinAprobar);
 
@@ -21,6 +21,10 @@ public_createInscripcion;
 public_updateInscripcion;
 public_deleteInscripcion;
 */ 
+
+const getGenericResult = (data, message) => {
+    return {data, message};
+}
 
 const getGenericError = (res) => {
     return res.status(500).json({data: null, message: "Error interno del servidor"});
@@ -43,6 +47,15 @@ export const private_getInscripciones = async (req, res) => {
         return getGenericError(res);
     }
 }
+
+export const private_getInscripcionesByUser = async (req, res) => {
+    const idValidationResult = idValidation.validate(req.params);
+    if (idValidationResult.error) {
+        return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+    }
+
+    
+}   
 
 /*
 export async function private_getInscripcionesByUser(req, res) {
