@@ -21,7 +21,7 @@ import userRoutes from "./user.routes.js";
 import electivoRoutes from "./electivo.routes.js"
 import horarioRoutes from "./horario.routes.js";
 import preinscriptionRoutes from "./preinscription.routes.js";
-import sendMail from "../services/email.service.js";
+import { sendMail } from "../controllers/email.controller.js";
 // import nowRoutes from "./now.routes.js";
 import inscripcionRoutes from "./inscripcion.routes.js"
 const router = new Router();
@@ -33,6 +33,6 @@ router.use("/horarios", horarioRoutes);
 // router.use("/electivos3", nowRoutes);
 router.use("/Inscripciones",inscripcionRoutes);
 router.use("/preinscriptions", preinscriptionRoutes);
-router.use("/send-mail", sendMail);
+router.post("/send-mail", sendMail);
 
 export default router;
