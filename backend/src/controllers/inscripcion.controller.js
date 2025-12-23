@@ -1,4 +1,7 @@
 "use strict";
+
+import { getInscripciones } from "../service/inscripcion.service";
+
 /*
 private_getInscripciones);
 private_getInscripcionesByUser);
@@ -19,6 +22,28 @@ public_createInscripcion;
 public_updateInscripcion;
 public_deleteInscripcion;
 */ 
+
+const getGenericError = (res) => {
+    return res.status(500).json({data: null, message: "Error interno del servidor"});
+}
+
+export const private_getInscripciones = async (req, res) => {
+    const invalidResult = (result) => {
+        return (!result || !result.data || !result.data.length);
+    }
+
+    try {
+        const result = await getInscripciones();
+        if (invalidResult(result) || result.data.length <= 0) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(201).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
 
 /*
 export async function private_getInscripcionesByUser(req, res) {
