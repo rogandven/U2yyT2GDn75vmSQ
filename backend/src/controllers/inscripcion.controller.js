@@ -1,7 +1,24 @@
 "use strict";
+/*
+private_getInscripciones);
+private_getInscripcionesByUser);
+private_getInscripcion);
+private_getInscripcionesSinAprobar);
 
+private_createInscripcion;
+private_updateInscripcion;
+private_deleteInscripcion;
 
+private_approveInscripcion;
+private_rejectInscripcion;
 
+public_getInscripcion;
+public_getInscripcionesByUser;
+
+public_createInscripcion;
+public_updateInscripcion;
+public_deleteInscripcion;
+*/ 
 
 /*
 export async function private_getInscripcionesByUser(req, res) {
