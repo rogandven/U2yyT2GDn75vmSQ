@@ -190,7 +190,9 @@ export async function login(req, res) {
   if (result.error) {
     return res.status(500).json(getControllerResult("Error interno del servidor", result));
   }
-  if (result.data === null) {
+  // console.log(result.data);
+  // throw new Error("minecraft");
+  if (!result.data.token) {
     result.error = true;
     return res.status(400).json(getControllerResult(result.details || "Error al iniciar sesión", result));
   }
