@@ -1,5 +1,6 @@
 "use strict";
 
+import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
 import { getInscripcion, getInscripciones, isInvalidInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -90,6 +91,22 @@ export const private_getInscripcion = async (req, res) => {
             return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
         }
         return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+export const private_getInscripcionesSinAprobar = async (req, res) => {
+    try {
+        let result = await getInscripciones();
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.estado === AWAITING;
+        });
     } catch (error) {
         console.error(error);
         return getGenericError(res);
