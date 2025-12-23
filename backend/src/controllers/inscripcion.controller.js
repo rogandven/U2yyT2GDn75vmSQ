@@ -3,7 +3,6 @@
 import { getInscripciones } from "../service/inscripcion.service";
 
 /*
-private_getInscripciones);
 private_getInscripcionesByUser);
 private_getInscripcion);
 private_getInscripcionesSinAprobar);
