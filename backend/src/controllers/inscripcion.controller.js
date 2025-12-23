@@ -114,6 +114,8 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
 
 export const private_createInscripcion = async (req, res) => {
     try {
+        req.body.estado = APPROVED;
+
         const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
         if (validationResult) {
             return res.status(400).json(getGenericResult(null, validationResult));
@@ -122,7 +124,7 @@ export const private_createInscripcion = async (req, res) => {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
         if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
-            return res.status(401).json(getGenericResult(null, "Ya existe esta inscripción"));
+            return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
         }
         const inscripcionCreada = await createInscripcion(req.body);
         if (inscripcionCreada.data) {
