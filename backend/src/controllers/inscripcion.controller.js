@@ -1,7 +1,8 @@
 "use strict";
 
-import { getInscripciones } from "../service/inscripcion.service";
-import { idValidation } from "../validations/modules/id.validation";
+import { getInscripciones } from "../service/inscripcion.service.js";
+import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
+import { idValidation } from "../validations/modules/id.validation.js";
 
 /*
 private_getInscripcion);
@@ -30,16 +31,16 @@ const getGenericError = (res) => {
     return res.status(500).json({data: null, message: "Error interno del servidor"});
 }
 
-export const private_getInscripciones = async (req, res) => {
-    const invalidResult = (result) => {
-        return (!result || !result.data || !result.data.length);
-    }
+const invalidResult = (result) => {
+    return (!result || !result.data || !result.data.length);
+}
 
+export const private_getInscripciones = async (req, res) => {
     try {
         const result = await getInscripciones();
         if (invalidResult(result) || result.data.length <= 0) {
             result.message = "No hay inscripciones para mostrar";
-            return res.status(201).json(result);
+            return res.status(204).json(result);
         }
         return res.status(200).json(result);
     } catch (error) {
@@ -53,8 +54,28 @@ export const private_getInscripcionesByUser = async (req, res) => {
     if (idValidationResult.error) {
         return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
     }
+    const userExists = await _userExists(req.params.id);
+    if (!userExists) {
+        return res.status(404).json(getGenericResult(null, "Usuario no encontrado"));
+    }
 
-    
+    try {
+        let result = await getInscripciones();
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.id_usuario === req.params.id;
+        });
+        if (result.data.length <= 0) {
+            return res.status(204).json(result);
+        }
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
 }   
 
 /*
