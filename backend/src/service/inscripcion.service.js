@@ -12,7 +12,7 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
 export const isInvalidInscripcion = async (inscripcion) => {
-  return !(await electivoExists(inscripcion.id_electivo)) || !(await userExists(inscripcion.id_inscripcion));
+  return !(await electivoExists(inscripcion.id_electivo)) || !(await userExists(inscripcion.id_usuario));
 }
 
 const cleanUpInscripcionArray = async (array) => {
@@ -84,16 +84,27 @@ export async function createInscripcion(data) {
   }
 }
 
-export async function updateInscripcion(data, inscripcion) {
+const throwErrorIfFailedUpdate = (inscripcionEditada) => {
+  if (!inscripcionEditada.affected || (inscripcionEditada.affected !== 1)) {
+    throw new Error(`Se afectaron ${inscripcionEditada.affected} inscripciones`);
+  }
+}
+
+export async function updateInscripcion(data, inscripcion, inscripcionAntigua) {
   const dynamicMessage = (inscripcion) => {
     return inscripcion ? "¡Inscripcion editada!" : "No se pudo editar la inscripción";
   }
+ 
+  const queryRunner = AppDataSource.createQueryRunner();
+  await queryRunner.startTransaction();
 
   try {
-    inscripcion = Object.assign(inscripcion, data);
-    let inscripcionEditada = await inscripcionRepo.save(inscripcion);
+    let inscripcionEditada = await inscripcionRepo.update(inscripcion, data);
+    throwErrorIfFailedUpdate(inscripcionEditada);
+
     return formatMessage(inscripcionEditada, dynamicMessage(inscripcionEditada));
   } catch (error) {
+    await queryRunner.rollbackTransaction();
     console.error(error);
     return formatMessage(null, dynamicMessage(null));;
   }

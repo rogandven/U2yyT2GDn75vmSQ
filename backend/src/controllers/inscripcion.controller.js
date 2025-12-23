@@ -1,9 +1,9 @@
 "use strict";
 
 import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
-import { createInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion } from "../service/inscripcion.service.js";
+import { createInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
-import { createValidation, integrityValidation } from "../validations/inscripcion.validation.js";
+import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 
@@ -126,6 +126,44 @@ export const private_createInscripcion = async (req, res) => {
             return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
         }
         const inscripcionCreada = await createInscripcion(req.body);
+        if (inscripcionCreada && inscripcionCreada.data) {
+            return res.status(200).json(inscripcionCreada);
+        }
+        return getGenericError(res);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+export const private_updateInscripcion = async (req, res) => {
+    try {
+        const idValidationResult = idValidation.validate(req.params);
+        if (idValidationResult.error) {
+            return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+        }
+        const validationResult = validationFunctionHelper([integrityValidation, updateValidation], req.body);
+        if (validationResult) {
+            return res.status(400).json(getGenericResult(null, validationResult));
+        }
+        const rawInscripcion = await getInscripcion(req.params.id);
+        if (!(rawInscripcion.data && rawInscripcion.data.id_inscripcion)) {
+            return res.status(400).json(getGenericResult(null, "Inscripción no encontrada"));
+        }
+
+        const editedInscripcion = {
+            id_electivo: (req.body.id_electivo || rawInscripcion.data.id_electivo), 
+            id_usuario: (req.body.id_usuario || rawInscripcion.data.id_electivo)
+        };
+
+        console.log(editedInscripcion);
+        if (await isInvalidInscripcion(editedInscripcion)) {
+            return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
+        }
+        if (await inscripcionAlreadyExists(req.params.id, editedInscripcion.id_usuario, editedInscripcion.id_electivo)) {
+            return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
+        }
+        const inscripcionCreada = await updateInscripcion(req.body, {id_inscripcion: req.params.id});
         if (inscripcionCreada && inscripcionCreada.data) {
             return res.status(200).json(inscripcionCreada);
         }
