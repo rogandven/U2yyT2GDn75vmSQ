@@ -1,9 +1,11 @@
 "use strict";
 
 import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
-import { getInscripcion, getInscripciones, isInvalidInscripcion } from "../service/inscripcion.service.js";
+import { createInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
+import { createValidation, integrityValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
+import { validationFunctionHelper } from "./utils/utils.controller.js";
 
 /*
 private_createInscripcion;
@@ -104,6 +106,29 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
         result.data = result.data.filter((inscripcion) => {
             return inscripcion.estado === AWAITING;
         });
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+export const private_createInscripcion = async (req, res) => {
+    try {
+        const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
+        if (validationResult) {
+            return res.status(400).json(getGenericResult(null, validationResult));
+        }
+        if (await isInvalidInscripcion(req.body)) {
+            return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
+        }
+        if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
+            return res.status(401).json(getGenericResult(null, "Ya existe esta inscripción"));
+        }
+        const inscripcionCreada = await createInscripcion(req.body);
+        if (inscripcionCreada.data) {
+            return res.status(200).json(inscripcionCreada);
+        }
+        return res.status(500).json(inscripcionCreada);
     } catch (error) {
         console.error(error);
         return getGenericError(res);

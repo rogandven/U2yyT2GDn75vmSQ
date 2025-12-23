@@ -26,3 +26,20 @@ export const robustErrorMessage = (a, b) => {
     }
     return String(a);
 }
+
+export const validationFunctionHelper = (array, data) => {
+    if (!(Array.isArray(array)) || !data) {
+        return String("Datos inválidos"); // para que funcione el IntelliSense, jajajaja
+    }
+    let current = null;
+    for (let i = 0; i < array.length; i++) {
+        if (!(array[i].validate)) {
+            continue;
+        }      
+        current = array[i].validate(data);
+        if (current.error && current.error.message) {
+            return String(current.error.message);
+        }
+    }
+    return null;
+}
