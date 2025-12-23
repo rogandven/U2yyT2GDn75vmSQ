@@ -55,3 +55,7 @@ export const formatMessage = (data, message) => {
         message: String(message),
     }
 }
+
+export const inscripcionBelongsToUser = (inscripcion, id_usuario) => {
+    return inscripcion.id_usuario === id_usuario;
+}
