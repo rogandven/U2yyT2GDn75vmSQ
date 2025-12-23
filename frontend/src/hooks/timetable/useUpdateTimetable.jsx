@@ -68,7 +68,7 @@ export const editTimetable=(fetchTimetable)=> {
             const response = await updateTimetable(id_horario, formValues);
             if(response){
                 Swal.fire({
-                    title:"Horario actualizado con exitosamente",
+                    title:"Horario actualizado con éxito",
                     icon:"success",
                     confirmButtonText:"Aceptar"
                 })

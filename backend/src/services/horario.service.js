@@ -45,7 +45,16 @@ export async function updateHorarioById_Electivo(id_horario, updateData) {
     throw new Error("Horario no encontrado");
   }
 
+  // const { hora_inicio, hora_termino,sala, dia } = req.body;
+  updateData.hora_inicio = updateData.hora_inicio || horario.hora_inicio;
+  updateData.hora_termino = updateData.hora_termino || horario.hora_termino;
+  updateData.sala = updateData.sala || horario.sala;
+  updateData.dia = updateData.dia || horario.dia;
 
+  console.log("HORARIO: ");
+  console.log(horario);
+  console.log("UPDATED DATA: ");
+  console.log(updateData);
   Object.assign(horario, updateData);
 
   return await horarioRepository.save(horario);

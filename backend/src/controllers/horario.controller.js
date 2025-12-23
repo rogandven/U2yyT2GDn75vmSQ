@@ -149,6 +149,7 @@ export async function patchHorario(req, res) {
 
   try {
     const updatedHorario = await updateHorarioById_Electivo(id, {  hora_inicio, hora_termino, sala, dia });
+    console.log(updatedHorario);
     handleSuccess(res, 200, "Horario actualizado exitosamente", updatedHorario)
     // console.log(profesor);
   } catch (error) {
