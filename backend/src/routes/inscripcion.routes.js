@@ -16,7 +16,7 @@ router.get("/admin/pendiente", isAuthenticated, isAdminOrProfesor, private_getIn
 
 router.post("/admin/", isAuthenticated, isAdminOrProfesor, private_createInscripcion);
 router.patch("/admin/:id", isAuthenticated, isAdminOrProfesor, private_updateInscripcion);
-router.delete("/admin/", isAuthenticated, isAdminOrProfesor, private_deleteInscripcion);
+router.delete("/admin/:id", isAuthenticated, isAdminOrProfesor, private_deleteInscripcion);
 
 router.post("/aprobar/:id", isAuthenticated, isAdminOrProfesor, private_approveInscripcion);
 router.post("/rechazar/:id", isAuthenticated, isAdminOrProfesor, private_rejectInscripcion);

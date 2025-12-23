@@ -46,7 +46,7 @@ const findCopy = async (userId, electivoId) => {
   }
 } 
 
-const findCopyEdit = async (inscripcionId, userId, electivoId) => {
+export async function findCopyEdit(inscripcionId, userId, electivoId) {
   const BASE_CASE = [{}];
   try {
     if ((!inscripcionId || isNaN(inscripcionId)) || (!userId || isNaN(userId)) || (!electivoId || isNaN(electivoId))) {
@@ -54,13 +54,10 @@ const findCopyEdit = async (inscripcionId, userId, electivoId) => {
       return BASE_CASE;
     }
     let array = await inscripcionRepo.find({where: {id_usuario: userId, id_electivo: electivoId}});
-    console.log(array);
     if (!array || !(array.filter)) {
-      console.log("La consulta retornó algo que no tiene método filter()");
       return BASE_CASE;
     }
     array = array.filter((element) => {
-      console.log(element);
       return element.id_inscripcion !== inscripcionId;
     });
     return array;
@@ -202,27 +199,18 @@ export async function createInscripcionFromService(data) {
   }  
 }
 
-export async function updateInscripcionFromService(id, data) {
-  if (!data || !id || isNaN(id)) {
+export async function updateInscripcionFromService(inscripcion) {
+  if (!inscripcion) {
     return getServiceResult(true, null, "Datos no proporcionados", 0);
   }
 
   try {
-    const checkResult = await findCopyEdit(id, data.id_usuario, data.id_electivo);
-    if (checkResult.length > 0) {
-      return getServiceResult(false, checkResult, "Ya existe esta inscripción", checkResult.length);
-    }
-    let inscripcionEditada = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
-    if (!inscripcionEditada) {
-      return getServiceResult(false, null, "Inscripción no encontrada", 0);
-    }
-    inscripcionEditada = Object.assign(inscripcionEditada, data);
-    await inscripcionRepo.update(inscripcionEditada);
-    return getServiceResult(false, inscripcionEditada, "Inscripción editada con éxito", 1);
+    inscripcionRepo.save(inscripcion);
+    return getServiceResult(false, inscripcion, "Inscripción actualizada con éxito", 1);
   } catch (error) {
-    console.error("Error al editar inscripción:", error);
-    return getServiceResult(true, null, error.message ? error.message : "Error al editar inscripciones", 0);
-  }  
+    console.error(error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al actualizar inscripción", 0);
+  }
 }
 
 export async function deleteInscripcionFromService(id) {
@@ -235,7 +223,10 @@ export async function deleteInscripcionFromService(id) {
     if (!inscripcion) {
       return getServiceResult(false, null, "Inscripción no encontrada", 0);
     }
-    await inscripcionRepo.delete(inscripcion);
+    const result = await inscripcionRepo.delete({id_inscripcion: inscripcion.id_inscripcion})
+    if (result && result.affected && result.affected !== 1) {
+      return getServiceResult(true, null, "Error interno del servidor", 0);
+    }
     return getServiceResult(false, inscripcion, "Inscripción eliminada con éxito", 1);
   } catch (error) {
     console.error("Error al eliminar inscripción");
@@ -306,5 +297,25 @@ export async function getInscripcionFromService(id, userId, checksEnabled) {
   } catch (error) {
     console.error("Error al encontrar inscripción: ", error.message ? error.message : "Mensaje desconocido", error);
     return getServiceResult(true, null, "Error interno del servidor", 0);
+  }
+}
+
+export async function alternateGetInscripcionFromService(id) {
+  const getResult = (inscripcion, message = "Inscripción no encontrada", error = true) => {
+    return {
+      inscripcion: inscripcion,
+      message: String(message),
+      error: Boolean(error),
+    }
+  }
+
+  try {
+    const inscripcion = await inscripcionRepo.findOne({where: {id_inscripcion: id}});
+    if (!inscripcion) {
+      return getResult(null, "Inscripción no encontrada", false);
+    }
+    return getResult(inscripcion, "Inscripción encontrada con éxito", false);
+  } catch (error) {
+    return getResult(null, "Error interno del servidor", true);
   }
 }
