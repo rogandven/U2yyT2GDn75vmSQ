@@ -1,12 +1,13 @@
 import nodemailer from "nodemailer";
 import { EMAIL, EMAIL_PROVIDER, EMAIL_PASSWORD } from "../config/configEnv.js";
 
-export const sendMail = (to, subject, text) => {
+export const sendMail = (to, subject, text, html) => {
     const mailOptions = {
         from: EMAIL,
         to: to,
         subject: subject,
-        text: text
+        text: text,
+        html: html || undefined,
     };
 
     const transporter = nodemailer.createTransport({

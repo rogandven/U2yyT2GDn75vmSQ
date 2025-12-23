@@ -4,6 +4,7 @@ import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
+import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -17,6 +18,17 @@ export async function getUsersFromService() {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const users = await userRepository.find();
         return getServiceResult(false, users, "Usuarios encontrado con éxito", getResultLength(users));
+    } catch (error) {
+        console.error(error);
+        return getServiceResult(true, null, getErrorMessage(error), 0);
+    }
+}
+
+export async function getJefeDeCarrera() {
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const jefe = await userRepository.find({ where: { role: CAREER_HEAD_ROLE } }); 
+        return getServiceResult(false, jefe, "Jefe de carrera encontrado con éxito", getResultLength(jefe));
     } catch (error) {
         console.error(error);
         return getServiceResult(true, null, getErrorMessage(error), 0);

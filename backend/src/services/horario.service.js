@@ -5,7 +5,6 @@ import bcrypt from "bcrypt";
 const horarioRepository = AppDataSource.getRepository(HorarioEntity);
 
 export async function createHorario(data) {
-
   /*const newHorario = horarioRepository.create({
     id_electivo: data.id_electivo,
     sala,
@@ -14,6 +13,20 @@ export async function createHorario(data) {
   });
 
   return await horarioRepository.save(newHorario);*/
+}
+
+export async function doHorariosExist(id_electivo, id_horario) {
+  try {
+    const horarios = await horarioRepository.find({where: { id_electivo: id_electivo }});
+    const horariosParseados = horarios.filter(horario => {
+      return horario.id_horario !== id_horario
+    });
+    console.log("HORARIOS EXISTENTES: " + horariosParseados.length);
+    return horariosParseados.length > 0;
+  } catch (error) {
+    console.error(error);
+    return true;
+  }
 }
 
 export async function findAllHorarios() {

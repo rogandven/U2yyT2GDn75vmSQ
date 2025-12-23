@@ -10,5 +10,6 @@ router.post("/asignar/:id_electivo", asignarHorario);
 router.get("/", getHorarios);
 router.patch("/:id", patchHorario);
 router.delete("/:id", deleteHorario);
+// router.post("/send-email", sendEmailToJefe);
 
 export default router;

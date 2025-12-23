@@ -3,9 +3,12 @@
 import HorarioEntity from "../entity/horario.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
+import { findClaseById_electivo, updateHorarioById_Electivo, findAllHorarios, deleteHorarioById_Electivo, doHorariosExist } from "../services/horario.service.js";
 import { assignationValidation, integrityValidation, updateValidation } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
+import {sendMail} from "../services/email.service.js";
+import { getUsers } from "./user.controller.js";
+import { getJefeDeCarrera, getUsersFromService } from "../service/user.service.js";
 
 const isValidTimeFormat = (timeStr) => {
     const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
@@ -62,9 +65,26 @@ export async function asignarHorario(req, res) {
     });
     await horarioRepository.save(newHorario);
 
-    res
-      .status(201)
-      .json({ message: "Horario registrado exitosamente!", data: newHorario });
+    console.log("Nuevo horario creado:", JSON.stringify(newHorario));
+
+    if (newHorario && !(await doHorariosExist(id_electivo, newHorario.id_horario))) {
+      const JEFES_DE_CARRERA = await getJefeDeCarrera();
+      console.log("JEFES DE CARRERA: " + JSON.stringify(JEFES_DE_CARRERA));
+      if (JEFES_DE_CARRERA && JEFES_DE_CARRERA.data && JEFES_DE_CARRERA.data.length > 0) {
+        JEFES_DE_CARRERA.data.forEach((jefe) => {
+          if (jefe.email) {
+            const subject = `Se va a impartir el electivo ${electivo.nombre}`;
+            const text = `Se ha asignado un nuevo horario al electivo "${electivo.nombre}".\n\nDetalles del horario:\n- Día: ${dia}\n- Hora de inicio: ${hora_inicio}\n- Hora de término: ${hora_termino}\n- Sala: ${sala}\n\nPor favor, revise el sistema para más detalles.`;
+            sendMail(jefe.email, subject, text, null);
+            // console.log(`Notificación enviada a: ${jefe.email}`);
+          }
+        });
+      } else {
+        console.error("No se encontraron jefes de carrera para enviar notificaciones.");
+      }
+    }
+
+    return res.status(201).json({ message: "Horario registrado exitosamente!", data: newHorario });
   } catch (error) {
     console.error("Error en auth.controller.js -> register(): ", error);
     return res.status(500).json({ message: "Error al registrar el curso" });
@@ -153,5 +173,47 @@ export async function deleteHorario(req, res) {
   }
 }
 
+export async function sendEmailToJefe(subject, text) {
+  /*
+  try {
+      let correosEnviados = 0;
+      let correosEsperados = null;
+      const users = await getJefeDeCarrera();
+      if (!users) {
+        return;
+      }
+      correosEsperados = users.length;
+      users.map((user) => {
+        console.log(JSON.stringify(user));
+        try {
+          if (user.data && user.data.email) {
+            sendMail(user.data.email, subject, text);
+            console.log("Correo electrónico enviado a:", user.data.email);
+            correosEnviados++;
+          } else {
+            console.error("El usuario no tiene un correo electrónico válido:", user);
+            return;
+          }
+        } catch (error) {
+          console.error("Error al enviar correo electrónico a:", user.data.email, error);
+        }
+      });
+      return handleSuccess(res, 200, "Correos electrónicos enviados exitosamente");
+  }catch (error) {
+      console.error("Error al obtener jefes para enviar correos electrónicos:", error);
+  }
+  */
+
+  // TA MALO
+}
+
+    // Lógica para enviar correos electrónicos a los usuarios
+    // Puedes utilizar una biblioteca como nodemailer para enviar correos electrónicos
+
+    // Ejemplo básico (debes configurar el transporte y los detalles del correo):
+    /*
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {*/
 
 

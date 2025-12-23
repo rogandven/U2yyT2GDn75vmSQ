@@ -86,7 +86,7 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
-import ChatUser from "@pages/ChatUser";
+// import ChatUser from "@pages/ChatUser";
 import { getAllowedRoles } from '@services/admin.service.js'
 import Inscripciones from '@pages/Inscripciones';
 
