@@ -86,7 +86,7 @@ export const private_getInscripcion = async (req, res) => {
 
     try {
         let result = await getInscripcion(req.params.id);
-        if (!result || !(await isInvalidInscripcion(result.data))) {
+        if (!result || (await isInvalidInscripcion(result.data))) {
             return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
         }
         return res.status(200).json(result);
