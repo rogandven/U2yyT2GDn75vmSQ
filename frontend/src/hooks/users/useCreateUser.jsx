@@ -5,7 +5,6 @@ import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 
 async function createUserInfo() {
-
   const { value: formValues } = await Swal.fire({
     title: "Crear Usuario",
     html: `
@@ -21,7 +20,8 @@ async function createUserInfo() {
     `,
     focusConfirm: false,
     showCancelButton: true,
-    confirmButtonText: "Editar",
+    confirmButtonText: "Crear",
+    cancelButtonText: "Cancelar",
     preConfirm: () => {
       const rut = gebi('swal2-input1')?.value;
       const fullname = gebi('swal2-input2')?.value;
