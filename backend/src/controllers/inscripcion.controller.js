@@ -1,7 +1,7 @@
 "use strict";
 
-import { APPROVED, AWAITING } from "../constants/inscripcion.constants.js";
-import { createInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
+import { APPROVED, AWAITING, REJECTED } from "../constants/inscripcion.constants.js";
+import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -153,7 +153,7 @@ export const private_updateInscripcion = async (req, res) => {
 
         const editedInscripcion = {
             id_electivo: (req.body.id_electivo || rawInscripcion.data.id_electivo), 
-            id_usuario: (req.body.id_usuario || rawInscripcion.data.id_electivo)
+            id_usuario: (req.body.id_usuario || rawInscripcion.data.id_usuario)
         };
 
         console.log(editedInscripcion);
@@ -172,6 +172,45 @@ export const private_updateInscripcion = async (req, res) => {
         console.error(error);
         return getGenericError(res);
     }
+}
+
+export const private_deleteInscripcion = async (req, res) => {
+    try {
+        const idValidationResult = idValidation.validate(req.params);
+        if (idValidationResult.error) {
+            return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+        }
+        const inscripcion = await getInscripcion(req.params.id);
+        if (!(inscripcion.data) || !(inscripcion.data.id_inscripcion)) {
+            return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
+        }
+        const deletedInscripcion = await deleteInscripcion(inscripcion.data);
+        return res.status(200).json(deletedInscripcion);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+const changeInscriptionStatusHelper = async (req, res, status) => {
+    try {
+        if (req.body) {
+            return res.status(400).json(getGenericResult(null, "No se pueden pasar parámetros a este endpoint"));
+        }
+        req.body = {estado: status};
+        return private_updateInscripcion(req, res);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res); 
+    }
+} 
+
+export const private_approveInscripcion = async (req, res) => {
+    return await changeInscriptionStatusHelper(req, res, APPROVED);
+}
+
+export const private_rejectInscripcion = async (req, res) => {
+    return await changeInscriptionStatusHelper(req, res, REJECTED);
 }
 
 /*
