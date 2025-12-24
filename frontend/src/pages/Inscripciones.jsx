@@ -17,7 +17,7 @@ const Inscripciones = () => {
     setFiltroEstado("");
   };
 
-  const inscripcionesFiltradas = inscripciones.filter((insc) => {
+  const inscripcionesFiltradas = (inscripciones && inscripciones.filter) ? inscripciones.filter((insc) => {
     const coincideTexto =
       insc.electivo_nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
       insc.nombre_electivo?.toLowerCase().includes(busqueda.toLowerCase());
@@ -26,7 +26,7 @@ const Inscripciones = () => {
       !filtroEstado || insc.estado === filtroEstado;
     
     return coincideTexto && coincideEstado;
-  });
+  }) : [];
 
   if (loading) {
     return (
@@ -49,7 +49,7 @@ const Inscripciones = () => {
       <div className="inscripciones-header">
         <h2>Mis Inscripciones</h2>
         <div className="inscripciones-stats">
-          <span>Total: {inscripciones.length} inscripciones</span>
+          <span>Total: {(inscripciones && inscripciones.length) || 0} inscripciones</span>
         </div>
       </div>
       
@@ -108,7 +108,7 @@ const Inscripciones = () => {
             ) : (
               <tr>
                 <td colSpan="5" style={{ textAlign: "center" }}>
-                  {inscripciones.length === 0 ? 
+                  {(inscripciones && inscripciones.length) === 0 ? 
                     "No tienes inscripciones registradas" : 
                     "No hay inscripciones que coincidan con los filtros"}
                 </td>
@@ -118,7 +118,7 @@ const Inscripciones = () => {
         </table>
       </div>
 
-      {inscripciones.length > 0 && (
+      {((inscripciones && inscripciones.length) || 0) > 0 && (
         <div className="resumen-estados">
           <h3>Resumen de mis inscripciones</h3>
           <div className="estados-grid">
