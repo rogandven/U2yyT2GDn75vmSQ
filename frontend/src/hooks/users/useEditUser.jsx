@@ -1,5 +1,6 @@
 import { editUser } from "../../services/user.service";
 import Swal from "sweetalert2";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 async function editUserInfo(user) {
   const { value: formValues } = await Swal.fire({
@@ -71,10 +72,13 @@ export const useEditUser = (fetchUsers) => {
       if (!formValues) return;
 
       const response = await editUser(userId, formValues);
+      console.log(response);
       if (response) {
         await fetchUsers();
+        fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
       }
     } catch (error) {
+      fireDynamicSwal(500, null, null);
       console.error("Error al editar usuario:", error);
     }
   };
