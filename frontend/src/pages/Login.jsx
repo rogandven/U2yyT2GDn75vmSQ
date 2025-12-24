@@ -4,7 +4,7 @@ import LoginRegisterForm from "@components/LoginRegisterForm";
 import { loginService } from "@services/auth.service.js";
 // import luckyCat from "@assets/LuckyCat.png";
 // import "@styles/loginRegister.css";
-import { DEFAULT_LOGIN_REGISTER_STYLES } from "../../constants/TailwindConstants.jsx";
+import { DEFAULT_LOGIN_REGISTER_STYLES } from "../constants/TailwindConstants.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
