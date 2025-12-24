@@ -2,17 +2,14 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import dotenv from 'dotenv';
+import tailwindcss from '@tailwindcss/vite';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config();
-const PORT = 443;
 
 // https://vite.dev/config/
-
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, './src/assets'),
@@ -22,18 +19,6 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@styles': path.resolve(__dirname, './src/styles'),
       '@services': path.resolve(__dirname, './src/services'),
-    },
-  },
-  server: {
-    host: '0.0.0.0',
-    port: PORT,
-    strictPort: true,
-    cors: true
-  },
-  preview: {
-    host: '0.0.0.0',
-    port: PORT,
-    strictPort: true,
-    cors: true
-  },
+    }
+  }
 })
