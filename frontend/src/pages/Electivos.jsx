@@ -143,7 +143,7 @@ export default Electivos;
 
 //
 "use strict";
-import "@styles/electivos.css";
+// import "@styles/electivos.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";

@@ -1,4 +1,4 @@
-import "@styles/users.css";
+// import "@styles/users.css";
 import GetElectivo from "@hooks/users/GetElectivo.jsx";
 import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import LoginRegisterForm from "@components/LoginRegisterForm"
 import { registerService } from '@services/auth.service.js'
-import '@styles/loginRegister.css'
+// import '@styles/loginRegister.css'
 import luckyCat from "@assets/LuckyCat.png"
 
 const Register = () => {

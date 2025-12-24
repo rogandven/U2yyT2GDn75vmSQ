@@ -1,4 +1,4 @@
-import "@styles/timeTable.css";
+// import "@styles/timeTable.css";
 import { useGetTimetable } from "@hooks/timetable/useGetTimetable.jsx";
 import useCreateTimetable from "@hooks/timetable/useCreateTimetable.jsx";
 import editTimetable from "@hooks/timetable/useUpdateTimetable.jsx"; 
