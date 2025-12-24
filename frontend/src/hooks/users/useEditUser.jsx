@@ -8,11 +8,11 @@ async function editUserInfo(user) {
     html: `
     <div>
       <label for="swal2-input1">Nombre de usuario</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Nombre de usuario" value = "${user.username}">
+      <input id="swal2-input1" className="swal2-input" placeholder="Nombre de usuario" value = "${user.username}">
     </div>
     <div>
       <label for="swal2-input2">Correo electrónico</label>
-      <input id="swal2-input2" class="swal2-input" placeholder="Correo electrónico" value = "${user.email}">
+      <input id="swal2-input2" className="swal2-input" placeholder="Correo electrónico" value = "${user.email}">
     </div>
         `,
     focusConfirm: false,

@@ -8,12 +8,12 @@ export const useCreateElectivo = (fetchElectivos) => {
     const { value: formValues } = await Swal.fire({
       title: "Registrar nuevo electivo",
       html: `
-        <input id="nombre" class="swal2-input" placeholder="Nombre del electivo">
-        <input id="cupos" class="swal2-input" type="number" placeholder="Cupos">
-        <input id="apertura" class="swal2-input" type="date" placeholder="Fecha de apertura">
-        <input id="cierre" class="swal2-input" type="date" placeholder="Fecha de cierre">
-        <input id="area" class="swal2-input" placeholder="Área">
-        <textarea id="descripcion" class="swal2-textarea" placeholder="Descripción del electivo"></textarea>
+        <input id="nombre" className="swal2-input" placeholder="Nombre del electivo">
+        <input id="cupos" className="swal2-input" type="number" placeholder="Cupos">
+        <input id="apertura" className="swal2-input" type="date" placeholder="Fecha de apertura">
+        <input id="cierre" className="swal2-input" type="date" placeholder="Fecha de cierre">
+        <input id="area" className="swal2-input" placeholder="Área">
+        <textarea id="descripcion" className="swal2-textarea" placeholder="Descripción del electivo"></textarea>
       `,
       confirmButtonText: "Registrar",
       confirmButtonColor: "#4CAF50",
@@ -89,32 +89,32 @@ export const useCreateElectivo = (fetchElectivos) => {
 
   <div style="display:flex; flex-direction:column;">
     <label for="nombre" style="font-weight:600; margin-bottom:4px;">Nombre del electivo</label>
-    <input id="nombre" class="swal2-input" placeholder="Ingrese el nombre del electivo" style="width:100%; margin:0;">
+    <input id="nombre" className="swal2-input" placeholder="Ingrese el nombre del electivo" style="width:100%; margin:0;">
   </div>
 
   <div style="display:flex; flex-direction:column;">
     <label for="cupos" style="font-weight:600; margin-bottom:4px;">Cupos disponibles</label>
-    <input id="cupos" class="swal2-input" type="number" placeholder="Ingrese cupos disponibles" style="width:100%; margin:0;">
+    <input id="cupos" className="swal2-input" type="number" placeholder="Ingrese cupos disponibles" style="width:100%; margin:0;">
   </div>
 
   <div style="display:flex; flex-direction:column;">
     <label for="apertura" style="font-weight:600; margin-bottom:4px;">Inicio de preinscripción</label>
-    <input id="apertura" class="swal2-input" type="date" style="width:100%; margin:0;">
+    <input id="apertura" className="swal2-input" type="date" style="width:100%; margin:0;">
   </div>
 
   <div style="display:flex; flex-direction:column;">
     <label for="cierre" style="font-weight:600; margin-bottom:4px;">Término de preinscripción</label>
-    <input id="cierre" class="swal2-input" type="date" style="width:100%; margin:0;">
+    <input id="cierre" className="swal2-input" type="date" style="width:100%; margin:0;">
   </div>
 
   <div style="display:flex; flex-direction:column;">
     <label for="area" style="font-weight:600; margin-bottom:4px;">Área del electivo</label>
-    <input id="area" class="swal2-input" placeholder="Ingrese el área del electivo" style="width:100%; margin:0;">
+    <input id="area" className="swal2-input" placeholder="Ingrese el área del electivo" style="width:100%; margin:0;">
   </div>
 
   <div style="display:flex; flex-direction:column;">
     <label for="descripcion" style="font-weight:600; margin-bottom:4px;">Descripción del electivo</label>
-    <textarea id="descripcion" class="swal2-textarea" placeholder="Ingrese una descripción detallada del electivo" style="width:100%; margin:0;"></textarea>
+    <textarea id="descripcion" className="swal2-textarea" placeholder="Ingrese una descripción detallada del electivo" style="width:100%; margin:0;"></textarea>
   </div>
 
 </div>
@@ -194,32 +194,32 @@ export const useCreateElectivo = (fetchElectivos) => {
 
       <div>
         <label for="nombre" style="font-weight:600; margin-bottom:4px; display:block;">Nombre del electivo</label>
-        <input id="nombre" class="swal2-input"
+        <input id="nombre" className="swal2-input"
           placeholder="Ingrese el nombre del electivo"
           style="width:100%; margin:0 auto !important;" />
       </div>
 
       <div>
         <label for="cupos" style="font-weight:600; margin-bottom:4px; display:block;">Cupos disponibles</label>
-        <input id="cupos" class="swal2-input" type="number"
+        <input id="cupos" className="swal2-input" type="number"
           placeholder="Ingrese cupos disponibles"
           style="width:100%; margin:0 auto !important;" />
       </div>
 
       <div>
         <label for="apertura" style="font-weight:600; margin-bottom:4px; display:block;">Inicio de preinscripción</label>
-        <input id="apertura" class="swal2-input" type="date"
+        <input id="apertura" className="swal2-input" type="date"
           style="width:100%; margin:0 auto !important;" />
       </div>
 
       <div>
         <label for="cierre" style="font-weight:600; margin-bottom:4px; display:block;">Término de preinscripción</label>
-        <input id="cierre" class="swal2-input" type="date"
+        <input id="cierre" className="swal2-input" type="date"
           style="width:100%; margin:0 auto !important;" />
       </div>
       <div>
       <label for="area" style="font-weight:600; margin-bottom:4px; display:block;">Área del electivo</label>
-      <select id="area" class="swal2-input"
+      <select id="area" className="swal2-input"
         style="width:100%; margin:0 auto !important; padding:8px;">
         <option value="">Seleccione un área</option>
         <option value="Desarrollo de Software">Desarrollo de Software</option>
@@ -236,7 +236,7 @@ export const useCreateElectivo = (fetchElectivos) => {
 </div>
       <div>
         <label for="descripcion" style="font-weight:600; margin-bottom:4px; display:block;">Descripción del electivo</label>
-        <textarea id="descripcion" class="swal2-textarea"
+        <textarea id="descripcion" className="swal2-textarea"
           placeholder="Ingrese una descripción detallada del electivo"
           style="width:100%; height:100px; margin:0 auto !important;"></textarea>
       </div>

@@ -9,23 +9,23 @@ async function editElectivoInfo(electivos) {
     html: `
     <div>
       <label for="swal2-input0">Nombre de electivo</label>  
-      <input id="swal2-input0" class="swal2-input" placeholder="Nombre de electivo" value = "${electivos.nombre}">
+      <input id="swal2-input0" className="swal2-input" placeholder="Nombre de electivo" value = "${electivos.nombre}">
     </div>
     <div>
       <label for="swal2-input1">Descripcion</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Descripcion" value = "${electivos.descripcion}">
+      <input id="swal2-input1" className="swal2-input" placeholder="Descripcion" value = "${electivos.descripcion}">
     </div>    
     <div>
       <label for="swal2-input2">Nombre del profesor</label>
-      <input id="swal2-input2" class="swal2-input" placeholder="Nombre del profesor" value = "${electivos.profesor}">
+      <input id="swal2-input2" className="swal2-input" placeholder="Nombre del profesor" value = "${electivos.profesor}">
     </div>
     <div>
       <label for="swal2-input3">Numero de cupos</label>  
-      <input id="swal2-input3" class="swal2-input" placeholder="Numero de cupos" value = "${electivos.cupos}">
+      <input id="swal2-input3" className="swal2-input" placeholder="Numero de cupos" value = "${electivos.cupos}">
     </div>
     <div>
       <label for="swal2-input4">Numero de creditos</label>
-      <input id="swal2-input4" class="swal2-input" placeholder="Numero de creditos" value = "${electivos.creditos}">
+      <input id="swal2-input4" className="swal2-input" placeholder="Numero de creditos" value = "${electivos.creditos}">
     </div>
         `,
     focusConfirm: false,

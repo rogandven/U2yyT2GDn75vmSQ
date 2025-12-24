@@ -37,8 +37,8 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>{coalesceData(String(usuario && usuario.id_carrera)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.creditos)) || "N/A"}</td>
                     <td>
-                        <button class="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}>Editar</button>
-                        <button class="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}>Eliminar</button>
+                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}>Editar</button>
+                        <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}>Eliminar</button>
                     </td>
                 </tr>     
                 )           

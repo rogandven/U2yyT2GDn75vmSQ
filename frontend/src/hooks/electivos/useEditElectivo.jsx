@@ -8,12 +8,12 @@ export const useEditElectivo = (fetchElectivos) => {
     const { value: formValues } = await Swal.fire({
       title: "Editar electivo",
       html: `
-        <input id="nombre" class="swal2-input" value="${electivo.nombre}" placeholder="Nombre del electivo">
-        <input id="cupos" class="swal2-input" type="number" value="${electivo.cupos}" placeholder="Cupos">
-        <input id="apertura" class="swal2-input" type="date" value="${electivo.apertura?.split("T")[0]}" placeholder="Fecha de apertura">
-        <input id="cierre" class="swal2-input" type="date" value="${electivo.cierre?.split("T")[0]}" placeholder="Fecha de cierre">
-        <input id="area" class="swal2-input" value="${electivo.area}" placeholder="Área">
-        <textarea id="descripcion" class="swal2-textarea" placeholder="Descripción del electivo">${electivo.descripcion}</textarea>
+        <input id="nombre" className="swal2-input" value="${electivo.nombre}" placeholder="Nombre del electivo">
+        <input id="cupos" className="swal2-input" type="number" value="${electivo.cupos}" placeholder="Cupos">
+        <input id="apertura" className="swal2-input" type="date" value="${electivo.apertura?.split("T")[0]}" placeholder="Fecha de apertura">
+        <input id="cierre" className="swal2-input" type="date" value="${electivo.cierre?.split("T")[0]}" placeholder="Fecha de cierre">
+        <input id="area" className="swal2-input" value="${electivo.area}" placeholder="Área">
+        <textarea id="descripcion" className="swal2-textarea" placeholder="Descripción del electivo">${electivo.descripcion}</textarea>
       `,
       confirmButtonText: "Guardar cambios",
       confirmButtonColor: "#4CAF50",
@@ -101,7 +101,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="nombre" style="font-weight:600; margin-bottom:4px; display:block;">
                   Nombre del electivo
                 </label>
-                <input id="nombre" class="swal2-input"
+                <input id="nombre" className="swal2-input"
                   value="${electivo.nombre}"
                   placeholder="Ingrese el nombre del electivo"
                   style="width:100%; margin:0 auto !important;" />
@@ -111,7 +111,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="cupos" style="font-weight:600; margin-bottom:4px; display:block;">
                   Cupos disponibles
                 </label>
-                <input id="cupos" class="swal2-input" type="number"
+                <input id="cupos" className="swal2-input" type="number"
                   value="${electivo.cupos}"
                   placeholder="Ingrese cupos disponibles"
                   style="width:100%; margin:0 auto !important;" />
@@ -121,7 +121,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="apertura" style="font-weight:600; margin-bottom:4px; display:block;">
                   Inicio de preinscripción
                 </label>
-                <input id="apertura" class="swal2-input" type="date"
+                <input id="apertura" className="swal2-input" type="date"
                   value="${electivo.apertura?.split("T")[0]}"
                   style="width:100%; margin:0 auto !important;" />
               </div>
@@ -130,7 +130,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="cierre" style="font-weight:600; margin-bottom:4px; display:block;">
                   Término de preinscripción
                 </label>
-                <input id="cierre" class="swal2-input" type="date"
+                <input id="cierre" className="swal2-input" type="date"
                   value="${electivo.cierre?.split("T")[0]}"
                   style="width:100%; margin:0 auto !important;" />
               </div>
@@ -139,7 +139,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="area" style="font-weight:600; margin-bottom:4px; display:block;">
                   Área del electivo
                 </label>
-                <select id="area" class="swal2-input"
+                <select id="area" className="swal2-input"
                   style="width:100%; margin:0 auto !important; padding:8px;">
 
                   <option value="">Seleccione un área</option>
@@ -191,7 +191,7 @@ export const useEditElectivo = (fetchElectivos) => {
                 <label for="descripcion" style="font-weight:600; margin-bottom:4px; display:block;">
                   Descripción del electivo
                 </label>
-                <textarea id="descripcion" class="swal2-textarea"
+                <textarea id="descripcion" className="swal2-textarea"
                   placeholder="Ingrese una descripción detallada del electivo"
                   style="width:100%; height:100px; margin:0 auto !important;">${electivo.descripcion}</textarea>
               </div>

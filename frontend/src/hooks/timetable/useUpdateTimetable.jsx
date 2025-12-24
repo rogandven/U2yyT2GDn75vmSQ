@@ -8,25 +8,25 @@ async function editTimetableInfo(horario) {
             <div>
                 <label for="swal2-input1">Hora de Inicio:</label>
                 <label for="swal2-input1">Tiene que estar en formato 24 horas HH:MM</label>
-                <input id="swal2-input1" class="swal2-input" placeholder="HH:MM" value="${horario.hora_inicio}">
+                <input id="swal2-input1" className="swal2-input" placeholder="HH:MM" value="${horario.hora_inicio}">
             </div>
 
             <div>
                 <label for="swal2-input2">Hora de termino:</label>
                 <label for="swal2-input2">Tiene que estar en formato 24 horas HH:MM</label>
-                <input id="swal2-input2" class="swal2-input" placeholder="HH:MM" value="${horario.hora_termino}">
+                <input id="swal2-input2" className="swal2-input" placeholder="HH:MM" value="${horario.hora_termino}">
             </div>
 
             <div>
                 <label for="swal2-input3">Sala:</label>
                 <label for="swal2-input3">Tiene que tener entre 3 y 20 caracteres</label>
-                <input id="swal2-input3" class="swal2-input" placeholder="Sala" value="${horario.sala}">
+                <input id="swal2-input3" className="swal2-input" placeholder="Sala" value="${horario.sala}">
             </div>
 
             <div>
                 <label for="swal2-input4">Día:</label>
                 <label for="swal2-input4">Tiene que ser un día válido (lunes, martes, miércoles, jueves, viernes, sábado, )</label>
-                <input id="swal2-input4" class="swal2-input" placeholder="Día" value="${horario.dia}">
+                <input id="swal2-input4" className="swal2-input" placeholder="Día" value="${horario.dia}">
             </div>
             `,
 

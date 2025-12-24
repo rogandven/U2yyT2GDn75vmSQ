@@ -160,11 +160,11 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         <div>
           {mode === "login" ? (
             <p>
-              ¿No tienes cuenta? <a class="link link-primary" href="/register">Regístrate</a>
+              ¿No tienes cuenta? <a className="link link-primary" href="/register">Regístrate</a>
             </p>
           ) : (
             <p>
-              ¿Ya tienes cuenta? <a class="link link-primary" href="/login">Inicia sesión</a>
+              ¿Ya tienes cuenta? <a className="link link-primary" href="/login">Inicia sesión</a>
             </p>
           )}
         </div>

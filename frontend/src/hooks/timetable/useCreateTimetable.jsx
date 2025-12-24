@@ -7,30 +7,30 @@ async function CreateTimetable() {
         html: `
         <div>
             <label for="swal2-input0">Seleccione el electivo: </label>
-            <input id="swal2-input0" class="swal2-input" placeholder="1" value = "${""}">
+            <input id="swal2-input0" className="swal2-input" placeholder="1" value = "${""}">
         </div>
 
         <div>
             <label for="swal2-input1">Ingrese el horario de inicio del electivo: </label>
             <label for="swal2-input1">Tiene que estar en formato 24 horas HH:MM</label>
-            <input id="swal2-input1" class="swal2-input" placeholder="HH:MM" value = "${""}">
+            <input id="swal2-input1" className="swal2-input" placeholder="HH:MM" value = "${""}">
         </div>
 
         <div>
             <label for="swal2-input2">Ingrese el horario de termino del electivo: </label>
             <label for="swal2-input2">Tiene que estar en formato 24 horas HH:MM</label>
-            <input id="swal2-input2" class="swal2-input" placeholder="HH:MM" value = "${""}">
+            <input id="swal2-input2" className="swal2-input" placeholder="HH:MM" value = "${""}">
         </div>
 
         <div>
             <label for="swal2-input3">Sala</label>
-            <input id="swal2-input3" class="swal2-input" placeholder="Nombre de la sala" value="${""}">
+            <input id="swal2-input3" className="swal2-input" placeholder="Nombre de la sala" value="${""}">
         </div>
 
         <div>
             <label for="swal2-input4">Dia</label>
             <label for="swal2-input4">Tiene que tener entre 8 y 20 caracteres (no se puede exceder de los 20)</label>
-            <input id="swal2-input4" class="swal2-input" placeholder="dia del electivo" value="${""}">
+            <input id="swal2-input4" className="swal2-input" placeholder="dia del electivo" value="${""}">
         </div>
         `,
         focusConfirm: false,
