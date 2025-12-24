@@ -8,6 +8,8 @@ import { fullnameRegexMessageGenerator } from "../constants/user.constants.js";
 import { MAX_CUPOS, MAX_INSCRITOS, MIN_CUPOS, MIN_INSCRITOS } from "../constants/electivo.constants.js";
 import validateGeneration from "./modules/generation.validation.js"; 
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
+import { careerArrayValidationFunction } from "./modules/carreraArray.validation.js";
+import { idValidationFunction } from "./modules/id.validation.js";
 
 const AREAS_PERMITIDAS = [
   "Desarrollo de Software",
@@ -110,7 +112,9 @@ export const integrityValidation = Joi.object({
       "string.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`,
       "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
-  semestre_minimo: Joi.custom(validateGeneration)
+  semestre_minimo: Joi.custom(validateGeneration),
+  carreras: Joi.custom(careerArrayValidationFunction),
+  id_profesor: Joi.custom(idValidationFunction)
 });
 
 
@@ -138,6 +142,12 @@ export const createValidation = Joi.object({
   }),
   semestre_minimo: Joi.any().required().messages({
     "any.required": "El semestre mínimo es obligatorio",
+  }),
+  carreras: Joi.any().required().messages({
+    "any.required": "Las carreras son obligatorias",
+  }),
+  id_profesor: Joi.any().required().messages({
+    "any.required": "El ID del profesor es obligatorio",
   })
 }).unknown(false).messages({
     "any.unknown": "No se permiten campos adicionales"
@@ -152,6 +162,8 @@ export const updateValidation = Joi.object({
   descripcion: Joi.any(),
   aprobado: Joi.any(),
   semestre_minimo: Joi.any(),
+  carreras: Joi.any(),
+  id_profesor: Joi.any(),
 }).min(1).messages({
   "object.min":"Debe proporcionar un campo para actualizar",
   "any.min":"Debe proporcionar un campo para actualizar",

@@ -7,6 +7,7 @@ import { roleValidationFunction } from "./modules/role.validation.js";
 import { rutValidationFunction } from "./modules/rut.validation.js";
 import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX, MIN_CREDITOS, MAX_CREDITOS } from "../constants/user.constants.js";
 import { MIN_DATE_LENGTH, MAX_DATE_LENGTH } from "../constants/user.constants.js";
+import { careerValidationFunction } from "./modules/carrera.validation.js";
 /*
         id
         fullname
@@ -76,7 +77,7 @@ export const integrityValidation = Joi.object({
         "string.empty": "La fecha de actualización no puede ser vacía",
         "string.max": `La fecha debe ser de menos de ${MAX_DATE_LENGTH}`,        
     }),
-    id_carrera: Joi.any().custom(idValidationFunction),
+    carrera: Joi.custom(careerValidationFunction),
     creditos: Joi.number().integer().min(MIN_CREDITOS).max(MAX_CREDITOS).messages({
         "number.base": "El número de créditos debe ser un número",
         "number.integer": "El número de créditos debe ser un entero",
@@ -96,7 +97,7 @@ export const updateValidation = Joi.object({
     password: Joi.any(),
     role: Joi.any(),
     generation: Joi.any(),
-    id_carrera: Joi.any(),
+    carrera: Joi.any(),
 }).min(1).unknown(false).messages({
     "object.min":"Debe proporcionar al menos un campo para actualizar",
     "any.min":"Debe proporcionar al menos un campo para actualizar",
@@ -126,7 +127,7 @@ export const createValidation = Joi.object({
     generation: Joi.any().required().messages({
         "any.required":"La generación es obligatoria"
     }),
-    id_carrera: Joi.any().required().messages({
+    carrera: Joi.any().required().messages({
         "any.required":"La carrera es obligatoria"
     }),
     creditos: Joi.any().required().messages({
@@ -148,8 +149,8 @@ export const loginValidation = Joi.object({
         "any.required":"La contraseña es obligatria"
     }),
 }).min(1).unknown(false).messages({
-    "object.min":"Debe proporcionar al menos un campo para actualizar",
-    "any.min":"Debe proporcionar al menos un campo para actualizar",
+    "object.min":"Debe proporcionar al menos un campo para entrar",
+    "any.min":"Debe proporcionar al menos un campo para entrar",
     "any.unknown":"No se permiten campos adicionales",
     "object.unknown":"No se permiten campos adicionales",    
 });

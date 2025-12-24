@@ -52,9 +52,9 @@ export const UserEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
-        id_carrera: {
-            type: Number,
-            nullable: true
+        carrera: {
+            type: String,
+            nullable: true,
         },
         creditos: {
             type: Number,

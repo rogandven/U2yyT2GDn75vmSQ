@@ -20,7 +20,12 @@ export const APPROVED = 'APROBADA';
 export const REJECTED = 'RECHAZADA';
 export const VALID_STATUS_ARRAY = [AWAITING, APPROVED, REJECTED];
 
-
+export const CAREER_ARRAY_REGEXP = /^[A-Z,]+$/;
+export const CAREER_REGEXP = /^[A-Z]+$/;
+export const MIN_CAREER = 1;
+export const MAX_CAREER = 10;
+export const MAX_CAREER_AMOUNT = 10;
+export const MAX_CAREER_ARRAY = MAX_CAREER_AMOUNT * (MAX_CAREER + 1);
 
 export const USERNAME_REGEXP = /^[a-zA-Z0-9_]+$/;
 export const MIN_USERNAME = 3;
