@@ -1,4 +1,4 @@
-import { getControllerResult } from "../../controllers/utils/utils.controller.js";
+import { getControllerResult_NEW } from "../../controllers/utils/utils.controller.js";
 
 export const getMiddlewareResponse = (message) => {
     if ((!message) || (typeof(message) !== "string")) {
@@ -6,10 +6,10 @@ export const getMiddlewareResponse = (message) => {
     }
     return {
         message: String(message),
-        serviceResponse: null
+        data: null
     }
 }
 
 export const getTrueMiddlewareResponse = (message, serviceResponse) => {
-    return getControllerResult(message, serviceResponse);
+    return getControllerResult_NEW(message, serviceResponse);
 }

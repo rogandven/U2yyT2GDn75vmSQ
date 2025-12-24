@@ -1,8 +1,16 @@
-export const getControllerResult = (details, serviceResult) => {
+export const getControllerResult_OLD = (details, serviceResult) => {
     return {
         message: String(details),
         serviceResult: serviceResult
     };
+}
+
+export const getControllerResult_NEW = (details, serviceResult) => {
+    const object = {
+        message: String(details),
+    };
+    Object.assign(object, serviceResult);
+    return object;
 }
 
 export const fullNameProcessor = (string) => {

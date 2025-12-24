@@ -30,7 +30,7 @@ export async function loginService(datauser) {
 
         const { status, data } = response;
         if (status === 200) {
-            let parsedToken = data.serviceResult && data.serviceResult.data && data.serviceResult.data.token;
+            let parsedToken = data && data.data && data.data.token;
             if (parsedToken) {
                 const { username, email, rut, rol } = jwtDecode(parsedToken);
                 const userData = { username, email, rut, rol };
