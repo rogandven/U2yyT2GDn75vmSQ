@@ -4,6 +4,7 @@ import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
 import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { processCarrera } from "./utils/utils.controller.js";
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -46,6 +47,7 @@ export async function updateUserById(req, res) {
   if (!newData) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
+  newData.carrera = processCarrera(newData.carrera);  
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
@@ -130,6 +132,7 @@ export async function registerPrivate(req, res) {
   if (!req.body) {
     return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
   }
+  req.body.carrera = processCarrera(req.body.carrera);
 
   req.body.fullname = fullNameProcessor(req.body.fullname);
 

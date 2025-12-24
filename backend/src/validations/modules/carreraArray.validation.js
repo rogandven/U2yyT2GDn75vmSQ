@@ -11,7 +11,7 @@ const isCareerArrayValid = (string) => {
     const stringAsArray = string.split(SEPARATOR);
     let current = null;
     for (let i = 0; i < stringAsArray.length; i++) {
-        if ((current = joiCareerValidation.validate(stringAsArray[i]).error)) {
+        if ((current = joiCareerValidation.validate({carrera: stringAsArray[i]}).error)) {
             return String(current.message);
         }
     }

@@ -1,4 +1,4 @@
-import { getServiceResult } from "./utils/utils.service.js";
+import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
@@ -105,7 +105,7 @@ export async function updateElectivoFromService(id_instancia, data) {
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -114,6 +114,10 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
     }
     if (electivo.estado === nuevo_estado) {
       return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
+    }
+    const array = breakDownCarreraArray(electivo.carreras);
+    if (!(array.includes(String(carrera)))) {
+      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
     Object.assign(electivo, { estado: nuevo_estado });

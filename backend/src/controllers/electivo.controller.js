@@ -8,7 +8,7 @@ import {
   updateValidation,
 } from "../validations/electivo.validation.js";
 import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService } from "../service/electivo.service.js";
-import { getControllerResult_NEW } from "./utils/utils.controller.js";
+import { getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
@@ -47,7 +47,7 @@ const createElectivoHelper = async (req, res, estado) => {
   if (!req || !req.body) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
-
+  req.body.carreras = processCarrera(req.body.carreras);
   req.body.estado = estado;
 
   let result = createValidation.validate(req.body);
@@ -112,6 +112,8 @@ export async function updateElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(error.message ? error.message : "Datos inválidos", null));
     }
 
+    req.body.carreras = processCarrera(carreras);
+    req.body.estado = estado;
     const serviceResult = await updateElectivoFromService(id, req.body);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));

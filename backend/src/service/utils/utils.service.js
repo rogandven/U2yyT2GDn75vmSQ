@@ -1,3 +1,5 @@
+import { SEPARATOR } from "../../constants/career.constants.js";
+
 export const BASE_CASE = 500;
 export const BASE_LENGTH = 0;
 export const OBJECT_LENGTH = 1;
@@ -47,4 +49,12 @@ export const getServiceResult = (error, data, details, length) => {
         details: String(details || "Error desconocido"),
         length: parseInt(length || 0)
     };
+}
+
+export const breakDownCarreraArray = (string) => {
+    if (typeof(string) !== "string") {
+        return [];
+    }
+    const stringArray = string.split(SEPARATOR);
+    return stringArray;
 }
