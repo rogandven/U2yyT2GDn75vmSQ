@@ -7,21 +7,6 @@ import { createValidation, integrityValidation, updateValidation } from "../vali
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 
-/*
-private_updateInscripcion;
-private_deleteInscripcion;
-
-private_approveInscripcion;
-private_rejectInscripcion;
-
-public_getInscripcion;
-public_getInscripcionesByUser;
-
-public_createInscripcion;
-public_updateInscripcion;
-public_deleteInscripcion;
-*/ 
-
 const getGenericResult = (data, message) => {
     return {data, message};
 }
