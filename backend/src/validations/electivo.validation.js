@@ -154,7 +154,16 @@ export const createValidation = Joi.object({
   }),
   semestre_minimo: Joi.any().required().messages({
     "any.required": "El semestre mínimo es obligatorio",
-  })
+  }),
+  id_carrera: Joi.any().required().messages({
+    "any.required": "El ID de la carrera es obligatorio",
+  }),
+  id_profesor: Joi.any().required().messages({
+    "any.required": "El ID del profesor es obligatorio",
+  }),
+  id_codigo_electivo: Joi.number().integer().positive().custom(idValidationFunction).messages({
+    "any.required": "El código del electivo es obligatorio",
+  }),  
 }).unknown(false).messages({
     "any.unknown": "No se permiten campos adicionales"
 });
