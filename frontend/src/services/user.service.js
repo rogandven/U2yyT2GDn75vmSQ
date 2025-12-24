@@ -3,8 +3,7 @@ import axios from '@services/root.service.js';
 export async function getUsers() {
     try {
         const response = await axios.get('/users');
-        console.log(response);
-        return response.data.data;
+        return response.data?.serviceResult?.data;
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
     }
@@ -13,9 +12,15 @@ export async function getUsers() {
 export async function editUser(userId, userData) { 
     try {
         const response = await axios.patch(`/users/${userId}`, userData);
+        Object.assign(response.data, response.status);
         return response.data;
     } catch (error) {
         console.error("Error al editar usuario:", error);
+        if (error.response) {
+            Object.assign(error.response, {status: 500});
+            return error.response;
+        }
+        return {message: "Error desconocido", status: 500};
     }
 }
 
