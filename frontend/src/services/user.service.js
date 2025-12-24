@@ -1,5 +1,21 @@
 import axios from '@services/root.service.js';
 
+
+export async function createUser(userData) { 
+    try {
+        const response = await axios.post(`/users/`, userData);
+        Object.assign(response.data, {status: response.status});
+        return response.data;
+    } catch (error) {
+        console.error("Error al editar usuario:", error);
+        if (error.response?.data) {
+            Object.assign(error.response.data, {status: 500});
+            return error.response.data;
+        }
+        return {message: "Error desconocido", status: 500};
+    }
+}
+
 export async function getUsers() {
     try {
         const response = await axios.get('/users');
