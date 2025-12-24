@@ -2,21 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoginRegisterForm from "@components/LoginRegisterForm";
 import { loginService } from "@services/auth.service.js";
-import luckyCat from "@assets/LuckyCat.png";
-import "@styles/loginRegister.css";
-import { API_URL } from "../config/env.config.js";
+// import luckyCat from "@assets/LuckyCat.png";
+// import "@styles/loginRegister.css";
+import { DEFAULT_LOGIN_REGISTER_STYLES } from "../../constants/TailwindConstants.jsx";
 
 const Login = () => {
-  
-
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
 
+  // Función que maneja el envío del formulario de inicio de sesión
   const loginSubmit = async (data) => {
     try {
-      console.log(API_URL);
       const response = await loginService(data);
-      if (response && response.request && response.request.status === 200) {
+      if (response.request.status === 200) {
         navigate("/home");
       } else {
         setLoginError("Usuario o contraseña incorrectos");
@@ -28,10 +26,10 @@ const Login = () => {
 
   return (
     <main className="page-root">
-      <div className="lucky-cat-container">
+      {/* <div className="lucky-cat-container">
         <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" />
-      </div>
-      <div className="login-register-container">
+      </div> */}
+      <div className={DEFAULT_LOGIN_REGISTER_STYLES}>
         <LoginRegisterForm mode="login" onSubmit={loginSubmit} loginError={loginError} />
       </div>
     </main>
