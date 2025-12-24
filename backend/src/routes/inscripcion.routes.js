@@ -3,7 +3,7 @@
 import { Router } from "express";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor } from "../middleware/authorization.middleware.js"; 
-import { private_getInscripciones, private_getInscripcionesByUser, private_getInscripcion, private_getInscripcionesSinAprobar, private_createInscripcion, private_updateInscripcion, private_deleteInscripcion, private_approveInscripcion, private_rejectInscripcion, public_getInscripcion, public_getInscripcionesByUser } from "../controllers/inscripcion.controller.js";
+import { private_getInscripciones, private_getInscripcionesByUser, private_getInscripcion, private_getInscripcionesSinAprobar, private_createInscripcion, private_updateInscripcion, private_deleteInscripcion, private_approveInscripcion, private_rejectInscripcion, public_getInscripcion, public_getInscripcionesByUser, public_createInscripcion, public_updateInscripcion, public_deleteInscripcion } from "../controllers/inscripcion.controller.js";
 const router = Router();
 
 router.get("/admin/", isAuthenticated, isAdminOrProfesor, private_getInscripciones);
@@ -18,9 +18,7 @@ router.post("/rechazar/:id", isAuthenticated, isAdminOrProfesor, private_rejectI
 
 router.get("/:id", isAuthenticated, public_getInscripcion);
 router.get("/", isAuthenticated, public_getInscripcionesByUser);
-/*
 router.post("/", isAuthenticated, public_createInscripcion);
 router.patch("/:id", isAuthenticated, public_updateInscripcion);
 router.delete("/:id", isAuthenticated, public_deleteInscripcion);
-*/ 
 export default router;

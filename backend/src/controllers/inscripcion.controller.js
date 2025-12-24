@@ -117,10 +117,8 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
     }
 }
 
-export const private_createInscripcion = async (req, res) => {
+const createInscriptionHelper = async (req, res) => {
     try {
-        req.body.estado = APPROVED;
-
         const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
         if (validationResult) {
             return res.status(400).json(getGenericResult(null, validationResult));
@@ -142,7 +140,15 @@ export const private_createInscripcion = async (req, res) => {
     }
 }
 
-export const private_updateInscripcion = async (req, res) => {
+export const private_createInscripcion = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
+    }
+    req.body.estado = APPROVED;
+    return await createInscriptionHelper(req, res);
+}
+
+const updateInscriptionHelper = async (req, res, id_checks) => {
     try {
         const idValidationResult = idValidation.validate(req.params);
         if (idValidationResult.error) {
@@ -156,6 +162,13 @@ export const private_updateInscripcion = async (req, res) => {
         if (!(rawInscripcion.data && rawInscripcion.data.id_inscripcion)) {
             return res.status(400).json(getGenericResult(null, "Inscripción no encontrada"));
         }
+
+        if (id_checks && (rawInscripcion.data.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No se puede editar la inscripción de otro usuario"));
+        }
+        if (id_checks && (req.body.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No se puede inscribir a otro alumno"));
+        }     
 
         const editedInscripcion = {
             id_electivo: (req.body.id_electivo || rawInscripcion.data.id_electivo), 
@@ -180,7 +193,11 @@ export const private_updateInscripcion = async (req, res) => {
     }
 }
 
-export const private_deleteInscripcion = async (req, res) => {
+export const private_updateInscripcion = async (req, res) => {
+    return await updateInscriptionHelper(req, res, false);
+}
+
+const deleteInscripcionHelper = async (req, res, id_checks) => {
     try {
         const idValidationResult = idValidation.validate(req.params);
         if (idValidationResult.error) {
@@ -190,12 +207,19 @@ export const private_deleteInscripcion = async (req, res) => {
         if (!(inscripcion.data) || !(inscripcion.data.id_inscripcion)) {
             return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
         }
+        if (id_checks && (inscripcion.data.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No es posible eliminar una inscripción que no es tuya"));
+        }
         const deletedInscripcion = await deleteInscripcion(inscripcion.data);
         return res.status(200).json(deletedInscripcion);
     } catch (error) {
         console.error(error);
         return getGenericError(res);
     }
+}
+
+export const private_deleteInscripcion = async (req, res) => {
+    return deleteInscripcionHelper(req, res, false);
 }
 
 const changeInscriptionStatusHelper = async (req, res, status) => {
@@ -242,6 +266,34 @@ export const public_getInscripcionesByUser = async (req, res) => {
         console.error(error);
         return getGenericError(res);
     }
+}
+
+export const public_createInscripcion = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
+    }
+    if (req.body.id_usuario) {
+        return res.status(401).json(getGenericResult(null, "No se puede crear una inscripción para otro usuario"));
+    }
+    if (req.body.estado) {
+        return res.status(401).json(getGenericResult(null, "No se puede autoasignar un estado"));
+    }
+    req.body.id_usuario = req.user.id;
+    req.body.estado = AWAITING;
+    return await createInscriptionHelper(req, res);
+}
+
+export const public_updateInscripcion = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
+    }
+    req.body.estado = AWAITING;
+    req.body.id_usuario = req.user.id;
+    return await updateInscriptionHelper(req, res, true);
+}
+
+export const public_deleteInscripcion = async (req, res) => {
+    return deleteInscripcionHelper(req, res, true);
 }
 /*
 export async function private_getInscripcionesByUser(req, res) {
