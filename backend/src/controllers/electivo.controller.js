@@ -13,6 +13,8 @@ import { getElectivosIntegrityValidation } from "../validations/electivo.validat
 import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
+import { AWAITING } from "../constants/validationConstants.js";
+import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 export async function getElectivos(req, res) {
   if (req.query && req.query.area && typeof(req.query.area) === "string") {
@@ -43,12 +45,17 @@ export async function getElectivosSinAprobar(req, res) {
 }
 
 
-const createElectivoHelper = async (req, res, estado) => {
+const createElectivoHelper = async (req, res, estadoNuevo) => {
   if (!req || !req.body) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
   req.body.carreras = processCarrera(req.body.carreras);
-  req.body.estado = estado;
+  req.body.estado = estadoNuevo;
+  req.body.id_profesor = req.user.id;
+
+  if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+    return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+  }
 
   let result = createValidation.validate(req.body);
   if (result.error) {
@@ -112,9 +119,15 @@ export async function updateElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(error.message ? error.message : "Datos inválidos", null));
     }
 
-    req.body.carreras = processCarrera(carreras);
-    req.body.estado = estado;
-    const serviceResult = await updateElectivoFromService(id, req.body);
+    req.body.carreras = processCarrera(req.body.carreras);
+    if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+      return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+    }
+
+    if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {
+      req.body.estado = AWAITING;
+    }
+    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.rol || req.user.role));
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
@@ -173,7 +186,7 @@ export async function deleteElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
     
-    const serviceResult = await deleteElectivoFromService(id);
+    const serviceResult = await deleteElectivoFromService(id, req.user.id, (req.user.role || req.user.rol));
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW(serviceResult.details, serviceResult));
     }
