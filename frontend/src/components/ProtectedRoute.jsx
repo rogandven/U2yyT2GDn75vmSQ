@@ -1,30 +1,18 @@
-
-
-import { useAuth } from "@context/AuthContext";
-import { Navigate } from "react-router-dom";
-
-
-const normalizeRole = (role) => {
-  if (!role) return null;
-  return role.toUpperCase();
-};
+import { useAuth } from '@context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    
+    if (!isAuthenticated) {
+        return <Navigate to="/login" />;
+    }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
+    if (allowedRoles && !allowedRoles.includes(user?.rol)) {
+        return <Navigate to="/home" />;
+    }
 
-  const userRole = normalizeRole(user?.rol);
-
-  if (
-    allowedRoles &&
-    !allowedRoles.map((r) => r.toUpperCase()).includes(userRole)
-  ) {
-    return <Navigate to="/home" />;
-  }
-  return children;
+    return children;
 };
 
 export default ProtectedRoute;
