@@ -227,6 +227,18 @@ export const ElectivoEntity = new EntitySchema({
       type: "varchar",
       length: 100,
     },
+    id_carrera: {
+      type: "integer",
+      nullable: true,
+    },
+    id_profesor: {
+      type: "integer",
+      nullable: true,
+    },
+    codigoElectivo: {
+      type: "integer",
+      nullable: true,
+    }
   },
   checks: [
       { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },

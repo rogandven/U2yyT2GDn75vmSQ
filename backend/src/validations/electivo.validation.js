@@ -8,6 +8,7 @@ import { fullnameRegexMessageGenerator } from "../constants/user.constants.js";
 import { MAX_CUPOS, MAX_INSCRITOS, MIN_CUPOS, MIN_INSCRITOS } from "../constants/electivo.constants.js";
 import validateGeneration from "./modules/generation.validation.js"; 
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
+import { idValidationFunction } from "./modules/id.validation.js";
 
 const AREAS_PERMITIDAS = [
   "Desarrollo de Software",
@@ -110,7 +111,22 @@ export const integrityValidation = Joi.object({
       "string.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`,
       "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
-  semestre_minimo: Joi.custom(validateGeneration)
+  semestre_minimo: Joi.custom(validateGeneration),
+  id_carrera: Joi.number().integer().positive().custom(idValidationFunction).messages({
+    "number.base":"El ID de la carrera debe ser un número",
+    "number.integer":"El ID de la carrera debe ser un entero",
+    "number.positive": "El ID de la carrera debe ser positivo",
+  }),
+  id_profesor: Joi.number().integer().positive().custom(idValidationFunction).messages({
+    "number.base":"El ID del profesor debe ser un número",
+    "number.integer":"El ID del profesor debe ser un entero",
+    "number.positive": "El ID del profesor debe ser positivo",
+  }),  
+  id_codigo_electivo: Joi.number().integer().positive().custom(idValidationFunction).messages({
+    "number.base":"El ID del profesor debe ser un número",
+    "number.integer":"El ID del profesor debe ser un entero",
+    "number.positive": "El ID del profesor debe ser positivo",
+  }),  
 });
 
 
