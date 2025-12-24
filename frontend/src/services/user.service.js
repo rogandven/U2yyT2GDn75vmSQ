@@ -3,6 +3,7 @@ import axios from '@services/root.service.js';
 export async function getUsers() {
     try {
         const response = await axios.get('/users');
+        console.log(response);
         return response.data.data;
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
@@ -30,6 +31,7 @@ export async function deleteUser(userId) {
 export async function getProfile() { 
     try {
         const response = await axios.get('/users/profile');
+        console.log(response);
         return response.data;
     } catch (error) {
         console.error("Error al obtener perfil:", error);

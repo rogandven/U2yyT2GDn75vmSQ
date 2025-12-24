@@ -200,7 +200,7 @@ export async function login(req, res) {
 
 export async function logout(req, res) {
   // Eliminar la cookie de sesión del cliente
-  const result = logoutUserFromService(res.clearCookie);
+  const result = logoutUserFromService(res.clearCookie());
   if (result.error) {
     return res.status(200).json(getControllerResult("Sesión cerrada exitosamente", result));
   } else {
