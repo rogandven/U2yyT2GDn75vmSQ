@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
-import { DEFAULT_ICON_MARGIN_STYLES } from "../../../../constants/TailwindConstants.jsx";
+import { DEFAULT_ICON_MARGIN_STYLES } from "../../../constants/TailwindConstants.jsx";
 const nullLogOut = () => {
     return false;
 }

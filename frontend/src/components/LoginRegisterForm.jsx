@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 // import "@styles/LoginRegisterForm.css";
 import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
-import { DEFAULT_MARGIN_STYLES } from "../../constants/TailwindConstants.jsx";
+import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
@@ -89,7 +89,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                     message: "El correo debe tener como máximo 50 caracteres",
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@gmail\.(com|cl)$/,
+                    value: /^[a-zA-Z0-9._%+-]+@(gmail|ubiobio)\.(com|cl)$/,
                     message:
                       "El correo debe ser un correo de Gmail válido (@gmail.com o @gmail.cl)",
                   },

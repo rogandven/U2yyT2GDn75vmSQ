@@ -1,4 +1,4 @@
-import { DEFAULT_MARGIN_STYLES, DEFAULT_MARGIN_STYLES_2 } from "../../../constants/TailwindConstants.jsx";
+import { DEFAULT_MARGIN_STYLES, DEFAULT_MARGIN_STYLES_2 } from "../../constants/TailwindConstants.jsx";
 
 export const DUErrorAlert = ({message}) => {
     return (
