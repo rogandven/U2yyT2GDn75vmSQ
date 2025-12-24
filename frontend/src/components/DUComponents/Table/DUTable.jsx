@@ -1,3 +1,6 @@
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
+
 export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
     const coalesceData = (data) => {
         if (data === null || data === "null") {
@@ -37,8 +40,8 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>{coalesceData(String(usuario && usuario.id_carrera)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.creditos)) || "N/A"}</td>
                     <td>
-                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}>Editar</button>
-                        <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}>Eliminar</button>
+                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}><FaEdit></FaEdit></button>
+                        <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}><MdDelete></MdDelete></button>
                     </td>
                 </tr>     
                 )           

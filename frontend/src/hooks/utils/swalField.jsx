@@ -1,8 +1,8 @@
 export const createSwalField = (inputId, label, value) => {
     return `
-        <div>
-            <label for="swal2-input${Number(inputId)}">${label}</label>  
-            <input id="swal2-input${Number(inputId)}" className="swal2-input" placeholder="${label}" value="${value}"></input>
+        <div class="input m-1 form-group">
+            <label for="swal2-input${Number(inputId)}" class="label">${label}</label>  
+            <input id="swal2-input${Number(inputId)}" placeholder="${label}" value="${value}"></input>
         </div>        
     `
 }

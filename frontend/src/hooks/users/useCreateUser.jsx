@@ -34,7 +34,8 @@ async function createUserInfo() {
       const creditos = gebi('swal2-input9')?.value;
 
       return {rut, fullname, username, email, password, role, generation, id_carrera, creditos};
-    }
+    },
+    theme: "dark",
   });
   if (formValues) {
     return formValues;
