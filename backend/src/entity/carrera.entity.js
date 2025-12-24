@@ -5,7 +5,7 @@ const CarreraEntity = new EntitySchema({
   tableName: "carrera",
   columns: {
     id_carrera: {
-      type: "int",
+      type: "integer",
       primary: true,
       generated: true,
     },
