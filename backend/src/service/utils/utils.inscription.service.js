@@ -10,7 +10,7 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 export const userExists = async (id) => {
     try {
         const usuario = await userRepository.findOneBy({id: id});
-        console.log(usuario);
+        // console.log(usuario);
         if (!usuario) {
             return false;
         }
@@ -24,7 +24,7 @@ export const userExists = async (id) => {
 export const electivoExists = async (id) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
-        console.log(electivo);
+        // console.log(electivo);
         if (!electivo) {
             return false;
         }

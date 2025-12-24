@@ -77,22 +77,27 @@ export const private_getInscripcionesByUser = async (req, res) => {
     }
 }   
 
-export const private_getInscripcion = async (req, res) => {
+const getInscripcionHelper = async (req) => {
     const idValidationResult = idValidation.validate(req.params);
     if (idValidationResult.error) {
-        return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+        return {code: 400, json: getGenericResult(null, idValidationResult.error.message)}
     }
 
     try {
         let result = await getInscripcion(req.params.id);
         if (!result || (await isInvalidInscripcion(result.data))) {
-            return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
+            return {code: 404, json: getGenericResult(null, "Inscripción no encontrada")}
         }
-        return res.status(200).json(result);
+        return {code: 200, json: result}
     } catch (error) {
         console.error(error);
-        return getGenericError(res);
+        return {code: 500, json: {data: null, message: "Error interno del servidor"}};
     }
+}
+
+export const private_getInscripcion = async (req, res) => {
+    const result = await getInscripcionHelper(req);
+    return res.status(result.code).json(result.json);
 }
 
 export const private_getInscripcionesSinAprobar = async (req, res) => {
@@ -105,6 +110,7 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
         result.data = result.data.filter((inscripcion) => {
             return inscripcion.estado === AWAITING;
         });
+        return res.status(200).json(result);
     } catch (error) {
         console.error(error);
         return getGenericError(res);
@@ -156,7 +162,7 @@ export const private_updateInscripcion = async (req, res) => {
             id_usuario: (req.body.id_usuario || rawInscripcion.data.id_usuario)
         };
 
-        console.log(editedInscripcion);
+        // console.log(editedInscripcion);
         if (await isInvalidInscripcion(editedInscripcion)) {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
@@ -213,6 +219,30 @@ export const private_rejectInscripcion = async (req, res) => {
     return await changeInscriptionStatusHelper(req, res, REJECTED);
 }
 
+export const public_getInscripcion = async (req, res) => {
+    const result = await getInscripcionHelper(req);
+    if (result.json.data && (result.json.data.id_usuario === req.user.id)) {
+        return res.status(result.code).json(result.json);
+    }
+    return res.status(401).json({message: "Acceso denegado", data: null});
+}
+
+export const public_getInscripcionesByUser = async (req, res) => {
+    try {
+        let result = await getInscripciones();
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.id_usuario === req.user.id;
+        });
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
 /*
 export async function private_getInscripcionesByUser(req, res) {
     const result = idValidation.validate({id: req.params && req.params.id})

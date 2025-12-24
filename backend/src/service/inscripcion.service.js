@@ -76,7 +76,7 @@ export async function createInscripcion(data) {
   try {
     let nuevaInscripcion = inscripcionRepo.create(data);
     nuevaInscripcion = await inscripcionRepo.save(nuevaInscripcion);
-    console.log(JSON.stringify(nuevaInscripcion));
+    // console.log(JSON.stringify(nuevaInscripcion));
     return formatMessage(nuevaInscripcion, dynamicMessage(nuevaInscripcion));
   } catch (error) {
     console.error(error);

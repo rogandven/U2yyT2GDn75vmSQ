@@ -40,7 +40,7 @@ export async function updateElectivoById_Electivo(id_electivo, updateData) {
 }
 
 export async function deleteElectivoById_Electivo(id_electivo) {
-  console.log(id_electivo);
+  // console.log(id_electivo);
   const Electivo = await electivoRepository.findOneBy({ id_electivo });
 
   if (!Electivo) {
