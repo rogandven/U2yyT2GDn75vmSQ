@@ -62,7 +62,7 @@ export const useCreateElectivo = (fetchElectivos) => {
       console.log(response);
       if (response) {
         await fetchElectivos();
-        fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
+        fireDynamicSwal(response.status, response.data?.message === response.data?.details ? null : response.data?.message, response.data?.message);
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);

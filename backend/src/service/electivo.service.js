@@ -66,6 +66,11 @@ export async function createElectivoFromService(data) {
   try {
     const nuevoElectivo = electivoRepo.create(data);
     await electivoRepo.save(nuevoElectivo);
+
+    if (String(nuevoElectivo.apertura).localeCompare(String(nuevoElectivo.cierre)) > 0) {
+      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
+    }
+
     return getServiceResult(false, nuevoElectivo, "Electivo creado correctamente", 1);
   } catch (error) {
     console.error("Error al crear electivo:", error);
@@ -102,6 +107,11 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
     }
 
     Object.assign(electivo, data);
+
+    if (String(electivo.apertura).localeCompare(String(electivo.cierre)) > 0) {
+      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
+    }
+
     await electivoRepo.save(electivo);
 
     return getServiceResult(false, electivo, "Electivo actualizado correctamente", 1);

@@ -8,7 +8,7 @@ import {
   updateValidation,
 } from "../validations/electivo.validation.js";
 import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService } from "../service/electivo.service.js";
-import { getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
+import { fullNameProcessor, getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
@@ -48,6 +48,9 @@ export async function getElectivosSinAprobar(req, res) {
 const createElectivoHelper = async (req, res, estadoNuevo) => {
   if (!req || !req.body) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
+  }
+  if (req.body.nombre) {
+    req.body.nombre = fullNameProcessor(req.body.nombre);
   }
   req.body.carreras = processCarrera(req.body.carreras);
   req.body.estado = estadoNuevo;
@@ -114,12 +117,20 @@ export async function updateElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
     
-    const { error } = updateValidation.validate(req.body);
+    let { error } = updateValidation.validate(req.body);
     if (error) {
       return res.status(400).json(getControllerResult_NEW(error.message ? error.message : "Datos inválidos", null));
     }
+    error = integrityValidation.validate(req.body).error;
+    if (error) {
+      return res.status(400).json(getControllerResult_NEW(error.message ? error.message : "Datos inválidos", null));
+    }
+
     if (!req.body) {
       return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
+    }
+    if (req.body.nombre) {
+      req.body.nombre = fullNameProcessor(req.body.nombre);
     }
     console.log(req.body.carreras);
 

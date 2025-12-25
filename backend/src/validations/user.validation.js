@@ -98,6 +98,7 @@ export const updateValidation = Joi.object({
     role: Joi.any(),
     generation: Joi.any(),
     carrera: Joi.any(),
+    creditos: Joi.any(),    
 }).min(1).unknown(false).messages({
     "object.min":"Debe proporcionar al menos un campo para actualizar",
     "any.min":"Debe proporcionar al menos un campo para actualizar",

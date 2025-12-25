@@ -62,11 +62,12 @@ export const getElectivosIntegrityValidation = Joi.object({
 });
 
 export const integrityValidation = Joi.object({
-  nombre: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
+  nombre: Joi.string().regex(FULLNAME_REGEX).min(MIN_FULLNAME).max(MAX_FULLNAME).messages({
     "string.base": "El nombre debe ser una string",
     "string.empty": "El nombre del electivo es obligatorio.",
     "string.min": `El nombre debe tener al menos ${MIN_FULLNAME} caracteres.`,
     "string.max": `El nombre no puede superar los ${MAX_FULLNAME} caracteres.`,
+    "string.pattern.base": `El nombre del electivo solo puede tener letras y espacios.`,
   }),
   cupos: Joi.number().integer().min(MIN_CUPOS).max(MAX_CUPOS).messages({
       "number.base": "El campo 'cupos' debe ser un número.",

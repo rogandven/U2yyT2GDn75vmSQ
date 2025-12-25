@@ -63,3 +63,10 @@ export const processCarrera = (carrera) => {
     }
 
 }
+
+export const processRole = (role) => {
+    if (!role || typeof(role) !== "string") {
+        return undefined;
+    }
+    return role.toUpperCase().trim().replace(" ", "_");
+}

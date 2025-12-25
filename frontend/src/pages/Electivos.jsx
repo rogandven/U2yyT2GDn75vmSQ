@@ -29,7 +29,7 @@ const Electivos = () => {
     setFiltroArea("");
   };
 
-  const electivosFiltrados = electivos.filter((e) => {
+  const electivosFiltrados = electivos.data?.filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       e.descripcion.toLowerCase().includes(busqueda.toLowerCase());

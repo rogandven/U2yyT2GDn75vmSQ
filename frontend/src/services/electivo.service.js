@@ -7,7 +7,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
     console.log(axiosFunction);
 
     const response = await axiosFunction(URL, body);
-    return response.data?.data;
+    return {data: response.data?.data, status: response.status, message: response.data?.message};
   } catch (error) {
     console.error(error);
     return error.response?.data || null;

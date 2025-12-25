@@ -48,6 +48,7 @@ export async function updateUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
   newData.carrera = processCarrera(newData.carrera);  
+  newData.role = processRole(newData.role);
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
@@ -137,7 +138,7 @@ export async function registerPrivate(req, res) {
   req.body.fullname = fullNameProcessor(req.body.fullname);
 
   // console.log(req.body);
-
+  req.body.carrera = processRole(newData.role);
   validationResult = createValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
