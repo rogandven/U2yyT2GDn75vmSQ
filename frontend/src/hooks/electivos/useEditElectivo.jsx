@@ -1,45 +1,45 @@
-import { editUser } from "../../services/user.service";
+import { editElectivo } from "../../services/electivo.service";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 
-async function editUserInfo(user) {
+async function editElectivoInfo(electivo) {
   const { value: formValues } = await Swal.fire({
     title: "Editar Usuario",
     html: `
-      ${createSwalField(1, "RUT", (user && user.rut) || "")}
-      ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
-      ${createSwalField(3, "Apodo", (user && user.username) || "")}
-      ${createSwalField(4, "Correo", (user && user.email) || "")}
-      ${createSwalField(6, "Rol", (user && user.role) || "")}
-      ${createSwalField(7, "Generación", (user && user.generation) || "")}
-      ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
-      ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
+      ${createSwalField(1, "Nombre", electivo.nombre)}
+      ${createSwalField(2, "Descripcion", electivo.descripcion)}
+      ${createSwalField(3, "Cupos", electivo.cupos)}
+      ${createSwalField(4, "Apertura", electivo.apertura)}
+      ${createSwalField(5, "Cierre", electivo.cierre)}
+      ${createSwalField(6, "Área", electivo.area)}
+      ${createSwalField(7, "Semestre Mínimo", electivo.semestre_minimo)}
+      ${createSwalField(8, "Carreras", electivo.carreras)}
         `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
     preConfirm: () => {
       /*
-      const username = document.getElementById("swal2-input1").value;
+      const electivoname = document.getElementById("swal2-input1").value;
       const email = document.getElementById("swal2-input2").value;
 
-      if (!username || !email) {
+      if (!electivoname || !email) {
         Swal.showValidationMessage("Por favor, completa todos los campos");
         return false;
       }
 
-      if (username.length < 3 || username.length > 30) {
+      if (electivoname.length < 3 || electivoname.length > 30) {
         Swal.showValidationMessage(
-          "El nombre de usuario debe tener entre 3 y 30 caracteres"
+          "El nombre de electivo debe tener entre 3 y 30 caracteres"
         );
         return false;
       }
 
-      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      if (!/^[a-zA-Z0-9_]+$/.test(electivoname)) {
         Swal.showValidationMessage(
-          "El nombre de usuario solo puede contener letras, números y guiones bajos"
+          "El nombre de electivo solo puede contener letras, números y guiones bajos"
         );
         return false;
       }
@@ -57,48 +57,48 @@ async function editUserInfo(user) {
         );
         return false;
       }
-      return { username, email };
+      return { electivoname, email };
       */
-      const rut = gebi('swal2-input1')?.value;
-      const fullname = gebi('swal2-input2')?.value;
-      const username = gebi('swal2-input3')?.value;
-      const email = gebi('swal2-input4')?.value;
-      const role = gebi('swal2-input6')?.value;
-      const generation = gebi('swal2-input7')?.value;
-      const id_carrera = gebi('swal2-input8')?.value;
-      const creditos = gebi('swal2-input9')?.value;
+      const nombre = gebi('swal2-input1')?.value;
+      const descripcion = gebi('swal2-input2')?.value;
+      const cupos = gebi('swal2-input3')?.value;
+      const apertura = gebi('swal2-input4')?.value;
+      const cierre = gebi('swal2-input5')?.value;
+      const area = gebi('swal2-input6')?.value;
+      const semestre_minimo = gebi('swal2-input7')?.value;
+      const carreras = gebi('swal2-input8')?.value;
 
-      return {rut, fullname, username, email, role, generation, id_carrera, creditos};
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
     },
     theme: "dark"
   });
   if (formValues) {
     return {
-      username: formValues.username,
+      electivoname: formValues.electivoname,
       email: formValues.email,
     };
   }
 }
 
-export const useEditUser = (fetchUsers) => {
-  const handleEditUser = async (userId, user) => {
+export const useEditElectivo = (fetchElectivos) => {
+  const handleEditElectivo = async (electivoId, electivo) => {
     try {
-      const formValues = await editUserInfo(user);
+      const formValues = await editElectivoInfo(electivo);
       if (!formValues) return;
 
-      const response = await editUser(userId, formValues);
+      const response = await editElectivo(electivoId, formValues);
       console.log(response);
       if (response) {
-        await fetchUsers();
+        await fetchElectivos();
         fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar usuario:", error);
+      console.error("Error al editar electivo:", error);
     }
   };
 
-  return { handleEditUser };
+  return { handleEditElectivo };
 };
 
-export default useEditUser;
+export default useEditElectivo;

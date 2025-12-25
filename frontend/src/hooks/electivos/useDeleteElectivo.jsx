@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
-import { deleteUser } from "@services/user.service";
+import { deleteElectivo } from "@services/electivo.service";
 
-async function confirmDeleteUser() {
+async function confirmDeleteElectivo() {
   const result = await Swal.fire({
     title: "¿Estás seguro?",
     text: "No podrás deshacer esta acción",
@@ -15,8 +15,8 @@ async function confirmDeleteUser() {
 
 async function confirmAlert() {
   await Swal.fire({
-    title: "Usuario eliminado",
-    text: "El usuario ha sido eliminado correctamente",
+    title: "Electivo eliminado",
+    text: "El electivo ha sido eliminado correctamente",
     icon: "success",
     confirmButtonText: "Aceptar",
   });
@@ -25,30 +25,30 @@ async function confirmAlert() {
 async function confirmError() {
   await Swal.fire({
     title: "Error",
-    text: "No se pudo eliminar el usuario",
+    text: "No se pudo eliminar el electivo",
     icon: "error",
     confirmButtonText: "Aceptar",
   });
 }
 
-export const useDeleteUser = (fetchUsers) => {
-  const handleDeleteUser = async (userId) => {
+export const useDeleteElectivo = (fetchElectivos) => {
+  const handleDeleteElectivo = async (electivoId) => {
     try {
-      const isConfirmed = await confirmDeleteUser();
+      const isConfirmed = await confirmDeleteElectivo();
       if (isConfirmed) {
-        const response = await deleteUser(userId);
+        const response = await deleteElectivo(electivoId);
         if (response) {
           confirmAlert();
-          await fetchUsers();
+          await fetchElectivos();
         }
       }
     } catch (error) {
-      console.error("Error al eliminar usuario:", error);
+      console.error("Error al eliminar electivo:", error);
       confirmError();
     }
   };
 
-  return { handleDeleteUser };
+  return { handleDeleteElectivo };
 };
 
-export default useDeleteUser;
+export default useDeleteElectivo;

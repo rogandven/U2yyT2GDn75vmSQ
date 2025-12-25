@@ -15,7 +15,7 @@ const Electivos = () => {
 
   useEffect(() => {
     fetchElectivos();
-  }, [fetchElectivos]);
+  }, []);
 
   const limpiarFiltros = () => {
     setBusqueda("");

@@ -23,19 +23,31 @@ export async function getElectivosSinAprobar() {
 }
 
 export async function createElectivoProfesor(electivoData) {
-  return await routeHelper("/", electivoData, axios.post);
+  return await routeHelper("/electivos", electivoData, axios.post);
 }
 
 export async function createElectivoJefeDeCarrera(electivoData) {
-  return await routeHelper(`/private`, electivoData, axios.post);
+  return await routeHelper(`/electivos/private`, electivoData, axios.post);
 }
 
 export async function approveElectivo(id) {
-  return await routeHelper(`/private/approve/${id}`, null, axios.post);
+  return await routeHelper(`/electivos/private/approve/${id}`, null, axios.post);
 }
 
 export async function rejectElectivo(id) {
-  return await routeHelper(`/private/reject/${id}`, null, axios.post);
+  return await routeHelper(`/electivos/private/reject/${id}`, null, axios.post);
+}
+
+export async function editElectivo(id, electivoData) {
+  return await routeHelper(`/electivos/${id}`, electivoData);
+}
+
+export async function updateElectivo(id, electivoData) {
+  return await editElectivo(id, electivoData);
+}
+
+export async function deleteElectivo(id) {
+  return await routeHelper(`/electivos/${id}`, null);
 }
 
 /* export async function getElectivos() {
