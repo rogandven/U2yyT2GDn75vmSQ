@@ -35,7 +35,7 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
             <ul className="menu w-full grow">
                 {createSidebarItem("Inicio", "/home", (<FaHome />), undefined)}
                 {createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
-                {createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined)}
+                {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
                 {createSidebarItem("Electivos B", "/electivos", (<FaBook />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}

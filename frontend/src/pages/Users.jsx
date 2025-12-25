@@ -3,7 +3,7 @@ import useGetUsers from "@hooks/users/useGetUsers.jsx";
 import useDeleteUser from "@hooks/users/useDeleteUser.jsx";
 import useEditUser from "@hooks/users/useEditUser.jsx";
 import { useEffect } from "react";
-import { DUUserTable } from "../components/DUComponents/Table/DUTable.jsx";
+import { DUUserTable } from "../components/DUComponents/Table/DUUserTable.jsx";
 import useCreateUser from "../hooks/users/useCreateUser.jsx";
 
 const Users = () => {
