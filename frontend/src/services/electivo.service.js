@@ -2,11 +2,15 @@ import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
   try {
+    console.log(`URL = ${URL}`);
+    console.log(`BODY = ${JSON.stringify(body)}`);
+    console.log(axiosFunction);
+
     const response = await axiosFunction(URL, body);
     return response.data?.data;
   } catch (error) {
     console.error(error);
-    return error.response?.data?.data || null;
+    return error.response?.data || null;
   }
 }
 
@@ -39,15 +43,15 @@ export async function rejectElectivo(id) {
 }
 
 export async function editElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData);
+  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
 }
 
 export async function updateElectivo(id, electivoData) {
-  return await editElectivo(id, electivoData);
+  return await editElectivo(id, electivoData, axios.patch);
 }
 
 export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, null);
+  return await routeHelper(`/electivos/${id}`, null, axios.delete);
 }
 
 /* export async function getElectivos() {

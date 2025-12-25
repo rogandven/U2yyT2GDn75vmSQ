@@ -73,10 +73,7 @@ async function editElectivoInfo(electivo) {
     theme: "dark"
   });
   if (formValues) {
-    return {
-      electivoname: formValues.electivoname,
-      email: formValues.email,
-    };
+    return formValues;
   }
 }
 
@@ -86,6 +83,7 @@ export const useEditElectivo = (fetchElectivos) => {
       const formValues = await editElectivoInfo(electivo);
       if (!formValues) return;
 
+      console.log(formValues);
       const response = await editElectivo(electivoId, formValues);
       console.log(response);
       if (response) {

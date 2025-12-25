@@ -53,8 +53,13 @@ export const validationFunctionHelper = (array, data) => {
 }
 
 export const processCarrera = (carrera) => {
-  if (carrera && typeof(carrera) === "string") {
-    return carrera.toUpperCase().trim().replaceAll(" ", "");
-  } 
-  return undefined;
+    try {
+        if (carrera && typeof(carrera) === "string") {
+            return carrera.toUpperCase().trim().replaceAll(" ", "");
+        } 
+        return undefined;
+    } catch (error) {
+        return undefined;
+    }
+
 }

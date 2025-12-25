@@ -118,6 +118,10 @@ export async function updateElectivo(req, res) {
     if (error) {
       return res.status(400).json(getControllerResult_NEW(error.message ? error.message : "Datos inválidos", null));
     }
+    if (!req.body) {
+      return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
+    }
+    console.log(req.body.carreras);
 
     req.body.carreras = processCarrera(req.body.carreras);
     if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
@@ -127,7 +131,7 @@ export async function updateElectivo(req, res) {
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {
       req.body.estado = AWAITING;
     }
-    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.rol || req.user.role));
+    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera));
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }

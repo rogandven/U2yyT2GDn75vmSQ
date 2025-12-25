@@ -2,6 +2,7 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { parse_AAAA_MM_DD } from '../../../utils/parseDate.jsx';
 import { DUCareerSplitter } from './DUCareerSplitter.jsx';
+import { TiInfoLarge } from 'react-icons/ti'
 /*
         <table className="solicitud-table">
           <thead>
@@ -46,14 +47,13 @@ import { DUCareerSplitter } from './DUCareerSplitter.jsx';
         </table>
 */
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
         }
         return data;
     } */
-
     let numero = 1;
     return Array.isArray(electivosFiltrados) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
@@ -76,7 +76,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion}) => {
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
                 return electivo && (
-                <tr>
+                <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>{electivo.cupos || "N/A"}</td>
@@ -86,7 +86,11 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion}) => {
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
                     <td>{electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
-                    <td>{"PLACEHOLDER"}</td>
+                    <td>
+                      <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><FaEdit></FaEdit></button>
+                      <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>
+                      <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo)}}><TiInfoLarge/></button>
+                    </td>
                 </tr>     
                 )           
             })}

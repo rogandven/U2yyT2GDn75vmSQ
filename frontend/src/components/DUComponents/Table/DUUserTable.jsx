@@ -38,17 +38,17 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
                     <td>
-                        <div class="badge badge-primary">
+                        <div className="badge badge-primary">
                             {coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}
                         </div>
                     </td>
                     <td>
-                        <div class="badge badge-secondary">
+                        <div className="badge badge-secondary">
                             {coalesceData(String(usuario && usuario.generation)) || "N/A"}
                         </div>
                     </td>
                     <td>
-                        <div class="badge badge-accent">
+                        <div className="badge badge-accent">
                             {coalesceData(String(usuario && usuario.carrera)) || "N/A"}
                         </div>
                     </td>

@@ -10,7 +10,7 @@ export const DUCareerSplitter = (career) => {
     const elementArray = [];
     for (let i = 0; i < parsedString.length; i++) {
         elementArray.push((
-            <div class={styles[i % styles.length] + " m-1"}>{parsedString[i]}</div>
+            <div key={i} className={styles[i % styles.length] + " m-1"}>{parsedString[i]}</div>
         ))
     }
     return (<div>{elementArray.map((i) => i)}</div>);

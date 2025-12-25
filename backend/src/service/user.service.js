@@ -37,6 +37,20 @@ export async function getUserByIdFromService(id) {
     }
 }
 
+export async function MIDDLEWARE_getUserByIdFromService(id) {
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const user = await userRepository.findOne({ where: { id } });
+        if (!user) {
+            return null;
+        } 
+        delete user.password;  
+        return user;
+    } catch (error) {
+        return null;
+    }
+}
+
 export async function updateUserByIdFromService(id, newData) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);

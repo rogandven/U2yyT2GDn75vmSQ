@@ -2,9 +2,10 @@
 import { SESSION_SECRET } from "../config/configEnv.js";
 import jwt from "jsonwebtoken";
 import { getMiddlewareResponse } from "./utils/middleware.utils.js";
+import { MIDDLEWARE_getUserByIdFromService } from "../service/user.service.js";
 
 // Middleware para autenticar JWT
-export function authenticateJwt(req, res, next) {
+export async function authenticateJwt(req, res, next) {
   // Conseguir el token del encabezado Authorization
   const authHeader = req.headers.authorization;
 
@@ -19,6 +20,11 @@ export function authenticateJwt(req, res, next) {
     // Verificar y decodificar el token usando la clave secreta
     const decoded = jwt.verify(token, SESSION_SECRET);
     req.user = decoded;
+    const additionalData = await MIDDLEWARE_getUserByIdFromService(req.user.id);
+    if (!additionalData) {
+      throw new Error("Token inválido o expirado");
+    }
+    Object.assign(req.user, additionalData);
     next();
     
   } catch (error) {

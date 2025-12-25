@@ -49,6 +49,7 @@ export const useCreateElectivo = (fetchElectivos) => {
       if (!formValues) return;
 
       const userRole = getUserRole();
+      console.log(userRole);
       if (userRole === CAREER_HEAD_ROLE) {
         response = await createElectivoJefeDeCarrera(formValues);
       } else if (getAllowedRoles().includes(userRole)) {
