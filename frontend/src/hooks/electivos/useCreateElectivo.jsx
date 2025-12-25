@@ -1,10 +1,10 @@
-import { createUser } from "../../services/user.service.js";
+import { createElectivo } from "../../services/electivo.service.js";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 
-async function createUserInfo() {
+async function createElectivoInfo() {
   const { value: formValues } = await Swal.fire({
     title: "Crear Usuario",
     html: `
@@ -25,7 +25,7 @@ async function createUserInfo() {
     preConfirm: () => {
       const rut = gebi('swal2-input1')?.value;
       const fullname = gebi('swal2-input2')?.value;
-      const username = gebi('swal2-input3')?.value;
+      const electivoname = gebi('swal2-input3')?.value;
       const email = gebi('swal2-input4')?.value;
       const password = gebi('swal2-input5')?.value;
       const role = gebi('swal2-input6')?.value;
@@ -33,7 +33,7 @@ async function createUserInfo() {
       const carrera = gebi('swal2-input8')?.value;
       const creditos = gebi('swal2-input9')?.value;
 
-      return {rut, fullname, username, email, password, role, generation, carrera, creditos};
+      return {rut, fullname, electivoname, email, password, role, generation, carrera, creditos};
     },
     theme: "dark",
   });
@@ -42,16 +42,16 @@ async function createUserInfo() {
   }
 }
 
-export const useCreateUser = (fetchUsers) => {
-  const handleCreateUser = async (user) => {
+export const useCreateElectivo = (fetchElectivos) => {
+  const handleCreateElectivo = async (electivo) => {
     try {
-      const formValues = await createUserInfo(user);
+      const formValues = await createElectivoInfo(electivo);
       if (!formValues) return;
 
-      const response = await createUser(formValues);
+      const response = await createElectivo(formValues);
       console.log(response);
       if (response) {
-        await fetchUsers();
+        await fetchElectivos();
         fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
       }
     } catch (error) {
@@ -60,7 +60,7 @@ export const useCreateUser = (fetchUsers) => {
     }
   };
 
-  return { handleCreateUser };
+  return { handleCreateElectivo };
 };
 
-export default useCreateUser;
+export default useCreateElectivo;
