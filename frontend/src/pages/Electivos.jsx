@@ -1,4 +1,5 @@
 "use strict";
+import "@styles/Inscripcion.css";
 import "@styles/electivos.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";

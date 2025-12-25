@@ -18,6 +18,16 @@
   cursor: pointer;
   transition: background 0.15s;
 }
+.inscribir-btn {
+  padding: 10px 20px;
+  background: #0c9a40;
+  border: none;
+  color: #060505;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
 .solicitud-filtros-container {
   display: flex;
   flex-wrap: wrap;
