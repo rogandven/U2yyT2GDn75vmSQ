@@ -89,7 +89,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>
                       <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><FaEdit></FaEdit></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>
-                      <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo)}}><TiInfoLarge/></button>
+                      <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>
                     </td>
                 </tr>     
                 )           

@@ -85,7 +85,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={() => mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo}></DUElectivoTable>
       </div>
     </div>
   );
