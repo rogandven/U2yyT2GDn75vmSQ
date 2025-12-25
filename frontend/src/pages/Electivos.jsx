@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
-import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable";
+import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable.jsx";
+import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
+import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/ElectivoConstants.jsx";
 
 const Electivos = () => {
   const { electivos, fetchElectivos } = useGetElectivos();
@@ -54,34 +57,21 @@ const Electivos = () => {
 
   return (
     <div className="users-page">
-      <h2>Electivos disponibles</h2>
-      <div className="solicitud-filtros-container">
-        <input
-          className="solicitud-filtro-input"
-          type="text"
-          placeholder="Buscar por nombre o descripción..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-        <select
-          className="solicitud-filtro-select"
-          value={filtroArea}
+      <div className="solicitud-filtros-container flex flex-row mt-3">
+        <SearchBar 
+          customClassName={"solicitud-filtro-input ml-3"} 
+          placeholder={"Buscar por nombre o descripción..."} 
+          value={busqueda} 
+          onChange={(e) => setBusqueda(e.target.value)}>
+        </SearchBar>
+        <DUSelection
+          options={AREAS_PERMITIDAS_EN_MAYUSCULA}
+          defaultValue={"Todas las áreas"}
           onChange={(e) => setFiltroArea(e.target.value)}
-        >
-          <option value="">Todas las áreas</option>
-          <option value="Desarrollo de Software">Desarrollo de Software</option>
-          <option value="Bases de Datos y Sistemas de Información">Bases de Datos y Sistemas de Información</option>
-          <option value="Ciencias de la Computación">Ciencias de la Computación</option>
-          <option value="Inteligencia Artificial y Ciencia de Datos">Inteligencia Artificial y Ciencia de Datos</option>
-          <option value="Redes y Telecomunicaciones">Redes y Telecomunicaciones</option>
-          <option value="Ciberseguridad">Ciberseguridad</option>
-          <option value="Ingeniería de Software y Gestión TI">Ingeniería de Software y Gestión TI</option>
-          <option value="Sistemas Operativos e Infraestructura">Sistemas Operativos e Infraestructura</option>
-          <option value="Desarrollo Móvil e Interfaces">Desarrollo Móvil e Interfaces</option>
-          <option value="Innovación y Habilidades Blandas">Innovación y Habilidades Blandas</option>
-        </select>
+          className={'ml-3'}
+        />
         {(busqueda || filtroArea) && (
-          <button className="solicitud-limpiar-btn" onClick={limpiarFiltros}>
+          <button className="solicitud-limpiar-btn btn ml-5" onClick={limpiarFiltros}>
             Limpiar
           </button>
         )}
