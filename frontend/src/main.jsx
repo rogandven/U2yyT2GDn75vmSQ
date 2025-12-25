@@ -123,12 +123,20 @@ const router = createBrowserRouter([
       },
       {
        path:"/InscripcionesAdmin",
-       element:<InscripcionesAdmin/>,
+       element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles("JEFEDECARRERA")}>
+            <InscripcionesAdmin />
+          </ProtectedRoute>
+        ),
       },
       {
        path:"/InscripcionesDocente",
-       element:<InscripcionesDocente/>,
-      },       
+       element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles("PROFESOR")}>
+            <InscripcionesDocente />
+          </ProtectedRoute>
+        ),
+      },      
       {
         path: "/profile",
         element: <Profile />,

@@ -1,3 +1,3 @@
 export const getAllowedRoles = () => {
-    return ["administrador"];
-}
+  return ["administrador", "profesor", "jefedecarrera"];
+};

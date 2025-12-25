@@ -64,10 +64,54 @@ export async function isAdminOrProfesor(req, res, next) {
           "Acceso denegado. Solo administradores o profesores pueden realizar esta acción.",
       });
     }
-
     next();
   } catch (error) {
     console.error("Error en isAdminOrProfesor:", error);
+    res.status(500).json({ message: "Error interno en autorización", error });
+  }
+}
+export async function isProfesor(req, res, next) {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ email: req.user?.email });
+
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const rolUser = user.role?.toLowerCase();
+
+    if ( rolUser !== "profesor") {
+      return res.status(403).json({
+        message:
+          "Acceso denegado. Solo profesores pueden realizar esta acción.",
+      });
+    }
+    next();
+  } catch (error) {
+    console.error("Error en isProfesor:", error);
+    res.status(500).json({ message: "Error interno en autorización", error });
+  }
+}
+
+export async function isJefedeCarrera(req, res, next) {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOneBy({ email: req.user?.email });
+
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const rolUser = user.role?.toLowerCase();
+
+    if ( rolUser !== "jefedecarrera") {
+      return res.status(403).json({
+        message:
+          "Acceso denegado. Solo Jefe de Carrera pueden realizar esta acción.",
+      });
+    }
+    next();
+  } catch (error) {
+    console.error("Error en isProfesor:", error);
     res.status(500).json({ message: "Error interno en autorización", error });
   }
 }
