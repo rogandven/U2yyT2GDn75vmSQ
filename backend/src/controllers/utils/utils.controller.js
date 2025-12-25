@@ -68,5 +68,5 @@ export const processRole = (role) => {
     if (!role || typeof(role) !== "string") {
         return undefined;
     }
-    return role.toUpperCase().trim().replace(" ", "_");
+    return role.toUpperCase().trim().replaceAll(" ", "_");
 }
