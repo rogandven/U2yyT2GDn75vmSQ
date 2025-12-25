@@ -2,10 +2,6 @@ import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
   try {
-    console.log(`URL = ${URL}`);
-    console.log(`BODY = ${JSON.stringify(body)}`);
-    console.log(axiosFunction);
-
     const response = await axiosFunction(URL, body);
     return {data: response.data?.data, status: response.status, message: response.data?.message};
   } catch (error) {
@@ -35,11 +31,11 @@ export async function createElectivoJefeDeCarrera(electivoData) {
 }
 
 export async function approveElectivo(id) {
-  return await routeHelper(`/electivos/private/approve/${id}`, null, axios.post);
+  return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
 export async function rejectElectivo(id) {
-  return await routeHelper(`/electivos/private/reject/${id}`, null, axios.post);
+  return await routeHelper(`/electivos/private/reject/${id}`, undefined, axios.post);
 }
 
 export async function editElectivo(id, electivoData) {
@@ -51,7 +47,7 @@ export async function updateElectivo(id, electivoData) {
 }
 
 export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, null, axios.delete);
+  return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
 
 /* export async function getElectivos() {

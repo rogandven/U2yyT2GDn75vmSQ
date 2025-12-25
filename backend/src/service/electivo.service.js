@@ -102,6 +102,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
     }
 
     const array = breakDownCarreraArray(electivo.carreras);
+    console.log(array);
     if (!(array.includes(String(carrera)))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
@@ -132,6 +133,7 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
       return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
     }
     const array = breakDownCarreraArray(electivo.carreras);
+    console.log(array);
     if (!(array.includes(String(carrera)))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }

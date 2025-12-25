@@ -2,7 +2,10 @@ import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { parse_AAAA_MM_DD } from '../../../utils/parseDate.jsx';
 import { DUCareerSplitter } from './DUCareerSplitter.jsx';
-import { TiInfoLarge } from 'react-icons/ti'
+import { TiInfoLarge } from 'react-icons/ti';
+
+import { ImCheckmark } from 'react-icons/im';
+import { TiTimes } from 'react-icons/ti'
 /*
         <table className="solicitud-table">
           <thead>
@@ -90,6 +93,8 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                       <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><FaEdit></FaEdit></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>
                       <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>
+                      <button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>
+                      <button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false)}}><TiTimes/></button>
                     </td>
                 </tr>     
                 )           

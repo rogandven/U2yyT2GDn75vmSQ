@@ -170,7 +170,7 @@ const changeElectivoEstado = async (req, res, estado) => {
     if (validationResult.error) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
-    const serviceResult = await changeElectivoEstadoFromService(id, estado);
+    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.carrera);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
