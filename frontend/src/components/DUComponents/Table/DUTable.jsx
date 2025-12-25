@@ -3,8 +3,8 @@ import { MdDelete } from 'react-icons/md';
 
 export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
     const coalesceData = (data) => {
-        if (data === null || data === "null") {
-            return undefined;
+        if (data === null || data === "null" || data === undefined || data === "undefined") {
+            return "";
         }
         return data;
     }
@@ -36,9 +36,21 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>{coalesceData(String(usuario && usuario.fullname)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
-                    <td>{coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}</td>
-                    <td>{coalesceData(String(usuario && usuario.id_carrera)) || "N/A"}</td>
-                    <td>{coalesceData(String(usuario && usuario.creditos)) || "N/A"}</td>
+                    <td>
+                        <div class="badge badge-primary">
+                            {coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="badge badge-secondary">
+                            {coalesceData(String(usuario && usuario.generation)) || "N/A"}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="badge badge-accent">
+                            {coalesceData(String(usuario && usuario.carrera)) || "N/A"}
+                        </div>
+                    </td>
                     <td>
                         <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}><FaEdit></FaEdit></button>
                         <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}><MdDelete></MdDelete></button>
