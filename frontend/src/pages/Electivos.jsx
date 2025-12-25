@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
+import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable";
 
 const Electivos = () => {
   const { electivos, fetchElectivos } = useGetElectivos();
@@ -86,47 +87,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <table className="solicitud-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Cupos</th>
-              <th>Inscritos</th>
-              <th>Área</th>
-              <th>Apertura</th>
-              <th>Cierre</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(electivosFiltrados) && electivosFiltrados.length > 0 ? (
-              electivosFiltrados.map((e) => (
-                <tr key={e.id}>
-                  <td>{e.nombre}</td>
-                  <td>{e.cupos}</td>
-                  <td>{e.inscritos}</td>
-                  <td>{e.area}</td>
-                  <td>{e.apertura}</td>
-                  <td>{e.cierre}</td>
-                  <td style={{ textAlign: "center" }}>
-                    <button
-                      className="edit"
-                      onClick={() => mostrarDescripcion(e.nombre, e.descripcion)}
-                    >
-                      Información
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
-                  No hay electivos disponibles
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion}></DUElectivoTable>
       </div>
     </div>
   );

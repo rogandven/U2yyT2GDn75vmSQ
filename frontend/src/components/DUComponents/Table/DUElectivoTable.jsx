@@ -1,62 +1,92 @@
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import { parse_AAAA_MM_DD } from '../../../utils/parseDate.jsx';
+import { DUCareerSplitter } from './DUCareerSplitter.jsx';
+/*
+        <table className="solicitud-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cupos</th>
+              <th>Inscritos</th>
+              <th>Área</th>
+              <th>Apertura</th>
+              <th>Cierre</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(electivosFiltrados) && electivosFiltrados.length > 0 ? (
+              electivosFiltrados.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.nombre}</td>
+                  <td>{e.cupos}</td>
+                  <td>{e.inscritos}</td>
+                  <td>{e.area}</td>
+                  <td>{e.apertura}</td>
+                  <td>{e.cierre}</td>
+                  <td style={{ textAlign: "center" }}>
+                    <button
+                      className="edit"
+                      onClick={() => mostrarDescripcion(e.nombre, e.descripcion)}
+                    >
+                      Información
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" style={{ textAlign: "center" }}>
+                  No hay electivos disponibles
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+*/
 
-export const DUElectivoTable = (usuarios, handleDeleteElectivo, handleEditElectivo) => {
-    const coalesceData = (data) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion}) => {
+    /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
         }
         return data;
-    }
+    } */
 
     let numero = 1;
-    return Array.isArray(usuarios) && (
+    return Array.isArray(electivosFiltrados) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">
             <thead>
             <tr>
                 <th></th>
-                <th>RUT</th>
                 <th>Nombre</th>
-                <th>Apodo</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Generación</th>
-                <th>Carrera</th>
-                <th>Créditos</th>
-                <th>Acciones</th>
+                <th>Cupos</th>
+                <th>Inscritos</th>
+                <th>Área</th>
+                <th>Apertura</th>
+                <th>Cierre</th>
+                <th>Profesor</th>
+                <th>Carreras</th>
+                <th>Acciones</th>                
             </tr>
             </thead>
             <tbody>
             {/* row 1 */}
-            {usuarios.map((usuario) => {
-                return (
+            {electivosFiltrados.map((electivo) => {
+                return electivo && (
                 <tr>
-                    <th>{String(numero++)}</th>
-                    <td>{coalesceData(String(usuario && usuario.rut)) || "N/A"}</td>
-                    <td>{coalesceData(String(usuario && usuario.fullname)) || "N/A"}</td>
-                    <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
-                    <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
-                    <td>
-                        <div class="badge badge-primary">
-                            {coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="badge badge-secondary">
-                            {coalesceData(String(usuario && usuario.generation)) || "N/A"}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="badge badge-accent">
-                            {coalesceData(String(usuario && usuario.carrera)) || "N/A"}
-                        </div>
-                    </td>
-                    <td>{Number(usuario.creditos)}</td>
-                    <td>
-                        <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(usuario.id, usuario)}}><FaEdit></FaEdit></button>
-                        <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(usuario.id, usuario)}}><MdDelete></MdDelete></button>
-                    </td>
+                    <th>{numero++}</th>
+                    <td>{electivo.nombre || "N/A"}</td>
+                    <td>{electivo.cupos || "N/A"}</td>
+                    <td>{electivo.inscritos || "N/A"}</td>
+                    <td>{electivo.area || "N/A"}</td>
+                    <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
+                    <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
+                    <td>{electivo.id_profesor || "N/A"}</td>
+                    <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
+                    <td>{"PLACEHOLDER"}</td>
                 </tr>     
                 )           
             })}
@@ -64,5 +94,5 @@ export const DUElectivoTable = (usuarios, handleDeleteElectivo, handleEditElecti
             </tbody>
         </table>
         </div>
-    ) || (<div>No hay usuarios para mostrar</div>);
+    ) || (<div>No hay electivos para mostrar</div>);
 }
