@@ -5,6 +5,7 @@ import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
 import { STUDENT_ROLE } from "../constants/user.constants.js";
 import { processCarrera } from "./utils/utils.controller.js";
+import { processRole } from "./utils/utils.controller.js";
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
