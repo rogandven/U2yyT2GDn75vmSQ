@@ -30,10 +30,10 @@ async function createUserInfo() {
       const password = gebi('swal2-input5')?.value;
       const role = gebi('swal2-input6')?.value;
       const generation = gebi('swal2-input7')?.value;
-      const id_carrera = gebi('swal2-input8')?.value;
+      const carrera = gebi('swal2-input8')?.value;
       const creditos = gebi('swal2-input9')?.value;
 
-      return {rut, fullname, username, email, password, role, generation, id_carrera, creditos};
+      return {rut, fullname, username, email, password, role, generation, carrera, creditos};
     },
     theme: "dark",
   });

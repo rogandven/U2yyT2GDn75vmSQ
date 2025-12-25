@@ -14,7 +14,7 @@ async function editUserInfo(user) {
       ${createSwalField(4, "Correo", (user && user.email) || "")}
       ${createSwalField(6, "Rol", (user && user.role) || "")}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
-      ${createSwalField(8, "Carrera", (user && user.id_carrera) || "")}
+      ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
         `,
     focusConfirm: false,
