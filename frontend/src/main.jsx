@@ -109,10 +109,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/electivo",
-        element: <Electivo/>,
-      },
-      {
        path: "/inscripciones", 
        element: <Inscripciones/>,
       },
