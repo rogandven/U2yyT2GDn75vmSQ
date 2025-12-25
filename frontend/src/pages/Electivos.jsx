@@ -3,14 +3,13 @@ import "@styles/electivos.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
-import { CreateInscripcion } from "@hooks/Inscripciones/CreateInscripcion.jsx";
+import { useCreateInscripcion } from "@hooks/Inscripciones/useCreateInscripcion.jsx";
 
 const Electivos = () => {
   const { electivos, fetchElectivos } = useGetElectivos();
+  const { handleCreateInscripcion } = useCreateInscripcion(fetchElectivos);
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
-  
-  const { handleInscribirse } = CreateInscripcion(fetchElectivos);
 
   useEffect(() => {
     fetchElectivos();
@@ -92,7 +91,7 @@ const Electivos = () => {
               <th>Apertura</th>
               <th>Cierre</th>
               <th>Descripción</th>
-              <th>Acción</th> 
+               <th>Acción</th>
             </tr>
           </thead>
           <tbody>
@@ -114,12 +113,7 @@ const Electivos = () => {
                     </button>
                   </td>
                   <td style={{ textAlign: "center" }}>
-                    <button
-                      className="inscribir-btn"
-                      onClick={() => handleInscribirse(e.id)}
-                    >
-                      Inscribirse
-                    </button>
+                  <button className="inscribir-btn"onClick={() => handleCreateInscripcion(e.id)}>Inscribirse</button>
                   </td>
                 </tr>
               ))

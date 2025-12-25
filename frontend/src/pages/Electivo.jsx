@@ -2,6 +2,8 @@ import "@styles/users.css";
 import GetElectivo from "@hooks/users/GetElectivo.jsx";
 import DeleteElectivo from "@hooks/users/DeleteElectivo.jsx";
 import EditElectivo from "@hooks/users/EditElectivo.jsx";
+import { useCreateInscripcion } from "@hooks/Inscripciones/useCreateInscripcion.jsx";
+//import { useCreateInscripcion } from "@hooks/Inscripciones/useCreateInscripcion.jsx";
 import { useEffect } from "react";
 
 const esDocente = () => {
@@ -11,6 +13,8 @@ const esDocente = () => {
 
 const Electivo = () => {
   const { electivos, fetchElectivos } = GetElectivo();
+  const { handleCreateInscripcion } = useCreateInscripcion(fetchElectivos);
+  //const { handleCreateInscripcion } = useCreateInscripcion(fetchElectivos);
   const { handleDeleteElectivo } = DeleteElectivo(fetchElectivos);
   const { handleEditElectivo } = EditElectivo(fetchElectivos);
 
@@ -49,6 +53,7 @@ const Electivo = () => {
                   /*<button className="create" onClick={() => handleCreateElectivo(user.id, user)}>Crear</button>*/}
                   <button className="edit" onClick={() => handleEditElectivo(user.id, user)}>Editar</button>
                   <button className="delete" onClick={() => handleDeleteElectivo(user.id)}>Eliminar</button>
+                  <button className="inscribir-btn"onClick={() => handleCreateInscripcion(user.id)}>Inscribirse</button>
                 </td>
               </tr>
             ))

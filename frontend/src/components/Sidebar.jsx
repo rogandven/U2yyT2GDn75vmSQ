@@ -111,6 +111,7 @@ const Sidebar = () => {
                 <FaUsers className="icon"/> Usuarios
               </NavLink>
             </li>
+
           )}
           <li>
             <NavLink to="/electivo">
@@ -121,7 +122,22 @@ const Sidebar = () => {
             <NavLink to="/electivos">
             <SiBookstack className="icon"/> Electivos (Implementacion 2)
             </NavLink>
-          </li>          
+          </li>
+          <li>
+            <NavLink to="/InscripcionesAdmin">
+            <SiBookstack className="icon" /> Inscripciones Jefe de Carrera
+          </NavLink>
+          </li>
+          <li>
+            <NavLink to="/Inscripciones">
+            <SiBookstack className="icon" /> Inscripciones Alumno
+          </NavLink>
+         </li>  
+         <li>
+            <NavLink to="/InscripcionesDocente">
+            <SiBookstack className="icon" /> Inscripciones Docente
+          </NavLink>
+         </li>         
           <li>
             <NavLink to="/profile">
               <CgProfile className="icon"/> Perfil

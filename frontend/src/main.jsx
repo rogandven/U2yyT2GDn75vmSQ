@@ -86,7 +86,9 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
 import { getAllowedRoles } from '@services/admin.service.js'
-import Inscripciones from '@pages/Inscripciones';
+import Inscripciones from '@pages/Inscripciones'
+import InscripcionesAdmin from "./pages/InscripcionesJefedeCarrera";
+import InscripcionesDocente from "./pages/InscripcionesDocente";
 
 
 const router = createBrowserRouter([
@@ -112,13 +114,21 @@ const router = createBrowserRouter([
         element: <Electivo/>,
       },
       {
-       path: "/inscripciones", 
-       element: <Inscripciones/>,
-      },
-      {
         path: "/electivos",
         element: <Electivos/>,
-      },      
+      },
+      {
+        path:"/Inscripciones",
+        element: <Inscripciones/>,
+      },
+      {
+       path:"/InscripcionesAdmin",
+       element:<InscripcionesAdmin/>,
+      },
+      {
+       path:"/InscripcionesDocente",
+       element:<InscripcionesDocente/>,
+      },       
       {
         path: "/profile",
         element: <Profile />,

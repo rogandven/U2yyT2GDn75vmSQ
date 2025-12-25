@@ -2,21 +2,27 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
-import ClaseEntity from "../entity/clase.entity.js";
+import ElectivoEntity from "../entity/electivo.entity.js";
+import {inscripcionValidation,cancelarInscripcionValidation,gestionarInscripcionValidation,consultarInscripcionesValidation,inscripcionesEnEsperaValidation} from "../validations/inscripcion.validation.js";
 
 export async function CreateInscripciones(req, res) {
   try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const claseRepository = AppDataSource.getRepository(ClaseEntity);
-    
-    const { electivoId } = req.body;
-    const userId = req.user.id;
+    const { error } = inscripcionValidation.validate(req.params);
 
-    if (!electivoId) {
-      return res.status(400).json({ message: "El ID del electivo es obligatorio" });
+    if (error) {
+      return res.status(400).json({
+        message: "Error de validación",
+        errors: error.details.map(e => e.message)
+      });
     }
 
-    const electivo = await claseRepository.findOne({ where: { id_electivo: electivoId } });
+    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
+    const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
+
+    const { electivoId } = req.params;
+    const userId = req.user.id;
+
+    const electivo = await electivoRepository.findOne({ where: { id: electivoId, } });
     console.log(electivo);
     if (!electivo) {
       return res.status(404).json({ message: "Electivo no encontrado" });
@@ -29,16 +35,14 @@ export async function CreateInscripciones(req, res) {
         electivoId: electivoId
       }
     });
-    // console.log(inscripcionExistente);
 
-    if (inscripcionExistente) {
+    if (inscripcionExistente && inscripcionExistente.estado !=="retirada") {
       return res.status(400).json({ 
         message: "Ya tienes una solicitud de inscripción para este electivo",
         estado: inscripcionExistente.estado
       });
     }
 
- 
     const inscripcionesActivas = await inscripcionRepository.count({
       where: { electivoId: electivoId, estado: "activa" }
     });
@@ -53,18 +57,18 @@ export async function CreateInscripciones(req, res) {
       estadoDetalle = "Pendiente de revisión";
     }
 
-   
     const nuevaInscripcion = inscripcionRepository.create({
       electivoNombre: electivo.nombreEl,
       userId: userId,
       electivoId: electivoId,
+      electivoNombre: electivo.nombre,
       estado: "en_espera",
       estadoDetalle: estadoDetalle,
       periodo: electivo.periodo
     });
 
     await inscripcionRepository.save(nuevaInscripcion);
-   const {userId: a, electivoId: b, ...respuestaInscripcion} = nuevaInscripcion;
+    
     res.status(201).json({
       message: "Solicitud de inscripción enviada exitosamente",
       data: {
@@ -79,13 +83,21 @@ export async function CreateInscripciones(req, res) {
   }
 }
 
-export async function getInscripciones(req, res) {
+export async function getInscripcionesAlumno(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const userId = req.user.id;
-    const { periodo, estado } = req.query;
+    const { error } = consultarInscripcionesValidation.validate(req.query);
 
-    const where = { userId: userId }; 
+    if (error) {
+      return res.status(400).json({
+        message: "Error de validación",
+        errors: error.details.map(e => e.message)
+      });
+    }
+
+    const { periodo, estado } = req.query;
+    const userId = req.user.id;
+    const where = { userId: userId };
     
     if (periodo) {
       where.periodo = periodo;
@@ -101,7 +113,30 @@ export async function getInscripciones(req, res) {
 
     res.status(200).json({ message: "Inscripciones encontradas", data: inscripciones });
   } catch (error) {
-    console.error("Error en inscripcion.controller.js -> getInscripciones(): ", error);
+    console.error("Error en inscripcion.controller.js -> getInscripcionesAlumno(): ", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
+export async function getInscripcionesRechazadas(req, res) {
+  const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
+
+  try {
+    const inscripciones = await inscripcionRepository.find({
+      where: { estado: "rechazada" },
+      order: { createdAt: "ASC" },
+    });
+
+    res.status(200).json({
+      message: "Inscripciones rechazadas encontradas",
+      data: inscripciones,
+      total: inscripciones.length,
+    });
+  } catch (error) {
+    console.error(
+      "Error en inscripcion.controller.js -> getInscripcionesRechazadas(): ",
+      error
+    );
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
@@ -109,40 +144,23 @@ export async function getInscripciones(req, res) {
 export async function DeleteInscripciones(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const electivoRepository = AppDataSource.getRepository(ClaseEntity);
-    const { inscripcionId } = req.params;
-    if (!req.body) {
-      return res.status(400).json({ message: "Pedido vacío" });
-    }
-
-    const { motivo } = req.body;
-    const userId = req.user.id; 
-
-    if (!inscripcionId) {
-      return res.status(400).json({ message: "El ID de la inscripción es obligatorio" });
-    }
-
-    // console.log(inscripcionId);
-    // console.log(userId);
+    const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
+    
+    const inscripcionId = Number(req.params.inscripcionId);
+    const userId = req.user.id;
     const inscripcion = await inscripcionRepository.findOne({
       where: { 
         id: inscripcionId,
-        userId: userId 
+        userId: userId
       }
     });
-    // console.log(inscripcion);
+    
 
-    if (!inscripcion) {
-      return res.status(404).json({ message: "Inscripción no encontrada" });
-    }
-    // console.log(inscripcion.estado);
-
+  
     if (inscripcion.estado === "retirada" || inscripcion.estado === "rechazada") {
       return res.status(400).json({ message: "Esta inscripción ya fue cancelada" });
     }
-
-  
-    const electivo = await electivoRepository.findOne({ where: { id_electivo: inscripcion.electivoId } });
+    const electivo = await electivoRepository.findOne({ where: { id: inscripcion.electivoId } });
     
     if (electivo && electivo.fechaFinRetiro && inscripcion.estado === "activa") {
       const ahora = new Date();
@@ -153,12 +171,13 @@ export async function DeleteInscripciones(req, res) {
 
     const estadoAnterior = inscripcion.estado;
     inscripcion.estado = "retirada";
-    inscripcion.estadoDetalle = motivo || "Retiro voluntario";
+    inscripcion.estadoDetalle = "Retiro voluntario";
     await inscripcionRepository.save(inscripcion);
 
-    
     if (estadoAnterior === "activa" && electivo) {
-      await electivoRepository.decrement({ id: electivo.id }, "inscritosActuales", 1);
+      electivo.inscritosActuales = (electivo.inscritosActuales || 0) - 1;
+      if (electivo.inscritosActuales < 0) electivo.inscritosActuales = 0;
+      await electivoRepository.save(electivo);
     }
 
     res.status(200).json({ message: "Inscripción cancelada exitosamente", data: inscripcion });
@@ -167,43 +186,83 @@ export async function DeleteInscripciones(req, res) {
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
-
-export async function getInscripcion(req, res) {
+export async function gestionarInscripcionDocente(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
+    const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
+
+    const { error } = gestionarInscripcionValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        message: "Error de validación",
+        errors: error.details.map(e => e.message),
+      });
+    }
+
+    const { accion, motivo } = req.body;
     const { inscripcionId } = req.params;
-    const userId = req.user.id;
-    if (!inscripcionId) {
-      return res.status(400).json({ message: "El ID de la inscripción es obligatorio" });
+
+    if (!accion || !["aprobar", "rechazar"].includes(accion)) {
+      return res.status(400).json({ message: "Acción inválida. Use 'aprobar' o 'rechazar'" });
+    }
+    if (!motivo || motivo.trim() === "") {
+      return res.status(400).json({ message: "El motivo es obligatorio para esta acción" });
     }
 
+    const inscripcion = await inscripcionRepository.findOne({ where: { id: inscripcionId } });
+    if (!inscripcion) return res.status(404).json({ message: "Inscripción no encontrada" });
+    if (inscripcion.estado !== "rechazada")
+      return res.status(400).json({ message: "Esta inscripción no está en espera" });
 
-    const inscripcion = await inscripcionRepository.findOne({
-      where: { 
-        id: inscripcionId,
-        userId: userId 
-      }
-    });
+    const electivo = await electivoRepository.findOne({ where: { id: inscripcion.electivoId } });
+    if (!electivo) return res.status(404).json({ message: "Electivo no encontrado" });
 
-    if (!inscripcion) {
-      return res.status(404).json({ message: "Inscripción no encontrada" });
+    if (accion === "aprobar") {
+      const inscripcionesActivas = await inscripcionRepository.count({
+        where: { electivoId: inscripcion.electivoId, estado: "activa" },
+      });
+
+      if (inscripcionesActivas >= electivo.cupos)
+        return res.status(400).json({ message: "No hay cupos disponibles para aprobar esta inscripción" });
+
+      inscripcion.estado = "activa";
+      inscripcion.estadoDetalle = motivo; 
+      await inscripcionRepository.save(inscripcion);
+
+      electivo.inscritosActuales = (electivo.inscritosActuales || 0) + 1;
+      await electivoRepository.save(electivo);
+
+      return res.status(200).json({ message: "Inscripción aprobada exitosamente", data: inscripcion });
+    } else {
+      inscripcion.estado = "rechazada";
+      inscripcion.estadoDetalle = motivo; 
+      await inscripcionRepository.save(inscripcion);
+
+      return res.status(200).json({ message: "Inscripción rechazada", data: inscripcion });
     }
-
-    res.status(200).json({ message: "Inscripción encontrada", data: inscripcion });
   } catch (error) {
-    console.error("Error en inscripcion.controller.js -> obtenerInscripcion(): ", error);
+    console.error("Error en inscripcion.controller.js -> gestionarInscripcionDocente(): ", error);
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
 
+
 export async function gestionarInscripcion(req, res) {
   try {
     const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const claseRepository = AppDataSource.getRepository(ClaseEntity);
-    const { inscripcionId } = req.params;
+    const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
+    
+    const { error } = gestionarInscripcionValidation.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({
+        message: "Error de validación",
+        errors: error.details.map(e => e.message)
+      });
+    }
+
     const { accion, motivo } = req.body;
-    // console.log(accion);
-    // console.log(motivo);
+    const { inscripcionId } = req.params;
 
     if (!accion || !["aprobar", "rechazar"].includes(accion)) {
       return res.status(400).json({ 
@@ -236,7 +295,7 @@ export async function gestionarInscripcion(req, res) {
         where: { electivoId: inscripcion.electivoId, estado: "activa" }
       });
 
-      const electivo = await claseRepository.findOne({ where: { id_electivo: inscripcion.electivoId } });
+      const electivo = await electivoRepository.findOne({ where: { id: inscripcion.electivoId } });
       
       if (!electivo) {
         return res.status(404).json({ message: "Electivo no encontrado" });
@@ -252,10 +311,8 @@ export async function gestionarInscripcion(req, res) {
       inscripcion.estadoDetalle = "Inscripción aprobada";
       await inscripcionRepository.save(inscripcion);
 
-      await claseRepository.update(
-        { id_electivo: electivo.id_electivo }, 
-        { inscritosActuales: inscripcionesActivas + 1 }
-      );
+      electivo.inscritosActuales = (electivo.inscritosActuales || 0) + 1;
+      await electivoRepository.save(electivo);
 
       return res.status(200).json({ 
         message: "Inscripción aprobada exitosamente", 
@@ -277,31 +334,26 @@ export async function gestionarInscripcion(req, res) {
   }
 }
 
+
 export async function getInscripcionesEnEspera(req, res) {
+  const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
+
   try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const { id_electivo, periodo } = req.query;
-
-    const where = { estado: "en_espera" };
-    if (id_electivo) {
-      where.electivoId = parseInt(id_electivo);
-    }
-    if (periodo) {
-      where.periodo = periodo;
-    }
-
     const inscripciones = await inscripcionRepository.find({
-      where,
-      order: { createdAt: "ASC" }
+      where: { estado: "en_espera" },
+      order: { createdAt: "ASC" },
     });
 
-    res.status(200).json({ 
-      message: "Inscripciones en espera encontradas", 
+    res.status(200).json({
+      message: "Inscripciones en espera encontradas",
       data: inscripciones,
-      total: inscripciones.length 
+      total: inscripciones.length,
     });
   } catch (error) {
-    console.error("Error en inscripcion.controller.js -> getInscripcionesEnEspera(): ", error);
+    console.error(
+      "Error en inscripcion.controller.js -> getInscripcionesEnEspera(): ",
+      error
+    );
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }

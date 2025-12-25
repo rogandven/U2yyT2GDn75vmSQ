@@ -2,25 +2,20 @@
 import "@styles/Inscripcion.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useGetUnaInscripciones } from "@hooks/Inscripciones/useGetMiInscripcion.jsx";
-import { useDeleteInscripcion } from "@hooks/Inscripciones/useDeleteInscripcion.jsx";
+import { useGetInscripciones } from "@hooks/Inscripciones/useGetInscripciones.jsx";
+import {  useGestionarInscripcion } from "@hooks/Inscripciones/useGestionarInscripciones.jsx";
 
-const Inscripciones = () => {  
-  const { Inscripciones, fetchMisInscripciones} = useGetUnaInscripciones();
-  const { handleDeleteInscripcion } = useDeleteInscripcion(fetchMisInscripciones);
+const InscripcionesAdmin = () => {  
+  const { Inscripciones, fetchMisInscripciones} = useGetInscripciones();
+  const { handleGestionarInscripcion } = useGestionarInscripcion(fetchMisInscripciones);
   const [busqueda, setBusqueda] = useState("");
-  const [filtroArea, setFiltroArea] = useState("");
+  const [filtroArea] = useState("");
   
 
   useEffect(() => {
     fetchMisInscripciones();
   }, [fetchMisInscripciones]);
-
-  const limpiarFiltros = () => {
-    setBusqueda("");
-    setFiltroArea("");
-  };
-const normalizarTexto = (texto = "") =>
+  const normalizarTexto = (texto = "") =>
   texto
     .toLowerCase()                 
     .normalize("NFD")              
@@ -42,7 +37,6 @@ const normalizarTexto = (texto = "") =>
   return coincideTexto && coincideEstado;
 });
 
-
   return (
     <div className="users-page">
       <h2>Inscripciones</h2>
@@ -50,26 +44,10 @@ const normalizarTexto = (texto = "") =>
         <input
           className="solicitud-filtro-input"
           type="text"
-          placeholder="Buscar por id o por electivo"
+          placeholder="Buscar por id o electivo"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
-        <select
-          className="solicitud-filtro-select"
-          value={filtroArea}
-          onChange={(e) => setFiltroArea(e.target.value)}
-        >
-          <option value="">Todos los estados</option>
-          <option value="en_espera">en espera</option>
-          <option value="aceptada">aceptada</option>
-          <option value="rechazada">rechazada</option>
-          <option value="retirada">retirada</option>
-        </select>
-        {(busqueda || filtroArea) && (
-          <button className="solicitud-limpiar-btn" onClick={limpiarFiltros}>
-            Limpiar
-          </button>
-        )}
       </div>
       
       <div className="info-container">
@@ -99,7 +77,7 @@ const normalizarTexto = (texto = "") =>
                   <td>{e.estado}</td>
                   <td>{e.estadoDetalle}</td>
                   <td style={{ textAlign: "center" }}>
-                   <button className="Eliminar-btn" onClick={() => handleDeleteInscripcion(e.id)}>Eliminar</button>
+                   <button className="Gestionar-btn" onClick={() => handleGestionarInscripcion(e.id)}>Gestionar</button>
                   </td>
                 </tr>
               ))
@@ -119,4 +97,4 @@ const normalizarTexto = (texto = "") =>
   );
 };
 
-export default Inscripciones;
+export default InscripcionesAdmin;

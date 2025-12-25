@@ -22,6 +22,8 @@ export const InscripcionEntity = new EntitySchema({
         },
       estado: {
         type: String,
+        enum: ["en_espera", "activa", "rechazada", "retirada"],
+        default: "en_espera",
       },
 
     estadoDetalle: {
