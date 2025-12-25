@@ -3,10 +3,11 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 
-export const useChangeElectivoStatus = (fetchElectivos, approve) => {
-  const handleChangeElectivoStatus = async (electivoId) => {
+export const useChangeElectivoStatus = (fetchElectivos) => {
+  const handleChangeElectivoStatus = async (electivoId, approve) => {
     try {
       let response = null;
+      console.log(approve);
       if (approve) {
         response = await approveElectivo(electivoId);
       } else{ 

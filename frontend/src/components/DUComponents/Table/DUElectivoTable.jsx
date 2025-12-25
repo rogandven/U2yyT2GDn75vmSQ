@@ -5,7 +5,10 @@ import { DUCareerSplitter } from './DUCareerSplitter.jsx';
 import { TiInfoLarge } from 'react-icons/ti';
 
 import { ImCheckmark } from 'react-icons/im';
-import { TiTimes } from 'react-icons/ti'
+import { TiTimes } from 'react-icons/ti';
+import { BsClockFill } from 'react-icons/bs';
+
+import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
 /*
         <table className="solicitud-table">
           <thead>
@@ -50,6 +53,16 @@ import { TiTimes } from 'react-icons/ti'
         </table>
 */
 
+const estadoConverter = (estado) => {
+  if (estado === ESTADOS_VALIDOS.APROBADO) {
+    return (<ImCheckmark></ImCheckmark>)
+  } else if (estado === ESTADOS_VALIDOS.RECHAZADO) {
+    return (<TiTimes></TiTimes>)
+  } else {
+    return (<BsClockFill></BsClockFill>)
+  }
+}
+
 export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
@@ -72,6 +85,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                 <th>Cierre</th>
                 <th>Profesor</th>
                 <th>Carreras</th>
+                <th>Estado</th>
                 <th>Acciones</th>                
             </tr>
             </thead>
@@ -89,6 +103,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
                     <td>{electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
+                    <td>{estadoConverter(electivo.estado)}</td>
                     <td>
                       <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><FaEdit></FaEdit></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>

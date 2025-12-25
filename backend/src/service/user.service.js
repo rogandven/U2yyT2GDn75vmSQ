@@ -15,7 +15,12 @@ export async function parseCredentials(a, b) {
 export async function getUsersFromService() {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
-        const users = await userRepository.find();
+        let users = await userRepository.find();
+        if (users && Array.isArray(users)) {
+            for (let i = 0; i < users.length; i++) {
+                delete users[i].password;
+            }
+        }
         return getServiceResult(false, users, "Usuarios encontrado con éxito", getResultLength(users));
     } catch (error) {
         console.error(error);
@@ -30,6 +35,7 @@ export async function getUserByIdFromService(id) {
         if (!user) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         }        
+        delete user.password;
         return getServiceResult(false, user, "Usuario encontrado con éxito", getResultLength(user));
     } catch (error) {
         console.error(error);
