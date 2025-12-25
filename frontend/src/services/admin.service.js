@@ -9,17 +9,15 @@ export const getAllowedRoles = () => {
 
 export const getUserRole = () => {
     const user = sessionStorage.getItem('usuario') || null;
-    console.log(user);
 
     let parsedUser = null;
     let role = STUDENT_ROLE;
     try {
-        parsedUser = JSON.parse(user);
+        parsedUser = JSON.parse(user || {});
         if (parsedUser && parsedUser.rol) {
-            role = parsedUser.rol;
+            role = String(parsedUser.rol);
         }
     } catch (error) {}
 
-    console.log(role);
     return role.toUpperCase();
 }

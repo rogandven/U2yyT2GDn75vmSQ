@@ -12,7 +12,7 @@ async function editUserInfo(user) {
       ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
       ${createSwalField(3, "Apodo", (user && user.username) || "")}
       ${createSwalField(4, "Correo", (user && user.email) || "")}
-      ${createSwalField(6, "Rol", (user && user.role) || "")}
+      ${createSwalField(6, "Rol", ((user && user.role) || "")).replaceAll("_", " ")}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
       ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
