@@ -1,6 +1,6 @@
-import { private_approveInscripcion, private_rejectInscripcion} from "../../services/inscripcion.service.js";
+import { private_approveInscripcion, private_rejectInscripcion} from "../../../services/inscripcion.service.js";
 import Swal from "sweetalert2";
-import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { fireDynamicSwal } from "../../utils/dynamicSwal.jsx";
 
 
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
