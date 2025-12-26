@@ -9,6 +9,7 @@ async function confirmDeleteTimetable() {
     showCancelButton: true,
     confirmButtonText: "Sí, eliminar",
     cancelButtonText: "Cancelar",
+    theme: "dark",
   });
   return result.isConfirmed;
 }
@@ -19,6 +20,7 @@ async function confirmAlert() {
     text: "El horario ha sido eliminado correctamente",
     icon: "success",
     confirmButtonText: "Aceptar",
+    theme: "dark",
   });
 }
 
@@ -28,6 +30,7 @@ async function confirmError() {
     text: "No se pudo eliminar el horario",
     icon: "error",
     confirmButtonText: "Aceptar",
+    theme: "dark",
   });
 }
 

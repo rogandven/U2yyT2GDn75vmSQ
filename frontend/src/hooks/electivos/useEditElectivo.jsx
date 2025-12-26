@@ -20,6 +20,7 @@ async function editElectivoInfo(electivo) {
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
+    theme: "dark",
     preConfirm: () => {
       /*
       const electivoname = document.getElementById("swal2-input1").value;

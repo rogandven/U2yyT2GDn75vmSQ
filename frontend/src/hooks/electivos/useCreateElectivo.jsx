@@ -22,6 +22,7 @@ async function createElectivoInfo() {
     showCancelButton: true,
     confirmButtonText: "Crear",
     cancelButtonText: "Cancelar",
+    theme: "dark",
     preConfirm: () => {
       const nombre = gebi('swal2-input1')?.value;
       const descripcion = gebi('swal2-input2')?.value;

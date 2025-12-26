@@ -62,6 +62,7 @@ const Electivos = () => {
       confirmButtonText: "Cerrar",
       confirmButtonColor: "#3085d6",
       width: 600,
+      theme: "dark",
     });
   };
 

@@ -35,8 +35,8 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             return inscripcion && (
                 <tr key={String(inscripcion.id_inscripcion) + String(numero)}>
                 <th>{numero++}</th>
-                <td>{NamePlusIcon(inscripcion.nombre_usuario || inscripcion.id_usuario, (<FaUser className='mr-1'/>))}</td>
-                <td>{NamePlusIcon(inscripcion.nombre_electivo || inscripcion.id_electivo, (<GiGraduateCap className='mr-1'></GiGraduateCap>))}</td>
+                <td>{NamePlusIcon((inscripcion.nombre_usuario || inscripcion.id_usuario) + ` (${inscripcion.id_usuario})`, (<FaUser className='mr-1'/>))}</td>
+                <td>{NamePlusIcon((inscripcion.nombre_electivo || inscripcion.id_electivo) + ` (${inscripcion.id_electivo})`, (<GiGraduateCap className='mr-1'></GiGraduateCap>))}</td>
                 <td>{parse_SQLDate(inscripcion.fecha_hora)}</td>
                 <td>
                     <div className="badge badge-primary">

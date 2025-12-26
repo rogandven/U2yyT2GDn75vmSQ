@@ -12,6 +12,7 @@ async function confirmDeleteInscripcion() {
     showCancelButton: true,
     confirmButtonText: "Sí, eliminar",
     cancelButtonText: "Cancelar",
+    theme: "dark",
   });
   return result.isConfirmed;
 }
@@ -22,6 +23,7 @@ async function confirmAlert() {
     text: "La inscripción ha sido eliminado correctamente",
     icon: "success",
     confirmButtonText: "Aceptar",
+    theme: "dark",
   });
 }
 
@@ -31,6 +33,7 @@ async function confirmError() {
     text: "No se pudo eliminar el inscripcion",
     icon: "error",
     confirmButtonText: "Aceptar",
+    theme: "dark",
   });
 }
 
