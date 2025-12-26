@@ -3,6 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { parse_SQLDate } from '../../../utils/parseDate.jsx';
 import { DUCareerSplitter } from './DUCareerSplitter.jsx';
 import { TiInfoLarge } from 'react-icons/ti';
+import { FaUser } from 'react-icons/fa'
 
 import { ImCheckmark } from 'react-icons/im';
 import { TiTimes } from 'react-icons/ti';
@@ -10,6 +11,8 @@ import { BsClockFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io'
 
 import { ESTADOS_VALIDOS } from '../../../constants/InscripcionConstants.jsx';
+import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
+import { GiGraduateCap } from 'react-icons/gi';
 
 export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus}) => {
     let numero = 1;
@@ -32,8 +35,8 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             return inscripcion && (
                 <tr key={String(inscripcion.id_inscripcion) + String(numero)}>
                 <th>{numero++}</th>
-                <td>{inscripcion.id_usuario}</td>
-                <td>{inscripcion.id_electivo}</td>
+                <td>{NamePlusIcon(inscripcion.nombre_usuario || inscripcion.id_usuario, (<FaUser className='mr-1'/>))}</td>
+                <td>{NamePlusIcon(inscripcion.nombre_electivo || inscripcion.id_electivo, (<GiGraduateCap className='mr-1'></GiGraduateCap>))}</td>
                 <td>{parse_SQLDate(inscripcion.fecha_hora)}</td>
                 <td>
                     <div className="badge badge-primary">
