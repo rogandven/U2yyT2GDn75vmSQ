@@ -4,6 +4,7 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
+import { AREAS_PERMITIDAS, StaticDropdownList } from "../utils/DropdownList.jsx";
 
 async function createElectivoInfo() {
   const { value: formValues } = await Swal.fire({
@@ -14,7 +15,7 @@ async function createElectivoInfo() {
       ${createSwalField(3, "Cupos", "")}
       ${createSwalField(4, "Apertura", "")}
       ${createSwalField(5, "Cierre", "")}
-      ${createSwalField(6, "Área", "")}
+      ${StaticDropdownList(AREAS_PERMITIDAS, "Área", "swal2-input6", "m-1")}
       ${createSwalField(7, "Semestre Mínimo", "")}
       ${createSwalField(8, "Carreras", "")}
     `,
@@ -29,7 +30,7 @@ async function createElectivoInfo() {
       const cupos = gebi('swal2-input3')?.value;
       const apertura = gebi('swal2-input4')?.value;
       const cierre = gebi('swal2-input5')?.value;
-      const area = gebi('swal2-input6')?.value;
+      const area = String(gebi('swal2-input6')?.value).toUpperCase();
       const semestre_minimo = gebi('swal2-input7')?.value;
       const carreras = gebi('swal2-input8')?.value;
 

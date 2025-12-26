@@ -22,7 +22,7 @@ export const StaticDropdownList = (data, label, id, className) => {
     `
 }
 
-const AREAS_PERMITIDAS = [
+export const AREAS_PERMITIDAS = [
   "Desarrollo de Software",
   "Bases de Datos y Sistemas de Información",
   "Ciencias de la Computación",
