@@ -71,7 +71,6 @@ async function editElectivoInfo(electivo) {
 
       return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
     },
-    theme: "dark"
   });
   if (formValues) {
     return formValues;
