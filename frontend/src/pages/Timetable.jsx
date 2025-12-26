@@ -5,7 +5,7 @@ import editTimetable from "@hooks/timetable/useUpdateTimetable.jsx";
 import deleteTimetable from "@hooks/timetable/useDeleteTimetable.jsx";
 import { useEffect } from "react";
 import { useState } from "react";
-import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimetable.jsx";
+import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { isAdminOrProfesor } from "../services/admin.service.js";
 import { isJefeDeCarrera } from "../services/admin.service.js";
