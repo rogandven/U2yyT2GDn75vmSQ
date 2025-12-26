@@ -35,6 +35,8 @@ const Inscripciones = () => {
 
   useEffect(() => {
     fetchInscripciones();
+    fetchElectivoNames();
+    fetchUserNames();
   }, []);
 
   /* const limpiarFiltros = () => {
