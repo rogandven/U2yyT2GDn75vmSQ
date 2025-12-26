@@ -3,7 +3,7 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { CAREER_HEAD_ROLE, isAdminOrProfesor } from "../../services/admin.service.js";
-import { private_createInscripcion } from "../../services/inscripcion.service.js";
+import { private_createInscripcion, public_createInscripcion } from "../../services/inscripcion.service.js";
 
 async function createInscripcionInfo() {
   const { value: formValues } = await Swal.fire({
@@ -54,5 +54,21 @@ export const useCreateInscripcion = (fetchInscripciones) => {
 
   return { handleCreateInscripcion };
 };
+
+export const useCreateInscripcion_PUBLIC = () => {
+  const handleCreateInscripcion_PUBLIC = async (id_electivo) => {
+    try {
+      const response = await public_createInscripcion({id_electivo: id_electivo});
+      if (response) {
+        fireDynamicSwal(response?.status, null, response?.data?.message || response?.data?.details);
+      }
+    } catch (error) {
+      fireDynamicSwal(500, null, null);
+      console.error("Error al crear inscripción:", error);
+    }
+  } 
+
+  return { handleCreateInscripcion_PUBLIC };
+}
 
 export default useCreateInscripcion;

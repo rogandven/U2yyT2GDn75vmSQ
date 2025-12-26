@@ -1,4 +1,4 @@
-import { FaEdit } from "react-icons/fa";
+import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
 
 const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
@@ -20,7 +20,7 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
                         </div>
                       </td>
                       <td>
-                      <button className="btn btn-primary m-1" onClick={() => {handleEditTimetable(Timetable.id_horario, Timetable)}}><FaEdit></FaEdit></button>
+                      <button className="btn btn-primary m-1" onClick={() => {handleEditTimetable(Timetable.id_horario, Timetable)}}><IoMdSettings></IoMdSettings></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteTimetable(Timetable.id_horario)}}><MdDelete></MdDelete></button>
                       </td>
                   </tr>

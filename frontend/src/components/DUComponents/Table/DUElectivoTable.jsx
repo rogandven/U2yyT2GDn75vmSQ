@@ -7,6 +7,8 @@ import { TiInfoLarge } from 'react-icons/ti';
 import { ImCheckmark } from 'react-icons/im';
 import { TiTimes } from 'react-icons/ti';
 import { BsClockFill } from 'react-icons/bs';
+import { IoMdSettings } from 'react-icons/io';
+import { FiUserPlus } from 'react-icons/fi'
 
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
 /*
@@ -63,7 +65,7 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -105,11 +107,12 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>
-                      <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><FaEdit></FaEdit></button>
+                      <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><IoMdSettings></IoMdSettings></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>
                       <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>
                       <button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>
                       <button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false)}}><TiTimes/></button>
+                      <button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id)}}><FiUserPlus /></button>
                     </td>
                 </tr>     
                 )           

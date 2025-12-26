@@ -33,3 +33,7 @@ export const isAdminOrProfesor = () => {
     }
     return false;
 }
+
+export const getUserId = () => {
+    
+}
