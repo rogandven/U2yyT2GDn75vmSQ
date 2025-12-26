@@ -14,7 +14,7 @@ const processElectivoArray = async (resultados) => {
       for (let i = 0; i < resultados.length; i++) {
         try {
           current = await RAW_getUserById(resultados[i].id_profesor);
-          nombre_profesor = String(current && current.fullname) || nombre_profesor;
+          nombre_profesor = String((current && current.fullname) || "JUANITO PÉREZ");
           Object.assign(resultados[i], {nombre_profesor: nombre_profesor});
         } catch (error) {}
       }
