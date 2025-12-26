@@ -18,7 +18,7 @@ export async function createUser(userData) {
 
 export async function getUsers() {
     try {
-        const response = await axios.get('/users');
+        const response = await axios.get('/users/get');
         return response.data?.data;
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
@@ -27,7 +27,7 @@ export async function getUsers() {
 
 export async function editUser(userId, userData) { 
     try {
-        const response = await axios.patch(`/users/${userId}`, userData);
+        const response = await axios.patch(`/users/get/${userId}`, userData);
         Object.assign(response.data, {status: response.status});
         return response.data;
     } catch (error) {

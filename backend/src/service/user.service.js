@@ -4,6 +4,7 @@ import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
+import { STUDENT_ROLE } from "../constants/user.constants.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -192,4 +193,15 @@ export async function logoutUserFromService(clearCookieFunction) {
 
 export async function RAW_getUserById(id) {
     return await MIDDLEWARE_getUserByIdFromService(id);
+}
+
+export async function RAW_getAllStudents() {
+    const BASE_CASE = [];
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const students = await userRepository.find({where: {role: STUDENT_ROLE}});
+        return students || BASE_CASE;
+    } catch (error) {
+        return BASE_CASE;
+    }
 }

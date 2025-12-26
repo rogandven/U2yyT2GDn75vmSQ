@@ -7,7 +7,7 @@ import {
   integrityValidation,
   updateValidation,
 } from "../validations/electivo.validation.js";
-import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService, RAW_getElectivoById } from "../service/electivo.service.js";
+import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService, RAW_getElectivoById, RAW_getAllApprovedElectivos } from "../service/electivo.service.js";
 import { fullNameProcessor, getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -221,3 +221,15 @@ export const getElectivoName = async (id) => {
       return BASE_CASE;
     }
 } 
+
+
+export const getAllElectivoNames = async (req, res) => {
+  const electivos = await RAW_getAllApprovedElectivos();
+  const nombres = [];
+  for (let i = 0; i < electivos.length; i++) {
+    if (electivos[i] && electivos[i].id && electivos[i].nombre) {
+      nombres.push(String(electivos[i].id) + ". " + String(electivos[i].nombre).toUpperCase());
+    }
+  }
+  return res.status(200).json({lista: nombres});
+}

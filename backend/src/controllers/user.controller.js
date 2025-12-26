@@ -1,5 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById } from "../service/user.service.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById, RAW_getAllStudents } from "../service/user.service.js";
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
@@ -221,6 +221,25 @@ export const getUserNameById = async (id) => {
       return BASE_CASE;
     }
     return String(user.fullname || BASE_CASE).toUpperCase();
+  } catch (error) {
+    return BASE_CASE;
+  }
+}
+
+export const getAllStudentNames = async () => {
+  const BASE_CASE = [];
+  const names = [];
+  try {
+    const users = await RAW_getAllStudents();
+    if (!users) {
+      return BASE_CASE;
+    }
+    for (let i = 0; i < users.length; i++) {
+      if (users[i] && (users[i].fullname || users[i].username)) {
+        names.push(String(users[i].id) + ". " + String((users[i].fullname || users[i].username)).toUpperCase());
+      }
+    }
+    return names;
   } catch (error) {
     return BASE_CASE;
   }

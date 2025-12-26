@@ -11,6 +11,7 @@ import {
   getElectivosSinAprobar,
   rejectElectivo,
   getElectivoById,
+  getAllElectivoNames,
 } from "../controllers/electivo.controller.js";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../middleware/authorization.middleware.js"; 
@@ -18,9 +19,9 @@ import { isAdminOrProfesor, isJefeDeCarrera } from "../middleware/authorization.
 const router = Router();
 
 //para todos los usuarios autenticados
-router.get("/", isAuthenticated, getElectivos);
-router.get("/:id", isAuthenticated, getElectivoById);
-router.get("/private", isAuthenticated, isJefeDeCarrera, getElectivosSinAprobar);
+router.get("/get/", isAuthenticated, getElectivos);
+router.get("/get/:id", isAuthenticated, getElectivoById);
+router.get("/get_private/", isAuthenticated, isJefeDeCarrera, getElectivosSinAprobar);
 
 //Solo administrador o profesor pueden crear, actualizar o eliminar electivos
 router.post("/", isAuthenticated, isAdminOrProfesor, createElectivoProfesor);
@@ -29,5 +30,8 @@ router.post("/private/approve/:id", isAuthenticated, isJefeDeCarrera, approveEle
 router.post("/private/reject/:id", isAuthenticated, isJefeDeCarrera, rejectElectivo);
 router.patch("/:id", isAuthenticated, isAdminOrProfesor, updateElectivo);
 router.delete("/:id", isAuthenticated, isAdminOrProfesor, deleteElectivo);
+
+router.get("/frontend_list/", isAuthenticated, getAllElectivoNames);
+
 
 export default router;

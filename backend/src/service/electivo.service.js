@@ -191,3 +191,16 @@ export async function RAW_getElectivoById(id) {
     return null;
   }
 }
+
+export async function RAW_getAllApprovedElectivos() {
+  const BASE_CASE = [];
+  try {
+    const electivos = await electivoRepo.find({where: {estado: ESTADOS_VALIDOS.APROBADO}});
+    if (!electivos) {
+      return BASE_CASE;
+    }
+    return electivos;
+  } catch (error) {
+    return BASE_CASE;
+  }
+}

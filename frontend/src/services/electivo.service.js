@@ -11,15 +11,15 @@ const routeHelper = async (URL, body, axiosFunction) => {
 }
 
 export async function getElectivos() {
-  return await routeHelper("/electivos", null, axios.get);
+  return await routeHelper("/electivos/get/", null, axios.get);
 }
 
 export async function getElectivoById(id) {
-  return await routeHelper(`/electivos/${id}`, null, axios.get);
+  return await routeHelper(`/electivos/get/${id}`, null, axios.get);
 }
 
 export async function getElectivosSinAprobar() {
-  return await routeHelper(`/electivos/private`, null, axios.get);
+  return await routeHelper(`/electivos/get_private`, null, axios.get);
 }
 
 export async function createElectivoProfesor(electivoData) {
