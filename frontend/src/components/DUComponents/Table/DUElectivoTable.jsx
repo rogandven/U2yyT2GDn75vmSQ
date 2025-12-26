@@ -103,7 +103,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{electivo.area || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
-                    <td>{electivo.id_profesor || "N/A"}</td>
+                    <td>{electivo.nombre_profesor || electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>

@@ -3,8 +3,24 @@ import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { RAW_getUserById } from "./user.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+
+const processElectivoArray = async (resultados) => {
+    let nombre_profesor = "JUANITO PÉREZ";
+    let current = null;
+    if (Array.isArray(resultados)) {
+      for (let i = 0; i < resultados.length; i++) {
+        try {
+          current = await RAW_getUserById(resultados[i].id_profesor);
+          nombre_profesor = (current && (current.fullname || "JUANITO PÉREZ"));
+          Object.assign(resultados[i], {nombre_profesor: nombre_profesor});
+        } catch (error) {}
+      }
+    }
+    return resultados;
+}
 
 export async function getElectivosFromService(data) {
     try {
@@ -27,11 +43,12 @@ export async function getElectivosFromService(data) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
         
-        const resultados = await query.getMany();
+        let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
             throw Error("No se pudieron parsear los electivos como arreglo");
         }
+        resultados = await processElectivoArray(resultados);
 
         return getServiceResult(false, resultados, "Electivos obtenidos correctamente", resultados.length ? resultados.length : 0);
     } catch (error) {
@@ -55,6 +72,7 @@ export async function getElectivosSinAprobarFromService() {
         return false;
       })
 
+      resultados = await processElectivoArray(resultados);
       return getServiceResult(false, resultados, "Electivos obtenidos correctamente", resultados.length ? resultados.length : 0);
   } catch (error) {
       console.error("Error al listar electivos:", error);
