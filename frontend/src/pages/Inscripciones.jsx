@@ -13,7 +13,7 @@ import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.js
 // import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
 import useEditInscripcion from "../hooks/Inscripciones/useEditInscripcion.jsx";
 import useDeleteInscripcion from "../hooks/Inscripciones/useDeleteInscripcion.jsx";
-import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripcionStatus.jsx";
+import useChangeInscripcionStatus from "@hooks/inscripciones/useChangeInscripcionStatus.jsx";
 
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
