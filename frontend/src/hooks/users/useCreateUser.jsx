@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { VALID_ROLES } from "../../services/admin.service.js";
 
 async function createUserInfo() {
   const { value: formValues } = await Swal.fire({
@@ -13,7 +15,7 @@ async function createUserInfo() {
       ${createSwalField(3, "Apodo", "")}
       ${createSwalField(4, "Correo", "")}
       ${createSwalField(5, "Contraseña", "")}
-      ${createSwalField(6, "Rol", "")}
+      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input6", "m-1")}
       ${createSwalField(7, "Generación", "")}
       ${createSwalField(8, "Carrera", "")}
       ${createSwalField(9, "Créditos", "")}

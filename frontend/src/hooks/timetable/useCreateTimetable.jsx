@@ -5,6 +5,7 @@ import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { DIAS_SEMANA } from "../../constants/HorarioConstants.jsx";
 
 async function CreateTimetable(electivoNames) {
   const { value: formValues } = await Swal.fire({
@@ -14,7 +15,7 @@ async function CreateTimetable(electivoNames) {
       ${createSwalField(2, "Hora de Inicio", "")}
       ${createSwalField(3, "Hora de Término", "")}
       ${createSwalField(4, "Sala", "")}
-      ${createSwalField(5, "Día", "")}
+      ${StaticDropdownList(DIAS_SEMANA, "Día", "swal2-input5", "m-1")}
     `,
     focusConfirm: false,
     showCancelButton: true,

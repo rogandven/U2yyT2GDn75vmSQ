@@ -2,7 +2,9 @@ import { editUser } from "../../services/user.service";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { gebi } from "../utils/getElementById.jsx";
+import { VALID_ROLES } from "../../services/admin.service.js";
 
 async function editUserInfo(user) {
   const { value: formValues } = await Swal.fire({
@@ -12,7 +14,7 @@ async function editUserInfo(user) {
       ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
       ${createSwalField(3, "Apodo", (user && user.username) || "")}
       ${createSwalField(4, "Correo", (user && user.email) || "")}
-      ${createSwalField(6, "Rol", ((user && user.role) || "")).replaceAll("_", " ")}
+      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input5", "m-1")}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
       ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}

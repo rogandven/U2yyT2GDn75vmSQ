@@ -2,6 +2,8 @@ import { updateTimetable } from "@services/horario.service.js";
 import Swal from "sweetalert2";
 import { createSwalField } from "../utils/swalField.jsx";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { DIAS_SEMANA } from "../../constants/HorarioConstants.jsx";
 
 async function editTimetableInfo(horario) {
     const { value: formValues } = await Swal.fire({
@@ -10,7 +12,7 @@ async function editTimetableInfo(horario) {
             ${createSwalField(2, "Hora de Inicio", horario.hora_inicio)}
             ${createSwalField(3, "Hora de Término", horario.hora_termino)}
             ${createSwalField(4, "Sala", horario.sala)}
-            ${createSwalField(5, "Día", horario.dia)}
+            ${StaticDropdownList(DIAS_SEMANA, "Día", "swal2-input5", "m-1")}
             `,
 
         focusConfirm: false,
