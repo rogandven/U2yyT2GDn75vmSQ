@@ -19,7 +19,7 @@ const Profile = () => {
   return (
     <div>
       {profileData ? (
-        <div className="profile-container">
+        <div className="profile-container m-3">
           <ProfileCard user={profileData} />
         </div>
       ) : (
