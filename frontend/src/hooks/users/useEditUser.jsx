@@ -75,7 +75,7 @@ async function editUserInfo(user) {
     theme: "dark"
   });
   if (formValues) {
-    console.log(formValues);
+    // console.log(formValues);
     return formValues;
   }
 }
@@ -87,7 +87,7 @@ export const useEditUser = (fetchUsers) => {
       if (!formValues) return;
 
       const response = await editUser(userId, formValues);
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchUsers();
         fireDynamicSwal(response.status, null, response.message || response.details);

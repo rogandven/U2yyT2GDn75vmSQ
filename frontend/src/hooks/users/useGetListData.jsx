@@ -7,7 +7,7 @@ export const useGetUserNames = () => {
     const fetchUserNames = async () => {
         try {
             const data = await FRONTEND_getUserList();
-            console.log(data);
+            // console.log(data);
             setUserNames(data);
         } catch (error) {
             console.error("Error consiguiendo usuarios:", error);

@@ -132,7 +132,7 @@ export async function updateElectivo(req, res) {
     if (req.body.nombre) {
       req.body.nombre = fullNameProcessor(req.body.nombre);
     }
-    console.log(req.body.carreras);
+    // console.log(req.body.carreras);
 
     req.body.carreras = processCarrera(req.body.carreras);
     if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {

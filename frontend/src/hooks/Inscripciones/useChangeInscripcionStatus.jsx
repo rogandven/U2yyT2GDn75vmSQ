@@ -7,13 +7,13 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
   const handleChangeInscripcionStatus = async (inscripcionId, approve) => {
     try {
       let response = null;
-      console.log(approve);
+      // console.log(approve);
       if (approve) {
         response = await private_approveInscripcion(inscripcionId);
       } else{ 
         response = await private_rejectInscripcion(inscripcionId);
       }
-      console.log(response);
+      // console.log(response);
       if (response) {
         if (response.data){ 
           Object.assign(response, response.data);

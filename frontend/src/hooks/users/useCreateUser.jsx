@@ -51,7 +51,7 @@ export const useCreateUser = (fetchUsers) => {
       if (!formValues) return;
 
       const response = await createUser(formValues);
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchUsers();
         fireDynamicSwal(response.status, null, response.message);

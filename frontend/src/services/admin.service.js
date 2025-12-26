@@ -28,7 +28,7 @@ export const getUserRole = () => {
 
 export const isAdminOrProfesor = () => {
     const userRole = getUserRole();
-    console.log(userRole);
+    // console.log(userRole);
     const ALLOWED_ROLES = getAllowedRoles();
     for (let i = 0; i < ALLOWED_ROLES.length; i++) {
         if (ALLOWED_ROLES[i] === userRole) {
@@ -40,8 +40,8 @@ export const isAdminOrProfesor = () => {
 
 export const isJefeDeCarrera = () => {
     const userRole = getUserRole();
-    console.log(userRole);
+    // console.log(userRole);
     const result = (userRole && (userRole === CAREER_HEAD_ROLE)) || false;
-    console.log(result);
+    // console.log(result);
     return result;
 }

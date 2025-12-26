@@ -62,7 +62,7 @@ export async function deleteElectivo(id) {
 const cambiarEstadoHelper = async (verbo, id) => {
     try {
         const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // console.log(response);
+        // // console.log(response);
         return {data: response.data, code: response.status || 500};
     } catch (error) {
         console.error("Error al aprobar el electivo: ", error);
@@ -179,7 +179,7 @@ export async function FRONTEND_getElectivoList() {
 
     try {
         const response = await axios.get('/electivos/frontend_list');
-        console.log(response);
+        // console.log(response);
         const lista = response?.data?.lista;
         if (!Array.isArray(lista)) {
             return BASE_CASE;

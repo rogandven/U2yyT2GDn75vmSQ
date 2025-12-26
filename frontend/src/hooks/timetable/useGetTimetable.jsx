@@ -5,10 +5,10 @@ export const useGetTimetable = (horarioData, setHorarioData) => {
     const fetchHorario = async () => {
         try {
             const data = await getTimetables();
-            console.log('Datos de horario obtenidos:', data);
-            /* console.log('Tipo de datos de horario obtenidos:', typeof data);
+            // console.log('Datos de horario obtenidos:', data);
+            /* // console.log('Tipo de datos de horario obtenidos:', typeof data);
             try {
-                console.log('Datos de horario obtenidos (stringified):', JSON.stringify(data));
+                // console.log('Datos de horario obtenidos (stringified):', JSON.stringify(data));
             } catch (error) {
                 console.error('Error al convertir los datos de horario a JSON:', error);
             } */
