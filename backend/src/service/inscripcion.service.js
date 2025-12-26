@@ -10,9 +10,9 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
-export const isInvalidInscripcion = async (inscripcion) => {
+export const isInvalidInscripcion = async (inscripcion, checks) => {
   
-  return !(await electivoExists(inscripcion.id_electivo)) || !(await userExists(inscripcion.id_usuario));
+  return !(await electivoExists(inscripcion.id_electivo, checks)) || !(await userExists(inscripcion.id_usuario));
 }
 
 const cleanUpInscripcionArray = async (array) => {

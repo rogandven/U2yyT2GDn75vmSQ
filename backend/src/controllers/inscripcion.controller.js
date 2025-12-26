@@ -125,13 +125,13 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
     }
 }
 
-const createInscriptionHelper = async (req, res) => {
+const createInscriptionHelper = async (req, res, checks) => {
     try {
         const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
         if (validationResult) {
             return res.status(400).json(getGenericResult(null, validationResult));
         }
-        if (await isInvalidInscripcion(req.body)) {
+        if (await isInvalidInscripcion(req.body, checks)) {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
         if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
@@ -153,7 +153,7 @@ export const private_createInscripcion = async (req, res) => {
         return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
     }
     req.body.estado = APPROVED;
-    return await createInscriptionHelper(req, res);
+    return await createInscriptionHelper(req, res, false);
 }
 
 const updateInscriptionHelper = async (req, res, id_checks) => {
@@ -184,7 +184,7 @@ const updateInscriptionHelper = async (req, res, id_checks) => {
         };
 
         // console.log(editedInscripcion);
-        if (await isInvalidInscripcion(editedInscripcion)) {
+        if (await isInvalidInscripcion(editedInscripcion, id_checks)) {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
         if (await inscripcionAlreadyExists(req.params.id, editedInscripcion.id_usuario, editedInscripcion.id_electivo)) {
@@ -295,7 +295,7 @@ export const public_createInscripcion = async (req, res) => {
     }
     req.body.id_usuario = req.user.id;
     req.body.estado = AWAITING;
-    return await createInscriptionHelper(req, res);
+    return await createInscriptionHelper(req, res, true);
 }
 
 export const public_updateInscripcion = async (req, res) => {

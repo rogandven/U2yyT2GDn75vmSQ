@@ -38,7 +38,7 @@ export const isValidDate = async (electivo) => {
     return true;
 }
 
-export const electivoExists = async (id) => {
+export const electivoExists = async (id, checks = true) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
         // console.log(electivo);
@@ -48,8 +48,10 @@ export const electivoExists = async (id) => {
         if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
             return false;
         }
-        if (!(await isValidDate(electivo))) {
-            return false;
+        if (checks) {
+            if (!(await isValidDate(electivo))) {
+                return false;
+            }
         }
         return true;
     } catch (error) {
