@@ -5,7 +5,6 @@ import { electivoExists, formatMessage, userExists } from "./utils/utils.inscrip
 import { inscripcionAlreadyExists as IAE_helper } from "./utils/utils.inscription.service.js";
 // import UserEntity from "../entity/user.entity.js";
 // import ElectivoEntity from "../entity/electivo.entity.js";
-// import { AWAITING, MAX_INSCRIPCIONES } from "../constants/inscripcion.constants.js";
 
 const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);

@@ -1,8 +1,8 @@
 "use strict";
 
-import { APPROVED, AWAITING, REJECTED } from "../constants/inscripcion.constants.js";
+import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
 import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
-import { userExists as _userExists } from "../service/utils/utils.inscription.service.js";
+import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
@@ -289,6 +289,9 @@ export const public_createInscripcion = async (req, res) => {
     }
     if ((req.user.role || req.user.rol) !== STUDENT_ROLE) {
         return res.status(401).json(getGenericResult(null, "Solo los estudiantes pueden inscribir ramos"));
+    }
+    if ((await countInscripcionesByUser(req.user.id)) > MAX_INSCRIPCIONES) {
+        return res.status(401).json(getGenericResult(null, "Ya tiene suficientes inscripciones"));
     }
     req.body.id_usuario = req.user.id;
     req.body.estado = AWAITING;

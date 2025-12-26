@@ -93,3 +93,12 @@ export const countInscripciones = async (id_electivo) => {
         return 9999;
     }
 }
+
+export const countInscripcionesByUser = async (id_usuario) => {
+    try {
+        const cantidad = await inscripcionRepo.count({where: {id_usuario: id_usuario}});
+        return Number(cantidad);
+    } catch (error) {
+        return 9999;
+    }
+}
