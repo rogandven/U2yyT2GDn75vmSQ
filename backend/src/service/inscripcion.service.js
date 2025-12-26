@@ -12,6 +12,7 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
 export const isInvalidInscripcion = async (inscripcion) => {
+  
   return !(await electivoExists(inscripcion.id_electivo)) || !(await userExists(inscripcion.id_usuario));
 }
 
