@@ -1,49 +1,48 @@
 // import "@styles/profile.css";
-import profilePic from "@assets/profilePic.jpg";
+import profilePic from "@assets/cat_pfp.jpg";
+
 
 const ProfileCardRow = ({data, label}) => {
-  console.log(data);
   return (
-      <li className="list-row">
-        <div>
-          <div>{String(data)}</div>
-          <div className="text-xs uppercase font-semibold opacity-60">{String(label)}</div>
-        </div>
-      </li>
+    <label className="input">
+      <span className="label">{label}</span>
+      <p>{data}</p>
+    </label>
   )
 }
 
 const ProfileCardList = ({data}) => {
-  console.log(data);
   return (
     <div>
-      <h1 className="card-title">Información de usuario</h1>
-      <ul className="list">
-        <ProfileCardRow data={data.username || "ladiesman217"} label={"Nombre de usuario"}></ProfileCardRow>
-        <ProfileCardRow data={data.email || "juanito.perez"} label={"Correo electrónico"}></ProfileCardRow>
-        <ProfileCardRow data={data.role || "juanito.perez"} label={"Rol"}></ProfileCardRow>
-      </ul>
+      <ProfileCardRow data={data.username || "ladiesman217"} label={"Nombre de usuario"}></ProfileCardRow>
+      <ProfileCardRow data={data.email || "juanito.perez"} label={"Correo electrónico"}></ProfileCardRow>
+      <ProfileCardRow data={data.role || "juanito.perez"} label={"Rol"}></ProfileCardRow>
     </div>
   )
 }
 
 const ProfileCard = ({ user }) => {
-  console.log(user);
   return (
-      <div className="profile-card w-xl">
-        <div className="card card-side bg-base-100 shadow-sm">
-            <figure>
-              <div className="avatar">
-                <div className="w-max">
-                  <img className="justify-stretch w-max" src="https://img.daisyui.com/images/profile/demo/yellingwoman@192.webp" />
-                </div>
-              </div>
-            </figure>
-            <div className="card-body">
-              <ProfileCardList data={user}></ProfileCardList>
-            </div>
+    <div className="card bg-base-100 w-96 shadow-sm">
+      <div className="card-body flex flex-row">
+        <div className="avatar avatar-online object-scale-down">
+          <div className="w-24 rounded-full object-scale-down">
+            <img src={profilePic} />
+          </div>
+        </div>
+        <div className="profile-card-content ml-4">
+          <h2 className="card-title">{String((user && (user.fullname || user.username)) || "JUANITO PÉREZ").toUpperCase()}</h2>
+          <p><b>APODO</b>: {String((user && (user.username)) || "JUANITOPEREZ123").toUpperCase()}</p>
+          <p><b>RUT</b>: {String((user && (user.rut)) || "123456789-0").toUpperCase()}</p>
+          <p><b>CORREO</b>: {String((user && (user.email)) || "JUANITOPEREZ123@EMAIL.COM").toUpperCase()}</p>
+          <div className="flex flex-row center items-center content-center self-center">
+            <p className="flex flex-row center items-center content-center self-center"><b>CARRERA</b>: 
+              <div className="badge badge-primary ml-1">{String((user && (user.carrera)) || "IECI").toUpperCase()}</div>
+            </p>
+          </div>
         </div>
       </div>
+    </div>
   );
 
   /* return (
