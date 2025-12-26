@@ -4,7 +4,7 @@ import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
-import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -201,6 +201,17 @@ export async function RAW_getAllStudents() {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const students = await userRepository.find({where: {role: STUDENT_ROLE}});
         return students || BASE_CASE;
+    } catch (error) {
+        return BASE_CASE;
+    }
+}
+
+export async function EMAIL_getAllCareerChiefs(career) {
+    const BASE_CASE = [];
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const chiefs = await userRepository.find({where: {carrera: String(career).toUpperCase(), role: CAREER_HEAD_ROLE}});
+        return chiefs || BASE_CASE;
     } catch (error) {
         return BASE_CASE;
     }

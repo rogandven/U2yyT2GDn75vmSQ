@@ -23,22 +23,28 @@ export const userExists = async (id) => {
     }
 }
 
-export const isValidDate = async (electivo) => {
+export const isValidDate = async (electivo, req) => {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
-    if (today.localeCompare(apertura) < 0) {
+    if (today.localeCompare(electivo.apertura) < 0) {
         return true;
     }
-    if (today.localeCompare(cierre) > 0) {
+    if (today.localeCompare(electivo.cierre) > 0) {
         return false;
     }
     const inscripciones = await countInscripciones(electivo.id);
     if (electivo.cupos >= inscripciones) {
         return false;
     }
+    if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
+        return false;
+    }
+    if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
+        return false;
+    }
     return true;
 }
 
-export const electivoExists = async (id, checks = true) => {
+export const electivoExists = async (id, checks = true, req) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
         // console.log(electivo);
@@ -49,7 +55,7 @@ export const electivoExists = async (id, checks = true) => {
             return false;
         }
         if (checks) {
-            if (!(await isValidDate(electivo))) {
+            if (!(await isValidDate(electivo, req))) {
                 return false;
             }
         }

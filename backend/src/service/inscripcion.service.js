@@ -10,12 +10,12 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
-export const isInvalidInscripcion = async (inscripcion, checks) => {
+export const isInvalidInscripcion = async (inscripcion, checks, req) => {
   
-  return !(await electivoExists(inscripcion.id_electivo, checks)) || !(await userExists(inscripcion.id_usuario));
+  return !(await electivoExists(inscripcion.id_electivo, checks, req)) || !(await userExists(inscripcion.id_usuario));
 }
 
-const cleanUpInscripcionArray = async (array) => {
+const cleanUpInscripcionArray = async (array, req) => {
   if (!Array.isArray(array)) {
     return [];
   }
@@ -23,7 +23,7 @@ const cleanUpInscripcionArray = async (array) => {
   let current = null;
   for (let i = 0; i < array.length; i++) {
     current = array[i];
-    if (await isInvalidInscripcion(current)) {
+    if (await isInvalidInscripcion(current, false, req)) {
       array[i] = undefined;
     }
   }
@@ -34,7 +34,7 @@ const cleanUpInscripcionArray = async (array) => {
   return array;
 }
 
-export async function getInscripciones() {
+export async function getInscripciones(req) {
   const dynamicMessage = (inscripciones) => {
     return (inscripciones.length <= 0) ? "No hay inscripciones para mostrar" : "¡Inscripciones encontradas!";
   }
@@ -46,7 +46,7 @@ export async function getInscripciones() {
     if (!inscripciones) {
       return formatMessage(BASE_CASE, dynamicMessage(BASE_CASE));
     }
-    inscripciones = await cleanUpInscripcionArray(inscripciones);
+    inscripciones = await cleanUpInscripcionArray(inscripciones, req);
     return formatMessage(inscripciones, dynamicMessage(inscripciones));
   } catch (error) {
     console.error(error);

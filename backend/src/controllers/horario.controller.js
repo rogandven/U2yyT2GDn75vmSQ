@@ -2,11 +2,13 @@
 import { assignationValidation, integrityValidation, updateValidation, validateHourBusiness, validateHourIntegrity } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { idValidation } from "../validations/modules/id.validation.js";
-import { electivoExists } from "../service/electivo.service.js";
-import { createHorario, findAllHorarios, getConflictingHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
+import { electivoExists, RAW_getElectivoById } from "../service/electivo.service.js";
+import { createHorario, findAllHorarios, getConflictingHorarios, deleteHorarioById_Electivo, isFirstHorario } from "../services/horario.service.js";
 import { getHorario, updateHorarioById_Electivo } from "../services/horario.service.js";
 import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
+import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
+import sendMail from "../services/email.service.js";
 
 
 const processHorarioArray = async (array) => {
@@ -102,7 +104,19 @@ export async function asignarHorario(req, res) {
     if (existingHorarioSala.length > 0) {
       return res.status(409).json({ message: "Horario y sala ya registrados.", conflicts: existingHorarioSala });
     }
-    
+    let booleanToPrint = null;
+    if (booleanToPrint = await isFirstHorario(id_electivo)) {
+      const chiefs = await EMAIL_getAllCareerChiefs(req.user.carrera || req.user.career);
+      const electivo = await RAW_getElectivoById(id_electivo);
+      const nombre = String(electivo?.nombre || "Electivo desconocido");
+
+      chiefs.forEach((chief) => {
+        sendMail(chief.email, "Confirmación", `El electivo ${nombre.toUpperCase()} va a ser impartido por ${String(req.user.fullname || req.user.username || "Profesor desconocido").toUpperCase()}. Por favor, revise el sistema.`);
+      });
+      console.log(chiefs);
+    }
+
+
     if (newHorario = await createHorario(id_electivo, hora_inicio, hora_termino, sala, dia)) {
       return res.status(201).json({ message: "Horario registrado exitosamente!", data: newHorario });
     } else {

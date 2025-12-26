@@ -40,7 +40,7 @@ const invalidResult = (result) => {
 
 export const private_getInscripciones = async (req, res) => {
     try {
-        const result = await getInscripciones();
+        const result = await getInscripciones(req);
         if (invalidResult(result) || result.data.length <= 0) {
             result.message = "No hay inscripciones para mostrar";
             return res.status(204).json(result);
@@ -64,7 +64,7 @@ export const private_getInscripcionesByUser = async (req, res) => {
     }
 
     try {
-        let result = await getInscripciones();
+        let result = await getInscripciones(req);
         if (invalidResult(result)) {
             result.message = "No hay inscripciones para mostrar";
             return res.status(204).json(result);
@@ -91,7 +91,7 @@ const getInscripcionHelper = async (req) => {
 
     try {
         let result = await getInscripcion(req.params.id);
-        if (!result || (await isInvalidInscripcion(result.data))) {
+        if (!result || (await isInvalidInscripcion(result.data, false, req))) {
             return {code: 404, json: getGenericResult(null, "Inscripción no encontrada")}
         }
         await processInscripcionArray([result.data]);
@@ -109,7 +109,7 @@ export const private_getInscripcion = async (req, res) => {
 
 export const private_getInscripcionesSinAprobar = async (req, res) => {
     try {
-        let result = await getInscripciones();
+        let result = await getInscripciones(req);
         if (invalidResult(result)) {
             result.message = "No hay inscripciones para mostrar";
             return res.status(204).json(result);
@@ -131,7 +131,7 @@ const createInscriptionHelper = async (req, res, checks) => {
         if (validationResult) {
             return res.status(400).json(getGenericResult(null, validationResult));
         }
-        if (await isInvalidInscripcion(req.body, checks)) {
+        if (await isInvalidInscripcion(req.body, checks, req)) {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
         if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
@@ -184,7 +184,7 @@ const updateInscriptionHelper = async (req, res, id_checks) => {
         };
 
         // console.log(editedInscripcion);
-        if (await isInvalidInscripcion(editedInscripcion, id_checks)) {
+        if (await isInvalidInscripcion(editedInscripcion, id_checks, req)) {
             return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
         }
         if (await inscripcionAlreadyExists(req.params.id, editedInscripcion.id_usuario, editedInscripcion.id_electivo)) {
