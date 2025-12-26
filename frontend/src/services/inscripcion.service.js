@@ -2,29 +2,35 @@ import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
   try {
-    const response = await axiosFunction(URL, body);
+    let response = null;
+    if (!body) {
+      response = await axiosFunction(URL);
+    } else {
+      response = await axiosFunction(URL, body);
+    }
+    
     return {data: response.data, status: response.status, message: response.message};
   } catch (error) {
     console.log("ERROR EN INSCRIPCION.SERVICE: ");
     console.error(error);
-    return {status: 500, data: error.response?.data || null, message: error.response?.message};
+    return {status: 500, data: error.response?.data || undefined, message: error.response?.message};
   }
 }
 
 export async function private_getInscripciones() {
-  return await routeHelper("/inscripciones/admin/", null, axios.get);
+  return await routeHelper("/inscripciones/admin/", undefined, axios.get);
 }
 
 export async function private_getInscripcionesByUser(id) {
-  return await routeHelper(`/inscripciones/admin/user/${id}`, null, axios.get);
+  return await routeHelper(`/inscripciones/admin/user/${id}`, undefined, axios.get);
 }
 
 export async function private_getInscripcion(id) {
-  return await routeHelper(`/inscripciones/admin/inscripcion/${id}`, null, axios.get);
+  return await routeHelper(`/inscripciones/admin/inscripcion/${id}`, undefined, axios.get);
 }
 
 export async function private_getInscripcionesSinAprobar() {
-  return await routeHelper(`/inscripciones/admin/pendiente/`, null, axios.get);
+  return await routeHelper(`/inscripciones/admin/pendiente/`, undefined, axios.get);
 }
 
 export async function private_createInscripcion(inscripcionData) {
@@ -36,7 +42,7 @@ export async function private_updateInscripcion(id, inscripcionData) {
 }
 
 export async function private_deleteInscripcion(id) {
-  return await routeHelper(`/inscripciones/admin/${id}`, null, axios.delete);
+  return await routeHelper(`/inscripciones/admin/${id}`, undefined, axios.delete);
 }
 
 export async function private_approveInscripcion(id) {
@@ -48,11 +54,11 @@ export async function private_rejectInscripcion(id) {
 }
 
 export async function public_getInscripcion(id) {
-  return await routeHelper(`/inscripciones/${id}`, null, axios.patch);
+  return await routeHelper(`/inscripciones/${id}`, undefined, axios.patch);
 }
 
 export async function public_getInscripcionesByUser() {
-  return await routeHelper(`/inscripciones/`, null, axios.patch);
+  return await routeHelper(`/inscripciones/`, undefined, axios.get);
 }
 
 export async function public_createInscripcion(inscripcionData) {
@@ -64,5 +70,5 @@ export async function public_updateInscripcion(id, inscripcionData) {
 }
 
 export async function public_deleteInscripcion(id) {
-  return await routeHelper(`/inscripciones/${id}`, null, axios.patch);
+  return await routeHelper(`/inscripciones/${id}`, undefined, axios.patch);
 }

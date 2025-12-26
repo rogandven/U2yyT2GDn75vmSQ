@@ -14,7 +14,7 @@ import { ESTADOS_VALIDOS } from '../../../constants/InscripcionConstants.jsx';
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
 
-export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames}) => {
+export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe}) => {
     let numero = 1;
     const data = (inscripciones?.data?.data || []);
     return (
@@ -46,8 +46,8 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                 <td>
                     <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames)}}><IoMdSettings></IoMdSettings></button>
                     <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion)}}><MdDelete></MdDelete></button>
-                    <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true)}}><ImCheckmark/></button>
-                    <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false)}}><TiTimes/></button>
+                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true)}}><ImCheckmark/></button>}
+                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false)}}><TiTimes/></button>}
                 </td>
                 </tr>  
             )})}

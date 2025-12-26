@@ -11,6 +11,16 @@ import { IoMdSettings } from 'react-icons/io';
 import { FiUserPlus } from 'react-icons/fi'
 
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
+
+import { isAdminOrProfesor } from '../../../services/admin.service.js';
+import { isJefeDeCarrera } from '../../../services/admin.service.js';
+
+const isAdmin = isAdminOrProfesor();
+const isJefe = isJefeDeCarrera();
+
+const mustBeDisplayed = (electivo) => {
+  return isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
+}
 /*
         <table className="solicitud-table">
           <thead>
@@ -94,7 +104,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tbody>
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
-                return electivo && (
+                return electivo && mustBeDisplayed(electivo) && (
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
@@ -107,12 +117,12 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>
-                      <button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><IoMdSettings></IoMdSettings></button>
-                      <button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>
-                      <button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>
-                      <button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>
-                      <button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false)}}><TiTimes/></button>
-                      <button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id)}}><FiUserPlus /></button>
+                      {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><IoMdSettings></IoMdSettings></button>)}
+                      {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>)}
+                      {(<button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>)}
+                      {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>)}
+                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false)}}><TiTimes/></button>)}
+                      {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id)}}><FiUserPlus /></button>)}
                     </td>
                 </tr>     
                 )           

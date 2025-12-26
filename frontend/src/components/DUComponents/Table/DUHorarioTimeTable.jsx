@@ -2,6 +2,11 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
+import { isAdminOrProfesor } from '../../../services/admin.service.js';
+import { isJefeDeCarrera } from '../../../services/admin.service.js';
+
+const isAdmin = isAdminOrProfesor();
+const isJefe = isJefeDeCarrera();
 
 const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
   if (Array.isArray(data) && data.length > 0) {
@@ -21,10 +26,12 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
                           {String(Timetable.dia).toUpperCase()}
                         </div>
                       </td>
+                      {isAdmin && (
                       <td>
                       <button className="btn btn-primary m-1" onClick={() => {handleEditTimetable(Timetable.id_horario, Timetable)}}><IoMdSettings></IoMdSettings></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteTimetable(Timetable.id_horario)}}><MdDelete></MdDelete></button>
                       </td>
+                      )}
                   </tr>
       ));
   } else {
@@ -54,7 +61,7 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
                 <th>Hora Término</th>
                 <th>Sala</th>
                 <th>Día</th>
-                <th>Acciones</th>             
+                {isAdmin && (<th>Acciones</th>)}             
             </tr>
             </thead>
             <tbody>

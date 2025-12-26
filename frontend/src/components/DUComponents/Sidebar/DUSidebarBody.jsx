@@ -7,9 +7,12 @@ import { CgProfile } from "react-icons/cg";
 import { FaBook } from 'react-icons/fa';
 import { HiPencilAlt } from 'react-icons/hi';
 import { AiFillCalendar } from 'react-icons/ai';
+import { isAdminOrProfesor } from "../../../services/admin.service.js";
 
 
 export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
+    const isAdmin = isAdminOrProfesor();
+
     const createSidebarItem = (label, destination, icon, logoutSubmit) => {
         return (                    
             <DUSidebarItem 
@@ -34,9 +37,9 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
                 {createSidebarItem("Inicio", "/home", (<FaHome />), undefined)}
-                {createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
+                {isAdmin && createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
                 {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
-                {createSidebarItem("Electivos B", "/electivos", (<FaBook />), undefined)}
+                {createSidebarItem("Electivos", "/electivos", (<FaBook />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}

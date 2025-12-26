@@ -4,6 +4,7 @@ import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
+import sendMail from "../services/email.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
@@ -158,6 +159,9 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
 
     Object.assign(electivo, { estado: nuevo_estado });
     await electivoRepo.save(electivo);
+
+    const creador = (await RAW_getUserById(electivo.id_profesor))?.email;
+    sendMail(creador, "Rechazo", `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido rechazado.`);
 
     return getServiceResult(false, electivo, `Electivo ${nuevo_estado} correctamente`, 1);
   } catch (error) {

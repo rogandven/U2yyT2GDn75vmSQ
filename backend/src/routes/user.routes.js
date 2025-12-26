@@ -12,6 +12,7 @@ router.use(authenticateJwt);
 
 //ruta para obtener el perfil del usuario autenticado
 router.get("/profile", getProfile);
+router.get("/frontend_list", getAllStudentNames);
 
 //middleware para verificar si el usuario es administrador
 router.use(isAdmin);
@@ -23,6 +24,6 @@ router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
 router.post("/", registerPrivate);
 
-router.get("/frontend_list", getAllStudentNames);
+
 
 export default router;

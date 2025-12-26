@@ -6,13 +6,17 @@ import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
 import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable.jsx";
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
-import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/ElectivoConstants.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA, ESTADOS_VALIDOS } from "../constants/ElectivoConstants.jsx";
 import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
 import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
+import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+
 const Electivos = () => {
+  const isAdmin = isAdminOrProfesor();
+
   const { electivos, fetchElectivos } = useGetElectivos();
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
   const { handleEditElectivo } = useEditElectivo(fetchElectivos);
@@ -69,7 +73,7 @@ const Electivos = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        <button className="btn btn-primary ml-3 mb-0" onClick={handleCreateElectivo}>Crear Electivo</button>
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={handleCreateElectivo}>Crear Electivo</button>)}
         <SearchBar 
           customClassName={"solicitud-filtro-input ml-3"} 
           placeholder={"Buscar por nombre o descripción..."} 

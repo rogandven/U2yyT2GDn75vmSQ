@@ -6,8 +6,8 @@ import DUSidebarBody from "./DUComponents/Sidebar/DUSidebarBody.jsx";
 const Sidebar = ({PageContent}) => {
   const navigate = useNavigate();
 
-  const user = JSON.parse(sessionStorage.getItem("usuario")) || "";
-  const userRole = user?.rol;
+  // const user = JSON.parse(sessionStorage.getItem("usuario")) || "";
+  // const userRole = user?.rol;
 
   const logoutSubmit = () => {
     try {

@@ -38,6 +38,10 @@ export const isAdminOrProfesor = () => {
     return false;
 }
 
-export const getUserId = () => {
-    
+export const isJefeDeCarrera = () => {
+    const userRole = getUserRole();
+    console.log(userRole);
+    const result = (userRole && (userRole === CAREER_HEAD_ROLE)) || false;
+    console.log(result);
+    return result;
 }

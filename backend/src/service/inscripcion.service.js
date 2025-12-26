@@ -3,6 +3,9 @@ import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
 import { electivoExists, formatMessage, userExists } from "./utils/utils.inscription.service.js";
 import { inscripcionAlreadyExists as IAE_helper } from "./utils/utils.inscription.service.js";
+import sendMail from "../services/email.service.js";
+import { RAW_getUserById } from "./user.service.js";
+import { RAW_getElectivoById } from "./electivo.service.js";
 // import UserEntity from "../entity/user.entity.js";
 // import ElectivoEntity from "../entity/electivo.entity.js";
 
@@ -95,12 +98,24 @@ export async function updateInscripcion(data, inscripcion, inscripcionAntigua) {
     return inscripcion ? "¡Inscripcion editada!" : "No se pudo editar la inscripción";
   }
  
+  let sendEmail = inscripcion?.estado !== (data?.estado || inscripcion?.estado);
+
   const queryRunner = AppDataSource.createQueryRunner();
   await queryRunner.startTransaction();
 
   try {
     let inscripcionEditada = await inscripcionRepo.update(inscripcion, data);
     throwErrorIfFailedUpdate(inscripcionEditada);
+
+    try {
+      if (sendEmail) {
+        const electivo = await RAW_getElectivoById(inscripcion.id_electivo);
+        const creador = await RAW_getUserById(inscripcion.id_usuario);
+        sendMail(creador?.email, String(data?.estado).toUpperCase(), `Su inscripción para ${String(electivo?.nombre).toUpperCase()} ha sido ${String(data?.estado).toUpperCase()}.`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     return formatMessage(inscripcionEditada, dynamicMessage(inscripcionEditada));
   } catch (error) {

@@ -17,6 +17,7 @@ import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripc
 
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 
 const Inscripciones = () => {
   const { inscripciones, fetchInscripciones } = useGetInscripciones();
@@ -29,6 +30,9 @@ const Inscripciones = () => {
 
   const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
   const { userNames, fetchUserNames } = useGetUserNames();
+
+  const isAdmin = isAdminOrProfesor();
+  const isJefe = isJefeDeCarrera();
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
@@ -80,7 +84,7 @@ const Inscripciones = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        <button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames)}}>Crear Inscripcion</button>
+        {isAdmin && <button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames)}}>Crear Inscripcion</button>}
         {/* <DUSelection
           options={AREAS_PERMITIDAS_EN_MAYUSCULA}
           defaultValue={"Todas las áreas"}
@@ -94,7 +98,7 @@ const Inscripciones = () => {
         ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames}></DUInscripcionTable>
+        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames} isAdmin={isAdmin} isJefe={isJefe}></DUInscripcionTable>
       </div>
     </div>
   );

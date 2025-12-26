@@ -16,14 +16,17 @@ export const sendMail = (to, subject, text) => {
             pass: EMAIL_PASSWORD
         }
     });
-
-    transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
+    try {
+        transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+        });
+    } catch (error) {
         console.log(error);
-    } else {
-        console.log('Email sent: ' + info.response);
     }
-    });
 }
 
 export default sendMail;

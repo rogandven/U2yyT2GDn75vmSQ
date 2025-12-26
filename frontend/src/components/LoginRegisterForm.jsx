@@ -158,7 +158,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
         </form>
 
         <div>
-          {mode === "login" ? (
+          {/* mode === "login" ? (
             <p>
               ¿No tienes cuenta? <a className="link link-primary" href="/register">Regístrate</a>
             </p>
@@ -166,7 +166,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
             <p>
               ¿Ya tienes cuenta? <a className="link link-primary" href="/login">Inicia sesión</a>
             </p>
-          )}
+          )*/}
         </div>
       </div>
     </div>
