@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
 import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 
-const MIN_PASSWORD = 1;
-const MAX_PASSWORD = 500;
+const MIN_FIELD = 1;
+const MAX_FIELD = 500;
 
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
@@ -49,14 +49,14 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                   {...register("username", {
                     required: "El nombre de usuario es obligatorio",
                     minLength: {
-                      value: 3,
+                      value: MIN_FIELD,
                       message:
-                        "El nombre de usuario debe tener al menos 3 caracteres",
+                        `El nombre de usuario debe tener al menos ${MIN_FIELD} caracteres`,
                     },
                     maxLength: {
-                      value: 30,
+                      value: MAX_FIELD,
                       message:
-                        "El nombre de usuario debe tener como máximo 30 caracteres",
+                        `El nombre de usuario debe tener como máximo ${MAX_FIELD} caracteres`,
                     },
                     pattern: {
                       value: /^[a-zA-Z0-9_]+$/,
@@ -84,15 +84,15 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 {...register("email", {
                   required: "El correo es obligatorio",
                   minLength: {
-                    value: 15,
-                    message: "El correo debe tener al menos 15 caracteres",
+                    value: MIN_FIELD,
+                    message: `El correo debe tener al menos ${MIN_FIELD} caracteres`,
                   },
                   maxLength: {
-                    value: 50,
-                    message: "El correo debe tener como máximo 50 caracteres",
+                    value: MAX_FIELD,
+                    message: `El correo debe tener como máximo ${MAX_FIELD} caracteres`,
                   },
                   pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio|ubiobio)\.(com|cl)$/,
+                    value: /^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio|ubiobio)\.(cl)$/,
                     message:
                       "El correo debe ser un correo de la UBB",
                   },
@@ -137,12 +137,12 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 {...register("password", {
                   required: "La contraseña es obligatoria",
                   minLength: {
-                    value: MIN_PASSWORD,
-                    message: `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres`,
+                    value: MIN_FIELD,
+                    message: `La contraseña debe tener al menos ${MIN_FIELD} caracteres`,
                   },
                   maxLength: {
-                    value: MAX_PASSWORD,
-                    message: `La contraseña debe tener como máximo ${MAX_PASSWORD} caracteres`,
+                    value: MAX_FIELD,
+                    message: `La contraseña debe tener como máximo ${MAX_FIELD} caracteres`,
                   },
                 })}
               />
