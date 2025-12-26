@@ -44,7 +44,7 @@ export const useCreateInscripcion = (fetchInscripciones) => {
       console.log(response);
       if (response) {
         await fetchInscripciones();
-        fireDynamicSwal(response.status, response.data?.message === response.data?.details ? null : response.data?.message, response.data?.message);
+        fireDynamicSwal(response?.status, null, response?.data?.message || response?.data?.details);
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);

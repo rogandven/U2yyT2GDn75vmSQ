@@ -16,7 +16,7 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
       console.log(response);
       if (response) {
         await fetchElectivos();
-        fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
+        fireDynamicSwal(response.status, null, response.message);
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);

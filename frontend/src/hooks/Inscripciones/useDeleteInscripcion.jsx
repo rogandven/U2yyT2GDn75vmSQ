@@ -49,8 +49,7 @@ export const useDeleteInscripcion = (fetchInscripciones) => {
           if (response.data) {
             Object.assign(response, response.data);
           }
-          fireDynamicSwal(response.status, response.message, response.message);
-          // confirmAlert();
+          fireDynamicSwal(response?.status, null, response?.message);
           await fetchInscripciones();
         }
       }

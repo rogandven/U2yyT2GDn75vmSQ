@@ -1,33 +1,16 @@
 import { updateTimetable } from "@services/horario.service.js";
 import Swal from "sweetalert2";
+import { createSwalField } from "../utils/swalField.jsx";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 async function editTimetableInfo(horario) {
     const { value: formValues } = await Swal.fire({
         title: 'Editar Horario',
         html: `
-            <div>
-                <label for="swal2-input1">Hora de Inicio:</label>
-                <label for="swal2-input1">Tiene que estar en formato 24 horas HH:MM</label>
-                <input id="swal2-input1" className="swal2-input" placeholder="HH:MM" value="${horario.hora_inicio}">
-            </div>
-
-            <div>
-                <label for="swal2-input2">Hora de termino:</label>
-                <label for="swal2-input2">Tiene que estar en formato 24 horas HH:MM</label>
-                <input id="swal2-input2" className="swal2-input" placeholder="HH:MM" value="${horario.hora_termino}">
-            </div>
-
-            <div>
-                <label for="swal2-input3">Sala:</label>
-                <label for="swal2-input3">Tiene que tener entre 3 y 20 caracteres</label>
-                <input id="swal2-input3" className="swal2-input" placeholder="Sala" value="${horario.sala}">
-            </div>
-
-            <div>
-                <label for="swal2-input4">Día:</label>
-                <label for="swal2-input4">Tiene que ser un día válido (lunes, martes, miércoles, jueves, viernes, sábado, )</label>
-                <input id="swal2-input4" className="swal2-input" placeholder="Día" value="${horario.dia}">
-            </div>
+            ${createSwalField(2, "Hora de Inicio", horario.hora_inicio)}
+            ${createSwalField(3, "Hora de Término", horario.hora_termino)}
+            ${createSwalField(4, "Sala", horario.sala)}
+            ${createSwalField(5, "Día", horario.dia)}
             `,
 
         focusConfirm: false,
@@ -35,10 +18,10 @@ async function editTimetableInfo(horario) {
         confirmButtonText: 'Editar',
         preConfirm: () => {
             
-            const hora_inicio = document.getElementById('swal2-input1').value;
-            const hora_termino = document.getElementById('swal2-input2').value;
-            const sala = document.getElementById('swal2-input3').value;
-            const dia = document.getElementById('swal2-input4').value;
+            const hora_inicio = document.getElementById('swal2-input2').value;
+            const hora_termino = document.getElementById('swal2-input3').value;
+            const sala = document.getElementById('swal2-input4').value;
+            const dia = document.getElementById('swal2-input5').value;
 
             if(!hora_inicio || !hora_termino || !sala || !dia){
                 Swal.showValidationMessage('Por favor complete todos los campos');
@@ -47,6 +30,7 @@ async function editTimetableInfo(horario) {
             return { hora_inicio, hora_termino, sala, dia };
 
         },
+        theme: "dark",
     });
     if (formValues) {
         return {
@@ -67,15 +51,9 @@ export const editTimetable=(fetchTimetable)=> {
 
             const response = await updateTimetable(id_horario, formValues);
             if(response){
-                Swal.fire({
-                    title:"Horario actualizado con exitosamente",
-                    icon:"success",
-                    confirmButtonText:"Aceptar"
-                })
-                    await fetchTimetable();
-                }
-
+                fireDynamicSwal(response?.status, null, response.message || response.details || response.data?.message || response.data?.details);
                 await fetchTimetable();
+            }
         }
          catch (error) {
             console.error('Error al actualizar el horario:', error);

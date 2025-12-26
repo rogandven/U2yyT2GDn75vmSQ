@@ -12,29 +12,38 @@ export const getTimetables = async () => {
 
 export const assignTimetable = async (horarioData) => {
     try {
+        console.log(horarioData);
         const idElectivo = horarioData.id_electivo;
         delete horarioData.id_electivo;
         const response = await axios.post('/horarios/asignar/' + String(idElectivo), horarioData);
+        const status = {status: response?.status || 500};
+        try {
+            Object.assign(response.data, status);
+        } catch (error) {}
         return response.data;
     } catch (error) {
         console.error('Error al asignar el horario:', error);
-        throw error;
+        return error.response || {message: "Error desconocido", status: 500};
     }
 };
 
 
 export const updateTimetable = async (id_horario, updatedData) => {
+    let response = null;
     try {
         delete updatedData.id_horario;
         // console.log("¿Qué se va a actualizar?");
         // console.log(updatedData);
-        const response = await axios.patch(`/horarios/${id_horario}`, updatedData);
+        response = await axios.patch(`/horarios/${id_horario}`, updatedData);
+        const status = {status: response?.status || 500};
+        Object.assign(response.data, status)
         return response.data;
     } catch (error) {
-        // console.log(JSON.stringify(error));
-        // console.log(JSON.stringify(updatedData));
+        response = error?.response || {message: "Error desconocido", status: 500};
+        const status = {status: response?.status || 500};
+        Object.assign(response.data || response, status);
         console.error('Error al actualizar el horario:', error);
-        throw error;
+        return response.data || response;
     }
 };
 
