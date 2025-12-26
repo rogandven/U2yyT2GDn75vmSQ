@@ -53,6 +53,9 @@ export async function updateUserById(req, res) {
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
+  if (id === req.user.id) {
+    return res.status(401).json(getControllerResult_NEW("No se puede actualizar a si mismo", null));
+  }
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(newData.fullname);
   }
