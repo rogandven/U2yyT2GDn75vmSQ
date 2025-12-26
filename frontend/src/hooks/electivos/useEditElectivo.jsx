@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
 
 async function editElectivoInfo(electivo) {
   const { value: formValues } = await Swal.fire({
@@ -13,7 +15,7 @@ async function editElectivoInfo(electivo) {
       ${createSwalField(3, "Cupos", electivo.cupos)}
       ${createSwalField(4, "Apertura", electivo.apertura)}
       ${createSwalField(5, "Cierre", electivo.cierre)}
-      ${createSwalField(6, "Área", electivo.area)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input6", "m-1")}
       ${createSwalField(7, "Semestre Mínimo", electivo.semestre_minimo)}
       ${createSwalField(8, "Carreras", electivo.carreras)}
         `,
