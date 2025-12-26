@@ -290,7 +290,7 @@ export const public_createInscripcion = async (req, res) => {
     if ((req.user.role || req.user.rol) !== STUDENT_ROLE) {
         return res.status(401).json(getGenericResult(null, "Solo los estudiantes pueden inscribir ramos"));
     }
-    if ((await countInscripcionesByUser(req.user.id)) > MAX_INSCRIPCIONES) {
+    if ((await countInscripcionesByUser(req.user.id)) >= MAX_INSCRIPCIONES) {
         return res.status(401).json(getGenericResult(null, "Ya tiene suficientes inscripciones"));
     }
     req.body.id_usuario = req.user.id;
