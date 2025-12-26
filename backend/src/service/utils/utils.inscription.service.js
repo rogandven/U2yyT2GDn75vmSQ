@@ -2,6 +2,7 @@ import { AppDataSource } from "../../config/configDb.js";
 import { UserEntity } from "../../entity/user.entity.js";
 import ElectivoEntity from "../../entity/electivo.entity.js";
 import InscripcionEntity from "../../entity/inscripcion.entity.js";
+import { ESTADOS_VALIDOS } from "../../constants/electivo.constants.js";
 
 const userRepository = AppDataSource.getRepository(UserEntity);
 const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
@@ -24,6 +25,9 @@ export const userExists = async (id) => {
 export const electivoExists = async (id) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
+        if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
+            return false;
+        }
         // console.log(electivo);
         if (!electivo) {
             return false;

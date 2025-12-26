@@ -9,6 +9,7 @@ import { validationFunctionHelper } from "./utils/utils.controller.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { getUserNameById } from "./user.controller.js";
 import { BASE_CASE } from "../service/utils/utils.service.js";
+import { STUDENT_ROLE } from "../constants/user.constants.js";
 
 const processInscripcionArray = async (array) => {
     let current = null;
@@ -285,6 +286,9 @@ export const public_createInscripcion = async (req, res) => {
     }
     if (req.body.estado) {
         return res.status(401).json(getGenericResult(null, "No se puede autoasignar un estado"));
+    }
+    if ((req.user.role || req.user.rol) !== STUDENT_ROLE) {
+        return res.status(401).json(getGenericResult(null, "Solo los estudiantes pueden inscribir ramos"));
     }
     req.body.id_usuario = req.user.id;
     req.body.estado = AWAITING;
