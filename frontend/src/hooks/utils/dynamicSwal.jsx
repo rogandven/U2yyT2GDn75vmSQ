@@ -8,7 +8,7 @@ const isPositive = (status) => {
 export const fireDynamicSwal = (status, title, text) => {
     return Swal.fire({
         title: (title) || (isPositive(status) ? "Éxito" : "Error"),
-        text: text || "Hubo un error desconocido",
+        text: text || (isPositive(status) ? "Operación exitosa" : "Hubo un error desconocido"),
         icon: isPositive(status) ? 'success' : 'error'
     });
 }

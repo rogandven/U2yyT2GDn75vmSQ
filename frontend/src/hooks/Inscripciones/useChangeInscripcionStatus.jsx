@@ -1,6 +1,6 @@
-import { private_approveInscripcion, private_rejectInscripcion} from "../../../services/inscripcion.service.js";
+import { private_approveInscripcion, private_rejectInscripcion } from "../../services/inscripcion.service.js";
 import Swal from "sweetalert2";
-import { fireDynamicSwal } from "../../utils/dynamicSwal.jsx";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
@@ -15,6 +15,9 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
       }
       console.log(response);
       if (response) {
+        if (response.data){ 
+          Object.assign(response, response.data);
+        }
         await fetchInscripciones();
         fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
       }

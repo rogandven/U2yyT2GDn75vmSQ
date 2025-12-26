@@ -10,7 +10,7 @@ import { BsClockFill } from 'react-icons/bs';
 
 import { ESTADOS_VALIDOS } from '../../../constants/InscripcionConstants.jsx';
 
-export const DUInscripcionTable = ({inscripciones, handleEditInscripcion}) => {
+export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus}) => {
     let numero = 1;
     const data = (inscripciones?.data?.data || []);
     return (
@@ -41,9 +41,9 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion}) => {
                 </td>
                 <td>
                     <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion)}}><FaEdit></FaEdit></button>
-                    <button className="btn btn-secondary m-1" onClick={() => {}}><MdDelete></MdDelete></button>
-                    <button className="btn btn-success m-1" onClick={() => {}}><ImCheckmark/></button>
-                    <button className="btn btn-error m-1" onClick={() => {}}><TiTimes/></button>
+                    <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion)}}><MdDelete></MdDelete></button>
+                    <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true)}}><ImCheckmark/></button>
+                    <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false)}}><TiTimes/></button>
                 </td>
                 </tr>  
             )})}
