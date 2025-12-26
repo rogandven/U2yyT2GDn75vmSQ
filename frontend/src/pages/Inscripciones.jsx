@@ -15,14 +15,20 @@ import useEditInscripcion from "../hooks/Inscripciones/useEditInscripcion.jsx";
 import useDeleteInscripcion from "../hooks/Inscripciones/useDeleteInscripcion.jsx";
 import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripcionStatus.jsx";
 
+import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
+
 const Inscripciones = () => {
   const { inscripciones, fetchInscripciones } = useGetInscripciones();
   const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
   // const { inscripciones, fetchInscripciones } = useGetInscripciones();
   // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
-const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
-const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
-const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(fetchInscripciones)
+  const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
+  const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
+  const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(fetchInscripciones);
+
+  const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
+  const { userNames, fetchUserNames } = useGetElectivoNames();
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
