@@ -42,7 +42,7 @@ async function setupAPI() {
     await connectDB();
     // Crea los usuarios iniciales
     await createUsers();
-    await createElectivos();
+    // await createElectivos();
     // Configura el servidor
     await setupServer();
   } catch (error) {

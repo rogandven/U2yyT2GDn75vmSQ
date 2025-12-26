@@ -4,6 +4,7 @@ import User from "../entity/user.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
+import { EXMAPLE_EMAIL_1, EXMAPLE_EMAIL_2, EXMAPLE_EMAIL_3, EXMAPLE_EMAIL_4, EXMAPLE_EMAIL_5, EXMAPLE_EMAIL_6 } from "./configEnv.js";
 
 /*
 if (!AppDataSource.isInitialized) {
@@ -19,33 +20,71 @@ export async function createUsers() {
 
     const users = [
       {
-        username: "Administrador",
-        rut: "11111111-1",
-        email: "admin@ubiobio.cl",
-        password: await encryptPassword("admin123"),
-        role: "administrador",
+        fullname: "Roger Venegas",
+        username: "rogandven",
+        rut: "4825562-0",
+        email: EXMAPLE_EMAIL_1,
+        password: await encryptPassword("roger123"),
+        role: "JEFE_DE_CARRERA",
+        generation: "2023-1",
+        carrera: "IECI",
+        creditos: 0
       },
       {
-        username: "Profesor",
-        rut: "22222222-2",
-        email: "profesor@ubiobio.cl",
-        password: await encryptPassword("profesor123"),
-        role: "profesor",
+        fullname: "Sebastián Pinto",
+        username: "seba",
+        rut: "22849268-K",
+        email: EXMAPLE_EMAIL_2,
+        password: await encryptPassword("seba123"),
+        role: "PROFESOR",
+        generation: "2023-1",
+        carrera: "IECI",
+        creditos: 0
       },
       {
-        username: "Alumno",
-        rut: "33333333-3",
-        email: "alumno@alumnos.ubiobio.cl",
-        password: await encryptPassword("alumno123"),
-        role: "alumno",
+        fullname: "Carlos Domínguez",
+        username: "carmanolo",
+        rut: "20924430-6",
+        email: EXMAPLE_EMAIL_3,
+        password: await encryptPassword("carlos123"),
+        role: "ESTUDIANTE",
+        generation: "2023-1",
+        carrera: "IECI",
+        creditos: 300
       },
       {
-        username: "Gestor por asignar",
-        rut: "000000000-0",
-        email: "gestor.por.asignar@ubiobio.cl",
-        password: await encryptPassword("gestor123"),
-        role: "gestor",
+        fullname: "Rodrigo Alarcón",
+        username: "rodriser12",
+        rut: "8347186-7",
+        email: EXMAPLE_EMAIL_4,
+        password: await encryptPassword("rodri123"),
+        role: "JEFE_DE_CARRERA",
+        generation: "2023-1",
+        carrera: "ICINF",
+        creditos: 300
       },
+      {
+        fullname: "Fermín Millanao",
+        username: "fermin23",
+        rut: "16057069-5",
+        email: EXMAPLE_EMAIL_5,
+        password: await encryptPassword("fermin123"),
+        role: "PROFESOR",
+        generation: "2023-1",
+        carrera: "ICINF",
+        creditos: 0
+      },
+      {
+        fullname: "Andrés Opazo",
+        username: "andres123",
+        rut: "4738683-7",
+        email: EXMAPLE_EMAIL_6,
+        password: await encryptPassword("andres123"),
+        role: "ESTUDIANTE",
+        generation: "2023-1",
+        carrera: "ICINF",
+        creditos: 0
+      },      
     ];
 
     console.log("Creando usuarios base...");

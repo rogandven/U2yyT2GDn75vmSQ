@@ -25,6 +25,14 @@ export const EMAIL_PROVIDER=process.env.EMAIL_PROVIDER;
 export const EMAIL_PASSWORD=process.env.EMAIL_PASSWORD;
 export const JWT_SECRET = SESSION_SECRET;
 
+export const EXMAPLE_EMAIL_1 = process.env.EXMAPLE_EMAIL_1;
+export const EXMAPLE_EMAIL_2 = process.env.EXMAPLE_EMAIL_2;
+export const EXMAPLE_EMAIL_3 = process.env.EXMAPLE_EMAIL_3;
+export const EXMAPLE_EMAIL_4 = process.env.EXMAPLE_EMAIL_4;
+export const EXMAPLE_EMAIL_5 = process.env.EXMAPLE_EMAIL_5;
+export const EXMAPLE_EMAIL_6 = process.env.EXMAPLE_EMAIL_6;
+
+
 /*
 "use strict";
 import { fileURLToPath } from "url";
