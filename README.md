@@ -18,7 +18,7 @@ Antes de comenzar, asegúrate de tener instalado en tu sistema:
 
 ### 1. Clona el repositorio
 ```bash
-git clone https://github.com/HunterUrisus/Backend-Plantilla-MDD-2025-1
+git clone https://github.com/rogandven/GestionDeElectivosISW-2025-2
 cd Backend-Plantilla-MDD-2025-1/
 ```
 
