@@ -7,7 +7,7 @@ import { private_createInscripcion } from "../../services/inscripcion.service.js
 
 async function createInscripcionInfo() {
   const { value: formValues } = await Swal.fire({
-    title: "Crear Usuario",
+    title: "Crear Inscripcion",
     html: `
       ${createSwalField(1, "Usuario", "")}
       ${createSwalField(2, "Electivo", "")}

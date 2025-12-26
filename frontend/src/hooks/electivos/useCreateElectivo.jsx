@@ -7,7 +7,7 @@ import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/a
 
 async function createElectivoInfo() {
   const { value: formValues } = await Swal.fire({
-    title: "Crear Usuario",
+    title: "Crear Electivo",
     html: `
       ${createSwalField(1, "Nombre", "")}
       ${createSwalField(2, "Descripcion", "")}

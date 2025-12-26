@@ -11,7 +11,7 @@ import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripci
 import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
 import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 // import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
-// import useEditInscripcion from "../hooks/inscripciones/useEditInscripcion.jsx";
+import useEditInscripcion from "../hooks/Inscripciones/useEditInscripcion.jsx";
 // import useDeleteInscripcion from "../hooks/inscripciones/useDeleteInscripcion.jsx";
 // import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripcionStatus.jsx";
 
@@ -20,7 +20,7 @@ const Inscripciones = () => {
   const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
   // const { inscripciones, fetchInscripciones } = useGetInscripciones();
   // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
-  // const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
+const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
   // const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
 
   // const [busqueda, setBusqueda] = useState("");
@@ -85,7 +85,7 @@ const Inscripciones = () => {
         ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUInscripcionTable inscripciones={inscripciones}></DUInscripcionTable>
+        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion}></DUInscripcionTable>
       </div>
     </div>
   );
