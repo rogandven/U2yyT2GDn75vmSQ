@@ -1,38 +1,26 @@
-import { createElectivoJefeDeCarrera, createElectivoProfesor } from "../../services/electivo.service.js";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
-import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
+import { CAREER_HEAD_ROLE, isAdminOrProfesor } from "../../services/admin.service.js";
+import { private_createInscripcion } from "../../services/inscripcion.service.js";
 
-async function createElectivoInfo() {
+async function createInscripcionInfo() {
   const { value: formValues } = await Swal.fire({
     title: "Crear Usuario",
     html: `
-      ${createSwalField(1, "Nombre", "")}
-      ${createSwalField(2, "Descripcion", "")}
-      ${createSwalField(3, "Cupos", "")}
-      ${createSwalField(4, "Apertura", "")}
-      ${createSwalField(5, "Cierre", "")}
-      ${createSwalField(6, "Área", "")}
-      ${createSwalField(7, "Semestre Mínimo", "")}
-      ${createSwalField(8, "Carreras", "")}
+      ${createSwalField(1, "Usuario", "")}
+      ${createSwalField(2, "Electivo", "")}
     `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Crear",
     cancelButtonText: "Cancelar",
     preConfirm: () => {
-      const nombre = gebi('swal2-input1')?.value;
-      const descripcion = gebi('swal2-input2')?.value;
-      const cupos = gebi('swal2-input3')?.value;
-      const apertura = gebi('swal2-input4')?.value;
-      const cierre = gebi('swal2-input5')?.value;
-      const area = gebi('swal2-input6')?.value;
-      const semestre_minimo = gebi('swal2-input7')?.value;
-      const carreras = gebi('swal2-input8')?.value;
+      const id_usuario = gebi('swal2-input1')?.value;
+      const id_electivo = gebi('swal2-input2')?.value;
 
-      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
+      return {id_electivo, id_usuario};
     },
     theme: "dark",
   });
@@ -41,36 +29,30 @@ async function createElectivoInfo() {
   }
 }
 
-export const useCreateElectivo = (fetchElectivos) => {
-  const handleCreateElectivo = async (electivo) => {
+export const useCreateInscripcion = (fetchInscripciones) => {
+  const handleCreateInscripcion = async () => {
     try {
       let response = null;
-      const formValues = await createElectivoInfo(electivo);
+      if (!isAdminOrProfesor()) {
+        fireDynamicSwal(401, "Error", "Acceso denegado");
+      }
+      const formValues = await createInscripcionInfo();
       if (!formValues) return;
 
-      const userRole = getUserRole();
-      console.log(userRole);
-      if (userRole === CAREER_HEAD_ROLE) {
-        response = await createElectivoJefeDeCarrera(formValues);
-      } else if (getAllowedRoles().includes(userRole)) {
-        response = await createElectivoProfesor(formValues);
-      } else {
-        fireDynamicSwal(401, "Error", "Acceso denegado");
-        return;
-      }
-      
+      response = await private_createInscripcion(formValues);
+      console.log("LA RESPUESTA: ");
       console.log(response);
       if (response) {
-        await fetchElectivos();
+        await fetchInscripciones();
         fireDynamicSwal(response.status, response.data?.message === response.data?.details ? null : response.data?.message, response.data?.message);
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear electivo:", error);
+      console.error("Error al crear inscripción:", error);
     }
   };
 
-  return { handleCreateElectivo };
+  return { handleCreateInscripcion };
 };
 
-export default useCreateElectivo;
+export default useCreateInscripcion;

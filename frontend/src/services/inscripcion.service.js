@@ -3,10 +3,11 @@ import axios from '@services/root.service.js';
 const routeHelper = async (URL, body, axiosFunction) => {
   try {
     const response = await axiosFunction(URL, body);
-    return {data: response.data?.data, status: response.status, message: response.data?.message};
+    return {data: response.data, status: response.status, message: response.message};
   } catch (error) {
+    console.log("ERROR EN INSCRIPCION.SERVICE: ");
     console.error(error);
-    return error.response?.data || null;
+    return {status: 500, data: error.response?.data || null, message: error.response?.message};
   }
 }
 

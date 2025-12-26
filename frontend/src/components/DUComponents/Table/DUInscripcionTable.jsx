@@ -12,7 +12,7 @@ import { ESTADOS_VALIDOS } from '../../../constants/InscripcionConstants.jsx';
 
 export const DUInscripcionTable = ({inscripciones}) => {
     let numero = 1;
-    const data = (inscripciones && inscripciones.data || []);
+    const data = (inscripciones?.data?.data || []);
     return (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">

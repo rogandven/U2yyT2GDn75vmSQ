@@ -9,6 +9,7 @@ import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/InscripcionConstants.jsx";
 import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
 import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
+import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 // import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
 // import useEditInscripcion from "../hooks/inscripciones/useEditInscripcion.jsx";
 // import useDeleteInscripcion from "../hooks/inscripciones/useDeleteInscripcion.jsx";
@@ -16,6 +17,7 @@ import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx"
 
 const Inscripciones = () => {
   const { inscripciones, fetchInscripciones } = useGetInscripciones();
+  const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
   // const { inscripciones, fetchInscripciones } = useGetInscripciones();
   // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
   // const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
@@ -69,7 +71,7 @@ const Inscripciones = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        <button className="btn btn-primary ml-3 mb-0" onClick={null}>Crear Inscripcion</button>
+        <button className="btn btn-primary ml-3 mb-0" onClick={handleCreateInscripcion}>Crear Inscripcion</button>
         {/* <DUSelection
           options={AREAS_PERMITIDAS_EN_MAYUSCULA}
           defaultValue={"Todas las áreas"}

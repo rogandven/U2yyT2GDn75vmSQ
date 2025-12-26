@@ -42,10 +42,10 @@ async function createElectivoInfo() {
 }
 
 export const useCreateElectivo = (fetchElectivos) => {
-  const handleCreateElectivo = async (electivo) => {
+  const handleCreateElectivo = async () => {
     try {
       let response = null;
-      const formValues = await createElectivoInfo(electivo);
+      const formValues = await createElectivoInfo();
       if (!formValues) return;
 
       const userRole = getUserRole();

@@ -23,8 +23,8 @@ export const getUserRole = () => {
 }
 
 export const isAdminOrProfesor = () => {
-    console.log(userRole);
     const userRole = getUserRole();
+    console.log(userRole);
     const ALLOWED_ROLES = getAllowedRoles();
     for (let i = 0; i < ALLOWED_ROLES.length; i++) {
         if (ALLOWED_ROLES[i] === userRole) {

@@ -1,4 +1,4 @@
-import { approveInscripcion, rejectInscripcion } from "../../services/inscripcion.service.js";
+import { private_approveInscripcion, private_rejectInscripcion} from "../../services/inscripcion.service.js";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
@@ -9,9 +9,9 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
       let response = null;
       console.log(approve);
       if (approve) {
-        response = await approveInscripcion(inscripcionId);
+        response = await private_approveInscripcion(inscripcionId);
       } else{ 
-        response = await rejectInscripcion(inscripcionId);
+        response = await private_rejectInscripcion(inscripcionId);
       }
       console.log(response);
       if (response) {
