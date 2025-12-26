@@ -21,6 +21,17 @@ const ProfileCardList = ({data}) => {
   )
 }
 
+const Badge = (label, data, color) => {
+  /*String((user && (user.carrera)) || "IECI").toUpperCase()*/
+  return ( 
+    <div className="flex flex-row center items-center content-center self-center">
+      <p className="flex flex-row center items-center content-center self-center mb-1"><b>{String(label).toUpperCase()}</b>: 
+        <div className={`badge ${String(color)} ml-1`}>{String(data).toUpperCase()}</div>
+      </p>
+    </div>
+  );
+}
+
 const ProfileCard = ({ user }) => {
   return (
     <div className="card bg-base-100 w-96 shadow-sm">
@@ -35,11 +46,8 @@ const ProfileCard = ({ user }) => {
           <p><b>APODO</b>: {String((user && (user.username)) || "JUANITOPEREZ123").toUpperCase()}</p>
           <p><b>RUT</b>: {String((user && (user.rut)) || "123456789-0").toUpperCase()}</p>
           <p><b>CORREO</b>: {String((user && (user.email)) || "JUANITOPEREZ123@EMAIL.COM").toUpperCase()}</p>
-          <div className="flex flex-row center items-center content-center self-center">
-            <p className="flex flex-row center items-center content-center self-center"><b>CARRERA</b>: 
-              <div className="badge badge-primary ml-1">{String((user && (user.carrera)) || "IECI").toUpperCase()}</div>
-            </p>
-          </div>
+          {Badge("CARRERA", String((user && (user.carrera)) || "IECI").toUpperCase(), "badge-primary")}
+          {Badge("ROL", String((user && (user.role || user.rol)) || "ESTUDIANTE").toUpperCase().replaceAll("_", " "), "badge-secondary")}
         </div>
       </div>
     </div>
