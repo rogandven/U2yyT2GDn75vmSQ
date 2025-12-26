@@ -1,5 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService } from "../service/user.service.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById } from "../service/user.service.js";
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
@@ -210,5 +210,18 @@ export async function logout(req, res) {
     return res.status(200).json(getControllerResult_NEW("Sesión cerrada exitosamente", result));
   } else {
     return res.status(500).json(getControllerResult_NEW("Error al cerrar sesión", result));
+  }
+}
+
+export const getUserNameById = async (id) => {
+  const BASE_CASE = "JUANITO PÉREZ";
+  try {
+    const user = await RAW_getUserById(id);
+    if (!user) {
+      return BASE_CASE;
+    }
+    return String(user.fullname || BASE_CASE).toUpperCase();
+  } catch (error) {
+    return BASE_CASE;
   }
 }

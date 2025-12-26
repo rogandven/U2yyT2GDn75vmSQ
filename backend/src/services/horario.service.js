@@ -78,13 +78,6 @@ export async function updateHorarioById_Electivo(horario) {
     if (!horario) {
       throw new Error("Función mal llamada");
     }
-  /*
-    const horario = await getHorario(id_horario);
-    if (!horario) {
-      return {data: null, message: "Horario no encontrado", error: null};
-    }
-    Object.assign(horario, updateData);
-    */
     return {data: await horarioRepository.save(horario), message: "Horario actualizado con éxito", error: null};
   } catch (error) {
     return {data: null, message: "Error al actualizar horario", error: error};

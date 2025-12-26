@@ -179,3 +179,15 @@ export async function electivoExists(id_instancia) {
     return null;
   }
 }
+
+export async function RAW_getElectivoById(id) {
+  try {
+    const electivo = await electivoRepo.findOneBy({ id: id});
+    if (!electivo) {
+      throw new Error("Electivo no encontrado");
+    }
+    return electivo;
+  } catch (error) {
+    return null;
+  }
+}

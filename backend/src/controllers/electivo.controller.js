@@ -7,7 +7,7 @@ import {
   integrityValidation,
   updateValidation,
 } from "../validations/electivo.validation.js";
-import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService } from "../service/electivo.service.js";
+import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService, RAW_getElectivoById } from "../service/electivo.service.js";
 import { fullNameProcessor, getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
 import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -212,3 +212,12 @@ export async function deleteElectivo(req, res) {
   }
 }
 
+export const getElectivoName = async (id) => {
+    const BASE_CASE = "Electivo desconocido";
+    try {
+      const electivo = await RAW_getElectivoById(id);
+      return String(electivo.nombre) || BASE_CASE;
+    } catch (error) {
+      return BASE_CASE;
+    }
+} 

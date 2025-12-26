@@ -6,6 +6,23 @@ import { userExists as _userExists } from "../service/utils/utils.inscription.se
 import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
+import { getElectivoName } from "./electivo.controller.js";
+import { getUserNameById } from "./user.controller.js";
+import { BASE_CASE } from "../service/utils/utils.service.js";
+
+const processInscripcionArray = async (array) => {
+    let current = null;
+    if (Array.isArray(array)) {
+        for (let i = 0; i < array.length; i++) {
+            try {
+                current = String(await getElectivoName(array[i].id_electivo));
+                array[i].nombre_electivo = current;
+                current = String(await getUserNameById(array[i].id_usuario));
+                array[i].nombre_usuario = current;
+            } catch (error) {}
+        }   
+    }
+}
 
 const getGenericResult = (data, message) => {
     return {data, message};
@@ -26,6 +43,7 @@ export const private_getInscripciones = async (req, res) => {
             result.message = "No hay inscripciones para mostrar";
             return res.status(204).json(result);
         }
+        await processInscripcionArray(result.data);
         return res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -55,6 +73,7 @@ export const private_getInscripcionesByUser = async (req, res) => {
         if (result.data.length <= 0) {
             return res.status(204).json(result);
         }
+        await processInscripcionArray(result.data);
         return res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -73,6 +92,7 @@ const getInscripcionHelper = async (req) => {
         if (!result || (await isInvalidInscripcion(result.data))) {
             return {code: 404, json: getGenericResult(null, "Inscripción no encontrada")}
         }
+        await processInscripcionArray([result.data]);
         return {code: 200, json: result}
     } catch (error) {
         console.error(error);
@@ -95,6 +115,7 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
         result.data = result.data.filter((inscripcion) => {
             return inscripcion.estado === AWAITING;
         });
+        await processInscripcionArray(result.data);
         return res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -246,6 +267,7 @@ export const public_getInscripcionesByUser = async (req, res) => {
         result.data = result.data.filter((inscripcion) => {
             return inscripcion.id_usuario === req.user.id;
         });
+        await processInscripcionArray(result.data);
         return res.status(200).json(result);
     } catch (error) {
         console.error(error);

@@ -6,6 +6,20 @@ import { electivoExists } from "../service/electivo.service.js";
 import { createHorario, findAllHorarios, getConflictingHorarios, deleteHorarioById_Electivo } from "../services/horario.service.js";
 import { getHorario, updateHorarioById_Electivo } from "../services/horario.service.js";
 import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
+import { getElectivoName } from "./electivo.controller.js";
+
+
+const processHorarioArray = async (array) => {
+  let current = null;
+  if (Array.isArray(array)) {
+    for (let i = 0; i < array.length; i++) {
+      try {
+        current = String(await getElectivoName(array[i].id_electivo));
+        array[i].nombre_electivo = current;
+      } catch (error) {}
+    }
+  }
+}
 
 const isValidTimeFormat = (timeStr) => {
     const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
@@ -161,6 +175,7 @@ export async function getHorarios(req, res) {
   if (!horarioData) {
     return handleErrorClient(res, 400, "Horarios no encontrados");
   }
+  await processHorarioArray(horarioData);
   return handleSuccess(res, 200, "Horarios obtenidos exitosamente", horarioData);
 }
 

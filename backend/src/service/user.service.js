@@ -189,3 +189,7 @@ export async function logoutUserFromService(clearCookieFunction) {
     return getServiceResult(true, null, "Error al cerrar sesión", 0);
   }
 }
+
+export async function RAW_getUserById(id) {
+    return await MIDDLEWARE_getUserByIdFromService(id);
+}
