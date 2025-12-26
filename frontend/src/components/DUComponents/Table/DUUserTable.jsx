@@ -35,7 +35,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                 <tr>
                     <th>{String(numero++)}</th>
                     <td>{coalesceData(String(usuario && usuario.rut)) || "N/A"}</td>
-                    <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A") + ` (${usuario.id || usuario.id_usuario})`}</td>
+                    <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
                     <td>
