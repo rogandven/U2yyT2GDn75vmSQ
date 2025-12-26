@@ -113,7 +113,6 @@ export async function asignarHorario(req, res) {
       chiefs.forEach((chief) => {
         sendMail(chief.email, "Confirmación", `El electivo ${nombre.toUpperCase()} va a ser impartido por ${String(req.user.fullname || req.user.username || "Profesor desconocido").toUpperCase()}. Por favor, revise el sistema.`);
       });
-      console.log(chiefs);
     }
 
 
