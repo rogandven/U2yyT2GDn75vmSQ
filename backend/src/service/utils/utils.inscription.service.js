@@ -24,9 +24,7 @@ export const userExists = async (id) => {
 }
 
 export const isValidDate = async (electivo) => {
-    const today = String(parseUnixDate_ALT(Date.now));
-    const apertura = String(electivo.apertura);
-    const cierre = String(electivo.cierre);
+    const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(apertura) < 0) {
         return true;
     }
@@ -43,11 +41,11 @@ export const isValidDate = async (electivo) => {
 export const electivoExists = async (id) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
-        if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
-            return false;
-        }
         // console.log(electivo);
         if (!electivo) {
+            return false;
+        }
+        if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
             return false;
         }
         if (!(await isValidDate(electivo))) {

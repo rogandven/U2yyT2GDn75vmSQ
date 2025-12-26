@@ -27,7 +27,7 @@ export const parseUnixDate_ALT = (date) => {
             return defaultDate;
         }
 
-        date = parseInt(date) * 1000;
+        date = parseInt(date);
 
         try {
             const formattedDate = new Date(date);
