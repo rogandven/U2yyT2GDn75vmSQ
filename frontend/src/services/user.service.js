@@ -56,6 +56,22 @@ export async function getProfile() {
         return response.data;
     } catch (error) {
         console.error("Error al obtener perfil:", error);
-        throw error;
+        return null;
+    }
+}
+
+export async function FRONTEND_getUserList() {
+    const BASE_CASE = [];
+
+    try {
+        const response = await axios.get('/users/frontend_list');
+        console.log(response);
+        const lista = response?.data?.lista;
+        if (!Array.isArray(lista)) {
+            return BASE_CASE;
+        }
+        return lista || BASE_CASE;
+    } catch (error) {
+        return BASE_CASE;
     }
 }

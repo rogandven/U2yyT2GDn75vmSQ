@@ -172,3 +172,20 @@ export async function deleteElectivo(electivoId) {
     }
 }
     */
+
+
+export async function FRONTEND_getElectivoList() {
+    const BASE_CASE = [];
+
+    try {
+        const response = await axios.get('/electivos/frontend_list');
+        console.log(response);
+        const lista = response?.data?.lista;
+        if (!Array.isArray(lista)) {
+            return BASE_CASE;
+        }
+        return lista || BASE_CASE;
+    } catch (error) {
+        return BASE_CASE;
+    }
+}

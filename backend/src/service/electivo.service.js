@@ -195,7 +195,7 @@ export async function RAW_getElectivoById(id) {
 export async function RAW_getAllApprovedElectivos() {
   const BASE_CASE = [];
   try {
-    const electivos = await electivoRepo.find({where: {estado: ESTADOS_VALIDOS.APROBADO}});
+    const electivos = await electivoRepo.find();
     if (!electivos) {
       return BASE_CASE;
     }

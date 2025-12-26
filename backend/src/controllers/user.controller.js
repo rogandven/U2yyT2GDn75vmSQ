@@ -226,21 +226,21 @@ export const getUserNameById = async (id) => {
   }
 }
 
-export const getAllStudentNames = async () => {
+export const getAllStudentNames = async (req, res) => {
   const BASE_CASE = [];
   const names = [];
   try {
     const users = await RAW_getAllStudents();
     if (!users) {
-      return BASE_CASE;
+      return res.status(200).json({lista: BASE_CASE});
     }
     for (let i = 0; i < users.length; i++) {
       if (users[i] && (users[i].fullname || users[i].username)) {
         names.push(String(users[i].id) + ". " + String((users[i].fullname || users[i].username)).toUpperCase());
       }
     }
-    return names;
+    return res.status(200).json({lista: names});
   } catch (error) {
-    return BASE_CASE;
+    return res.status(200).json({lista: BASE_CASE});
   }
 }
