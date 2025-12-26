@@ -14,6 +14,7 @@ const processInscripcionArray = async (array) => {
     let current = null;
     if (Array.isArray(array)) {
         for (let i = 0; i < array.length; i++) {
+            console.log(array[i]);
             try {
                 current = String(await getElectivoName(array[i].id_electivo));
                 array[i].nombre_electivo = current;

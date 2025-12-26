@@ -28,7 +28,7 @@ const Inscripciones = () => {
   const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(fetchInscripciones);
 
   const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
-  const { userNames, fetchUserNames } = useGetElectivoNames();
+  const { userNames, fetchUserNames } = useGetUserNames();
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
@@ -94,7 +94,7 @@ const Inscripciones = () => {
         ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus}></DUInscripcionTable>
+        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames}></DUInscripcionTable>
       </div>
     </div>
   );
