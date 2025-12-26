@@ -21,16 +21,3 @@ export const StaticDropdownList = (data, label, id, className) => {
         </select>
     `
 }
-
-export const AREAS_PERMITIDAS = [
-  "Desarrollo de Software",
-  "Bases de Datos y Sistemas de Información",
-  "Ciencias de la Computación",
-  "Inteligencia Artificial y Ciencia de Datos",
-  "Redes y Telecomunicaciones",
-  "Ciberseguridad",
-  "Ingeniería de Software y Gestión TI",
-  "Sistemas Operativos e Infraestructura",
-  "Desarrollo Móvil e Interfaces",
-  "Innovación y Habilidades Blandas"
-];
