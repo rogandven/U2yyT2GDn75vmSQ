@@ -229,11 +229,11 @@ export const ElectivoEntity = new EntitySchema({
     },
     id_profesor: {
       type: "int",
-      nullable: true
+      nullable: false,
     },
     carreras: {
       type: String,
-      nullable: true
+      nullable: false,
     },
   },
   checks: [
