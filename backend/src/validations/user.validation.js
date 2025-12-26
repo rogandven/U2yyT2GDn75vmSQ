@@ -49,10 +49,11 @@ export const integrityValidation = Joi.object({
         "string.empty": "El correo no puede ser vacío",
         "string.email": "Correo malformado",
     }),
-    password: Joi.string().min(1).messages({
+    password: Joi.string().min(1).max(MAX_FULLNAME).messages({
         "string.base": "La contraseña debe ser un string",
         "string.min": "La contraseña no puede ser vacía",
         "string.empty": "La contraseña no puede ser vacía",
+        "string.max": `La contraseña debe tener menos de ${MAX_FULLNAME} caracteres`,
     }),
     role: Joi.string().min(1).custom(roleValidationFunction).messages({
         "string.base": "El rol debe ser un string",
