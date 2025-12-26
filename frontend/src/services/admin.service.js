@@ -21,3 +21,15 @@ export const getUserRole = () => {
 
     return role.toUpperCase();
 }
+
+export const isAdminOrProfesor = () => {
+    console.log(userRole);
+    const userRole = getUserRole();
+    const ALLOWED_ROLES = getAllowedRoles();
+    for (let i = 0; i < ALLOWED_ROLES.length; i++) {
+        if (ALLOWED_ROLES[i] === userRole) {
+            return true;
+        }
+    }
+    return false;
+}

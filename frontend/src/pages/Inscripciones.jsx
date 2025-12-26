@@ -2,36 +2,38 @@
 
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
-import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable.jsx";
-import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
+// import { useGetInscripciones } from "@hooks/inscripciones/useGetInscripciones.jsx";
+// import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
+// import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
-import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/ElectivoConstants.jsx";
-import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
-import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
-import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
-import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/InscripcionConstants.jsx";
+import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
+import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
+// import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
+// import useEditInscripcion from "../hooks/inscripciones/useEditInscripcion.jsx";
+// import useDeleteInscripcion from "../hooks/inscripciones/useDeleteInscripcion.jsx";
+// import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripcionStatus.jsx";
 
-const Electivos = () => {
-  const { electivos, fetchElectivos } = useGetElectivos();
-  const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
-  const { handleEditElectivo } = useEditElectivo(fetchElectivos);
-  const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
-  const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
+const Inscripciones = () => {
+  const { inscripciones, fetchInscripciones } = useGetInscripciones();
+  // const { inscripciones, fetchInscripciones } = useGetInscripciones();
+  // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
+  // const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
+  // const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
 
-  const [busqueda, setBusqueda] = useState("");
-  const [filtroArea, setFiltroArea] = useState("");
+  // const [busqueda, setBusqueda] = useState("");
+  // const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
-    fetchElectivos();
+    fetchInscripciones();
   }, []);
 
-  const limpiarFiltros = () => {
+  /* const limpiarFiltros = () => {
     setBusqueda("");
     setFiltroArea("");
-  };
+  }; */
 
-  const electivosFiltrados = electivos.data?.filter((e) => {
+  /* const inscripcionesFiltrados = inscripciones.data?.filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
@@ -63,34 +65,28 @@ const Electivos = () => {
       width: 600,
     });
   };
-
+  */
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        <button className="btn btn-primary ml-3 mb-0" onClick={handleCreateElectivo}>Crear Electivo</button>
-        <SearchBar 
-          customClassName={"solicitud-filtro-input ml-3"} 
-          placeholder={"Buscar por nombre o descripción..."} 
-          value={busqueda} 
-          onChange={(e) => setBusqueda(e.target.value)}>
-        </SearchBar>
-        <DUSelection
+        <button className="btn btn-primary ml-3 mb-0" onClick={null}>Crear Inscripcion</button>
+        {/* <DUSelection
           options={AREAS_PERMITIDAS_EN_MAYUSCULA}
           defaultValue={"Todas las áreas"}
           onChange={(e) => setFiltroArea(e.target.value)}
           className={'ml-3'}
-        />
-        {(busqueda || filtroArea) && (
+        />*/}
+        {/* (busqueda || filtroArea) && (
           <button className="solicitud-limpiar-btn btn ml-5" onClick={limpiarFiltros}>
             Limpiar
           </button>
-        )}
+        ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus}></DUElectivoTable>
+        <DUInscripcionTable inscripciones={inscripciones}></DUInscripcionTable>
       </div>
     </div>
   );
 };
 
-export default Electivos;
+export default Inscripciones;
