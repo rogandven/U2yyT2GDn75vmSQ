@@ -104,8 +104,8 @@ export async function asignarHorario(req, res) {
     if (existingHorarioSala.length > 0) {
       return res.status(409).json({ message: "Horario y sala ya registrados.", conflicts: existingHorarioSala });
     }
-    let booleanToPrint = null;
-    if (booleanToPrint = await isFirstHorario(id_electivo)) {
+    
+    if (await isFirstHorario(id_electivo)) {
       const chiefs = await EMAIL_getAllCareerChiefs(req.user.carrera || req.user.career);
       const electivo = await RAW_getElectivoById(id_electivo);
       const nombre = String(electivo?.nombre || "Electivo desconocido");
