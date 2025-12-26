@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
 import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 
+const MIN_PASSWORD = 1;
+const MAX_PASSWORD = 500;
+
 const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
   const {
     register,
@@ -134,12 +137,12 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
                 {...register("password", {
                   required: "La contraseña es obligatoria",
                   minLength: {
-                    value: 8,
-                    message: "La contraseña debe tener al menos 8 caracteres",
+                    value: MIN_PASSWORD,
+                    message: `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres`,
                   },
                   maxLength: {
-                    value: 26,
-                    message: "La contraseña debe tener como máximo 26 caracteres",
+                    value: MAX_PASSWORD,
+                    message: `La contraseña debe tener como máximo ${MAX_PASSWORD} caracteres`,
                   },
                 })}
               />
