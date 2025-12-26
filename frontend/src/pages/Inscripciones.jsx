@@ -8,15 +8,15 @@ import Swal from "sweetalert2";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/InscripcionConstants.jsx";
 import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
-import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
-import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.jsx";
+import useGetInscripciones from "../hooks/inscripciones/useGetInscripciones.jsx";
+import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
 // import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
-import useEditInscripcion from "../hooks/Inscripciones/useEditInscripcion.jsx";
-import useDeleteInscripcion from "../hooks/Inscripciones/useDeleteInscripcion.jsx";
+import useEditInscripcion from "../hooks/inscripciones/useEditInscripcion.jsx";
+import useDeleteInscripcion from "../hooks/inscripciones/useDeleteInscripcion.jsx";
 import useChangeInscripcionStatus from "@hooks/inscripciones/useChangeInscripcionStatus.jsx";
 
-import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
-import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { useGetElectivoNames } from "../hooks/inscripciones/useGetNames.jsx";
+import { useGetUserNames } from "../hooks/inscripciones/useGetNames.jsx";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 
 const Inscripciones = () => {
