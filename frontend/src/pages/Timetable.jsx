@@ -6,6 +6,7 @@ import deleteTimetable from "@hooks/timetable/useDeleteTimetable.jsx";
 import { useEffect } from "react";
 import { useState } from "react";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimetable.jsx";
+import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 
 const Timetable = () => {
     const [horarioData, setHorarioData] = useState([]);
@@ -16,15 +17,20 @@ const Timetable = () => {
     const { handleEditTimetable } = editTimetable(fetchTimetable);
     const { handleDeleteTimetable } = deleteTimetable(fetchTimetable);
 
+    const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
+
     useEffect(() => {
         if (typeof(fetchTimetable) === 'function') {
             fetchTimetable();
+        }
+        if (typeof(fetchElectivoNames) === 'function') {
+            fetchElectivoNames();
         }
     }, []);
 
     return (
         <div className="timetable-page">
-            <button className="create btn btn-primary ml-3 mt-3 mb-0" onClick={() => handleCreateTimetable(Timetable.hora_inicio,Timetable.hora_termino,Timetable.sala,Timetable.dia)}>Crear Horario</button>
+            <button className="create btn btn-primary ml-3 mt-3 mb-0" onClick={() => handleCreateTimetable(electivoNames)}>Crear Horario</button>
             <DUHorarioTable data={timetables?.data || []} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
         </div>
     );

@@ -4,21 +4,22 @@ import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { CAREER_HEAD_ROLE, isAdminOrProfesor } from "../../services/admin.service.js";
 import { private_createInscripcion, public_createInscripcion } from "../../services/inscripcion.service.js";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
 
-async function createInscripcionInfo() {
+async function createInscripcionInfo(electivoNames, userNames) {
   const { value: formValues } = await Swal.fire({
     title: "Crear Inscripcion",
     html: `
-      ${createSwalField(1, "Usuario", "")}
-      ${createSwalField(2, "Electivo", "")}
+      ${StaticDropdownList(userNames, "Usuario", "swal2-input1", "mb-1")}
+      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input2", "mb-1")}
     `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Crear",
     cancelButtonText: "Cancelar",
     preConfirm: () => {
-      const id_usuario = gebi('swal2-input1')?.value;
-      const id_electivo = gebi('swal2-input2')?.value;
+      const id_usuario = String(gebi('swal2-input1')?.value).split(".")[0];
+      const id_electivo = String(gebi('swal2-input2')?.value).split(".")[0];
 
       return {id_electivo, id_usuario};
     },
@@ -30,13 +31,13 @@ async function createInscripcionInfo() {
 }
 
 export const useCreateInscripcion = (fetchInscripciones) => {
-  const handleCreateInscripcion = async () => {
+  const handleCreateInscripcion = async (electivoNames, userNames) => {
     try {
       let response = null;
       if (!isAdminOrProfesor()) {
         fireDynamicSwal(401, "Error", "Acceso denegado");
       }
-      const formValues = await createInscripcionInfo();
+      const formValues = await createInscripcionInfo(electivoNames, userNames);
       if (!formValues) return;
 
       response = await private_createInscripcion(formValues);

@@ -4,12 +4,13 @@ import Swal from "sweetalert2";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
 
-async function CreateTimetable() {
+async function CreateTimetable(electivoNames) {
   const { value: formValues } = await Swal.fire({
     title: "Crear Nuevo Horario",
     html: `
-      ${createSwalField(1, "Electivo", "")}
+      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input1", "mb-1")}
       ${createSwalField(2, "Hora de Inicio", "")}
       ${createSwalField(3, "Hora de Término", "")}
       ${createSwalField(4, "Sala", "")}
@@ -20,7 +21,7 @@ async function CreateTimetable() {
     confirmButtonText: "Crear",
     cancelButtonText: "Cancelar",
     preConfirm: () => {
-      const id_electivo = gebi('swal2-input1')?.value;
+      const id_electivo = String(gebi('swal2-input1')?.value).split(".")[0];
       const hora_inicio = gebi('swal2-input2')?.value;
       const hora_termino = gebi('swal2-input3')?.value;
       const sala = gebi('swal2-input4')?.value;
@@ -36,10 +37,10 @@ async function CreateTimetable() {
 }
 
 export const useCreateTimetable = (fetchHorarios) => {
-    const handleCreateTimetable = async () => {
+    const handleCreateTimetable = async (electivoNames) => {
         let response = null;
         try {
-            const formValues = await CreateTimetable();
+            const formValues = await CreateTimetable(electivoNames);
             if(!formValues) return;
             response = await assignTimetable(formValues);
             if (typeof(fetchHorarios) === "function") {
