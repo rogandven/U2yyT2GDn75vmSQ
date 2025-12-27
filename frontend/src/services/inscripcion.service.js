@@ -70,5 +70,5 @@ export async function public_updateInscripcion(id, inscripcionData) {
 }
 
 export async function public_deleteInscripcion(id) {
-  return await routeHelper(`/inscripciones/${id}`, undefined, axios.patch);
+  return await routeHelper(`/inscripciones/${id}`, undefined, axios.delete);
 }

@@ -4,7 +4,11 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
-  const handleChangeInscripcionStatus = async (inscripcionId, approve) => {
+  const handleChangeInscripcionStatus = async (inscripcionId, approve, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+
     try {
       let response = null;
       // console.log(approve);

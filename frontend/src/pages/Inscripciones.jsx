@@ -20,26 +20,26 @@ import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { getUserRole, isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 
 const Inscripciones = () => {
-  const { inscripciones, fetchInscripciones } = useGetInscripciones();
-  const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
-  // const { inscripciones, fetchInscripciones } = useGetInscripciones();
-  // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
-  const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
-  const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
-  const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(fetchInscripciones);
-
-  const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
-  const { userNames, fetchUserNames } = useGetUserNames();
-
   const userRole = getUserRole();
   const isAdmin = isAdminOrProfesor(userRole);
   const isJefe = isJefeDeCarrera(userRole);
+
+  const { inscripciones, fetchInscripciones } = useGetInscripciones();
+  const { handleCreateInscripcion } = useCreateInscripcion(() => {fetchInscripciones(isAdmin)});
+  // const { inscripciones, fetchInscripciones } = useGetInscripciones();
+  // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
+  const { handleEditInscripcion } = useEditInscripcion(() => {fetchInscripciones(isAdmin)});
+  const { handleDeleteInscripcion } = useDeleteInscripcion(() => {fetchInscripciones(isAdmin)});
+  const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(() => {fetchInscripciones(isAdmin)});
+
+  const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
+  const { userNames, fetchUserNames } = useGetUserNames();
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
-    fetchInscripciones();
+    fetchInscripciones(isAdmin);
     fetchElectivoNames();
     fetchUserNames();
   }, []);

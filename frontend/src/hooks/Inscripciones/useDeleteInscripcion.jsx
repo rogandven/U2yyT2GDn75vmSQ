@@ -38,12 +38,12 @@ async function confirmError() {
 }
 
 export const useDeleteInscripcion = (fetchInscripciones) => {
-  const handleDeleteInscripcion = async (inscripcionId) => {
+  const handleDeleteInscripcion = async (inscripcionId, isAdmin) => {
     try {
       let response = null;
       const isConfirmed = await confirmDeleteInscripcion();
       if (isConfirmed) {
-        if (isAdminOrProfesor()) {
+        if (isAdmin) {
           response = await private_deleteInscripcion(inscripcionId);
         } else {
           response = await public_deleteInscripcion(inscripcionId);

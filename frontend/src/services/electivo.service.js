@@ -43,7 +43,7 @@ export async function editElectivo(id, electivoData) {
 }
 
 export async function updateElectivo(id, electivoData) {
-  return await editElectivo(id, electivoData, axios.patch);
+  return await editElectivo(id, electivoData);
 }
 
 export async function deleteElectivo(id) {

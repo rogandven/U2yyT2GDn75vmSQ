@@ -30,7 +30,7 @@ async function editInscripcionInfo(inscripcion, electivoNames, userNames) {
 }
 
 export const useEditInscripcion = (fetchInscripciones) => {
-  const handleEditInscripcion = async (electivoId, electivo, electivoNames, userNames) => {
+  const handleEditInscripcion = async (electivoId, electivo, electivoNames, userNames, isAdmin, isJefe) => {
     try {
       let response = null;
       const formValues = await editInscripcionInfo(electivo, electivoNames, userNames);
