@@ -81,7 +81,7 @@ const SDWrouteHelper = async (URL, body, axiosFunction) => {
   try {
     let response = null;
     response = await axiosFunction(URL, body);
-    return response?.result;
+    return Boolean(response?.result) || false;
   } catch (error) {
     return true;
   }
