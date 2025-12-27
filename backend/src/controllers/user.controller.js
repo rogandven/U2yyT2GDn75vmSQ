@@ -6,27 +6,8 @@ import { updateValidation, integrityValidation, createValidation, loginValidatio
 import { ADMIN_ROLE, CAREER_HEAD_ROLE, STUDENT_ROLE, TEACHER_ROLE } from "../constants/user.constants.js";
 import { processCarrera } from "./utils/utils.controller.js";
 import { processRole } from "./utils/utils.controller.js";
+import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
 
-const allowedTampering = {
-  CARREER_HEAD: [CAREER_HEAD_ROLE, ADMIN_ROLE, TEACHER_ROLE, STUDENT_ROLE],
-  ADMIN: [CAREER_HEAD_ROLE, ADMIN_ROLE, TEACHER_ROLE, STUDENT_ROLE],
-  TEACHER: [TEACHER_ROLE, STUDENT_ROLE],
-  STUDENT: []
-};
-
-const getAllowedRolesToTamper = (role) => {
-  if (!role || (typeof(role) !== "string")) {
-    return allowedTampering.STUDENT;
-  } else if (role === CAREER_HEAD_ROLE) {
-    return allowedTampering.CARREER_HEAD;
-  } else if (role === ADMIN_ROLE) {
-    return allowedTampering.ADMIN;
-  } else if (role === TEACHER_ROLE) {
-    return allowedTampering.TEACHER;
-  } else {
-    return allowedTampering.STUDENT;
-  }
-} 
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -84,7 +65,7 @@ export async function updateUserById(req, res) {
   if (newData.role) {
     newData.role = processRole(newData.role);
   }
-  if (!(getAllowedRolesToTamper(req.user.rol).includes(newData.role))) {
+  if (newData.role && !(getAllowedRolesToTamper(req.user.rol).includes(newData.role))) {
     return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
   }
 
@@ -103,7 +84,7 @@ export async function updateUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
 
-  const editedUser = await updateUserByIdFromService(id, newData);
+  const editedUser = await updateUserByIdFromService(id, newData, req.user.role);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }

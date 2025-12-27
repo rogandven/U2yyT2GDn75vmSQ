@@ -5,6 +5,7 @@ import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
 import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
+import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -58,12 +59,15 @@ export async function MIDDLEWARE_getUserByIdFromService(id) {
     }
 }
 
-export async function updateUserByIdFromService(id, newData) {
+export async function updateUserByIdFromService(id, newData, req_user_role) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const oldData = await userRepository.findOne({ where: { id } });
         if (!oldData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
+        }
+        if (oldData.role && !(getAllowedRolesToTamper(req_user_role).includes(oldData.role))) {
+            return getServiceResult(false, null, `No tiene permiso para trabajar con ${oldData.role}`, 0);
         }
         if (newData.password) {
             newData.password = encryptPassword(newData.password);
