@@ -4,7 +4,7 @@ import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
-import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
 import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
 
 export async function parseCredentials(a, b) {
@@ -59,7 +59,7 @@ export async function MIDDLEWARE_getUserByIdFromService(id) {
     }
 }
 
-export async function updateUserByIdFromService(id, newData, req_user_role) {
+export async function updateUserByIdFromService(id, newData, req_user_role, req_user_carrera) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const oldData = await userRepository.findOne({ where: { id } });
@@ -69,9 +69,13 @@ export async function updateUserByIdFromService(id, newData, req_user_role) {
         if (oldData.role && !(getAllowedRolesToTamper(req_user_role).includes(oldData.role))) {
             return getServiceResult(false, null, `No tiene permiso para trabajar con ${oldData.role}`, 0);
         }
+        if ((req_user_role !== ADMIN_ROLE) && (oldData.carrera !== req_user_carrera)) {
+            return getServiceResult(false, null, "No tiene permiso para actualizar usuarios de otra carrera")
+        }
         if (newData.password) {
             newData.password = encryptPassword(newData.password);
         }
+
         /* fullname, username, rut, email, password, role, generation */
         Object.assign(oldData, newData);
 
@@ -83,7 +87,7 @@ export async function updateUserByIdFromService(id, newData, req_user_role) {
     }
 }
 
-export async function deleteUserByIdFromService(id) {
+export async function deleteUserByIdFromService(id, req_user_role, req_user_carrera) {
     var queryRunner = {};
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
@@ -94,6 +98,9 @@ export async function deleteUserByIdFromService(id) {
         if (!userData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         } 
+        if ((req_user_role !== ADMIN_ROLE) && (userData.carrera !== req_user_carrera)) {
+            return getServiceResult(false, null, "No tiene permiso para actualizar usuarios de otra carrera");
+        }
         const result = await userRepository.remove(userData);
         if (result.affected && result.affected !== 1) {
             throw new Error("No se pudo eliminar el usuario");

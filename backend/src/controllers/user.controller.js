@@ -84,7 +84,7 @@ export async function updateUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
 
-  const editedUser = await updateUserByIdFromService(id, newData, req.user.role);
+  const editedUser = await updateUserByIdFromService(id, newData, req.user.role, req.user.carrera);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }
@@ -109,7 +109,7 @@ export async function deleteUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW("No se puede eliminar a si mismo", null));
   }
 
-  const user = await deleteUserByIdFromService(id);
+  const user = await deleteUserByIdFromService(id, req.user.role, req.user.carrera);
 
   if (user.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
@@ -156,6 +156,9 @@ export async function registerPrivate(req, res) {
 
   if (!(getAllowedRolesToTamper(req.user.rol).includes(req.body.role))) {
     return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
+  }
+  if ((req.user.rol !== ADMIN_ROLE) && (req.user.carrera !== req.body.carrera)) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para registrar alumnos de otras carreras`));
   }
 
   validationResult = createValidation.validate(req.body);
