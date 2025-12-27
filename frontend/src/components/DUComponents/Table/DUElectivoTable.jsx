@@ -105,8 +105,8 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
-                    <td>{electivo.cupos || "N/A"}</td>
-                    <td>{electivo.inscritos || "N/A"}</td>
+                    <td>{`${Number(electivo.inscritos || 0)} / ${Number(electivo.cupos || 0)}`}</td>
+                    <td>{(electivo.inscritos || 0)}</td>
                     <td>{electivo.area || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>

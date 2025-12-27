@@ -14,11 +14,12 @@ async function createElectivoInfo() {
       ${createSwalField(1, "Nombre", "")}
       ${createSwalField(2, "Descripcion", "")}
       ${createSwalField(3, "Cupos", "")}
-      ${createSwalField(4, "Apertura", "")}
-      ${createSwalField(5, "Cierre", "")}
-      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input6", "m-1")}
-      ${createSwalField(7, "Semestre Mínimo", "")}
-      ${createSwalField(8, "Carreras", "")}
+      ${createSwalField(4, "Créditos Requeridos", "")}
+      ${createSwalField(5, "Apertura", "")}
+      ${createSwalField(6, "Cierre", "")}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input7", "m-1")}
+      ${createSwalField(8, "Semestre Mínimo", "")}
+      ${createSwalField(9, "Carreras", "")}
     `,
     focusConfirm: false,
     showCancelButton: true,
@@ -29,13 +30,14 @@ async function createElectivoInfo() {
       const nombre = gebi('swal2-input1')?.value;
       const descripcion = gebi('swal2-input2')?.value;
       const cupos = gebi('swal2-input3')?.value;
-      const apertura = gebi('swal2-input4')?.value;
-      const cierre = gebi('swal2-input5')?.value;
-      const area = String(gebi('swal2-input6')?.value).toUpperCase();
-      const semestre_minimo = gebi('swal2-input7')?.value;
-      const carreras = gebi('swal2-input8')?.value;
+      const creditos_requeridos = gebi('swal2-input4')?.value;
+      const apertura = gebi('swal2-input5')?.value;
+      const cierre = gebi('swal2-input6')?.value;
+      const area = String(gebi('swal2-input7')?.value).toUpperCase();
+      const semestre_minimo = gebi('swal2-input8')?.value;
+      const carreras = gebi('swal2-input9')?.value;
 
-      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras, creditos_requeridos};
     },
   });
   if (formValues) {

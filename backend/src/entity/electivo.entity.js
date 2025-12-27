@@ -204,6 +204,7 @@ export const ElectivoEntity = new EntitySchema({
     creditos_requeridos:{
       type: "int",
       default: 0,
+      nullable: false,
     },
     semestre_minimo:{
       type: "varchar",

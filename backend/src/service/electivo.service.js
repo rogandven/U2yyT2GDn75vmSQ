@@ -5,19 +5,26 @@ import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
+import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
 const processElectivoArray = async (resultados) => {
     let nombre_profesor = "JUANITO PÉREZ";
     let current = null;
+    let inscritos = null;
     if (Array.isArray(resultados)) {
       for (let i = 0; i < resultados.length; i++) {
         try {
           current = await RAW_getUserById(resultados[i].id_profesor);
           nombre_profesor = String((current && current.fullname) || "JUANITO PÉREZ").toUpperCase();
-          Object.assign(resultados[i], {nombre_profesor: nombre_profesor});
-        } catch (error) {}
+          current = await countInscripcionesAprobadas(resultados.id);
+          console.log(current);
+          inscritos = Number(current) || 0;
+          Object.assign(resultados[i], {nombre_profesor: nombre_profesor, inscritos: inscritos});
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     return resultados;

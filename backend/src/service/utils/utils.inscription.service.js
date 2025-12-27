@@ -4,6 +4,7 @@ import ElectivoEntity from "../../entity/electivo.entity.js";
 import InscripcionEntity from "../../entity/inscripcion.entity.js";
 import { ESTADOS_VALIDOS } from "../../constants/electivo.constants.js";
 import { parseUnixDate_ALT } from "../../helpers/date.helper.js";
+import { APPROVED, VALID_STATUS_ARRAY } from "../../constants/inscripcion.constants.js";
 
 const userRepository = AppDataSource.getRepository(UserEntity);
 const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
@@ -31,8 +32,13 @@ export const isValidDate = async (electivo, req) => {
     if (today.localeCompare(electivo.cierre) > 0) {
         return false;
     }
-    const inscripciones = await countInscripciones(electivo.id);
+    const inscripciones = await countInscripcionesAprobadas(electivo.id);
     if (electivo.cupos >= inscripciones) {
+        return false;
+    }
+    console.log(req.user.creditos);
+    throw Error("minecraft");
+    if (electivo.creditos_requeridos > req.user.creditos) {
         return false;
     }
     if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
@@ -96,6 +102,15 @@ export const inscripcionBelongsToUser = (inscripcion, id_usuario) => {
 export const countInscripciones = async (id_electivo) => {
     try {
         const cantidad = await inscripcionRepo.count({where: {id_electivo: id_electivo}});
+        return Number(cantidad);
+    } catch (error) {
+        return 9999;
+    }
+}
+
+export const countInscripcionesAprobadas = async (id_electivo) => {
+    try {
+        const cantidad = await inscripcionRepo.count({where: {id_electivo: id_electivo, estado: APPROVED}});
         return Number(cantidad);
     } catch (error) {
         return 9999;
