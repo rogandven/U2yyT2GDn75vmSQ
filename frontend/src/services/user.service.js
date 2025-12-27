@@ -27,7 +27,7 @@ export async function getUsers() {
 
 export async function editUser(userId, userData) { 
     try {
-        const response = await axios.patch(`/users/get/${userId}`, userData);
+        const response = await axios.patch(`/users/${userId}`, userData);
         Object.assign(response.data, {status: response.status});
         return response.data;
     } catch (error) {

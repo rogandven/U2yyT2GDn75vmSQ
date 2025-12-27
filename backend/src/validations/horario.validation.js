@@ -7,7 +7,7 @@ export const validateDay = (value, helpers) => {
   if (!DIAS_SEMANA.includes(value.toLowerCase())) {
     return helpers.message("El día debe ser uno de los siguientes: " + DIAS_SEMANA.join(", "));
   }
-  return value;
+  return true;
 };
 
 const inRange = (integer = 0, min = 0, max = 0) => {

@@ -44,7 +44,7 @@ export async function loginService(datauser) {
         }
     } catch (error) {
         console.error("Error en auth.service");
-        // console.log(error);
+        console.log(error.response);
         return error.response;
     }
 }

@@ -4,7 +4,7 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { gebi } from "../utils/getElementById.jsx";
-// import { VALID_ROLES } from "../../services/admin.service.js";
+import { VALID_ROLES } from "../../services/admin.service.js";
 
 async function editUserInfo(user) {
   const { value: formValues } = await Swal.fire({

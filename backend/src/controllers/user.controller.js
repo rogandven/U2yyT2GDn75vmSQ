@@ -48,8 +48,7 @@ export async function updateUserById(req, res) {
   if (!newData) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
-  newData.carrera = processCarrera(newData.carrera);  
-  newData.role = processRole(newData.role);
+  
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
@@ -59,6 +58,13 @@ export async function updateUserById(req, res) {
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(newData.fullname);
   }
+  if (newData.carrera) {
+    newData.carrera = processCarrera(newData.carrera);  
+  }
+  if (newData.role) {
+    newData.role = processRole(newData.role);
+  }
+
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
@@ -94,6 +100,9 @@ export async function deleteUserById(req, res) {
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
+  }
+  if (id === req.user.id) {
+    return res.status(400).json(getControllerResult_NEW("No se puede eliminar a si mismo", null));
   }
 
   const user = await deleteUserByIdFromService(id);
@@ -138,11 +147,9 @@ export async function registerPrivate(req, res) {
     return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
   }
   req.body.carrera = processCarrera(req.body.carrera);
-
   req.body.fullname = fullNameProcessor(req.body.fullname);
+  req.body.role = processRole(req.body.role);
 
-  // console.log(req.body);
-  req.body.carrera = processRole(newData.role);
   validationResult = createValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
@@ -178,9 +185,7 @@ export async function registerPublic(req, res) {
     return res.status(401).json(getControllerResult_NEW("No se puede autoasignar la cantidad de créditos"), null);
   }
   req.body.role = STUDENT_ROLE;
-  // console.log(req.body.role);
   req.body.creditos = 0;
-  // console.log(req.body.creditos);
   return await registerPrivate(req, res);
 }
 

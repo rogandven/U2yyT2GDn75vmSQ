@@ -9,6 +9,7 @@ import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
 import sendMail from "../services/email.service.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 
 const processHorarioArray = async (array) => {
@@ -80,6 +81,9 @@ export async function asignarHorario(req, res) {
     if (req.body.dia) {
       req.body.dia = String(req.body.dia).toLowerCase().trim();
     }
+    if (req.body.dia === "día") {
+      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
+    }
     const { id_electivo } = req.params;
     let validationResult = idValidation.validate({id: id_electivo});
     if (validationResult.error) {
@@ -93,9 +97,14 @@ export async function asignarHorario(req, res) {
     if (result) {
       return res.status(400).json({ message: String(result) });
     } 
-    const electivoReallyExists = await electivoExistanceCheckerHelper(id_electivo);
-    if (electivoReallyExists) {
-      return res.status(electivoReallyExists.status).json({message: electivoReallyExists.message});
+
+    const electivo = await RAW_getElectivoById(horarioToUpdate.id_electivo);
+    if (!electivo) {
+      return handleErrorClient(res, 404, "Electivo no encontrado");
+    }
+
+    if ((req.user.role !== CAREER_HEAD_ROLE || req.user.role !== ADMIN_ROLE) && (req.user.id !== electivo.id_profesor)) {
+      return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
     }
 
     const { hora_inicio, hora_termino, sala, dia } = req.body;
@@ -136,6 +145,9 @@ export async function patchHorario(req, res) {
     if(!id){
       return res.status(400).json({ message: "El ID del horario es obligatorio" });
     }
+    if (req.body.dia === "día") {
+      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
+    }
     let validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
@@ -149,6 +161,15 @@ export async function patchHorario(req, res) {
     if (!horarioToUpdate) {
       return handleErrorClient(res, 404, "Horario no encontrado");
     }
+    const electivo = await RAW_getElectivoById(horarioToUpdate.id_electivo);
+    if (!electivo) {
+      return handleErrorClient(res, 404, "Electivo no encontrado");
+    }
+
+    if ((req.user.role !== CAREER_HEAD_ROLE || req.user.role !== ADMIN_ROLE) && (req.user.id !== electivo.id_profesor)) {
+      return handleErrorClient(res, 401, "No puede editar un horario que no es suyo");
+    }
+
     Object.assign(horarioToUpdate, req.body);
 
     let result = timeValidationHelper(horarioToUpdate.hora_inicio, horarioToUpdate.hora_termino);
