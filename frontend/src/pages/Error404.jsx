@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import luckyCatSad from "@assets/LuckyCatSad.png";
-// import "@styles/error404.css";
 
 const Error404 = () => {
   return (

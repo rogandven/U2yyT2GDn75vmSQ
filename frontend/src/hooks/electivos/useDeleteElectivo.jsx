@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { deleteElectivo } from "@services/electivo.service";
+import { fireDynamicSwal } from "../utils/dynamicSwal";
 
 async function confirmDeleteElectivo() {
   const result = await Swal.fire({
@@ -35,7 +36,11 @@ async function confirmError() {
 }
 
 export const useDeleteElectivo = (fetchElectivos) => {
-  const handleDeleteElectivo = async (electivoId) => {
+  const handleDeleteElectivo = async (electivoId, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+
     try {
       const isConfirmed = await confirmDeleteElectivo();
       if (isConfirmed) {

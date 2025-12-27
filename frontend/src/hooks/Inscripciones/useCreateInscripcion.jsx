@@ -57,7 +57,10 @@ export const useCreateInscripcion = (fetchInscripciones) => {
 };
 
 export const useCreateInscripcion_PUBLIC = () => {
-  const handleCreateInscripcion_PUBLIC = async (id_electivo) => {
+  const handleCreateInscripcion_PUBLIC = async (id_electivo, isAdmin) => {
+    if (isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
     try {
       const response = await public_createInscripcion({id_electivo: id_electivo});
       if (response) {

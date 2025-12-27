@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { private_updateInscripcion, public_updateInscripcion } from "../../services/inscripcion.service.js";
-import { isAdminOrProfesor } from "../../services/admin.service.js";
+// import { isAdminOrProfesor } from "../../services/admin.service.js";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 
 async function editInscripcionInfo(inscripcion, electivoNames, userNames) {

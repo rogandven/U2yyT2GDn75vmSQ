@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
-import { isAdminOrProfesor } from "../services/admin.service.js";
-import { isJefeDeCarrera } from "../services/admin.service.js";
+// import { isAdminOrProfesor } from "../services/admin.service.js";
+// import { isJefeDeCarrera } from "../services/admin.service.js";
 
 const Timetable = () => {
     const isAdmin = isAdminOrProfesor();

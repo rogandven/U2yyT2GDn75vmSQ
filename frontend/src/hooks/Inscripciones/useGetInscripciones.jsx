@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getUserRole, isAdminOrProfesor } from '../../services/admin.service.js';
 import { private_getInscripciones, public_getInscripcionesByUser } from '../../services/inscripcion.service.js';
-import { JEFE_DE_CARRERA } from '../../constants/InscripcionConstants.jsx';
+// import { JEFE_DE_CARRERA } from '../../constants/InscripcionConstants.jsx';
 export const useGetInscripciones = () => { 
     const [inscripciones, setInscripciones] = useState([]);
     

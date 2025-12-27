@@ -198,7 +198,7 @@ export async function login(req, res) {
   if (result.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", result));
   }
-  console.log(result.data);
+  // console.log(result.data);
   if (!(result.data && result.data.token)) {
     result.error = true;
     return res.status(400).json(getControllerResult_NEW(result.details || "Error al iniciar sesión", result));

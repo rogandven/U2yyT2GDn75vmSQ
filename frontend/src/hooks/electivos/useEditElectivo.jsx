@@ -80,7 +80,11 @@ async function editElectivoInfo(electivo) {
 }
 
 export const useEditElectivo = (fetchElectivos) => {
-  const handleEditElectivo = async (electivoId, electivo) => {
+  const handleEditElectivo = async (electivoId, electivo, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+    
     try {
       const formValues = await editElectivoInfo(electivo);
       if (!formValues) return;

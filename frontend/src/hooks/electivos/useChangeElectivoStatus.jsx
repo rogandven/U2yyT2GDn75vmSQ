@@ -4,8 +4,11 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 
 export const useChangeElectivoStatus = (fetchElectivos) => {
-  const handleChangeElectivoStatus = async (electivoId, approve) => {
+  const handleChangeElectivoStatus = async (electivoId, approve, isJefe) => {
     try {
+      if (!isJefe) {
+        return fireDynamicSwal(500, null, "Acceso denegado");
+      }
       let response = null;
       // // console.log(approve);
       if (approve) {

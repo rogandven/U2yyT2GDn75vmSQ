@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
-import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
+// import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
 
@@ -44,21 +44,21 @@ async function createElectivoInfo() {
 }
 
 export const useCreateElectivo = (fetchElectivos) => {
-  const handleCreateElectivo = async () => {
+  const handleCreateElectivo = async (isAdmin, isJefe) => {
     try {
+      if (!isAdmin) {
+        return fireDynamicSwal(500, null, "Acceso denegado");;
+      }
+
       let response = null;
       const formValues = await createElectivoInfo();
       if (!formValues) return;
 
-      const userRole = getUserRole();
-      // console.log(userRole);
-      if (userRole === CAREER_HEAD_ROLE) {
+
+      if (isJefe) {
         response = await createElectivoJefeDeCarrera(formValues);
-      } else if (getAllowedRoles().includes(userRole)) {
-        response = await createElectivoProfesor(formValues);
       } else {
-        fireDynamicSwal(401, "Error", "Acceso denegado");
-        return;
+        response = await createElectivoProfesor(formValues);
       }
       
       // console.log(response);

@@ -7,18 +7,16 @@ import { CgProfile } from "react-icons/cg";
 import { FaBook } from 'react-icons/fa';
 import { HiPencilAlt } from 'react-icons/hi';
 import { AiFillCalendar } from 'react-icons/ai';
-import { isAdminOrProfesor } from "../../../services/admin.service.js";
 
+export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
 
-export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
-    const isAdmin = isAdminOrProfesor();
 
     const createSidebarItem = (label, destination, icon, logoutSubmit) => {
         return (                    
             <DUSidebarItem 
                 label={String(label)} 
                 destination={String(destination)} 
-                icon={icon} 
+                icon={icon}
                 logoutSubmit={logoutSubmit}>
             </DUSidebarItem>
         )

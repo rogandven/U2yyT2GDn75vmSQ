@@ -172,6 +172,7 @@ export async function loginUserFromService(data) {
             rut: userFound.rut,
             rol: userFound.role,
         };
+        console.log((String(payload?.username).toUpperCase() || "JUANITO PÉREZ") + " entró al sistema");
         const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
         return getServiceResult(false, { token: accessToken }, "Inicio de sesión exitoso!", 1);

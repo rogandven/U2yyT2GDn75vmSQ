@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import { private_deleteInscripcion } from "../../services/inscripcion.service.js";
 import { public_deleteInscripcion } from "../../services/inscripcion.service.js";
-import { isAdminOrProfesor } from "../../services/admin.service.js";
+// import { isAdminOrProfesor } from "../../services/admin.service.js";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 async function confirmDeleteInscripcion() {
