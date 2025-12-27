@@ -6,6 +6,7 @@ import { gebi } from "../utils/getElementById.jsx";
 // import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
+import { createSwalDateField } from "../utils/swalField.jsx";
 
 async function createElectivoInfo() {
   const { value: formValues } = await Swal.fire({
@@ -15,8 +16,8 @@ async function createElectivoInfo() {
       ${createSwalField(2, "Descripcion", "")}
       ${createSwalField(3, "Cupos", "")}
       ${createSwalField(4, "Créditos Requeridos", "")}
-      ${createSwalField(5, "Apertura", "")}
-      ${createSwalField(6, "Cierre", "")}
+      ${createSwalDateField(5, "Apertura")}
+      ${createSwalDateField(6, "Cierre")}
       ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input7", "m-1")}
       ${createSwalField(8, "Semestre Mínimo", "")}
       ${createSwalField(9, "Carreras", "")}

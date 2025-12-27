@@ -6,3 +6,12 @@ export const createSwalField = (inputId, label, value) => {
         </div>        
     `
 }
+
+export const createSwalDateField = (inputId, label) => {
+    return `
+    <label class="input m-1">
+        <span class="label">${label}</span>
+        <input type="date" id="swal2-input${Number(inputId)}" />
+    </label>
+    `
+}
