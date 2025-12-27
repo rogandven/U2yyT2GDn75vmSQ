@@ -31,6 +31,7 @@ export const EXMAPLE_EMAIL_3 = process.env.EXMAPLE_EMAIL_3;
 export const EXMAPLE_EMAIL_4 = process.env.EXMAPLE_EMAIL_4;
 export const EXMAPLE_EMAIL_5 = process.env.EXMAPLE_EMAIL_5;
 export const EXMAPLE_EMAIL_6 = process.env.EXMAPLE_EMAIL_6;
+export const EXMAPLE_EMAIL_7 = process.env.EXMAPLE_EMAIL_6;
 
 
 /*

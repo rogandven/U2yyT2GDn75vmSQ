@@ -84,7 +84,18 @@ export async function createUsers() {
         generation: "2023-1",
         carrera: "ICINF",
         creditos: 0
-      },      
+      },
+      {
+        fullname: "Voger Renegas".toUpperCase(),
+        username: "voger123",
+        rut: "16117628-1",
+        email: EXMAPLE_EMAIL_7,
+        password: await encryptPassword("renegas123"),
+        role: "ADMINISTRADOR",
+        generation: "2023-1",
+        carrera: "ICINF",
+        creditos: 0
+      },                
     ];
 
     console.log("Creando usuarios base...");
