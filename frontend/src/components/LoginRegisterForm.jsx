@@ -6,7 +6,7 @@ import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 const MIN_FIELD = 1;
 const MAX_FIELD = 500;
 
-const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
+const LoginRegisterForm = ({ mode = "login", onSubmit}) => {
   const {
     register,
     handleSubmit,

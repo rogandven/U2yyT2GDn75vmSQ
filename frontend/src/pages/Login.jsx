@@ -5,10 +5,11 @@ import { loginService } from "@services/auth.service.js";
 // import luckyCat from "@assets/LuckyCat.png";
 // import "@styles/loginRegister.css";
 import { DEFAULT_LOGIN_REGISTER_STYLES } from "../constants/TailwindConstants.jsx";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loginError, setLoginError] = useState("");
+  // const [loginError, setLoginError] = useState("");
 
   // Función que maneja el envío del formulario de inicio de sesión
   const loginSubmit = async (data) => {
@@ -17,7 +18,11 @@ const Login = () => {
       if (response.request.status === 200) {
         navigate("/home");
       } else {
-        setLoginError("Usuario o contraseña incorrectos");
+        Swal.fire({
+          title: "Usuario o clave incorrectos",
+          icon: "error",
+          theme: "dark"
+        });
       }
     } catch (error) {
       console.error(error);
@@ -30,7 +35,7 @@ const Login = () => {
         <img src={luckyCat} alt="Lucky Cat" className="lucky-cat" />
       </div> */}
       <div className={DEFAULT_LOGIN_REGISTER_STYLES}>
-        <LoginRegisterForm mode="login" onSubmit={loginSubmit} loginError={loginError} />
+        <LoginRegisterForm mode="login" onSubmit={loginSubmit}/>
       </div>
     </main>
   );

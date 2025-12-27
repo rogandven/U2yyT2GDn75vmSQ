@@ -74,13 +74,13 @@ export async function public_deleteInscripcion(id) {
 }
 
 export async function shallDisplayWarning(id_electivo, id_usuario) {
-  return await SDWrouteHelper(`/inscripciones/sdw`, {id_electivo: Number(id_electivo), id_usuario: Number(id_usuario)}, axios.get);
+  return await SDWrouteHelper(`/inscripciones/sdw`, {id_electivo: Number(id_electivo), id_usuario: Number(id_usuario)});
 }
 
-const SDWrouteHelper = async (URL, body, axiosFunction) => {
+const SDWrouteHelper = async (URL, body) => {
   try {
     let response = null;
-    response = await axiosFunction(URL, body);
+    response = await axios.get(URL, body, { withCredentials: true });
     return Boolean(response?.result) || false;
   } catch (error) {
     return true;
