@@ -22,6 +22,6 @@ router.post("/", isAuthenticated, public_createInscripcion);
 router.patch("/:id", isAuthenticated, public_updateInscripcion);
 router.delete("/:id", isAuthenticated, public_deleteInscripcion);
 
-router.get("/shall_display_warning", isAuthenticated, shallDisplayWarning);
+router.get("/sdw/", isAuthenticated, shallDisplayWarning);
 
 export default router;

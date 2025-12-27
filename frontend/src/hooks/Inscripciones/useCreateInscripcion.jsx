@@ -68,8 +68,7 @@ export const useCreateInscripcion_PUBLIC = () => {
         icon: "warning",
         theme: "dark",
       });
-      // console.log(shallReturn);
-      if (!shallReturn) {
+      if (!shallReturn.isConfirmed) {
         return;
       }
     }
