@@ -14,6 +14,7 @@ async function editElectivoInfo(electivo) {
       ${createSwalField(1, "Nombre", electivo.nombre)}
       ${createSwalField(2, "Descripcion", electivo.descripcion)}
       ${createSwalField(3, "Cupos", electivo.cupos)}
+      ${createSwalField(9, "Créditos Requeridos", electivo.creditos_requeridos)}
       ${createSwalDateField(4, "Apertura")}
       ${createSwalDateField(5, "Cierre")}
       ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input6", "m-1")}
@@ -71,8 +72,9 @@ async function editElectivoInfo(electivo) {
       const area = gebi('swal2-input6')?.value;
       const semestre_minimo = gebi('swal2-input7')?.value;
       const carreras = gebi('swal2-input8')?.value;
+      const creditos_requeridos = gebi('swal2-input9')?.value;
 
-      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras, creditos_requeridos};
     },
   });
   if (formValues) {
@@ -92,7 +94,7 @@ export const useEditElectivo = (fetchElectivos) => {
 
       // console.log(formValues);
       const response = await editElectivo(electivoId, formValues);
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchElectivos();
         fireDynamicSwal(response.status, null, response.message || response.details);

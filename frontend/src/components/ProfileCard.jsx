@@ -15,8 +15,9 @@ const ProfileCardList = ({data}) => {
   return (
     <div>
       <ProfileCardRow data={data.username || "ladiesman217"} label={"Nombre de usuario"}></ProfileCardRow>
-      <ProfileCardRow data={data.email || "juanito.perez"} label={"Correo electrónico"}></ProfileCardRow>
-      <ProfileCardRow data={data.role || "juanito.perez"} label={"Rol"}></ProfileCardRow>
+      <ProfileCardRow data={data.email || "juanito.perez@alumnos.ubiobio.cl"} label={"Correo electrónico"}></ProfileCardRow>
+      <ProfileCardRow data={data.role || "ESTUDIANTE"} label={"Rol"}></ProfileCardRow>
+      <ProfileCardRow data={data.creditos || 0} label={"Rol"}></ProfileCardRow>
     </div>
   )
 }
@@ -46,6 +47,7 @@ const ProfileCard = ({ user }) => {
           <p><b>APODO</b>: {String((user && (user.username)) || "JUANITOPEREZ123").toUpperCase()}</p>
           <p><b>RUT</b>: {String((user && (user.rut)) || "123456789-0").toUpperCase()}</p>
           <p><b>CORREO</b>: {String((user && (user.email)) || "JUANITOPEREZ123@EMAIL.COM").toUpperCase()}</p>
+          <p><b>CRÉDITOS</b>: {(String(user.creditos || "0")).toUpperCase()}</p>
           {Badge("CARRERA", String((user && (user.carrera)) || "IECI").toUpperCase(), "badge-primary")}
           {Badge("ROL", String((user && (user.role || user.rol)) || "ESTUDIANTE").toUpperCase().replaceAll("_", " "), "badge-secondary")}
         </div>

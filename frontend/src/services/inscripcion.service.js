@@ -17,6 +17,16 @@ const routeHelper = async (URL, body, axiosFunction) => {
   }
 }
 
+const SDWrouteHelper = async (URL, body) => {
+  try {
+    let response = null;
+    response = await axios.get(URL, body);
+    return response?.result;
+  } catch (error) {
+    return true;
+  }
+}
+
 export async function private_getInscripciones() {
   return await routeHelper("/inscripciones/admin/", undefined, axios.get);
 }
@@ -71,4 +81,8 @@ export async function public_updateInscripcion(id, inscripcionData) {
 
 export async function public_deleteInscripcion(id) {
   return await routeHelper(`/inscripciones/${id}`, undefined, axios.delete);
+}
+
+export async function shallDisplayWarning(id_electivo, id_usuario) {
+  return await SDWrouteHelper(`/inscripciones/shall_display_warning`, {id_electivo: Number(id_electivo), id_usuario: Number(id_usuario)});
 }

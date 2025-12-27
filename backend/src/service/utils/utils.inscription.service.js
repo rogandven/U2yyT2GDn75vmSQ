@@ -23,7 +23,7 @@ export const userExists = async (id) => {
         return false;
     }
 }
-
+/*
 export const isValidDate = async (electivo, req) => {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(electivo.apertura) < 0) {
@@ -36,7 +36,6 @@ export const isValidDate = async (electivo, req) => {
     if (electivo.cupos >= inscripciones) {
         return false;
     }
-    console.log(req.user.creditos);
     if (electivo.creditos_requeridos > req.user.creditos) {
         return false;
     }
@@ -47,8 +46,9 @@ export const isValidDate = async (electivo, req) => {
         return false;
     }
     return true;
-}
+}*/
 
+/*
 export const electivoExists = async (id, checks = true, req) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
@@ -59,18 +59,13 @@ export const electivoExists = async (id, checks = true, req) => {
         if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
             return false;
         }
-        if (checks) {
-            if (!(await isValidDate(electivo, req))) {
-                return false;
-            }
-        }
         return true;
     } catch (error) {
         console.error(error);
         return false;
     }
 }
-
+*/
 
 export const inscripcionAlreadyExists = async (id_inscripcion, id_usuario, id_electivo) => {
     try {

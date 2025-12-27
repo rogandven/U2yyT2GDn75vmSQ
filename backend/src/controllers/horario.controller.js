@@ -50,18 +50,19 @@ const timeValidationHelper = (hora_inicio, hora_termino) => {
 
 const joiValidationHelper = (validationFunction, integrityFunction, body) => {
     let result = validationFunction.validate(body);
-    console.log(result);
+    // console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
     result=integrityFunction.validate(body);
-    console.log(result);
+    // console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
     return null;
 }
 
+/*
 const electivoExistanceCheckerHelper = async (id_electivo) => {
     const electivoReallyExists = (await electivoExists(id_electivo));
 
@@ -72,7 +73,7 @@ const electivoExistanceCheckerHelper = async (id_electivo) => {
       return {message: String("Electivo no encontrado"), status: 400};
     }
     return null;
-}
+}*/
 
 export async function asignarHorario(req, res) {
   try {

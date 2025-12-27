@@ -1,11 +1,15 @@
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
-import { electivoExists, formatMessage, userExists } from "./utils/utils.inscription.service.js";
+import { formatMessage } from "./utils/utils.inscription.service.js";
 import { inscripcionAlreadyExists as IAE_helper } from "./utils/utils.inscription.service.js";
 import sendMail from "../services/email.service.js";
 import { RAW_getUserById } from "./user.service.js";
 import { RAW_getElectivoById } from "./electivo.service.js";
+import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
+import { parseUnixDate_ALT, parseUnixDate } from "../helpers/date.helper.js";
+import { AWAITING } from "../constants/inscripcion.constants.js";
 // import UserEntity from "../entity/user.entity.js";
 // import ElectivoEntity from "../entity/electivo.entity.js";
 
@@ -13,8 +17,67 @@ const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
-export const isInvalidInscripcion = async (inscripcion, checks, req) => {
-  return !(await electivoExists(inscripcion.id_electivo, checks, req)) || !(await userExists(inscripcion.id_usuario));
+export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, user_PARAM) => {
+  let user = null;
+  const electivo = await RAW_getElectivoById(inscripcion.id_electivo);
+  if (!electivo) {
+    return "Electivo no encontrado";
+  }
+  if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
+    return "El electivo no ha sido aprobado todavía";
+  }
+  if (user_PARAM) {
+    user = user_PARAM;
+  }
+  user = await RAW_getUserById(inscripcion.id_usuario);
+  if (!user) {
+    return "Usuario no encontrado";
+  }
+  if (user.role !== STUDENT_ROLE){
+    return `El usuario ${user.fullname || user.username || user.id} no es un estudiante.`;
+  }
+  if (!(String(electivo.carreras).includes(user.carrera))) {
+    return `El usuario ${user.fullname || user.username || user.id} no pertenece a ninguna de las carreras requeridas`;
+  }
+  if (addtionalChecks) {
+    const today = String(parseUnixDate_ALT(Date.now().toString()));
+    if (today.localeCompare(electivo.cierre) > 0) {
+      return "Ya se cerraron las inscripciones para este electivo";
+    }
+    if (today.localeCompare(electivo.apertura) > 0) {
+      if (electivo.creditos_requeridos > req.user.creditos) {
+        return "No cumple con los suficientes créditos para inscribir este electivo";
+      }
+      if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
+        return "No pertenece a la generación establecida";
+      }
+      if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
+        return "No posee los suficientes créditos para inscribir este electivo";
+      }
+    }
+  }
+  return null;
+}
+
+export const shallDisplayWarning = async (usuario_id, electivo_id) => {
+  const electivo = await RAW_getElectivoById(electivo_id);
+  if (!electivo) {
+    return true;
+  }
+  const usuario = await RAW_getUserById(usuario_id);
+  if (!usuario) {
+    return true;
+  }
+  if (electivo.creditos_requeridos > req.user.creditos) {
+    return true;
+  }
+  if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
+    return true;
+  }
+  if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
+    return true;
+  }
+  return false;
 }
 
 const cleanUpInscripcionArray = async (array, req) => {
@@ -92,12 +155,12 @@ const throwErrorIfFailedUpdate = (inscripcionEditada) => {
   }
 }
 
-export async function updateInscripcion(data, inscripcion, inscripcionAntigua) {
+export async function updateInscripcion(data, inscripcion, inscripcionAntigua, creador) {
   const dynamicMessage = (inscripcion) => {
     return inscripcion ? "¡Inscripcion editada!" : "No se pudo editar la inscripción";
   }
- 
-  let sendEmail = inscripcion?.estado !== (data?.estado || inscripcion?.estado);
+
+  let sendEmail = (data?.estado !== AWAITING);
 
   const queryRunner = AppDataSource.createQueryRunner();
   await queryRunner.startTransaction();
@@ -108,12 +171,11 @@ export async function updateInscripcion(data, inscripcion, inscripcionAntigua) {
 
     try {
       if (sendEmail) {
-        const electivo = await RAW_getElectivoById(inscripcion.id_electivo);
-        const creador = await RAW_getUserById(inscripcion.id_usuario);
+        const electivo = await RAW_getElectivoById(inscripcionAntigua.id_electivo);
         sendMail(creador?.email, String(data?.estado).toUpperCase(), `Su inscripción para ${String(electivo?.nombre).toUpperCase()} ha sido ${String(data?.estado).toUpperCase()}.`);
       }
     } catch (error) {
-      // console.log(error);
+      console.error(error);
     }
 
     return formatMessage(inscripcionEditada, dynamicMessage(inscripcionEditada));

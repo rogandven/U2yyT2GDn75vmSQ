@@ -21,7 +21,7 @@ export const sendMail = (to, subject, text) => {
         if (error) {
             console.log(error);
         } else {
-            console.log('Email sent: ' + info.response);
+            console.log(`Email sent to ${String(to)}: ` + info.response);
         }
         });
     } catch (error) {

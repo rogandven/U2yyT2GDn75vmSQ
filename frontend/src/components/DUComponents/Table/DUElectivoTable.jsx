@@ -88,7 +88,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                 <th></th>
                 <th>Nombre</th>
                 <th>Cupos</th>
-                <th>Inscritos</th>
+                <th>Créditos Requeridos</th>
                 <th>Área</th>
                 <th>Apertura</th>
                 <th>Cierre</th>
@@ -106,7 +106,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>{`${Number(electivo.inscritos || 0)} / ${Number(electivo.cupos || 0)}`}</td>
-                    <td>{(electivo.inscritos || 0)}</td>
+                    <td>{(electivo.creditos_requeridos || 0)}</td>
                     <td>{electivo.area || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>

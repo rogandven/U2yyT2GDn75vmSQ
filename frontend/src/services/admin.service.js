@@ -11,7 +11,7 @@ export const getUserRole = () => {
     try {
         const user = JSON.parse(sessionStorage.getItem('usuario'));
         const rol = String(user?.rol) || STUDENT_ROLE;
-        console.log("ROL ACTUAL: " + rol);
+        // console.log("ROL ACTUAL: " + rol);
         return rol;
     } catch (error) {
         console.error(error);

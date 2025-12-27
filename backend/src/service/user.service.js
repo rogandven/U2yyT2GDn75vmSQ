@@ -48,7 +48,8 @@ export async function getUserByIdFromService(id) {
 export async function MIDDLEWARE_getUserByIdFromService(id) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
-        const user = await userRepository.findOne({ where: { id } });
+        const user = await userRepository.findOne({where: {id: Number(id)}});
+        // console.log(user);
         if (!user) {
             return null;
         } 
