@@ -139,9 +139,8 @@ export async function updateElectivo(req, res) {
         return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
       }
     }
-
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {
-      req.body.estado = AWAITING;
+      req.body.estado = ESTADOS_VALIDOS.PENDIENTE;
     }
     const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera));
     if (serviceResult.error) {

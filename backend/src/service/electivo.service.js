@@ -140,7 +140,9 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
       return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
     }
 
-    await electivoRepo.save(electivo);
+    delete electivo.id;
+    const result = await electivoRepo.update({id: id_instancia}, electivo);
+    console.log(result);
 
     return getServiceResult(false, electivo, "Electivo actualizado correctamente", 1);
   } catch (error) {
