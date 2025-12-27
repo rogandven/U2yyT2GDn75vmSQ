@@ -3,9 +3,30 @@ import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService,
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
-import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE, STUDENT_ROLE, TEACHER_ROLE } from "../constants/user.constants.js";
 import { processCarrera } from "./utils/utils.controller.js";
 import { processRole } from "./utils/utils.controller.js";
+
+const allowedTampering = {
+  CARREER_HEAD: [CAREER_HEAD_ROLE, ADMIN_ROLE, TEACHER_ROLE, STUDENT_ROLE],
+  ADMIN: [CAREER_HEAD_ROLE, ADMIN_ROLE, TEACHER_ROLE, STUDENT_ROLE],
+  TEACHER: [TEACHER_ROLE, STUDENT_ROLE],
+  STUDENT: []
+};
+
+const getAllowedRolesToTamper = (role) => {
+  if (!role || (typeof(role) !== "string")) {
+    return allowedTampering.STUDENT;
+  } else if (role === CAREER_HEAD_ROLE) {
+    return allowedTampering.CARREER_HEAD;
+  } else if (role === ADMIN_ROLE) {
+    return allowedTampering.ADMIN;
+  } else if (role === TEACHER_ROLE) {
+    return allowedTampering.TEACHER;
+  } else {
+    return allowedTampering.STUDENT;
+  }
+} 
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -48,7 +69,6 @@ export async function updateUserById(req, res) {
   if (!newData) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
-  
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
@@ -63,6 +83,9 @@ export async function updateUserById(req, res) {
   }
   if (newData.role) {
     newData.role = processRole(newData.role);
+  }
+  if (!(getAllowedRolesToTamper(req.user.rol).includes(newData.role))) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
   }
 
   const result = idValidation.validate({id: id});
@@ -149,6 +172,10 @@ export async function registerPrivate(req, res) {
   req.body.carrera = processCarrera(req.body.carrera);
   req.body.fullname = fullNameProcessor(req.body.fullname);
   req.body.role = processRole(req.body.role);
+
+  if (!(getAllowedRolesToTamper(req.user.rol).includes(req.body.role))) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
+  }
 
   validationResult = createValidation.validate(req.body);
   if (validationResult.error) {

@@ -65,7 +65,7 @@ async function editUserInfo(user) {
       const fullname = gebi('swal2-input2')?.value;
       const username = gebi('swal2-input3')?.value;
       const email = gebi('swal2-input4')?.value;
-      const role = gebi('swal2-input6')?.value;
+      const role = gebi('swal2-input5')?.value;
       const generation = gebi('swal2-input7')?.value;
       const carrera = gebi('swal2-input8')?.value;
       const creditos = gebi('swal2-input9')?.value;
@@ -86,6 +86,7 @@ export const useEditUser = (fetchUsers) => {
       const formValues = await editUserInfo(user);
       if (!formValues) return;
 
+      console.log(formValues);
       const response = await editUser(userId, formValues);
       // console.log(response);
       if (response) {
