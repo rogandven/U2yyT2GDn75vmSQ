@@ -50,10 +50,12 @@ const timeValidationHelper = (hora_inicio, hora_termino) => {
 
 const joiValidationHelper = (validationFunction, integrityFunction, body) => {
     let result = validationFunction.validate(body);
+    console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
     result=integrityFunction.validate(body);
+    console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
@@ -81,7 +83,7 @@ export async function asignarHorario(req, res) {
     if (req.body.dia) {
       req.body.dia = String(req.body.dia).toLowerCase().trim();
     }
-    if (req.body.dia === "día") {
+    if (req.body.dia === "día" || req.body.dia === "dia") {
       return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
     }
     const { id_electivo } = req.params;
@@ -98,13 +100,20 @@ export async function asignarHorario(req, res) {
       return res.status(400).json({ message: String(result) });
     } 
 
-    const electivo = await RAW_getElectivoById(horarioToUpdate.id_electivo);
+    const electivo = await RAW_getElectivoById(req.body.id_electivo);
     if (!electivo) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
-    if ((req.user.role !== CAREER_HEAD_ROLE || req.user.role !== ADMIN_ROLE) && (req.user.id !== electivo.id_profesor)) {
-      return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+    const canSkipChecks = (req.user.role === ADMIN_ROLE);
+
+    if (!canSkipChecks) {
+       if (!(String(electivo.carreras).includes(req.user.carrera))) {
+        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
+       }
+      if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
+        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      }
     }
 
     const { hora_inicio, hora_termino, sala, dia } = req.body;
@@ -145,14 +154,20 @@ export async function patchHorario(req, res) {
     if(!id){
       return res.status(400).json({ message: "El ID del horario es obligatorio" });
     }
-    if (req.body.dia === "día") {
-      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
-    }
     let validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
     }
-    validationResult = joiValidationHelper(updateValidation, integrityValidation);
+
+    if (req.body.dia) {
+      req.body.dia = String(req.body.dia).toLowerCase().trim();
+    }
+    if (req.body.dia === "día" || req.body.dia === "dia") {
+      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
+    }
+
+    validationResult = joiValidationHelper(updateValidation, integrityValidation, req.body);
+    console.log(validationResult);
     if (validationResult) {
       return res.status(400).json({message: String(validationResult)});
     }
@@ -166,10 +181,17 @@ export async function patchHorario(req, res) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
-    if ((req.user.role !== CAREER_HEAD_ROLE || req.user.role !== ADMIN_ROLE) && (req.user.id !== electivo.id_profesor)) {
-      return handleErrorClient(res, 401, "No puede editar un horario que no es suyo");
-    }
+    const canSkipChecks = (req.user.role === ADMIN_ROLE);
 
+    if (!canSkipChecks) {
+       if (!(String(electivo.carreras).includes(req.user.carrera))) {
+        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
+       }
+      if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
+        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      }
+    }
+    
     Object.assign(horarioToUpdate, req.body);
 
     let result = timeValidationHelper(horarioToUpdate.hora_inicio, horarioToUpdate.hora_termino);

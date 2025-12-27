@@ -92,7 +92,7 @@ export const useEditElectivo = (fetchElectivos) => {
 
       // console.log(formValues);
       const response = await editElectivo(electivoId, formValues);
-      // console.log(response);
+      console.log(response);
       if (response) {
         await fetchElectivos();
         fireDynamicSwal(response.status, null, response.message || response.details);

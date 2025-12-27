@@ -1,12 +1,18 @@
 import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
+  let response = null;
   try {
-    const response = await axiosFunction(URL, body);
+    response = await axiosFunction(URL, body);
     return {data: response.data?.data, status: response.status, message: response.data?.message};
   } catch (error) {
-    console.error(error);
-    return error.response?.data || null;
+    response = error.response;
+    if (response.data.message) {
+      response.data.message = String(response.data.message).replaceAll("AAAA-MM-DD", "DD-MM-AAAA");
+    }
+    
+    Object.assign(response.data, {status: response.status});
+    return response.data || null;
   }
 }
 

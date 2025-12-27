@@ -50,7 +50,8 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
-        
+        query = query.orderBy("electivo.id", "ASC");
+
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
@@ -182,10 +183,10 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
-        return getServiceResult(false, null, "Electivo no encontrado", 0);
+        return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
     if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {
-      return getServiceResult(false, null, "No tiene permiso para borrar este electivo", 0);
+      return getServiceResult(true, null, "No tiene permiso para borrar este electivo", 0);
     }
 
     await electivoRepo.remove(electivo);

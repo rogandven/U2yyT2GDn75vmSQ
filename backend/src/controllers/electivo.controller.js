@@ -14,7 +14,7 @@ import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { AWAITING } from "../constants/validationConstants.js";
-import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 export async function getElectivos(req, res) {
   if (req.query && req.query.area && typeof(req.query.area) === "string") {
@@ -133,10 +133,11 @@ export async function updateElectivo(req, res) {
       req.body.nombre = fullNameProcessor(req.body.nombre);
     }
     // console.log(req.body.carreras);
-
-    req.body.carreras = processCarrera(req.body.carreras);
-    if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
-      return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+    if ((req.user.role || req.user.rol) !== ADMIN_ROLE) {
+      req.body.carreras = processCarrera(req.body.carreras);
+      if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+        return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+      }
     }
 
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {

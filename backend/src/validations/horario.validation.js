@@ -3,7 +3,7 @@ import Joi from "joi";
 import { HORARIO_PATTERN, SALA_PATTERN, MIN_STRING, MAX_STRING, SALA_OBLIGATORIA, DIA_OBLIGATORIO, HORA_INICIO_OBLIGATORIA, HORA_TERMINO_OBLIGATORIA, CAMPOS_ADICIONALES, DIAS_SEMANA } from "../constants/horarioConstants.js";
 
 
-export const validateDay = (value, helpers) => {
+export const validateDay = (helpers, value) => {
   if (!DIAS_SEMANA.includes(value.toLowerCase())) {
     return helpers.message("El día debe ser uno de los siguientes: " + DIAS_SEMANA.join(", "));
   }
@@ -71,12 +71,15 @@ export const integrityValidation = Joi.object({
   dia: Joi.string()
     .min(MIN_STRING)
     .max(MAX_STRING)
+    .valid(...DIAS_SEMANA)
     .custom(validateDay)
     .messages({
       "string.pattern.base":
         "La sala solo puede contener letras, números y guiones bajos.",
       "string.min": `La sala debe tener al menos ${MIN_STRING} caracteres.`,
       "string.max": `La sala  no puede exceder los ${MAX_STRING} caracteres.`,
+      "any.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
+      "string.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
     }),
 });
 
@@ -104,7 +107,7 @@ export const assignationValidation = Joi.object({
   });
 
 export const updateValidation = Joi.object({
-   hora_inicio: Joi.any(),
+  hora_inicio: Joi.any(),
   hora_termino: Joi.any(),
   sala: Joi.any(),
   dia: Joi.any(),

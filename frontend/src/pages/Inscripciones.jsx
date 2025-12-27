@@ -85,7 +85,7 @@ const Inscripciones = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames)}}>Crear Inscripcion</button>)}
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames, isAdmin, isJefe)}}>Crear Inscripcion</button>)}
         {/* <DUSelection
           options={AREAS_PERMITIDAS_EN_MAYUSCULA}
           defaultValue={"Todas las áreas"}

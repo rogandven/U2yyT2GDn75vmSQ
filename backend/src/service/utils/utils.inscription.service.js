@@ -37,7 +37,6 @@ export const isValidDate = async (electivo, req) => {
         return false;
     }
     console.log(req.user.creditos);
-    throw Error("minecraft");
     if (electivo.creditos_requeridos > req.user.creditos) {
         return false;
     }

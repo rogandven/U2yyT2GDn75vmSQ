@@ -31,10 +31,10 @@ async function createInscripcionInfo(electivoNames, userNames) {
 }
 
 export const useCreateInscripcion = (fetchInscripciones) => {
-  const handleCreateInscripcion = async (electivoNames, userNames) => {
+  const handleCreateInscripcion = async (electivoNames, userNames, isAdmin, isJefe) => {
     try {
       let response = null;
-      if (!isAdminOrProfesor()) {
+      if (isAdmin) {
         fireDynamicSwal(401, "Error", "Acceso denegado");
       }
       const formValues = await createInscripcionInfo(electivoNames, userNames);
