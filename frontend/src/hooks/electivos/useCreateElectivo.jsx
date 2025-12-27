@@ -63,14 +63,14 @@ export const useCreateElectivo = (fetchElectivos) => {
       } else {
         response = await createElectivoProfesor(formValues);
       }
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchElectivos();
         fireDynamicSwal(response?.status, null, (response?.data?.message || response?.data?.details) || (response?.message || response?.details));
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear electivo:", error);
+      // console.error("Error al crear electivo:", error);
     }
   };
 

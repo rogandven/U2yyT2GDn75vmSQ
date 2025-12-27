@@ -10,7 +10,7 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
         return fireDynamicSwal(500, null, "Acceso denegado");
       }
       let response = null;
-      console.log({electivoId: Number(electivoId), approve: Boolean(approve), isJefe: Boolean(isJefe)});
+      // console.log({electivoId: Number(electivoId), approve: Boolean(approve), isJefe: Boolean(isJefe)});
       if (approve) {
         response = await approveElectivo(electivoId);
       } else { 

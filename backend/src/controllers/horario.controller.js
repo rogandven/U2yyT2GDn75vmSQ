@@ -168,7 +168,7 @@ export async function patchHorario(req, res) {
     }
 
     validationResult = joiValidationHelper(updateValidation, integrityValidation, req.body);
-    console.log(validationResult);
+    // console.log(validationResult);
     if (validationResult) {
       return res.status(400).json({message: String(validationResult)});
     }
