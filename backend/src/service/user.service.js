@@ -98,8 +98,11 @@ export async function deleteUserByIdFromService(id, req_user_role, req_user_carr
         if (!userData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         } 
+        if (userData.role && !(getAllowedRolesToTamper(req_user_role).includes(userData.role))) {
+            return getServiceResult(false, null, `No tiene permiso para trabajar con ${userData.role}`, 0);
+        }
         if ((req_user_role !== ADMIN_ROLE) && (userData.carrera !== req_user_carrera)) {
-            return getServiceResult(false, null, "No tiene permiso para actualizar usuarios de otra carrera");
+            return getServiceResult(false, null, "No tiene permiso para eliminar usuarios de otra carrera");
         }
         const result = await userRepository.remove(userData);
         if (result.affected && result.affected !== 1) {

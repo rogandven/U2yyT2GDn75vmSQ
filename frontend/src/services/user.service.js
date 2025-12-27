@@ -43,9 +43,11 @@ export async function editUser(userId, userData) {
 export async function deleteUser(userId) {
     try {
         const response = await axios.delete(`/users/${userId}`);
+        Object.assign(response.data, {status: response.status});
         return response.data;
     } catch (error) {
         console.error("Error al eliminar usuario:", error);
+        return error.response || {status: 500, message: "Error desconocido"};
     }
 }
 

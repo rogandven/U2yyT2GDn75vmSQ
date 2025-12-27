@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { deleteUser } from "@services/user.service";
+import { fireDynamicSwal } from "../utils/dynamicSwal";
 
 async function confirmDeleteUser() {
   const result = await Swal.fire({
@@ -41,7 +42,7 @@ export const useDeleteUser = (fetchUsers) => {
       if (isConfirmed) {
         const response = await deleteUser(userId);
         if (response) {
-          confirmAlert();
+          fireDynamicSwal(response.status, null, response.data.details || response.data.message);
           await fetchUsers();
         }
       }
