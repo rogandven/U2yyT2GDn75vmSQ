@@ -1,64 +1,79 @@
+/* id_inscripcion: {
+    type: "int",
+},
+fecha_hora: {
+    type: "timestamp",
+},
+estado: {
+    type: String,
+},
+id_usuario: {
+    type: USER_ID_TYPE,
+    nullable: false,
+},
+id_electivo: {
+    type: ELECTIVO_ID_TYPE,
+}, */
+
+
 "use strict";
-
 import Joi from "joi";
+import { idValidationFunction } from "./modules/id.validation.js";
+import { MAX_DATE_LENGTH, MIN_DATE_LENGTH } from "../constants/user.constants.js";
+import { timestampValidationFunction } from "./modules/timestamp.validation.js";
+import { MAX_STATUS, MIN_STATUS } from "../constants/inscripcion.constants.js";
+import { inscriptionStatusValidationFunction } from "./modules/inscripcion.status.validation.js";
 
-export const inscripcionValidation = Joi.object({
-  electivoId: Joi.number()
-    .integer()
-    .positive()
-    .required()
-    .messages({
-      "number.base": "El ID del electivo debe ser un número",
-      "number.integer": "El ID del electivo debe ser un número entero",
-      "number.positive": "El ID del electivo debe ser positivo",
-      "any.required": "El ID del electivo es obligatorio"
-    })
-});
-
-export const cancelarInscripcionValidation = Joi.object({
-  motivo: Joi.string()
-    .max(500)
-    .optional()
-    .messages({
-      "string.base": "El motivo debe ser texto",
-      "string.max": "El motivo no puede exceder 500 caracteres"
-    })
-});
-
-export const gestionarInscripcionValidation = Joi.object({
-  accion: Joi.string()
-    .valid("aprobar", "rechazar")
-    .required()
-    .messages({
-      "string.base": "La acción debe ser texto",
-      "any.only": "La acción debe ser 'aprobar' o 'rechazar'",
-      "any.required": "La acción es obligatoria"
+export const integrityValidation = Joi.object({
+    id_inscripcion: Joi.any().custom(idValidationFunction),
+    fecha_hora: Joi.string().min(MIN_DATE_LENGTH).max(MAX_DATE_LENGTH).custom(timestampValidationFunction).messages({
+        "string.base":"La fecha debe estar en formato string",
+        "string.min":"La fecha no puede ser vacía",
+        "string.max":`La fecha no puede ser de más de ${MAX_DATE_LENGTH} caracteres`,
     }),
-  motivo: Joi.string()
-    .max(500)
-    .when('accion', {
-      is: 'rechazar',
-      then: Joi.required(),
-      otherwise: Joi.optional()
-    })
-    .messages({
-      "string.base": "El motivo debe ser texto",
-      "string.max": "El motivo no puede exceder 500 caracteres",
-      "any.required": "El motivo es obligatorio cuando se rechaza una inscripción"
-    })
+    estado: Joi.string().min(MIN_STATUS).max(MAX_STATUS).custom(inscriptionStatusValidationFunction).messages({
+        "string.base":"El estado debe estar en formato string",
+        "string.min":"El estado no puede ser vacío",
+        "string.max":`El estado no puede ser de más de ${MAX_STATUS} caracteres`,
+    }),
+    id_usuario: Joi.any().custom(idValidationFunction),
+    id_electivo: Joi.any().custom(idValidationFunction),
 });
 
-export const consultarInscripcionesValidation = Joi.object({
-  periodo: Joi.string()
-    .pattern(/^\d{4}-[12]$/)
-    .optional()
-    .messages({
-      "string.pattern.base": "El formato del período debe ser YYYY-1 o YYYY-2 (ej: 2024-1)"
+export const createValidation = Joi.object({
+    estado: Joi.any().required().messages({
+        "any.required": "El estado es obligatorio",
     }),
-  estado: Joi.string()
-    .valid("en_espera", "activa", "rechazada", "retirada")
-    .optional()
-    .messages({
-      "any.only": "El estado debe ser: en_espera, activa, rechazada o retirada"
-    })
+    id_usuario: Joi.any().required().messages({
+        "any.required": "El ID del usuario es obligatorio",
+    }),
+    id_electivo: Joi.any().required().messages({
+        "any.required": "El ID de la instancia es obligatorio",
+    }),
+}).unknown(false).messages({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.unknown": "No se permiten campos adicionales",
 });
+
+export const updateValidation = Joi.object({
+    estado: Joi.any(),
+    fecha_hora: Joi.any(),
+    id_usuario: Joi.any(),
+    id_electivo: Joi.any(),
+}).unknown(false).min(1).messages({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.unknown": "No se permiten campos adicionales",
+    "object.min": "Debe proporcionar un campo para actualizar",
+});
+
+export const findValidation = Joi.object({
+    id_inscripcion: Joi.any().required().custom(idValidationFunction)
+}).unknown(false).messages({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.unknown": "No se permiten campos adicionales",
+    "any.required": "El ID es obligatorio",
+});
+
+export const warningValidation = Joi.object({
+    id_electivo: Joi.number().required(),
+}).unknown(false);

@@ -1,77 +1,3 @@
-/*
-"use strict";
-
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import Root from "@pages/Root";
-import Home from "@pages/Home";
-import Login from "@pages/Login";
-import Register from "@pages/Register";
-import Error404 from "@pages/Error404";
-import Users from "@pages/Users";
-import Profile from "@pages/Profile";
-
-import ProtectedRoute from "@components/ProtectedRoute";
-import { getAllowedRoles } from "@services/admin.service.js";
-
-import Electivos from "@pages/Electivos";
-import ElectivosAdmin from "@pages/ElectivosAdmin";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <Error404 />,
-    children: [
-      {
-        path: "/home",
-        element: <Home />,
-      },
-      {
-        path: "/electivos",
-        element: <Electivos />,
-      },
-      {
-        path: "/admin/electivos",
-        element: (
-          <ProtectedRoute allowedRoles={["administrador", "profesor"]}>
-            <ElectivosAdmin />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/users",
-        element: (
-          <ProtectedRoute allowedRoles={getAllowedRoles()}>
-            <Users />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/profile",
-        element: <Profile />,
-      },
-      {
-        path: "*",
-        element: <Error404 />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
-);
-*/
 "use strict";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -81,11 +7,14 @@ import Login from '@pages/Login'
 import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
-import Electivo from '@pages/Electivo'
+// import Electivo from '@pages/Electivo'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
-import { getAllowedRoles } from '@services/admin.service.js'
+import Timetable from '@pages/Timetable'
+import { VALID_ADMIN_ROLES } from "./services/admin.service.js";
+import Inscripciones from '@pages/Inscripciones';
+
 
 const router = createBrowserRouter([
   {
@@ -100,14 +29,14 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: (
-          <ProtectedRoute allowedRoles={getAllowedRoles()}>
+          <ProtectedRoute allowedRoles={VALID_ADMIN_ROLES}>
             <Users />
           </ProtectedRoute>
         ),
       },
       {
-        path: "/electivo",
-        element: <Electivo/>,
+       path: "/inscripciones", 
+       element: <Inscripciones/>,
       },
       {
         path: "/electivos",
@@ -116,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/horarios",
+        element: <Timetable />,
       }
     ],
   },
@@ -123,10 +56,10 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
-  {
+  {/*
     path: "/register",
     element: <Register />,
-  },
+  */},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

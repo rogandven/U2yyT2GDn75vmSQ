@@ -1,23 +1,29 @@
 import { editUser } from "../../services/user.service";
 import Swal from "sweetalert2";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { createSwalField } from "../utils/swalField.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { gebi } from "../utils/getElementById.jsx";
+import { VALID_ROLES } from "../../services/admin.service.js";
 
 async function editUserInfo(user) {
   const { value: formValues } = await Swal.fire({
     title: "Editar Usuario",
     html: `
-    <div>
-      <label for="swal2-input1">Nombre de usuario</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Nombre de usuario" value = "${user.username}">
-    </div>
-    <div>
-      <label for="swal2-input2">Correo electrónico</label>
-      <input id="swal2-input2" class="swal2-input" placeholder="Correo electrónico" value = "${user.email}">
-    </div>
+      ${createSwalField(1, "RUT", (user && user.rut) || "")}
+      ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
+      ${createSwalField(3, "Apodo", (user && user.username) || "")}
+      ${createSwalField(4, "Correo", (user && user.email) || "")}
+      ${StaticDropdownList(VALID_ROLES, (user && user.role) || "Rol", "swal2-input5", "m-1", Boolean(user))}
+      ${createSwalField(7, "Generación", (user && user.generation) || "")}
+      ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
+      ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
         `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
     preConfirm: () => {
+      /*
       const username = document.getElementById("swal2-input1").value;
       const email = document.getElementById("swal2-input2").value;
 
@@ -54,13 +60,23 @@ async function editUserInfo(user) {
         return false;
       }
       return { username, email };
+      */
+      const rut = gebi('swal2-input1')?.value;
+      const fullname = gebi('swal2-input2')?.value;
+      const username = gebi('swal2-input3')?.value;
+      const email = gebi('swal2-input4')?.value;
+      const role = gebi('swal2-input5')?.value;
+      const generation = gebi('swal2-input7')?.value;
+      const carrera = gebi('swal2-input8')?.value;
+      const creditos = gebi('swal2-input9')?.value;
+
+      return {rut, fullname, username, email, role, generation, carrera, creditos};
     },
+    theme: "dark"
   });
   if (formValues) {
-    return {
-      username: formValues.username,
-      email: formValues.email,
-    };
+    // console.log(formValues);
+    return formValues;
   }
 }
 
@@ -70,12 +86,16 @@ export const useEditUser = (fetchUsers) => {
       const formValues = await editUserInfo(user);
       if (!formValues) return;
 
+      console.log(formValues);
       const response = await editUser(userId, formValues);
+      // console.log(response);
       if (response) {
         await fetchUsers();
+        fireDynamicSwal(response.status, null, response.message || response.details);
       }
     } catch (error) {
-      console.error("Error al editar usuario:", error);
+      fireDynamicSwal(500, null, null);
+      // console.error("Error al editar usuario:", error);
     }
   };
 

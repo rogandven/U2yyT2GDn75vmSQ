@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGetProfile } from "@hooks/profile/useGetProfile.jsx";
 import ProfileCard from "@components/ProfileCard.jsx";
-import "@styles/profile.css";
+// import "@styles/profile.css";
 
 const Profile = () => {
   const { fetchProfile } = useGetProfile();
@@ -19,7 +19,7 @@ const Profile = () => {
   return (
     <div>
       {profileData ? (
-        <div className="profile-container">
+        <div className="profile-container m-3">
           <ProfileCard user={profileData} />
         </div>
       ) : (

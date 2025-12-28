@@ -1,0 +1,37 @@
+import { private_approveInscripcion, private_rejectInscripcion } from "../../services/inscripcion.service.js";
+import Swal from "sweetalert2";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+
+
+export const useChangeInscripcionStatus = (fetchInscripciones) => {
+  const handleChangeInscripcionStatus = async (inscripcionId, approve, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+
+    try {
+      let response = null;
+      // console.log(approve);
+      if (approve) {
+        response = await private_approveInscripcion(inscripcionId);
+      } else{ 
+        response = await private_rejectInscripcion(inscripcionId);
+      }
+      // console.log(response);
+      if (response) {
+        if (response.data){ 
+          Object.assign(response, response.data);
+        }
+        await fetchInscripciones();
+        fireDynamicSwal(response.status, null, response.message || response.details);
+      }
+    } catch (error) {
+      fireDynamicSwal(500, null, null);
+      // console.error("Error al editar inscripcion:", error);
+    }
+  };
+
+  return { handleChangeInscripcionStatus };
+};
+
+export default useChangeInscripcionStatus;

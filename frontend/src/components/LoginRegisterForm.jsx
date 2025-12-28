@@ -1,7 +1,12 @@
 import { useForm } from "react-hook-form";
 // import "@styles/LoginRegisterForm.css";
+import DUErrorAlert from "./DUComponents/DUErrorAlert.jsx";
+import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 
-const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
+const MIN_FIELD = 1;
+const MAX_FIELD = 500;
+
+const LoginRegisterForm = ({ mode = "login", onSubmit}) => {
   const {
     register,
     handleSubmit,
@@ -19,140 +24,153 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
     } catch (error) {
       if (error.response) {
-        console.error("Error del backend:", error.response.data);
+        // Error from the backend
+        // console.error("Error del backend:", error.response.data);
       }
     }
   };
 
   return (
-    <div className="login-register-form">
-      <h2 className="form-title">
-        {mode === "login" ? "Iniciar sesión" : "Registrarse"}
-      </h2>
-      
-      {mode === "login" && (Object.values(errors).length > 0 || loginError) && (
-        <div className="form-error-container">
-          <p>{errors.email?.message || errors.password?.message || loginError}</p>
-        </div>
-      )}
+    <div className="card bg-base-100 w-96 shadow-sm">
+      <div className="login-register-form card-body align-middle items-center">
+        <h2 className="form-title card-title">
+          {mode === "login" ? "Iniciar sesión" : "Registrarse"}
+        </h2>
 
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        {mode === "register" && (
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          {mode === "register" && (
+            <div className="form-group">
+              <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+                <span className="label">Nombre de usuario:</span>
+                <input
+                  className={DEFAULT_MARGIN_STYLES}
+                  type="text"
+                  min={3}
+                  {...register("username", {
+                    required: "El nombre de usuario es obligatorio",
+                    minLength: {
+                      value: MIN_FIELD,
+                      message:
+                        `El nombre de usuario debe tener al menos ${MIN_FIELD} caracteres`,
+                    },
+                    maxLength: {
+                      value: MAX_FIELD,
+                      message:
+                        `El nombre de usuario debe tener como máximo ${MAX_FIELD} caracteres`,
+                    },
+                    pattern: {
+                      value: /^[a-zA-Z0-9_]+$/,
+                      message:
+                        "El usuario sólo puede contener letras, números y guiones bajos",
+                    },
+                  })}
+                />
+              </label>
+              {errors.username && /* (
+                  <span className="form-error-container">
+                    {errors.username.message}
+                  </span>
+                ) */ 
+                <DUErrorAlert message={errors.username.message}></DUErrorAlert>
+              }
+            </div>
+          )}
           <div className="form-group">
-            <label>Nombre de usuario:</label>
-            <input
-              type="text"
-              min={3}
-              {...register("username", {
-                required: "El nombre de usuario es obligatorio",
-                minLength: {
-                  value: 3,
-                  message:
-                    "El nombre de usuario debe tener al menos 3 caracteres",
-                },
-                maxLength: {
-                  value: 30,
-                  message:
-                    "El nombre de usuario debe tener como máximo 30 caracteres",
-                },
-                pattern: {
-                  value: /^[a-zA-Z0-9_]+$/,
-                  message:
-                    "El usuario sólo puede contener letras, números y guiones bajos",
-                },
-              })}
-            />
-            {errors.username && (
-              <span className="form-error-container">
-                {errors.username.message}
-              </span>
+            <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+              <span className="label">Correo:</span>
+              <input
+                
+                type="email"
+                {...register("email", {
+                  required: "El correo es obligatorio",
+                  minLength: {
+                    value: MIN_FIELD,
+                    message: `El correo debe tener al menos ${MIN_FIELD} caracteres`,
+                  },
+                  maxLength: {
+                    value: MAX_FIELD,
+                    message: `El correo debe tener como máximo ${MAX_FIELD} caracteres`,
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio|ubiobio)\.(cl)$/,
+                    message:
+                      "El correo debe ser un correo de la UBB",
+                  },
+                })}
+              />
+            </label>
+            {errors.email && (
+              /* <span className="form-error-container">{errors.email.message}</span> */
+              <DUErrorAlert message={errors.email.message}></DUErrorAlert>
             )}
           </div>
-        )}
-        <div className="form-group">
-          <label>Correo:</label>
-          <input
-            type="email"
-            {...register("email", {
-              required: "El correo es obligatorio",
-              minLength: {
-                value: 15,
-                message: "El correo debe tener al menos 15 caracteres",
-              },
-              maxLength: {
-                value: 50,
-                message: "El correo debe tener como máximo 50 caracteres",
-              },
-              pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@(ubiobio\.cl|alumnos\.ubiobio\.cl|gmail\.cl|gmail\.com)$/,
-              message:
-                "El correo debe ser institucional de la UBB (@ubiobio.cl o @alumnos.ubiobio.cl)",
-            },
 
-            })}
-          />
-          {errors.email && (
-            <span className="form-error-container">{errors.email.message}</span>
+          {mode === "register" && (
+            <div className="form-group">
+              <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>
+                  <span className="label">Rut:</span>
+                  <input
+                    
+                    type="text"
+                    {...register("rut", {
+                      required: "El rut es obligatorio",
+                      pattern: {
+                        value: /^\d{2}\.\d{3}\.\d{3}-[\dkK]$/,
+                        message: "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
+                      },
+                    })}
+                  />
+              </label>
+              {errors.rut && (
+                <DUErrorAlert message={errors.rut.message}></DUErrorAlert>
+                /* <span className="form-error-container">{errors.rut.message}</span> */
+              )}
+            </div>
           )}
-        </div>
 
-        {mode === "register" && (
           <div className="form-group">
-            <label>Rut:</label>
-            <input
-              type="text"
-              {...register("rut", {
-                required: "El rut es obligatorio",
-                pattern: {
-                  value: /^\d{2}\.\d{3}\.\d{3}-[\dkK]$/,
-                  message: "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
-                },
-              })}
-            />
-            {errors.rut && (
-              <span className="form-error-container">{errors.rut.message}</span>
+            <label className={"input w-full " + DEFAULT_MARGIN_STYLES}>     
+              <span className="label">Contraseña:</span>
+              <input
+                
+                type="password"
+                {...register("password", {
+                  required: "La contraseña es obligatoria",
+                  minLength: {
+                    value: MIN_FIELD,
+                    message: `La contraseña debe tener al menos ${MIN_FIELD} caracteres`,
+                  },
+                  maxLength: {
+                    value: MAX_FIELD,
+                    message: `La contraseña debe tener como máximo ${MAX_FIELD} caracteres`,
+                  },
+                })}
+              />
+            </label>
+            {errors.password && (
+              <DUErrorAlert message={errors.password.message}></DUErrorAlert>
+              /* <span className="form-error-container">
+                {errors.password.message}
+              </span> */
             )}
           </div>
-        )}
 
-        <div className="form-group">
-          <label>Contraseña:</label>
-          <input
-            type="password"
-            {...register("password", {
-              required: "La contraseña es obligatoria",
-              minLength: {
-                value: 8,
-                message: "La contraseña debe tener al menos 8 caracteres",
-              },
-              maxLength: {
-                value: 26,
-                message: "La contraseña debe tener como máximo 26 caracteres",
-              },
-            })}
-          />
-          {errors.password && (
-            <span className="form-error-container">
-              {errors.password.message}
-            </span>
-          )}
+          <button type="submit" className={"btn w-full " + DEFAULT_MARGIN_STYLES}>
+            {mode === "login" ? "Entrar" : "Registrarse"}
+          </button>
+        </form>
+
+        <div>
+          {/* mode === "login" ? (
+            <p>
+              ¿No tienes cuenta? <a className="link link-primary" href="/register">Regístrate</a>
+            </p>
+          ) : (
+            <p>
+              ¿Ya tienes cuenta? <a className="link link-primary" href="/login">Inicia sesión</a>
+            </p>
+          )*/}
         </div>
-
-        <button type="submit">
-          {mode === "login" ? "Entrar" : "Registrarse"}
-        </button>
-      </form>
-
-      <div style={{ marginTop: "1rem" }}>
-        {mode === "login" ? (
-          <p>
-            ¿No tienes cuenta? <a href="/register">Regístrate</a>
-          </p>
-        ) : (
-          <p>
-            ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
-          </p>
-        )}
       </div>
     </div>
   );

@@ -1,78 +1,107 @@
-
+import { editElectivo } from "../../services/electivo.service";
 import Swal from "sweetalert2";
-import { updateElectivo } from "@services/electivo.service.js";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { createSwalField } from "../utils/swalField.jsx";
+import { gebi } from "../utils/getElementById.jsx";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
+import { createSwalDateField } from "../utils/swalField.jsx";
+
+async function editElectivoInfo(electivo) {
+  const { value: formValues } = await Swal.fire({
+    title: "Editar Electivo",
+    html: `
+      ${createSwalField(1, "Nombre", electivo.nombre)}
+      ${createSwalField(2, "Descripcion", electivo.descripcion)}
+      ${createSwalField(3, "Cupos", electivo.cupos)}
+      ${createSwalField(9, "Créditos Requeridos", electivo.creditos_requeridos)}
+      ${createSwalDateField(4, electivo.apertura || "Apertura", electivo.apertura)}
+      ${createSwalDateField(5, electivo.cierre || "Cierre", electivo.cierre)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, String(electivo.area).toUpperCase() || "Área", "swal2-input6", "m-1", false)}
+      ${createSwalField(7, "Semestre Mínimo", electivo.semestre_minimo)}
+      ${createSwalField(8, "Carreras", electivo.carreras)}
+        `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Editar",
+    theme: "dark",
+    preConfirm: () => {
+      /*
+      const electivoname = document.getElementById("swal2-input1").value;
+      const email = document.getElementById("swal2-input2").value;
+
+      if (!electivoname || !email) {
+        Swal.showValidationMessage("Por favor, completa todos los campos");
+        return false;
+      }
+
+      if (electivoname.length < 3 || electivoname.length > 30) {
+        Swal.showValidationMessage(
+          "El nombre de electivo debe tener entre 3 y 30 caracteres"
+        );
+        return false;
+      }
+
+      if (!/^[a-zA-Z0-9_]+$/.test(electivoname)) {
+        Swal.showValidationMessage(
+          "El nombre de electivo solo puede contener letras, números y guiones bajos"
+        );
+        return false;
+      }
+
+      if (!email || email.length < 15 || email.length > 50) {
+        Swal.showValidationMessage(
+          "El correo electrónico debe tener entre 15 y 50 caracteres"
+        );
+        return false;
+      }
+
+      if (!/^[a-zA-Z0-9._%+-]+@gmail\.(com|cl)$/.test(email)) {
+        Swal.showValidationMessage(
+          "Por favor, ingresa un correo de Gmail válido (@gmail.com o @gmail.cl)"
+        );
+        return false;
+      }
+      return { electivoname, email };
+      */
+      const nombre = gebi('swal2-input1')?.value;
+      const descripcion = gebi('swal2-input2')?.value;
+      const cupos = gebi('swal2-input3')?.value;
+      const apertura = gebi('swal2-input4')?.value;
+      const cierre = gebi('swal2-input5')?.value;
+      const area = gebi('swal2-input6')?.value;
+      const semestre_minimo = gebi('swal2-input7')?.value;
+      const carreras = gebi('swal2-input8')?.value;
+      const creditos_requeridos = gebi('swal2-input9')?.value;
+
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras, creditos_requeridos};
+    },
+  });
+  if (formValues) {
+    return formValues;
+  }
+}
 
 export const useEditElectivo = (fetchElectivos) => {
-  const handleEditElectivo = async (electivo) => {
-    const { value: formValues } = await Swal.fire({
-      title: "Editar electivo",
-      html: `
-        <input id="nombre" class="swal2-input" value="${electivo.nombre}" placeholder="Nombre del electivo">
-        <input id="cupos" class="swal2-input" type="number" value="${electivo.cupos}" placeholder="Cupos">
-        <input id="apertura" class="swal2-input" type="date" value="${electivo.apertura?.split("T")[0]}" placeholder="Fecha de apertura">
-        <input id="cierre" class="swal2-input" type="date" value="${electivo.cierre?.split("T")[0]}" placeholder="Fecha de cierre">
-        <input id="area" class="swal2-input" value="${electivo.area}" placeholder="Área">
-        <textarea id="descripcion" class="swal2-textarea" placeholder="Descripción del electivo">${electivo.descripcion}</textarea>
-      `,
-      confirmButtonText: "Guardar cambios",
-      confirmButtonColor: "#4CAF50",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      focusConfirm: false,
+  const handleEditElectivo = async (electivoId, electivo, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+    
+    try {
+      const formValues = await editElectivoInfo(electivo);
+      if (!formValues) return;
 
-      preConfirm: () => {
-        const nombre = document.getElementById("nombre").value.trim();
-        const cupos = parseInt(document.getElementById("cupos").value);
-        const apertura = document.getElementById("apertura").value;
-        const cierre = document.getElementById("cierre").value;
-        const area = document.getElementById("area").value.trim();
-        const descripcion = document.getElementById("descripcion").value.trim();
-
-        if (!nombre || nombre.length < 3)
-          return Swal.showValidationMessage("El nombre debe tener al menos 3 caracteres");
-
-        if (isNaN(cupos) || cupos < 1)
-          return Swal.showValidationMessage("Debe ingresar un número válido de cupos (mínimo 1)");
-
-        if (!apertura)
-          return Swal.showValidationMessage("Debe ingresar la fecha de apertura");
-
-        if (!cierre)
-          return Swal.showValidationMessage("Debe ingresar la fecha de cierre");
-
-        if (new Date(cierre) <= new Date(apertura))
-          return Swal.showValidationMessage("La fecha de cierre debe ser posterior a la apertura");
-
-        if (!area || area.length < 3)
-          return Swal.showValidationMessage("El área debe tener al menos 3 caracteres");
-
-        if (!descripcion || descripcion.length < 10)
-          return Swal.showValidationMessage("La descripción debe tener al menos 10 caracteres");
-
-        return { nombre, cupos, apertura, cierre, area, descripcion };
-      },
-    });
-
-    if (formValues) {
-      const confirmUpdate = await Swal.fire({
-        title: "¿Confirmar cambios?",
-        text: "Se actualizarán los datos del electivo.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Sí, actualizar",
-        cancelButtonText: "Cancelar",
-      });
-
-      if (confirmUpdate.isConfirmed) {
-        try {
-          await updateElectivo(electivo.id, formValues);
-          Swal.fire("Actualizado", "El electivo fue actualizado correctamente", "success");
-          await fetchElectivos();
-        } catch (error) {
-          console.error("Error al actualizar electivo:", error);
-          Swal.fire("Error", "No se pudo actualizar el electivo", "error");
-        }
+      // console.log(formValues);
+      const response = await editElectivo(electivoId, formValues);
+      // console.log(response);
+      if (response) {
+        await fetchElectivos();
+        fireDynamicSwal(response.status, null, response.message || response.details);
       }
+    } catch (error) {
+      fireDynamicSwal(500, null, null);
+      // console.error("Error al editar electivo:", error);
     }
   };
 

@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
-import "@styles/root.css";
+// import "@styles/root.css";
+import "@styles/global.css";
 import { AuthProvider } from "@context/AuthContext";
 import Sidebar from "../components/Sidebar";
 
@@ -12,12 +13,15 @@ function Root() {
 }
 
 function PageRoot() {
-  return (
-    <div className="page-root">
-      <Sidebar />
+  const PageContent = (
       <div className="page-content">
         <Outlet />
       </div>
+  );
+
+  return (
+    <div className="page-root">
+      <Sidebar PageContent={PageContent}/>
     </div>
   );
 }

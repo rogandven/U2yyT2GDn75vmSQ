@@ -1,24 +1,45 @@
 "use strict";
-import "@styles/electivos.css";
+
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
+import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTable.jsx";
+import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
+import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA, ESTADOS_VALIDOS } from "../constants/ElectivoConstants.jsx";
+import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
+import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
+import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
+import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
+import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
+import { getUserRole } from "../services/admin.service.js";
+import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 
 const Electivos = () => {
+  const userRole = getUserRole();
+  const isAdmin = isAdminOrProfesor(userRole);
+  const isJefe = isJefeDeCarrera(userRole);
+
   const { electivos, fetchElectivos } = useGetElectivos();
+  const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
+  const { handleEditElectivo } = useEditElectivo(fetchElectivos);
+  const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
+  const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
+  const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
+
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
     fetchElectivos();
-  }, [fetchElectivos]);
+  }, []);
 
   const limpiarFiltros = () => {
     setBusqueda("");
     setFiltroArea("");
   };
 
-  const electivosFiltrados = electivos.filter((e) => {
+  const electivosFiltrados = electivos.data?.filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
@@ -48,78 +69,34 @@ const Electivos = () => {
       confirmButtonText: "Cerrar",
       confirmButtonColor: "#3085d6",
       width: 600,
+      theme: "dark",
     });
   };
 
   return (
     <div className="users-page">
-      <h2>Electivos disponibles</h2>
-      <div className="solicitud-filtros-container">
-        <input
-          className="solicitud-filtro-input"
-          type="text"
-          placeholder="Buscar por nombre o descripción..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
-        <select
-          className="solicitud-filtro-select"
-          value={filtroArea}
+      <div className="solicitud-filtros-container flex flex-row mt-3">
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe)}>Crear Electivo</button>)}
+        <SearchBar 
+          customClassName={"solicitud-filtro-input ml-3"} 
+          placeholder={"Buscar por nombre o descripción..."} 
+          value={busqueda} 
+          onChange={(e) => setBusqueda(e.target.value)}>
+        </SearchBar>
+        <DUSelection
+          options={AREAS_PERMITIDAS_EN_MAYUSCULA}
+          defaultValue={"Todas las áreas"}
           onChange={(e) => setFiltroArea(e.target.value)}
-        >
-          <option value="">Todas las áreas</option>
-          <option value="Desarrollo">Desarrollo</option>
-          <option value="Investigación">Investigación</option>
-          <option value="Habilidades Sociales">Habilidades Sociales</option>
-        </select>
+          className={'ml-3'}
+        />
         {(busqueda || filtroArea) && (
-          <button className="solicitud-limpiar-btn" onClick={limpiarFiltros}>
+          <button className="solicitud-limpiar-btn btn ml-5" onClick={limpiarFiltros}>
             Limpiar
           </button>
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <table className="solicitud-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Cupos</th>
-              <th>Inscritos</th>
-              <th>Área</th>
-              <th>Apertura</th>
-              <th>Cierre</th>
-              <th>Descripción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(electivosFiltrados) && electivosFiltrados.length > 0 ? (
-              electivosFiltrados.map((e) => (
-                <tr key={e.id}>
-                  <td>{e.nombre}</td>
-                  <td>{e.cupos}</td>
-                  <td>{e.inscritos}</td>
-                  <td>{e.area}</td>
-                  <td>{e.apertura}</td>
-                  <td>{e.cierre}</td>
-                  <td style={{ textAlign: "center" }}>
-                    <button
-                      className="edit"
-                      onClick={() => mostrarDescripcion(e.nombre, e.descripcion)}
-                    >
-                      Información
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
-                  No hay electivos disponibles
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
       </div>
     </div>
   );

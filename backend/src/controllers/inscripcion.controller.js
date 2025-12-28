@@ -1,341 +1,336 @@
 "use strict";
 
-import { AppDataSource } from "../config/configDb.js";
-import InscripcionEntity from "../entity/inscripcion.entity.js";
-import ClaseEntity from "../entity/clase.entity.js";
+import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
+import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
+import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
+import { createValidation, integrityValidation, updateValidation, warningValidation } from "../validations/inscripcion.validation.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+import { validationFunctionHelper } from "./utils/utils.controller.js";
+import { getElectivoName } from "./electivo.controller.js";
+import { getUserNameById } from "./user.controller.js";
+import { BASE_CASE } from "../service/utils/utils.service.js";
+import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { shallDisplayWarning as SERVICE_shallDisplayWarning } from "../service/inscripcion.service.js";
+import { RAW_getUserById } from "../service/user.service.js";
 
-export async function CreateInscripciones(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const claseRepository = AppDataSource.getRepository(ClaseEntity);
-    
-    const { electivoId } = req.body;
-    const userId = req.user.id;
+const processInscripcionArray = async (array) => {
+    let current = null;
+    if (Array.isArray(array)) {
+        for (let i = 0; i < array.length; i++) {
+            // console.log(array[i]);
+            try {
+                current = String(await getElectivoName(array[i].id_electivo));
+                array[i].nombre_electivo = current;
+                current = String(await getUserNameById(array[i].id_usuario));
+                array[i].nombre_usuario = current;
+            } catch (error) {}
+        }   
+    }
+}
 
-    if (!electivoId) {
-      return res.status(400).json({ message: "El ID del electivo es obligatorio" });
+const getGenericResult = (data, message) => {
+    return {data, message};
+}
+
+const getGenericError = (res) => {
+    return res.status(500).json({data: null, message: "Error interno del servidor"});
+}
+
+const invalidResult = (result) => {
+    return (!result || !result.data || !result.data.length);
+}
+
+export const private_getInscripciones = async (req, res) => {
+    try {
+        const result = await getInscripciones(req);
+        if (invalidResult(result) || result.data.length <= 0) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        await processInscripcionArray(result.data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+export const private_getInscripcionesByUser = async (req, res) => {
+    const idValidationResult = idValidation.validate(req.params);
+    if (idValidationResult.error) {
+        return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+    }
+    const userExists = await _userExists(req.params.id);
+    if (!userExists) {
+        return res.status(404).json(getGenericResult(null, "Usuario no encontrado"));
     }
 
-    const electivo = await claseRepository.findOne({ where: { id_electivo: electivoId } });
-    console.log(electivo);
-    if (!electivo) {
-      return res.status(404).json({ message: "Electivo no encontrado" });
-    }
-    
-
-    const inscripcionExistente = await inscripcionRepository.findOne({
-      where: { 
-        userId: userId,
-        electivoId: electivoId
-      }
-    });
-    // console.log(inscripcionExistente);
-
-    if (inscripcionExistente) {
-      if (inscripcionExistente.estado === "rechazada" || inscripcionExistente.estado === "retirada") {
-        return res.status(400).json({ 
-          message: "Ya tienes una solicitud rechazada o retirada para este electivo"
+    try {
+        let result = await getInscripciones(req);
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.id_usuario === req.params.id;
         });
-      }
-      return res.status(400).json({ 
-        message: "Ya tienes una solicitud de inscripción para este electivo",
-        estado: inscripcionExistente.estado
-      });
+        if (result.data.length <= 0) {
+            return res.status(204).json(result);
+        }
+        await processInscripcionArray(result.data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}   
+
+const getInscripcionHelper = async (req) => {
+    const idValidationResult = idValidation.validate(req.params);
+    if (idValidationResult.error) {
+        return {code: 400, json: getGenericResult(null, idValidationResult.error.message)}
     }
 
- 
-    const inscripcionesActivas = await inscripcionRepository.count({
-      where: { electivoId: electivoId, estado: "activa" }
-    });
-
-    let estadoDetalle = "";
-    let enListaEspera = false;
-
-    if (inscripcionesActivas >= electivo.cupos) {
-      estadoDetalle = "En lista de espera: No hay cupos disponibles. Pendiente de revisión";
-      enListaEspera = true;
-    } else {
-      estadoDetalle = "Pendiente de revisión";
+    try {
+        let result = await getInscripcion(req.params.id);
+        if (!result) {
+            return {code: 404, json: getGenericResult(null, "Inscripción no encontrada")}
+        }
+        await processInscripcionArray([result.data]);
+        return {code: 200, json: result}
+    } catch (error) {
+        console.error(error);
+        return {code: 500, json: {data: null, message: "Error interno del servidor"}};
     }
-
-   
-    const nuevaInscripcion = inscripcionRepository.create({
-      electivoNombre: electivo.nombreEl,
-      userId: userId,
-      electivoId: electivoId,
-      estado: "en_espera",
-      estadoDetalle: estadoDetalle,
-      periodo: electivo.periodo
-    });
-
-    await inscripcionRepository.save(nuevaInscripcion);
-   const {userId: a, electivoId: b, ...respuestaInscripcion} = nuevaInscripcion;
-    res.status(201).json({
-      message: "Solicitud de inscripción enviada exitosamente",
-      data: {
-        inscripcion: nuevaInscripcion,
-        enListaEspera: enListaEspera,
-        cuposDisponibles: electivo.cupos - inscripcionesActivas
-      }
-    });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> CreateInscripciones(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
 }
 
-export async function getInscripciones(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const userId = req.user.id;
-    const { periodo, estado } = req.query;
-
-    const where = { userId: userId }; 
-    
-    if (periodo) {
-      where.periodo = periodo;
-    }
-    if (estado) {
-      where.estado = estado;
-    }
-
-    const inscripciones = await inscripcionRepository.find({
-      where,
-      order: { createdAt: "DESC" }
-    });
-
-    res.status(200).json({ message: "Inscripciones encontradas", data: inscripciones });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> getInscripciones(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
+export const private_getInscripcion = async (req, res) => {
+    const result = await getInscripcionHelper(req);
+    return res.status(result.code).json(result.json);
 }
 
-export async function DeleteInscripciones(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const electivoRepository = AppDataSource.getRepository(ClaseEntity);
-    const { inscripcionId } = req.params;
+export const private_getInscripcionesSinAprobar = async (req, res) => {
+    try {
+        let result = await getInscripciones(req);
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.estado === AWAITING;
+        });
+        await processInscripcionArray(result.data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+const createInscriptionHelper = async (req, res, checks, user) => {
+    try {
+        const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
+        if (validationResult) {
+            return res.status(400).json(getGenericResult(null, validationResult));
+        }
+        const message = await isInvalidInscripcion(req.body, checks, req, user);
+        if (message) {
+            return res.status(404).json(getGenericResult(null, message));
+        }
+        if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
+            return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
+        }
+        const inscripcionCreada = await createInscripcion(req.body);
+        if (inscripcionCreada && inscripcionCreada.data) {
+            return res.status(200).json(inscripcionCreada);
+        }
+        return getGenericError(res);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
+    }
+}
+
+export const private_createInscripcion = async (req, res) => {
     if (!req.body) {
-      return res.status(400).json({ message: "Pedido vacío" });
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
     }
-
-    const { motivo } = req.body;
-    const userId = req.user.id; 
-
-    if (!inscripcionId) {
-      return res.status(400).json({ message: "El ID de la inscripción es obligatorio" });
-    }
-
-    // console.log(inscripcionId);
-    // console.log(userId);
-    const inscripcion = await inscripcionRepository.findOne({
-      where: { 
-        id: inscripcionId,
-        userId: userId 
-      }
-    });
-    // console.log(inscripcion);
-
-    if (!inscripcion) {
-      return res.status(404).json({ message: "Inscripción no encontrada" });
-    }
-    // console.log(inscripcion.estado);
-
-    if (inscripcion.estado === "retirada" || inscripcion.estado === "rechazada") {
-      return res.status(400).json({ message: "Esta inscripción ya fue cancelada" });
-    }
-
-  
-    const electivo = await electivoRepository.findOne({ where: { id_electivo: inscripcion.electivoId } });
-    
-    if (electivo && electivo.fechaFinRetiro && inscripcion.estado === "activa") {
-      const ahora = new Date();
-      if (ahora > new Date(electivo.fechaFinRetiro)) {
-        return res.status(400).json({ message: "El período de retiro ha finalizado" });
-      }
-    }
-
-    const estadoAnterior = inscripcion.estado;
-    inscripcion.estado = "retirada";
-    inscripcion.estadoDetalle = motivo || "Retiro voluntario";
-    await inscripcionRepository.save(inscripcion);
-
-    
-    if (estadoAnterior === "activa" && electivo) {
-      await electivoRepository.decrement({ id: electivo.id }, "inscritosActuales", 1);
-    }
-
-    res.status(200).json({ message: "Inscripción cancelada exitosamente", data: inscripcion });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> DeleteInscripciones(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
+    req.body.estado = APPROVED;
+    return await createInscriptionHelper(req, res, false, null);
 }
 
-export async function getInscripcion(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const { inscripcionId } = req.params;
-    const userId = req.user.id;
-    if (!inscripcionId) {
-      return res.status(400).json({ message: "El ID de la inscripción es obligatorio" });
+const updateInscriptionHelper = async (req, res, id_checks, user) => {
+    try {
+        const idValidationResult = idValidation.validate(req.params);
+        if (idValidationResult.error) {
+            return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+        }
+        const validationResult = validationFunctionHelper([integrityValidation, updateValidation], req.body);
+        if (validationResult) {
+            return res.status(400).json(getGenericResult(null, validationResult));
+        }
+        const rawInscripcion = await getInscripcion(req.params.id);
+        if (!(rawInscripcion.data && rawInscripcion.data.id_inscripcion)) {
+            return res.status(400).json(getGenericResult(null, "Inscripción no encontrada"));
+        }
+
+        if (id_checks && (rawInscripcion.data.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No se puede editar la inscripción de otro usuario"));
+        }
+        if (id_checks && (req.body.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No se puede inscribir a otro alumno"));
+        }     
+
+        const editedInscripcion = {
+            id_electivo: (req.body.id_electivo || rawInscripcion.data.id_electivo), 
+            id_usuario: (req.body.id_usuario || rawInscripcion.data.id_usuario)
+        };
+
+        // console.log(editedInscripcion);
+        const message = await isInvalidInscripcion(editedInscripcion, id_checks, req, user);
+        if (!user) {
+            user = await RAW_getUserById(editedInscripcion.id_usuario);
+        }
+
+
+        if (message) {
+            return res.status(404).json(getGenericResult(null, message));
+        }
+        if (await inscripcionAlreadyExists(req.params.id, editedInscripcion.id_usuario, editedInscripcion.id_electivo)) {
+            return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
+        }
+        const inscripcionCreada = await updateInscripcion(req.body, {id_inscripcion: req.params.id}, rawInscripcion, user);
+        if (inscripcionCreada && inscripcionCreada.data) {
+            return res.status(200).json(inscripcionCreada);
+        }
+        return getGenericError(res);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
     }
-
-
-    const inscripcion = await inscripcionRepository.findOne({
-      where: { 
-        id: inscripcionId,
-        userId: userId 
-      }
-    });
-
-    if (!inscripcion) {
-      return res.status(404).json({ message: "Inscripción no encontrada" });
-    }
-
-    res.status(200).json({ message: "Inscripción encontrada", data: inscripcion });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> obtenerInscripcion(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
 }
 
-export async function gestionarInscripcion(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const claseRepository = AppDataSource.getRepository(ClaseEntity);
-    const { inscripcionId } = req.params;
-    const { accion, motivo } = req.body;
-    // console.log(accion);
-    // console.log(motivo);
+export const private_updateInscripcion = async (req, res) => {
+    return await updateInscriptionHelper(req, res, false);
+}
 
-    if (!accion || !["aprobar", "rechazar"].includes(accion)) {
-      return res.status(400).json({ 
-        message: "Acción inválida. Use 'aprobar' o 'rechazar'" 
-      });
+const deleteInscripcionHelper = async (req, res, id_checks) => {
+    try {
+        const idValidationResult = idValidation.validate(req.params);
+        if (idValidationResult.error) {
+            return res.status(400).json(getGenericResult(null, idValidationResult.error.message));
+        }
+        const inscripcion = await getInscripcion(req.params.id);
+        if (!(inscripcion.data) || !(inscripcion.data.id_inscripcion)) {
+            return res.status(404).json(getGenericResult(null, "Inscripción no encontrada"));
+        }
+        if (id_checks && (inscripcion.data.id_usuario !== req.user.id)) {
+            return res.status(401).json(getGenericResult(null, "No es posible eliminar una inscripción que no es tuya"));
+        }
+        const deletedInscripcion = await deleteInscripcion(inscripcion.data);
+        return res.status(200).json(deletedInscripcion);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
     }
+}
 
-    if (accion === "rechazar" && !motivo) {
-      return res.status(400).json({ 
-        message: "El motivo de rechazo es obligatorio" 
-      });
+export const private_deleteInscripcion = async (req, res) => {
+    return deleteInscripcionHelper(req, res, false);
+}
+
+const changeInscriptionStatusHelper = async (req, res, status) => {
+    try {
+        if (req.body) {
+            return res.status(400).json(getGenericResult(null, "No se pueden pasar parámetros a este endpoint"));
+        }
+        req.body = {estado: status};
+        return private_updateInscripcion(req, res);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res); 
     }
+} 
 
-    const inscripcion = await inscripcionRepository.findOne({
-      where: { id: inscripcionId }
-    });
+export const private_approveInscripcion = async (req, res) => {
+    return await changeInscriptionStatusHelper(req, res, APPROVED);
+}
 
-    if (!inscripcion) {
-      return res.status(404).json({ message: "Inscripción no encontrada" });
+export const private_rejectInscripcion = async (req, res) => {
+    return await changeInscriptionStatusHelper(req, res, REJECTED);
+}
+
+export const public_getInscripcion = async (req, res) => {
+    const result = await getInscripcionHelper(req);
+    if (result.json.data && (result.json.data.id_usuario === req.user.id)) {
+        return res.status(result.code).json(result.json);
     }
+    return res.status(401).json({message: "Acceso denegado", data: null});
+}
 
-    if (inscripcion.estado !== "en_espera") {
-      return res.status(400).json({ 
-        message: "Esta inscripción no está en espera" 
-      });
-    }
-
-    if (accion === "aprobar") {
-      const inscripcionesActivas = await inscripcionRepository.count({
-        where: { electivoId: inscripcion.electivoId, estado: "activa" }
-      });
-
-      const electivo = await claseRepository.findOne({ where: { id_electivo: inscripcion.electivoId } });
-      
-      if (!electivo) {
-        return res.status(404).json({ message: "Electivo no encontrado" });
-      }
-
-      if (inscripcionesActivas >= electivo.cupos) {
-        return res.status(400).json({ 
-          message: "No hay cupos disponibles para aprobar esta inscripción" 
+export const public_getInscripcionesByUser = async (req, res) => {
+    try {
+        let result = await getInscripciones();
+        if (invalidResult(result)) {
+            result.message = "No hay inscripciones para mostrar";
+            return res.status(204).json(result);
+        }
+        result.data = result.data.filter((inscripcion) => {
+            return inscripcion.id_usuario === req.user.id;
         });
-      }
-
-      inscripcion.estado = "activa";
-      inscripcion.estadoDetalle = "Inscripción aprobada";
-      await inscripcionRepository.save(inscripcion);
-
-      await claseRepository.update(
-        { id_electivo: electivo.id_electivo }, 
-        { inscritosActuales: inscripcionesActivas + 1 }
-      );
-
-      return res.status(200).json({ 
-        message: "Inscripción aprobada exitosamente", 
-        data: inscripcion 
-      });
-    } else {
-      inscripcion.estado = "rechazada";
-      inscripcion.estadoDetalle = motivo;
-      await inscripcionRepository.save(inscripcion);
-
-      return res.status(200).json({ 
-        message: "Inscripción rechazada", 
-        data: inscripcion 
-      });
+        await processInscripcionArray(result.data);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        return getGenericError(res);
     }
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> gestionarInscripcion(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
 }
 
-export async function getInscripcionesEnEspera(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const { id_electivo, periodo } = req.query;
-
-    const where = { estado: "en_espera" };
-    if (id_electivo) {
-      where.electivoId = parseInt(id_electivo);
+export const public_createInscripcion = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
     }
-    if (periodo) {
-      where.periodo = periodo;
+    if (req.body.id_usuario) {
+        return res.status(401).json(getGenericResult(null, "No se puede crear una inscripción para otro usuario"));
     }
-
-    const inscripciones = await inscripcionRepository.find({
-      where,
-      order: { createdAt: "ASC" }
-    });
-
-    res.status(200).json({ 
-      message: "Inscripciones en espera encontradas", 
-      data: inscripciones,
-      total: inscripciones.length 
-    });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> getInscripcionesEnEspera(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
+    if (req.body.estado) {
+        return res.status(401).json(getGenericResult(null, "No se puede autoasignar un estado"));
+    }
+    if ((req.user.role || req.user.rol) !== STUDENT_ROLE) {
+        return res.status(401).json(getGenericResult(null, "Solo los estudiantes pueden inscribir ramos"));
+    }
+    if ((await countInscripcionesByUser(req.user.id)) >= MAX_INSCRIPCIONES) {
+        return res.status(401).json(getGenericResult(null, "Ya tiene suficientes inscripciones"));
+    }
+    req.body.id_usuario = req.user.id;
+    req.body.estado = AWAITING;
+    return await createInscriptionHelper(req, res, true, req.user);
 }
 
-export async function getNotificaciones(req, res) {
-  try {
-    const inscripcionRepository = AppDataSource.getRepository(InscripcionEntity);
-    const userId = req.user.id; 
+export const public_updateInscripcion = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
+    }
+    req.body.estado = AWAITING;
+    req.body.id_usuario = req.user.id;
+    return await updateInscriptionHelper(req, res, true, req.user);
+}
 
-    const inscripciones = await inscripcionRepository.find({
-      where: { userId: userId },
-      order: { updatedAt: "DESC" }
-    });
+export const public_deleteInscripcion = async (req, res) => {
+    return deleteInscripcionHelper(req, res, true);
+}
 
-    const notificaciones = inscripciones.map(insc => ({
-      id: insc.id,
-      electivoId: insc.electivoId,
-      estado: insc.estado,
-      mensaje: insc.estadoDetalle,
-      fecha: insc.updatedAt
-    }));
-
-    res.status(200).json({ 
-      message: "Notificaciones obtenidas", 
-      data: notificaciones,
-      pendientes: notificaciones.filter(n => n.estado === "en_espera").length
-    });
-  } catch (error) {
-    console.error("Error en inscripcion.controller.js -> getNotificaciones(): ", error);
-    res.status(500).json({ message: "Error interno del servidor." });
-  }
+export const shallDisplayWarning = async (req, res) => {
+    const validationResult = warningValidation.validate(req.body);
+    if (validationResult.error) {
+        return res.status(200).json({result: true});
+    }
+    let result = true;
+    const id_electivo = (req.body && req.body.id_electivo) || 0;
+    const user_id = (req.user && req.user.id) || 0;
+    try {
+        result = await SERVICE_shallDisplayWarning(user_id, id_electivo);
+    } catch (error) {}
+     
+    return res.status(200).json({result: result});
 }

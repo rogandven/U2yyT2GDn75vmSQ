@@ -1,0 +1,64 @@
+import { aprobarElectivos, rechazarElectivos } from "../../services/electivo.service.js";
+import Swal from "sweetalert2";
+
+const statusIsPositive = (status) => {
+    return (status >= 200 && status <= 299);
+}
+
+const swalCreationHelper = (isPositive, title, description) => {
+    let defaultIcon = 'error';
+    if (isPositive) {
+        defaultIcon = 'success';
+    }
+    return Swal.fire({
+        title: title || 'Error!',
+        text: description || 'Error desconocido',
+        icon: defaultIcon || 'error'
+    });
+}
+
+const errorGenerico = (verbo) => {
+    return swalCreationHelper(false, "Error", `Error al ${verbo} electivo`);
+}
+
+export const AprobarElectivo = (fetchElectivos) => {
+    const handleAprobarElectivo = async (electivoId) => {
+        try {
+            const response = await aprobarElectivos(electivoId);
+            if (response) {
+                await fetchElectivos();
+                const isPositive = statusIsPositive(response.code);
+                swalCreationHelper(isPositive, isPositive ? 'Éxito' : 'Error', response.data.message);
+            } else {
+                errorGenerico('aprobar');
+            }
+            //// console.log(JSON.stringify(response));
+            
+        } catch (error) {
+            errorGenerico('aprobar');
+            // console.error("Error al aprobar electivo:", error);
+        }
+    };
+    return { handleAprobarElectivo };
+};
+
+export const RechazarElectivo = (fetchElectivos) => {
+    const handleRechazarElectivo = async (electivoId) => {
+        try {
+            const response = await rechazarElectivos(electivoId);
+            if (response) {
+                await fetchElectivos();
+                const isPositive = statusIsPositive(response.code);
+                swalCreationHelper(isPositive, isPositive ? 'Éxito' : 'Error', response.data.message);
+            } else {
+                errorGenerico('rechazar');
+            }
+        } catch (error) {
+            // console.error("Error al aprobar electivo:", error);
+            errorGenerico('rechazar');
+        }
+    };
+    return { handleRechazarElectivo };
+};
+
+export default AprobarElectivo;

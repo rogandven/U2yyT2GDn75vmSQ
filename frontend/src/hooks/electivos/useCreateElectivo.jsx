@@ -1,68 +1,76 @@
-
-
+import { createElectivoJefeDeCarrera, createElectivoProfesor } from "../../services/electivo.service.js";
 import Swal from "sweetalert2";
-import { createElectivo } from "@services/electivo.service.js";
+import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { createSwalField } from "../utils/swalField.jsx";
+import { gebi } from "../utils/getElementById.jsx";
+// import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
+import { StaticDropdownList } from "../utils/DropdownList.jsx";
+import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
+import { createSwalDateField } from "../utils/swalField.jsx";
+
+async function createElectivoInfo() {
+  const { value: formValues } = await Swal.fire({
+    title: "Crear Electivo",
+    html: `
+      ${createSwalField(1, "Nombre", "")}
+      ${createSwalField(2, "Descripcion", "")}
+      ${createSwalField(3, "Cupos", "")}
+      ${createSwalField(4, "Créditos Requeridos", "")}
+      ${createSwalDateField(5, "Apertura", null)}
+      ${createSwalDateField(6, "Cierre", null)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input7", "m-1", true)}
+      ${createSwalField(8, "Semestre Mínimo", "")}
+      ${createSwalField(9, "Carreras", "")}
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Crear",
+    cancelButtonText: "Cancelar",
+    theme: "dark",
+    preConfirm: () => {
+      const nombre = gebi('swal2-input1')?.value;
+      const descripcion = gebi('swal2-input2')?.value;
+      const cupos = gebi('swal2-input3')?.value;
+      const creditos_requeridos = gebi('swal2-input4')?.value;
+      const apertura = gebi('swal2-input5')?.value;
+      const cierre = gebi('swal2-input6')?.value;
+      const area = String(gebi('swal2-input7')?.value).toUpperCase();
+      const semestre_minimo = gebi('swal2-input8')?.value;
+      const carreras = gebi('swal2-input9')?.value;
+
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras, creditos_requeridos};
+    },
+  });
+  if (formValues) {
+    return formValues;
+  }
+}
 
 export const useCreateElectivo = (fetchElectivos) => {
-  const handleCreateElectivo = async () => {
-    const { value: formValues } = await Swal.fire({
-      title: "Registrar nuevo electivo",
-      html: `
-        <input id="nombre" class="swal2-input" placeholder="Nombre del electivo">
-        <input id="cupos" class="swal2-input" type="number" placeholder="Cupos">
-        <input id="apertura" class="swal2-input" type="date" placeholder="Fecha de apertura">
-        <input id="cierre" class="swal2-input" type="date" placeholder="Fecha de cierre">
-        <input id="area" class="swal2-input" placeholder="Área">
-        <textarea id="descripcion" class="swal2-textarea" placeholder="Descripción del electivo"></textarea>
-      `,
-      confirmButtonText: "Registrar",
-      confirmButtonColor: "#4CAF50",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      focusConfirm: false,
-
-      preConfirm: () => {
-        const nombre = document.getElementById("nombre").value.trim();
-        const cupos = parseInt(document.getElementById("cupos").value);
-        const apertura = document.getElementById("apertura").value;
-        const cierre = document.getElementById("cierre").value;
-        const area = document.getElementById("area").value.trim();
-        const descripcion = document.getElementById("descripcion").value.trim();
-
-        if (!nombre || nombre.length < 3)
-          return Swal.showValidationMessage("El nombre debe tener al menos 3 caracteres");
-
-        if (isNaN(cupos) || cupos < 1)
-          return Swal.showValidationMessage("Debe ingresar un número válido de cupos (mínimo 1)");
-
-        if (!apertura)
-          return Swal.showValidationMessage("Debe ingresar la fecha de apertura");
-
-        if (!cierre)
-          return Swal.showValidationMessage("Debe ingresar la fecha de cierre");
-
-        if (new Date(cierre) <= new Date(apertura))
-          return Swal.showValidationMessage("La fecha de cierre debe ser posterior a la apertura");
-
-        if (!area || area.length < 3)
-          return Swal.showValidationMessage("El área debe tener al menos 3 caracteres");
-
-        if (!descripcion || descripcion.length < 10)
-          return Swal.showValidationMessage("La descripción debe tener al menos 10 caracteres");
-
-        return { nombre, cupos, apertura, cierre, area, descripcion };
-      },
-    });
-
-    if (formValues) {
-      try {
-        await createElectivo(formValues);
-        Swal.fire("Éxito", "Electivo creado correctamente", "success");
-        await fetchElectivos();
-      } catch (error) {
-        console.error("Error al crear electivo:", error);
-        Swal.fire("Error", "No se pudo crear el electivo", "error");
+  const handleCreateElectivo = async (isAdmin, isJefe) => {
+    try {
+      if (!isAdmin) {
+        return fireDynamicSwal(500, null, "Acceso denegado");;
       }
+
+      let response = null;
+      const formValues = await createElectivoInfo();
+      if (!formValues) return;
+
+
+      if (isJefe) {
+        response = await createElectivoJefeDeCarrera(formValues);
+      } else {
+        response = await createElectivoProfesor(formValues);
+      }
+      // console.log(response);
+      if (response) {
+        await fetchElectivos();
+        fireDynamicSwal(response?.status, null, (response?.data?.message || response?.data?.details) || (response?.message || response?.details));
+      }
+    } catch (error) {
+      fireDynamicSwal(500, null, null);
+      // console.error("Error al crear electivo:", error);
     }
   };
 
