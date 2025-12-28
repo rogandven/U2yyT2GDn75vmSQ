@@ -6,6 +6,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
     response = await axiosFunction(URL, body);
     return {data: response.data?.data, status: response.status, message: response.data?.message};
   } catch (error) {
+    console.log(error);
     response = error.response;
     if (response.data.message) {
       response.data.message = String(response.data.message).replaceAll("AAAA-MM-DD", "DD-MM-AAAA");

@@ -128,6 +128,9 @@ export async function updateElectivoFromService(id_instancia, data, carrera, use
         return getServiceResult(false, null, "Electivo no encontrado", 0);
     }
 
+    console.log(carrera);
+    console.log(electivo.carreras);
+
     const array = breakDownCarreraArray(electivo.carreras);
     // console.log(array);
     if ((user_role !== ADMIN_ROLE) && !(array.includes(String(carrera)))) {
@@ -188,8 +191,8 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
 
-    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(String(electivo.carreras).includes(String(user_career))))) {
-      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
+    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(String(electivo.carreras).split(",").includes(String(user_career))))) {
+      return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
     }
 
     if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {

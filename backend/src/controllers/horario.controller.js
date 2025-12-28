@@ -115,7 +115,7 @@ export async function asignarHorario(req, res) {
     console.log(req.user.carrera);
 
     if (!canSkipChecks) {
-       if (!(String(electivo.carreras).includes(req.user.carrera))) {
+       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
         return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
        }
       if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
@@ -191,7 +191,7 @@ export async function patchHorario(req, res) {
     const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
     if (!canSkipChecks) {
-       if (!(String(electivo.carreras).includes(req.user.carrera))) {
+       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
         return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
        }
       if (((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {

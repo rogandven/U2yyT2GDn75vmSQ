@@ -56,7 +56,7 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
   req.body.estado = estadoNuevo;
   req.body.id_profesor = req.user.id;
 
-  if (((req.user.role || req.user.rol) !== ADMIN_ROLE) && !(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+  if (((req.user.role || req.user.rol) !== ADMIN_ROLE) && !(req.body.carreras && String(req.body.carreras).split(",").includes(req.user.carrera))) {
     return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
   }
 
@@ -135,7 +135,7 @@ export async function updateElectivo(req, res) {
     // console.log(req.body.carreras);
     if ((req.user.role || req.user.rol) !== ADMIN_ROLE) {
       req.body.carreras = processCarrera(req.body.carreras);
-      if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+      if (!(req.body.carreras && String(req.body.carreras).split(",").includes(req.user.carrera))) {
         return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
       }
     }
@@ -201,9 +201,9 @@ export async function deleteElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
     
-    const serviceResult = await deleteElectivoFromService(id, req.user.id, (req.user.role || req.user.rol));
+    const serviceResult = await deleteElectivoFromService(id, req.user.id, (req.user.role || req.user.rol), req.user.career || req.user.carrera);
     if (serviceResult.error) {
-      return res.status(500).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+      return res.status(400).json(getControllerResult_NEW(serviceResult.details, serviceResult));
     }
     return res.status(200).json(getControllerResult_NEW(serviceResult.details, serviceResult));
   } catch (error) {

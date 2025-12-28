@@ -40,20 +40,25 @@ export const useDeleteElectivo = (fetchElectivos) => {
     if (!isAdmin) {
       return fireDynamicSwal(500, null, "Acceso denegado");
     }
-
+    let response = null;
+    let data = null;
     try {
+      
       const isConfirmed = await confirmDeleteElectivo();
       if (isConfirmed) {
-        const response = await deleteElectivo(electivoId);
-        if (response) {
-          confirmAlert();
-          await fetchElectivos();
-        }
+        response = await deleteElectivo(electivoId);
+      } else {
+        return;
       }
     } catch (error) {
-      // console.error("Error al eliminar electivo:", error);
-      confirmError();
+      response = error?.response;
     }
+    data = response?.data;
+    if (data && response) {
+      Object.assign(data, {status: response?.status});
+    }
+    fetchElectivos(); 
+    fireDynamicSwal(response?.status, null, response?.message || response?.details);
   };
 
   return { handleDeleteElectivo };

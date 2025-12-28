@@ -36,7 +36,7 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
   if (user.role !== STUDENT_ROLE){
     return `El usuario ${user.fullname || user.username || user.id} no es un estudiante.`;
   }
-  if (!(String(electivo.carreras).includes(user.carrera))) {
+  if (!(String(electivo.carreras).split(",").includes(user.carrera))) {
     return `El usuario ${user.fullname || user.username || user.id} no pertenece a ninguna de las carreras requeridas`;
   }
   if (addtionalChecks) {
