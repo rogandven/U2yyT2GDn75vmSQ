@@ -6,6 +6,9 @@ import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
 import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
+import { sendDeletionMail } from "../services/email.service.js";
+import { RAW_getAllStudents } from "./user.service.js";
+
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
@@ -183,6 +186,7 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
 export async function deleteElectivoFromService(id_instancia, user_id, user_role, user_career) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
+    let currentUserBatch = null;
 
     if (!electivo) {
         return getServiceResult(true, null, "Electivo no encontrado", 0);
@@ -197,6 +201,27 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     }
 
     await electivoRepo.remove(electivo);
+    
+    const carreras = String(electivo.carreras).split(",");
+    console.log(carreras);
+
+    for (let i = 0; i < carreras.length; i++) {
+      try {
+        currentUserBatch = await RAW_getAllStudents(String(carreras[i]).trim().toUpperCase());
+        if (Array.isArray(currentUserBatch)) {
+          for (let j = 0; j < currentUserBatch.length; j++) {
+            sendDeletionMail(currentUserBatch[j].email, electivo, req.user);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        continue;
+      }
+    }
+
+    sendDeletionMail()
+
+
     return getServiceResult(false, null, "Electivo eliminado correctamente", 0);
   } catch (error) {
     console.error("Error al eliminar electivo:", error);

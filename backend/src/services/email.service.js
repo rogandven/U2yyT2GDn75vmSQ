@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { EMAIL, EMAIL_PROVIDER, EMAIL_PASSWORD } from "../config/configEnv.js";
+import { DeleteNotification } from "../constants/electivo.constants.js";
 
 export const sendMail = (to, subject, text) => {
     const mailOptions = {
@@ -27,6 +28,13 @@ export const sendMail = (to, subject, text) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const sendDeletionMail = (to, electivoData, deletedBy) => {
+    if (!to || !electivoData || !deletedBy) {
+        return;
+    }
+    return sendMail(to, `Eliminación de electivo ${electivoData.nombre || electivoData.id}`, DeleteNotification())
 }
 
 export default sendMail;

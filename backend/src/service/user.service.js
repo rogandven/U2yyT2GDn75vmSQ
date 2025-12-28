@@ -232,3 +232,14 @@ export async function EMAIL_getAllCareerChiefs(career) {
         return BASE_CASE;
     }
 }
+
+export async function RAW_getAllStudents(career) {
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const estudiantes = await userRepository.find({where: {carrera: String(career).toUpperCase()}});
+        return estudiantes;
+    } catch (error) {
+        console.error("Error al obtener los usuarios: ", error);
+        return [];
+    }
+}
