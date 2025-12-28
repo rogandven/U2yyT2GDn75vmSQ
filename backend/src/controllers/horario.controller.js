@@ -101,7 +101,7 @@ export async function asignarHorario(req, res) {
       return res.status(400).json({ message: String(result) });
     } 
 
-    const electivo = await RAW_getElectivoById(req.body.id_electivo);
+    const electivo = await RAW_getElectivoById(id_electivo);
     console.log(electivo);
     if (!electivo) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
