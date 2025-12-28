@@ -169,3 +169,14 @@ export async function logoutUserFromService(clearCookieFunction) {
     return getServiceResult(true, null, "Error al cerrar sesión", 0);
   }
 }
+
+export async function RAW_getAllStudents(career) {
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const estudiantes = await userRepository.find({where: {carrera: String(career).toUpperCase()}});
+        return estudiantes;
+    } catch (error) {
+        console.error("Error al obtener los usuarios: ", error);
+        return [];
+    }
+}
