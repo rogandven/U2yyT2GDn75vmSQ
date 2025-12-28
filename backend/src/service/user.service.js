@@ -233,7 +233,7 @@ export async function EMAIL_getAllCareerChiefs(career) {
     }
 }
 
-export async function RAW_getAllStudents(career) {
+export async function RAW_getAllStudents_WITHCAREER(career) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const estudiantes = await userRepository.find({where: {carrera: String(career).toUpperCase()}});

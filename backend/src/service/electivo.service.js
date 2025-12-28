@@ -3,7 +3,7 @@ import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
-import { RAW_getUserById } from "./user.service.js";
+import { RAW_getAllStudents_WITHCAREER, RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
 import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
 import { sendDeletionMail } from "../services/email.service.js";
@@ -201,13 +201,13 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     }
 
     await electivoRepo.remove(electivo);
-    
+
     const carreras = String(electivo.carreras).split(",");
     console.log(carreras);
 
     for (let i = 0; i < carreras.length; i++) {
       try {
-        currentUserBatch = await RAW_getAllStudents(String(carreras[i]).trim().toUpperCase());
+        currentUserBatch = await RAW_getAllStudents_WITHCAREER(String(carreras[i]).trim().toUpperCase());
         if (Array.isArray(currentUserBatch)) {
           for (let j = 0; j < currentUserBatch.length; j++) {
             sendDeletionMail(currentUserBatch[j].email, electivo, req.user);
