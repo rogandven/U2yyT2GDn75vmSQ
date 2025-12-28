@@ -10,11 +10,11 @@ export const useGetTimetable = (horarioData, setHorarioData) => {
             try {
                 // console.log('Datos de horario obtenidos (stringified):', JSON.stringify(data));
             } catch (error) {
-                console.error('Error al convertir los datos de horario a JSON:', error);
+                // console.error('Error al convertir los datos de horario a JSON:', error);
             } */
             setHorarioData(data);
         } catch (error) {
-            console.error('Error al conseguir la clase data:', error);
+            // console.error('Error al conseguir la clase data:', error);
         } 
     };
 

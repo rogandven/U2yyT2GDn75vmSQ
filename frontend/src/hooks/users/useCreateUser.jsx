@@ -58,7 +58,7 @@ export const useCreateUser = (fetchUsers) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear usuario:", error);
+      // console.error("Error al crear usuario:", error);
     }
   };
 

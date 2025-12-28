@@ -15,7 +15,7 @@ const Sidebar = ({PageContent}) => {
       logout();
       navigate("/login");
     } catch (error) {
-      console.error("Error al cerrar sesión", error);
+      // console.error("Error al cerrar sesión", error);
     }
   };
 

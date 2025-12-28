@@ -58,7 +58,7 @@ export const editTimetable=(fetchTimetable)=> {
             }
         }
          catch (error) {
-            console.error('Error al actualizar el horario:', error);
+            // console.error('Error al actualizar el horario:', error);
         }
     };
     return { handleEditTimetable };

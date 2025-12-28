@@ -27,7 +27,7 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar inscripcion:", error);
+      // console.error("Error al editar inscripcion:", error);
     }
   };
 

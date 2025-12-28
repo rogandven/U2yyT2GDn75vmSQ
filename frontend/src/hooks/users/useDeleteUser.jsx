@@ -47,7 +47,7 @@ export const useDeleteUser = (fetchUsers) => {
         }
       }
     } catch (error) {
-      console.error("Error al eliminar usuario:", error);
+      // console.error("Error al eliminar usuario:", error);
       confirmError();
     }
   };

@@ -46,7 +46,7 @@ export const useCreateInscripcion = (fetchInscripciones) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear inscripción:", error);
+      // console.error("Error al crear inscripción:", error);
     }
   };
 
@@ -79,7 +79,7 @@ export const useCreateInscripcion_PUBLIC = () => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear inscripción:", error);
+      // console.error("Error al crear inscripción:", error);
     }
   } 
 

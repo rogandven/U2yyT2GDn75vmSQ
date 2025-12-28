@@ -6,7 +6,7 @@ export const useGetProfile = () => {
             const profileData = await getProfile();
             return profileData;
         } catch (error) {
-            console.error("Error consiguiendo el perfil:", error);
+            // console.error("Error consiguiendo el perfil:", error);
         }
     }
     return { fetchProfile };

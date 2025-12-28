@@ -48,7 +48,7 @@ export const useCreateTimetable = (fetchHorarios) => {
                 fetchHorarios();
             }
         } catch (error) {
-            console.error('Error creating timetable:', error);
+            // console.error('Error creating timetable:', error);
             response = error?.response || {status: 500, message: "Error desconocido"};
         }
         fireDynamicSwal(response.status, null, response?.data?.message || response?.message);

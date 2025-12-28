@@ -95,7 +95,7 @@ export const useEditUser = (fetchUsers) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar usuario:", error);
+      // console.error("Error al editar usuario:", error);
     }
   };
 

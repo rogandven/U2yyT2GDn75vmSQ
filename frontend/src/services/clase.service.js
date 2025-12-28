@@ -5,7 +5,7 @@ export const getClass = async () => {
         const response = await axios.get('/api/clases');
         return response.data;
     } catch (error) {
-        console.error('Error al obtener la clase:', error);
+        // console.error('Error al obtener la clase:', error);
         throw error;
     }
 };
@@ -15,7 +15,7 @@ export const assignClass = async (classData) => {
         const response = await axios.post('/api/clases/asignar', classData);
         return response.data;
     } catch (error) {
-        console.error('Error al asignar la clase:', error);
+        // console.error('Error al asignar la clase:', error);
         throw error;
     }
 };
@@ -28,7 +28,7 @@ export const updateClass = async (classId, updatedData) => {
     } catch (error) {
         // // console.log(JSON.stringify(error));
         // // console.log(JSON.stringify(updatedData));
-        console.error('Error al actualizar la clase:', error);
+        // console.error('Error al actualizar la clase:', error);
         throw error;
     }
 };
@@ -38,7 +38,7 @@ export const deleteClass = async (classId) => {
         const response = await axios.delete(`/api/clases/${classId}`);
         return response.data;
     } catch (error) {
-        console.error('Error al eliminar la clase:', error);
+        // console.error('Error al eliminar la clase:', error);
         throw error;
     }
 };

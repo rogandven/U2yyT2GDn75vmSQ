@@ -23,7 +23,7 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar electivo:", error);
+      // console.error("Error al editar electivo:", error);
     }
   };
 

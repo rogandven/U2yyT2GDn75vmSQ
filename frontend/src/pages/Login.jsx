@@ -25,7 +25,7 @@ const Login = () => {
         });
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

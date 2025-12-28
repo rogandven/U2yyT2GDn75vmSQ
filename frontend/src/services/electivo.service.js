@@ -61,7 +61,7 @@ export async function deleteElectivo(id) {
         const response = await axios.get('/electivos');
         return response.data.data;
     } catch (error) {
-        console.error("Error al obtener electivos:", error);
+        // console.error("Error al obtener electivos:", error);
     }
 }
 
@@ -71,7 +71,7 @@ const cambiarEstadoHelper = async (verbo, id) => {
         // // console.log(response);
         return {data: response.data, code: response.status || 500};
     } catch (error) {
-        console.error("Error al aprobar el electivo: ", error);
+        // console.error("Error al aprobar el electivo: ", error);
         return null;
     }
 }
@@ -89,7 +89,7 @@ export async function editElectivo(electivoId, electivoData) {
         const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
         return response.data;
     } catch (error) {
-        console.error("Error al editar el electivo:", error);
+        // console.error("Error al editar el electivo:", error);
     }
 }
 
@@ -98,7 +98,7 @@ export async function deleteElectivo(electivoId) {
         const response = await axios.delete(`/electivos/${electivoId}`);
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
+        // console.error("Error al eliminar el electivo:", error);
     }
 }
 
@@ -112,7 +112,7 @@ export async function getElectivos(query = "") {
     const response = await axios.get(`/electivos${query}`);
     return response.data.data || [];
   } catch (error) {
-    console.error("Error al obtener electivos:", error);
+    // console.error("Error al obtener electivos:", error);
     throw error;
   }
 }
@@ -122,7 +122,7 @@ export async function createElectivo(electivoData) {
     const response = await axios.post("/electivos", electivoData);
     return response.data.data || response.data;
   } catch (error) {
-    console.error("Error al crear electivo:", error);
+    // console.error("Error al crear electivo:", error);
     throw error;
   }
 }
@@ -132,7 +132,7 @@ export async function updateElectivo(id, electivoData) {
     const response = await axios.patch(`/electivos/${id}`, electivoData);
     return response.data.data || response.data;
   } catch (error) {
-    console.error("Error al actualizar electivo:", error);
+    // console.error("Error al actualizar electivo:", error);
     throw error;
   }
 }
@@ -143,7 +143,7 @@ export async function deleteElectivo(id) {
     const response = await axios.delete(`/electivos/${id}`);
     return response.data.data || response.data;
   } catch (error) {
-    console.error("Error al eliminar electivo:", error);
+    // console.error("Error al eliminar electivo:", error);
     throw error;
   }
 }
@@ -156,7 +156,7 @@ export async function getElectivos() {
         const response = await axios.get('/electivos');
         return response.data.data;
     } catch (error) {
-        console.error("Error al obtener electivos:", error);
+        // console.error("Error al obtener electivos:", error);
     }
 }
 
@@ -165,7 +165,7 @@ export async function editElectivo(electivoId, electivoData) {
         const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
         return response.data;
     } catch (error) {
-        console.error("Error al editar el electivo:", error);
+        // console.error("Error al editar el electivo:", error);
     }
 }
 
@@ -174,7 +174,7 @@ export async function deleteElectivo(electivoId) {
         const response = await axios.delete(`/electivos/${electivoId}`);
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
+        // console.error("Error al eliminar el electivo:", error);
     }
 }
     */

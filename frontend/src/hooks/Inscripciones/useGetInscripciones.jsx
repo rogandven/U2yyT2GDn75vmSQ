@@ -16,7 +16,7 @@ export const useGetInscripciones = () => {
             }
             setInscripciones(data);
         } catch (error) {
-            console.error("Error consiguiendo inscripciones:", error);
+            // console.error("Error consiguiendo inscripciones:", error);
             setInscripciones(BASE_CASE);
         }
     };

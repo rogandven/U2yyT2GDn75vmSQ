@@ -14,7 +14,7 @@ export const getUserRole = () => {
         // console.log("ROL ACTUAL: " + rol);
         return rol;
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         return STUDENT_ROLE;
     }
 }

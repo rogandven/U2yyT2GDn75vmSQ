@@ -57,7 +57,7 @@ export const useDeleteInscripcion = (fetchInscripciones) => {
         }
       }
     } catch (error) {
-      console.error("Error al eliminar inscripcion:", error);
+      // console.error("Error al eliminar inscripcion:", error);
       confirmError();
     }
   };

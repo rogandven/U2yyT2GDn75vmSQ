@@ -123,7 +123,7 @@ export const EditElectivo = (fetchElectivos) => {
         await fetchElectivos();
       }
     } catch (error) {
-      console.error("Error al editar electivo:", error);
+      // console.error("Error al editar electivo:", error);
     }
   };
   return { handleEditElectivo };

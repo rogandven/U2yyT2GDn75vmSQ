@@ -70,7 +70,7 @@ export const useCreateElectivo = (fetchElectivos) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al crear electivo:", error);
+      // console.error("Error al crear electivo:", error);
     }
   };
 

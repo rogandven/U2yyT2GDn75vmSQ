@@ -16,7 +16,7 @@ export const useGetElectivos = () => {
         setElectivos([]);
       }
     } catch (error) {
-      console.error("Error al obtener electivos:", error);
+      // console.error("Error al obtener electivos:", error);
       setElectivos([]);
     }
   }, []);

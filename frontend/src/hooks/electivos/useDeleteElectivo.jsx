@@ -51,7 +51,7 @@ export const useDeleteElectivo = (fetchElectivos) => {
         }
       }
     } catch (error) {
-      console.error("Error al eliminar electivo:", error);
+      // console.error("Error al eliminar electivo:", error);
       confirmError();
     }
   };
