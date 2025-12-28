@@ -6,6 +6,7 @@ import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
 import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
+import { shallBeAllowedToMakeChanges } from "./utils/utils.career.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
@@ -120,23 +121,12 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia, data, carrera, user_role) {
+export async function updateElectivoFromService(id_instancia, data, carrera, user_role, careerString, electivo) {
+  if (!careerString) {
+    throw new Error("Función mal llamada");
+  }
+  
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
-
-    if (!electivo) {
-        return getServiceResult(false, null, "Electivo no encontrado", 0);
-    }
-
-    console.log(carrera);
-    console.log(electivo.carreras);
-
-    const array = breakDownCarreraArray(electivo.carreras);
-    // console.log(array);
-    if ((user_role !== ADMIN_ROLE) && !(array.includes(String(carrera)))) {
-      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
-    }
-
     Object.assign(electivo, data);
 
     if (String(electivo.apertura).localeCompare(String(electivo.cierre)) > 0) {
@@ -154,7 +144,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera, use
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera, user_role, user_career) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_career, user_role) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -165,8 +155,7 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
       return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
     }
     const array = breakDownCarreraArray(electivo.carreras);
-    // console.log(array);
-    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(array.includes(String(carrera))))) {
+    if ((user_role !== ADMIN_ROLE) && (!(array.includes(String(user_career))))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
@@ -191,7 +180,7 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
 
-    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(String(electivo.carreras).split(",").includes(String(user_career))))) {
+    if ((user_role !== ADMIN_ROLE) && (!(String(electivo.carreras).split(",").includes(String(user_career))))) {
       return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
     }
 
