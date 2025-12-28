@@ -13,9 +13,9 @@ export const MAX_INSCRITOS = MAX_CUPOS;
 
 export const DeleteNotification = (electivoData, deletedBy) => {
     return {
-        textContent: `Estimado usuario,
+        textContent: `Estimados usuarios,
 
-        Se le informa que el electivo "${electivoData.nombre}" ha sido eliminado del sistema.
+        Se le informa que el electivo "${electivoData.nombre}" ha sido eliminado por problemas de carga académica que ha sufrido el profesor actualmente.
 
         Detalles:
         - Electivo: ${electivoData.nombre}
