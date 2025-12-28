@@ -89,6 +89,16 @@ export async function asignarHorario(req, res) {
       return res.status(409).json({ message: "Horario y sala ya registrados.", conflicts: existingHorarioSala });
     }
     
+    if (await isFirstHorario(id_electivo)) {
+      const chiefs = await EMAIL_getAllCareerChiefs(req.user.carrera || req.user.career);
+      const electivo = await RAW_getElectivoById(id_electivo);
+      const nombre = String(electivo?.nombre || "Electivo desconocido");
+
+      chiefs.forEach((chief) => {
+        sendMail(chief.email, "Confirmación", `El electivo ${nombre.toUpperCase()} va a ser impartido por ${String(req.user.fullname || req.user.username || "Profesor desconocido").toUpperCase()}. Por favor, revise el sistema.`);
+      });
+    }
+
     if (newHorario = await createHorario(id_electivo, hora_inicio, hora_termino, sala, dia)) {
       return res.status(201).json({ message: "Horario registrado exitosamente!", data: newHorario });
     } else {
