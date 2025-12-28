@@ -5,12 +5,36 @@ import { private_updateInscripcion, public_updateInscripcion } from "../../servi
 // import { isAdminOrProfesor } from "../../services/admin.service.js";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 
+const getSelectedNameElectivo = (inscripcion, electivoNames) => {
+  try {
+    for (let i = 0; i < electivoNames.length; i++) {
+      if (inscripcion.id_electivo === String(electivoNames[i]).split(".")[0]) {
+        return electivoNames[i];
+      }
+    }
+  } catch (error) {
+    return "";
+  }
+}
+
+const getSelectedNameUsuario = (inscripcion, userNames) => {
+  try {
+    for (let i = 0; i < userNames.length; i++) {
+      if (inscripcion.id_usuario === String(userNames[i]).split(".")[0]) {
+        return userNames[i];
+      }
+    }
+  } catch (error) {
+    return "";
+  }
+}
+
 async function editInscripcionInfo_PRIVATE(inscripcion, electivoNames, userNames) {
  const { value: formValues } = await Swal.fire({
-    title: "Crear Usuario",
+    title: "Editar Inscripción",
     html: `
-      ${StaticDropdownList(userNames, "Usuario", "swal2-input1", "mb-1")}
-      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input2", "mb-1")}
+      ${StaticDropdownList(userNames, getSelectedNameUsuario(inscripcion, userNames), "swal2-input1", "mb-1", false)}
+      ${StaticDropdownList(electivoNames, getSelectedNameElectivo(inscripcion, electivoNames), "swal2-input2", "mb-1", false)}
     `,
     focusConfirm: false,
     showCancelButton: true,
@@ -31,9 +55,9 @@ async function editInscripcionInfo_PRIVATE(inscripcion, electivoNames, userNames
 
 async function editInscripcionInfo_PUBLIC(inscripcion, electivoNames) {
  const { value: formValues } = await Swal.fire({
-    title: "Crear Usuario",
+    title: "Editar Inscripción",
     html: `
-      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input2", "mb-1")}
+      ${StaticDropdownList(electivoNames, getSelectedNameElectivo(inscripcion, electivoNames), "swal2-input2", "mb-1", false)}
     `,
     focusConfirm: false,
     showCancelButton: true,

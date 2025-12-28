@@ -11,11 +11,11 @@ async function CreateTimetable(electivoNames) {
   const { value: formValues } = await Swal.fire({
     title: "Crear Nuevo Horario",
     html: `
-      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input1", "mb-1")}
+      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input1", "mb-1", true)}
       ${createSwalField(2, "Hora de Inicio", "")}
       ${createSwalField(3, "Hora de Término", "")}
       ${createSwalField(4, "Sala", "")}
-      ${StaticDropdownList(DIAS_SEMANA, "Día", "swal2-input5", "m-1")}
+      ${StaticDropdownList(DIAS_SEMANA, "Día", "swal2-input5", "m-1", true)}
     `,
     focusConfirm: false,
     showCancelButton: true,

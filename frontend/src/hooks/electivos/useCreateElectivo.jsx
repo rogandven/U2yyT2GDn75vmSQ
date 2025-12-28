@@ -16,9 +16,9 @@ async function createElectivoInfo() {
       ${createSwalField(2, "Descripcion", "")}
       ${createSwalField(3, "Cupos", "")}
       ${createSwalField(4, "Créditos Requeridos", "")}
-      ${createSwalDateField(5, "Apertura")}
-      ${createSwalDateField(6, "Cierre")}
-      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input7", "m-1")}
+      ${createSwalDateField(5, "Apertura", null)}
+      ${createSwalDateField(6, "Cierre", null)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input7", "m-1", true)}
       ${createSwalField(8, "Semestre Mínimo", "")}
       ${createSwalField(9, "Carreras", "")}
     `,

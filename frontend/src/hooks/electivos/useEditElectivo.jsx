@@ -9,15 +9,15 @@ import { createSwalDateField } from "../utils/swalField.jsx";
 
 async function editElectivoInfo(electivo) {
   const { value: formValues } = await Swal.fire({
-    title: "Editar Usuario",
+    title: "Editar Electivo",
     html: `
       ${createSwalField(1, "Nombre", electivo.nombre)}
       ${createSwalField(2, "Descripcion", electivo.descripcion)}
       ${createSwalField(3, "Cupos", electivo.cupos)}
       ${createSwalField(9, "Créditos Requeridos", electivo.creditos_requeridos)}
-      ${createSwalDateField(4, "Apertura")}
-      ${createSwalDateField(5, "Cierre")}
-      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input6", "m-1")}
+      ${createSwalDateField(4, electivo.apertura || "Apertura", electivo.apertura)}
+      ${createSwalDateField(5, electivo.cierre || "Cierre", electivo.cierre)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, String(electivo.area).toUpperCase() || "Área", "swal2-input6", "m-1", false)}
       ${createSwalField(7, "Semestre Mínimo", electivo.semestre_minimo)}
       ${createSwalField(8, "Carreras", electivo.carreras)}
         `,

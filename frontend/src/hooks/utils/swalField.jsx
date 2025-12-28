@@ -7,11 +7,11 @@ export const createSwalField = (inputId, label, value) => {
     `
 }
 
-export const createSwalDateField = (inputId, label) => {
+export const createSwalDateField = (inputId, label, value) => {
     return `
     <label class="input m-1">
         <span class="label">${label}</span>
-        <input type="date" id="swal2-input${Number(inputId)}" />
+        <input type="date" id="swal2-input${Number(inputId)}" value="${value || Date.prototype.toISOString(Date.now())}" />
     </label>
     `
 }

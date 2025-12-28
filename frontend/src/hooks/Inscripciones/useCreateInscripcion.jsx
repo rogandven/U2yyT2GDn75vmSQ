@@ -10,8 +10,8 @@ async function createInscripcionInfo(electivoNames, userNames) {
   const { value: formValues } = await Swal.fire({
     title: "Crear Inscripcion",
     html: `
-      ${StaticDropdownList(userNames, "Usuario", "swal2-input1", "mb-1")}
-      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input2", "mb-1")}
+      ${StaticDropdownList(userNames, "Usuario", "swal2-input1", "mb-1", true)}
+      ${StaticDropdownList(electivoNames, "Electivo", "swal2-input2", "mb-1", true)}
     `,
     focusConfirm: false,
     showCancelButton: true,

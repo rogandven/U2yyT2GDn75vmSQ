@@ -15,7 +15,7 @@ async function createUserInfo() {
       ${createSwalField(3, "Apodo", "")}
       ${createSwalField(4, "Correo", "")}
       ${createSwalField(5, "Contraseña", "")}
-      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input6", "m-1")}
+      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input6", "m-1", true)}
       ${createSwalField(7, "Generación", "")}
       ${createSwalField(8, "Carrera", "")}
       ${createSwalField(9, "Créditos", "")}

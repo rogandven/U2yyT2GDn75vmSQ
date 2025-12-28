@@ -14,7 +14,7 @@ async function editUserInfo(user) {
       ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
       ${createSwalField(3, "Apodo", (user && user.username) || "")}
       ${createSwalField(4, "Correo", (user && user.email) || "")}
-      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input5", "m-1")}
+      ${StaticDropdownList(VALID_ROLES, (user && user.role) || "Rol", "swal2-input5", "m-1", Boolean(user))}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
       ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}

@@ -12,7 +12,7 @@ async function editTimetableInfo(horario) {
             ${createSwalField(2, "Hora de Inicio", horario.hora_inicio)}
             ${createSwalField(3, "Hora de Término", horario.hora_termino)}
             ${createSwalField(4, "Sala", horario.sala)}
-            ${StaticDropdownList(DIAS_SEMANA, "Día", "swal2-input5", "m-1")}
+            ${StaticDropdownList(DIAS_SEMANA, horario.dia, "swal2-input5", "m-1", false)}
             `,
 
         focusConfirm: false,
