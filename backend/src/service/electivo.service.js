@@ -151,7 +151,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera, user_role) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera, user_role, user_career) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -219,7 +219,7 @@ export async function electivoExists(id_instancia) {
 
 export async function RAW_getElectivoById(id) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id});
+    const electivo = await electivoRepo.findOne({id: Number(id), where: {id: Number(id)}});
     if (!electivo) {
       throw new Error("Electivo no encontrado");
     }
