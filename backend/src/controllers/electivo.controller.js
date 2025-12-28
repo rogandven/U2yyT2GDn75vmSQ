@@ -142,7 +142,7 @@ export async function updateElectivo(req, res) {
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {
       req.body.estado = ESTADOS_VALIDOS.PENDIENTE;
     }
-    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera));
+    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera), req.user.role || req.user.rol);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
