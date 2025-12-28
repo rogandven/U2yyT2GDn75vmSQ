@@ -80,6 +80,8 @@ export const integrityValidation = Joi.object({
       "string.max": `La sala  no puede exceder los ${MAX_STRING} caracteres.`,
       "any.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
       "string.valid": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
+      "any.only": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
+      "string.only": `El día debe ser uno de los siguientes: ${DIAS_SEMANA.join(", ")}`,
     }),
 });
 

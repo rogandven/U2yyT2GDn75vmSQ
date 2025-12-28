@@ -101,6 +101,7 @@ export const integrityValidation = Joi.object({
       "any.required": "Debe ingresar el área del electivo.",
       "any.valid": `Solo se permiten las siguientes áreas: ${AREAS_PERMITIDAS_EN_MAYUSCULA.join(", ")}`,
       "string.valid": `Solo se permiten las siguientes áreas: ${AREAS_PERMITIDAS_EN_MAYUSCULA.join(", ")}`,
+      "any.only": `Solo se permiten las siguientes áreas: ${AREAS_PERMITIDAS_EN_MAYUSCULA.join(", ")}`,
     }),
   descripcion: Joi.string()
     .min(MIN_FULLNAME)
