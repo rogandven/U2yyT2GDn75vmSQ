@@ -79,8 +79,7 @@ export async function updateUserByIdFromService(id, newData, req_user_role, req_
 
         /* fullname, username, rut, email, password, role, generation */
         Object.assign(oldData, newData);
-
-        await userRepository.save(oldData);
+        await userRepository.update({id: id}, oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
     } catch (error) {
         console.error(error);

@@ -83,14 +83,13 @@ export async function updateUserById(req, res) {
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
-
   const editedUser = await updateUserByIdFromService(id, newData, req.user.role || req.user.rol, req.user.carrera);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }
   if (editedUser.length <= 0) {
     editedUser.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", editedUser));
+    return res.status(400).json(getControllerResult_NEW(editedUser.details || "Error desconocido", editedUser));
   }
   return res.status(200).json(getControllerResult_NEW(editedUser.details, editedUser));
 }
