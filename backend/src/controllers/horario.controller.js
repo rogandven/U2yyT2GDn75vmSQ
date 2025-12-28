@@ -106,7 +106,7 @@ export async function asignarHorario(req, res) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
-    const canSkipChecks = (req.user.role === ADMIN_ROLE);
+    const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
     if (!canSkipChecks) {
        if (!(String(electivo.carreras).includes(req.user.carrera))) {
@@ -182,13 +182,13 @@ export async function patchHorario(req, res) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
-    const canSkipChecks = (req.user.role === ADMIN_ROLE);
+    const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
     if (!canSkipChecks) {
        if (!(String(electivo.carreras).includes(req.user.carrera))) {
         return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
        }
-      if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
+      if (((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
         return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
       }
     }

@@ -65,7 +65,7 @@ export async function updateUserById(req, res) {
   if (newData.role) {
     newData.role = processRole(newData.role);
   }
-  if (newData.role && !(getAllowedRolesToTamper(req.user.rol).includes(newData.role))) {
+  if (newData.role && !(getAllowedRolesToTamper(req.user.role || req.user.rol).includes(newData.role))) {
     return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
   }
 
@@ -84,7 +84,7 @@ export async function updateUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
 
-  const editedUser = await updateUserByIdFromService(id, newData, req.user.role, req.user.carrera);
+  const editedUser = await updateUserByIdFromService(id, newData, req.user.role || req.user.rol, req.user.carrera);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }
@@ -109,7 +109,7 @@ export async function deleteUserById(req, res) {
     return res.status(400).json(getControllerResult_NEW("No se puede eliminar a si mismo", null));
   }
 
-  const user = await deleteUserByIdFromService(id, req.user.role, req.user.carrera);
+  const user = await deleteUserByIdFromService(id, req.user.role || req.user.rol, req.user.carrera);
 
   if (user.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
@@ -154,10 +154,10 @@ export async function registerPrivate(req, res) {
   req.body.fullname = fullNameProcessor(req.body.fullname);
   req.body.role = processRole(req.body.role);
 
-  if (!(getAllowedRolesToTamper(req.user.rol).includes(req.body.role))) {
+  if (!(getAllowedRolesToTamper(req.user.role || req.user.rol).includes(req.body.role))) {
     return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
   }
-  if ((req.user.rol !== ADMIN_ROLE) && (req.user.carrera !== req.body.carrera)) {
+  if (((req.user.role || req.user.rol) !== ADMIN_ROLE) && (req.user.carrera !== req.body.carrera)) {
     return res.status(401).json(getControllerResult_NEW(`No tiene permiso para registrar alumnos de otras carreras`));
   }
 
