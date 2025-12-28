@@ -2,7 +2,7 @@ import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.j
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
-import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
 import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
@@ -130,7 +130,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
 
     const array = breakDownCarreraArray(electivo.carreras);
     // console.log(array);
-    if (!(array.includes(String(carrera)))) {
+    if ((user_role !== ADMIN_ROLE) && !(array.includes(String(carrera)))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
@@ -151,7 +151,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera, user_role) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -163,7 +163,7 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
     }
     const array = breakDownCarreraArray(electivo.carreras);
     // console.log(array);
-    if (!(array.includes(String(carrera)))) {
+    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(array.includes(String(carrera))))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
@@ -180,13 +180,18 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
   }
 }
 
-export async function deleteElectivoFromService(id_instancia, user_id, user_role) {
+export async function deleteElectivoFromService(id_instancia, user_id, user_role, user_career) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
+
+    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(array.includes(String(carrera))))) {
+      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
+    }
+
     if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {
       return getServiceResult(true, null, "No tiene permiso para borrar este electivo", 0);
     }

@@ -87,6 +87,8 @@ export const integrityValidation = Joi.object({
     .greater(Joi.ref("apertura"))
     .messages({
       "date.base": "La fecha de cierre debe tener un formato válido (AAAA-MM-DD).",
+      "any.greater": "La fecha de cierre debe ser mayor que la fecha de apertura.",
+      "date.greater": "La fecha de cierre debe ser mayor que la fecha de apertura.",
     }),
   area: Joi.string()
     .min(MIN_FULLNAME)
