@@ -188,7 +188,7 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
 
-    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(String(electivo.carreras).includes(String(carrera))))) {
+    if ((user_role !== ADMIN_ROLE) && String(user_career) !== (!(String(electivo.carreras).includes(String(user_career))))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
