@@ -5,7 +5,7 @@ import { createCarrera, deleteCarrera, getCarreraById, getCarreras, updateCarrer
 
 const router = Router();
 
-router.use(authenticateJwt);
+// router.use(authenticateJwt);
 router.post("/", createCarrera);
 router.get("/:id", getCarreraById);
 router.get("/", getCarreras);

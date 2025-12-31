@@ -22,11 +22,11 @@ export async function getCarreras(req, res) {
 
 export async function getCarreraById(req, res) {
     try {
-        const carreras = await s_getCarreraById(req.params.id);
-        if (carreras.length <= 0) {
-            return res.status(204).json({message: "No hay carreras para mostrar", carreras: null});
+        const carrera = await s_getCarreraById(req.params.id);
+        if (!carrera) {
+            return res.status(404).json({message: "Carrera no encontrada", carrera: null});
         }
-        return res.status(200).json({message: "¡Carreras encontradas con éxito!", carreras: carreras});
+        return res.status(200).json({message: "¡Carrera encontrada con éxito!", carrera: carrera});
     } catch (error) {
         console.error(error);
         return res.status(500).json({message: "Error interno del servidor", carreras: null});
