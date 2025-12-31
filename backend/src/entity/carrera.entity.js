@@ -14,7 +14,8 @@ export const carreraEntity= new EntitySchema({
         sigla:{
             primary:false,
             type: String,
-            nullable:false
+            nullable:false,
+            unique: true,
         },
         nombre:{
             primary:false,
