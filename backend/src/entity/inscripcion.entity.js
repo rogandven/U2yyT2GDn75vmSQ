@@ -23,14 +23,15 @@ export const InscripcionEntity=new EntitySchema({
         nullable: false,
         default: AWAITING,
     },
-    id_usuario: {
+
+    /*id_usuario: {
         type: USER_ID_TYPE,
         nullable: false,
     },
     id_electivo: {
         type: ELECTIVO_ID_TYPE,
         nullable: false,
-    },
+    },*/
   },
 });
 

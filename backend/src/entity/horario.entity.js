@@ -1,6 +1,6 @@
 "use strict";
 
-import { EntitySchema } from "typeorm";
+import { EntitySchema, JoinColumn } from "typeorm";
 
 export const HorarioEntity = new EntitySchema({
     name: "HorarioEntity",
@@ -48,6 +48,14 @@ export const HorarioEntity = new EntitySchema({
         },
         
     },
+    relations:{
+        electivo:{
+            type: "many-to-one",
+            target:"electivos",
+            JoinColumn:{name:"id_electivo"},
+            onDelete:"CASCADE",
+        },
+    },    
 });
 
 export default HorarioEntity;

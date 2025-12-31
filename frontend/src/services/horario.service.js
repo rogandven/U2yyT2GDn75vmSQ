@@ -19,7 +19,9 @@ export const assignTimetable = async (horarioData) => {
         const status = {status: response?.status || 500};
         try {
             Object.assign(response.data, status);
-        } catch (error) {}
+        } catch (error){
+            return error;
+        } 
         return response.data;
     } catch (error) {
         console.error('Error al asignar el horario:', error);

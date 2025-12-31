@@ -236,9 +236,14 @@ export const ElectivoEntity = new EntitySchema({
       nullable: false,
     },
   },
-  checks: [
-      { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
-  ],
+  relations:{
+    usuarios:{
+      type:"many-to-one",
+      target:"users",
+      JoinColumn:{name:"id_profesor"},
+      onDelete:"CASCADE", 
+    }
+  }
 });
 
 export default ElectivoEntity;
