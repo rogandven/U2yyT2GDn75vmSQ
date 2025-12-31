@@ -8,242 +8,89 @@ import { processCarrera } from "./utils/utils.controller.js";
 import { processRole } from "./utils/utils.controller.js";
 
 export async function getUsers(req, res) {
-  const users = await getUsersFromService();
-  if (users.error) {
-    return res.status(500).json(getControllerResult_NEW("Error en el servidor", users));
+  try {
+    const users = await getUsersFromService();
+    users && users.forEach((user) => {
+      delete user.password;
+    });
+    if (users.length <= 0) {
+      return res.status(201).json({message: "No hay usuarios para mostrar", users: users});
+    }
+    return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
+  } catch (error) {
+    return res.status(500).json({message: "Error interno del servidor", users: null});
   }
-  if (users.length <= 0) {
-    return res.status(404).json(getControllerResult_NEW("No hay usuarios", users));
-  }  
-  return res.status(200).json(getControllerResult_NEW("Usuarios encontrados con éxito", users));
 }
 
 export async function getUserById(req, res) {
-  const { id } = req.params;
-
-  if (!id) {
-    return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
+  try {
+    const user = await getUserByIdFromService(req.params.id);
+    if (!user) {
+      return res.status(404).json({message: "Usuario no encontrado", user: null});
+    }
+    delete user.password;
+    return res.status(200).json({message: "Usuario encontrado con éxito", user: user});
+  } catch (error) {
+    return res.status(500).json({message: "Error interno del servidor", user: null});
   }
-  const result = idValidation.validate({id: id});
-  if (result.error) {
-    return res.status(400).json(getControllerResult_NEW(result.error.message, null));
-  }
-
-  const user = await getUserByIdFromService(id);
-
-  if (user.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
-  }
-  if (user.length <= 0) {
-    user.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", user));
-  }
-
-  return res.status(200).json(getControllerResult_NEW(user.details, user));
 }
 
 export async function updateUserById(req, res) {
-  const { id } = req.params;
-  const newData = req.body || null;
-  if (!newData) {
-    return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
-  }
-  newData.carrera = processCarrera(newData.carrera);  
-  newData.role = processRole(newData.role);
-  if (!id) {
-    return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
-  }
-  if (id === req.user.id) {
-    return res.status(401).json(getControllerResult_NEW("No se puede actualizar a si mismo", null));
-  }
-  if (newData.fullname) {
-    newData.fullname = fullNameProcessor(newData.fullname);
-  }
-  const result = idValidation.validate({id: id});
-  if (result.error) {
-    return res.status(400).json(getControllerResult_NEW(result.error.message, null));
-  }
+  const internalServerError = {message: "Error interno del servidor", data: data};
 
-  var validationResult = integrityValidation.validate(newData);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
+  try {
+    const result = await updateUserByIdFromService(req.params.id, req.body);
+    if (!result) {
+      return res.status(500).json(internalServerError);
+    }
+    return res.status(200).json({message: "¡Usuario actualizado con éxito!", data: result});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(internalServerError);
   }
-
-  validationResult = updateValidation.validate(newData);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }  
-
-  const editedUser = await updateUserByIdFromService(id, newData);
-  if (editedUser.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
-  }
-  if (editedUser.length <= 0) {
-    editedUser.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", editedUser));
-  }
-  return res.status(200).json(getControllerResult_NEW(editedUser.details, editedUser));
 }
 
 export async function deleteUserById(req, res) {
-  const { id } = req.params;
+  const internalServerError = {message: "Error interno del servidor", data: data};
 
-  if (!id) {
-    return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
-  } 
-  const result = idValidation.validate({id: id});
-  if (result.error) {
-    return res.status(400).json(getControllerResult_NEW(result.error.message, null));
+  try {
+    const deletionResult = await deleteUserByIdFromService(req.params.id);
+    return res.status(200).json({message: "¡Usuario eliminado con éxito!", data: deletionResult});
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(internalServerError);
   }
-
-  const user = await deleteUserByIdFromService(id);
-
-  if (user.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
-  }
-  if (user.length <= 0) {
-    user.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", user));
-  }
-
-  return res.status(200).json(getControllerResult_NEW(user.details, user));
 }
 
 export async function getProfile(req, res) {
-  const id = req.user? (req.user.id || null) : null;
-
-  if (!id) {
-    return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
-  }  
-  const result = idValidation.validate({id: id});
-  if (result.error) {
-    return res.status(400).json(getControllerResult_NEW(result.error.message, null));
+  try {
+    return res.status(200).json({message: "Perfil encontrado con éxito", userData: req.user});
+  } catch (error) {
+    return res.status(500).json({message: "Error interno del servidor", userData: null});
   }
-
-  const user = await getUserByIdFromService(id);
-
-  if (user.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
-  }
-  if (user.length <= 0) {
-    user.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", user));
-  }
-
-  return res.status(200).json(getControllerResult_NEW("Perfil encontrado con éxito", user));
 }
 
 export async function registerPrivate(req, res) {
-  if (!req.body) {
-    return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
+  try {
+    const creationResult = registerUserFromService(req.body);
+    return res.status(200).json({message: "Usuario registrado con éxito", data: creationResult});
+  } catch (error) {
+    return res.status(500).json({message: "Error interno del servidor", data: null});
   }
-  req.body.carrera = processCarrera(req.body.carrera);
-
-  req.body.fullname = fullNameProcessor(req.body.fullname);
-
-  // console.log(req.body);
-  req.body.carrera = processRole(newData.role);
-  validationResult = createValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }     
-  var validationResult = integrityValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }
-
-
-  const user = await registerUserFromService(req.body);
-  if (user.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
-  } 
-  if (user.length === 0) {
-    user.error = true;
-    if (user.details && user.details.endsWith("ya registrado")) {
-      return res.status(409).json(getControllerResult_NEW(user.details, user));
-    }
-    return res.status(400).json(getControllerResult_NEW(user.details ? user.details : "Error al registrar usuario", user));
-  }
-  return res.status(201).json(getControllerResult_NEW(user.details, user));
-}
-
-export async function registerPublic(req, res) {
-  if (!req || !(req.body)) {
-    return res.status(400).json(getControllerResult_NEW("Ningún dato proporcionado"), null);
-  }
-  if (req.body.role) {
-    return res.status(401).json(getControllerResult_NEW("No se puede autoasignar un rol"), null);
-  }
-  if (req.body.creditos) {
-    return res.status(401).json(getControllerResult_NEW("No se puede autoasignar la cantidad de créditos"), null);
-  }
-  req.body.role = STUDENT_ROLE;
-  // console.log(req.body.role);
-  req.body.creditos = 0;
-  // console.log(req.body.creditos);
-  return await registerPrivate(req, res);
 }
 
 export async function login(req, res) {
-  var validationResult = loginValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }   
-  validationResult = integrityValidation.validate(req.body);
-  if (validationResult.error) {
-    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
-  }
-
-  const result = await loginUserFromService(req.body);
-  if (result.error) {
-    return res.status(500).json(getControllerResult_NEW("Error interno del servidor", result));
-  }
-  console.log(result.data);
-  if (!(result.data && result.data.token)) {
-    result.error = true;
-    return res.status(400).json(getControllerResult_NEW(result.details || "Error al iniciar sesión", result));
-  }
-  return res.status(200).json(getControllerResult_NEW("Sesión iniciada con éxito", result));
+  
 }
 
 export async function logout(req, res) {
-  // Eliminar la cookie de sesión del cliente
-  const result = logoutUserFromService(res.clearCookie);
-  if (result.error) {
-    return res.status(200).json(getControllerResult_NEW("Sesión cerrada exitosamente", result));
-  } else {
-    return res.status(500).json(getControllerResult_NEW("Error al cerrar sesión", result));
-  }
+ 
 }
 
 export const getUserNameById = async (id) => {
-  const BASE_CASE = "JUANITO PÉREZ";
-  try {
-    const user = await RAW_getUserById(id);
-    if (!user) {
-      return BASE_CASE;
-    }
-    return String(user.fullname || BASE_CASE).toUpperCase();
-  } catch (error) {
-    return BASE_CASE;
-  }
+  
 }
 
 export const getAllStudentNames = async (req, res) => {
-  const BASE_CASE = [];
-  const names = [];
-  try {
-    const users = await RAW_getAllStudents();
-    if (!users) {
-      return res.status(200).json({lista: BASE_CASE});
-    }
-    for (let i = 0; i < users.length; i++) {
-      if (users[i] && (users[i].fullname || users[i].username)) {
-        names.push(String(users[i].id) + ". " + String((users[i].fullname || users[i].username)).toUpperCase());
-      }
-    }
-    return res.status(200).json({lista: names});
-  } catch (error) {
-    return res.status(200).json({lista: BASE_CASE});
-  }
+  
 }

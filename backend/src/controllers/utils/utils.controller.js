@@ -8,8 +8,8 @@ export const getControllerResult_OLD = (details, serviceResult) => {
 export const getControllerResult_NEW = (details, serviceResult) => {
     const object = {
         message: String(details),
+        result: serviceResult,
     };
-    Object.assign(object, serviceResult);
     return object;
 }
 
