@@ -1,4 +1,4 @@
-"use strict";
+/* "use strict";
 import { assignationValidation, integrityValidation, updateValidation, validateHourBusiness, validateHourIntegrity } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { idValidation } from "../validations/modules/id.validation.js";
@@ -218,4 +218,4 @@ export async function deleteHorario(req, res) {
 }
 
 
-
+*/

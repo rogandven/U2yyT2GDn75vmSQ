@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
 import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
@@ -310,3 +310,4 @@ export const public_updateInscripcion = async (req, res) => {
 export const public_deleteInscripcion = async (req, res) => {
     return deleteInscripcionHelper(req, res, true);
 }
+    */

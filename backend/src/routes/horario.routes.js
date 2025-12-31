@@ -1,5 +1,5 @@
 "use strict";
-import { Router } from "express";
+/* import { Router } from "express";
 import { asignarHorario,getHorarios,patchHorario,deleteHorario } from "../controllers/horario.controller.js";
 import { isAdminOrProfesor } from "../middleware/authorization.middleware.js"; 
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
@@ -12,4 +12,4 @@ router.get("/", getHorarios);
 router.patch("/:id", isAdminOrProfesor, patchHorario);
 router.delete("/:id", isAdminOrProfesor, deleteHorario);
 
-export default router;
+export default router;*/

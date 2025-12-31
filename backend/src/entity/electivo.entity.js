@@ -231,10 +231,6 @@ export const ElectivoEntity = new EntitySchema({
       type: "int",
       nullable: false,
     },
-    carreras: {
-      type: String,
-      nullable: false,
-    },
   },
   relations:{
     usuarios:{

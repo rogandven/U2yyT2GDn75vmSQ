@@ -1,4 +1,4 @@
-import { AppDataSource } from "../../config/configDb.js";
+/* import { AppDataSource } from "../../config/configDb.js";
 import { UserEntity } from "../../entity/user.entity.js";
 import ElectivoEntity from "../../entity/electivo.entity.js";
 import InscripcionEntity from "../../entity/inscripcion.entity.js";
@@ -109,4 +109,4 @@ export const countInscripcionesByUser = async (id_usuario) => {
     } catch (error) {
         return 9999;
     }
-}
+} */

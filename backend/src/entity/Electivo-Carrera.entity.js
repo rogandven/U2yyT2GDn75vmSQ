@@ -7,18 +7,18 @@ export const ElectivoCarreraEntity=new EntitySchema({
     columns:{
         id_electivo:{
             primary:true,
-            type:int,
+            type:"integer",
             generated:false
 
         },
         id_carreras:{
             primary:true,
-            type:int,
+            type:"integer",
             generated:false
 
         },
         cupos:{
-            type:int,
+            type:"integer",
             nullable:false
         },
         
@@ -36,6 +36,7 @@ export const ElectivoCarreraEntity=new EntitySchema({
             JoinColumn:{name:"id_carreras"},
             onDelete:"CASCADE",  
         }
-        
     }
-})
+});
+
+export default ElectivoCarreraEntity;

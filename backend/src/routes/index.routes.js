@@ -1,10 +1,9 @@
 
-/*
 "use strict";
 import { Router } from "express";
 import authRoutes from "./auth.routes.js";
 import userRoutes from "./user.routes.js";
-import electivoRoutes from "./electivo.routes.js";
+// import electivoRoutes from "./electivo.routes.js";
 
 const router = Router();
 
@@ -12,8 +11,9 @@ const router = Router();
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 
-router.use("/electivos", electivoRoutes);
-*/
+export default router;
+
+/*
 "use strict";
 import { Router } from "express";
 import authRoutes from "./auth.routes.js"
@@ -31,4 +31,4 @@ router.use("/electivos", electivoRoutes);
 router.use("/horarios", horarioRoutes);
 // router.use("/electivos3", nowRoutes);
 router.use("/inscripciones",inscripcionRoutes);
-export default router;
+export default router; */

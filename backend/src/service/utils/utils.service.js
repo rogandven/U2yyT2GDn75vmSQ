@@ -28,7 +28,7 @@ export const getResultLength = (result) => {
     }
 }
 
-/*
+
 export const parseErrorCode = (errorCode) => {
     if (!errorCode) {
         return BASE_CASE;
@@ -40,7 +40,7 @@ export const parseErrorCode = (errorCode) => {
         return BASE_CASE;
     }
     return Math.abs(Math.round(errorCode));
-} */
+}
 
 export const getServiceResult = (error, data, details, length) => {
     return {

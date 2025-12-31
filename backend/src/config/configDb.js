@@ -2,11 +2,13 @@
 import { DataSource } from "typeorm"
 import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD, DB_HOST } from "./configEnv.js";
 // import ClaseEntity from "../entity/clase.entity.js";
+/* import carreraEntity from "../entity/carrera.entity.js";
+import ElectivoCarreraEntity from "../entity/Electivo-Carrera.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
-import InscripcionEntity from '../entity/inscripcion.entity.js';
-import UserEntity from '../entity/user.entity.js';
 import HorarioEntity from "../entity/horario.entity.js";
-
+import PreinscripcionEntity from "../entity/Preinscripcion.entity.js"; */
+import UserEntity from "../entity/user.entity.js"; 
+import carreraEntity from "../entity/carrera.entity.js";
 // Configuración de la conexión a la base de datos
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -15,10 +17,12 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [ElectivoEntity, InscripcionEntity, UserEntity, HorarioEntity],
+    entities: [carreraEntity, UserEntity],
     synchronize: true,
-    logging: false,
+    logging: true,
 });
+/* entities: [ElectivoEntity, UserEntity, HorarioEntity, PreinscripcionEntity, carreraEntity, ElectivoCarreraEntity], */
+
 
 // Función para conectar a la base de datos
 export async function connectDB() {

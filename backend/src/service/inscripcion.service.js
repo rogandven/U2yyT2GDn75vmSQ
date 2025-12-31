@@ -1,4 +1,4 @@
-import { getServiceResult } from "./utils/utils.service.js";
+/* import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
 import { electivoExists, formatMessage, userExists } from "./utils/utils.inscription.service.js";
@@ -152,4 +152,4 @@ export async function deleteInscripcion(inscripcion) {
 
 export async function inscripcionAlreadyExists(id_inscripcion, id_usuario, id_electivo) {
   return await IAE_helper(id_inscripcion, id_usuario, id_electivo);
-}
+} */

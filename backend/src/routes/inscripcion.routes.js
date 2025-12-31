@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 import { Router } from "express";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor } from "../middleware/authorization.middleware.js"; 
@@ -22,3 +22,4 @@ router.post("/", isAuthenticated, public_createInscripcion);
 router.patch("/:id", isAuthenticated, public_updateInscripcion);
 router.delete("/:id", isAuthenticated, public_deleteInscripcion);
 export default router;
+*/

@@ -2,6 +2,7 @@
 
 import { EntitySchema,JoinColumn } from "typeorm";
 import { USER_ID_TYPE } from "../constants/entity.constants.js";
+import carreraEntity from "./carrera.entity.js";
 
 export const UserEntity = new EntitySchema({
     name: "User",
@@ -55,7 +56,7 @@ export const UserEntity = new EntitySchema({
             type: Number,
             default: 0
         },       
-        id_carrera: {
+        carreraIdCarrera: {
             primary:false,
             type: "integer",
             nullable: true,
@@ -64,7 +65,7 @@ export const UserEntity = new EntitySchema({
     relations:{
         carrera:{
             type:"many-to-one",
-            target:"carreras",
+            target: carreraEntity,
             JoinColumn:{name:"id_carrera"}
         }
     }

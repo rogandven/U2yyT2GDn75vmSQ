@@ -1,26 +1,26 @@
 "use strict";
 import { EntitySchema } from "typeorm";
 
-export const ElectivoCarreraEntity=new EntitySchema({
+export const PreinscripcionEntity=new EntitySchema({
     name:"Preinscripcion",
     table_name:"Preinscripciones",
     columns:{
         id:{
             primary:true,
-            type:int,
+            type:"integer",
             generated:false
 
         },
 
         id_usuario:{
             primary:false,
-            type:int,
+            type:"integer",
             generated:false
 
         },
         id_electivo:{
             primary:false,
-            type:int,
+            type:"integer",
             generated:false
 
         },
@@ -44,6 +44,7 @@ export const ElectivoCarreraEntity=new EntitySchema({
             JoinColumn:{name:"id_electivo"},
             onDelete:"CASCADE", 
         },
-        
     }
-})
+});
+
+export default PreinscripcionEntity;

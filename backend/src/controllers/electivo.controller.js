@@ -1,4 +1,4 @@
-
+/*
 "use strict";
 
 import {
@@ -233,3 +233,4 @@ export const getAllElectivoNames = async (req, res) => {
   }
   return res.status(200).json({lista: nombres});
 }
+  */

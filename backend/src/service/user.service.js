@@ -68,7 +68,6 @@ export async function updateUserByIdFromService(id, newData) {
         if (newData.password) {
             newData.password = encryptPassword(newData.password);
         }
-        /* fullname, username, rut, email, password, role, generation */
         Object.assign(oldData, newData);
 
         await userRepository.save(oldData);
@@ -126,7 +125,6 @@ export async function checkIfUserExists(userRepository, newData) {
 }
 
 export async function registerUserFromService(newData) {
-    /* fullname, username, rut, email, password, role, generation */
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const result = await checkIfUserExists(userRepository, newData);
@@ -215,4 +213,4 @@ export async function EMAIL_getAllCareerChiefs(career) {
     } catch (error) {
         return BASE_CASE;
     }
-}
+} 

@@ -1,4 +1,4 @@
-import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.js";
+/* import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
@@ -225,4 +225,4 @@ export async function RAW_getAllApprovedElectivos() {
   } catch (error) {
     return BASE_CASE;
   }
-}
+} */

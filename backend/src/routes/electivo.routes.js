@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 import { Router } from "express";
 import {
   getElectivos,
@@ -35,3 +35,4 @@ router.get("/frontend_list/", isAuthenticated, getAllElectivoNames);
 
 
 export default router;
+*/
