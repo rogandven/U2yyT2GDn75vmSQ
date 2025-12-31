@@ -1,5 +1,7 @@
 "use strict";
 import { EntitySchema } from "typeorm";
+import { carreraEntity } from "./carrera.entity";
+import ElectivoEntity from "./electivo.entity";
 
 export const ElectivoCarreraEntity=new EntitySchema({
     name:"ElectivoCarrera",
@@ -26,13 +28,13 @@ export const ElectivoCarreraEntity=new EntitySchema({
     relations:{
         electivo:{
            type: "many-to-one",
-            target:"electivos",
+            target:ElectivoEntity,
             JoinColumn:{name:"id_electivo"},
             onDelete:"CASCADE", 
         },
         carrera:{
            type: "many-to-one",
-            target:"carreras",
+            target:carreraEntity,
             JoinColumn:{name:"id_carreras"},
             onDelete:"CASCADE",  
         }

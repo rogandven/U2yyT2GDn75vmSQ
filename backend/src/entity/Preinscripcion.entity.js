@@ -1,5 +1,7 @@
 "use strict";
 import { EntitySchema } from "typeorm";
+import ElectivoEntity from "./electivo.entity";
+import UserEntity from "./user.entity";
 
 export const ElectivoCarreraEntity=new EntitySchema({
     name:"Preinscripcion",
@@ -34,13 +36,13 @@ export const ElectivoCarreraEntity=new EntitySchema({
     relations:{
         usuarios:{
            type: "many-to-one",
-            target:"users",
+            target:UserEntity,
             JoinColumn:{name:"id_usuario"},
             onDelete:"CASCADE",  
         },
         electivo:{
            type: "many-to-one",
-            target:"electivos",
+            target:ElectivoEntity,
             JoinColumn:{name:"id_electivo"},
             onDelete:"CASCADE", 
         },
