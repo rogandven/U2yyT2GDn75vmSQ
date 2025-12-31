@@ -56,7 +56,7 @@ export const UserEntity = new EntitySchema({
             type: Number,
             default: 0
         },       
-        carreraIdCarrera: {
+        carreraId: {
             primary:false,
             type: "integer",
             nullable: true,
@@ -66,7 +66,7 @@ export const UserEntity = new EntitySchema({
         carrera:{
             type:"many-to-one",
             target: carreraEntity,
-            JoinColumn:{name:"id_carrera"}
+            JoinColumn:{name:"id"}
         }
     }
 });

@@ -6,7 +6,7 @@ export const carreraEntity= new EntitySchema({
     name:"Carrera",
     table_name:"carerras",
     columns: {
-        id_carrera:{
+        id:{
             primary:true,
             type: "integer",
             generated:true
