@@ -1,3 +1,5 @@
+"use strict";
+
 import { AppDataSource } from "../config/configDb.js";
 import carreraEntity from "../entity/carrera.entity.js";
 

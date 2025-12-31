@@ -1,3 +1,5 @@
+"use strict";
+
 import { AppDataSource } from "../config/configDb.js";
 import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";

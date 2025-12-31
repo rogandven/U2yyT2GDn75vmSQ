@@ -8,7 +8,7 @@ export async function getUsers(req, res) {
       delete user.password;
     });
     if (users.length <= 0) {
-      return res.status(201).json({message: "No hay usuarios para mostrar", users: users});
+      return res.status(204).json({message: "No hay usuarios para mostrar", users: users});
     }
     return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
   } catch (error) {
@@ -80,7 +80,7 @@ export async function getProfile(req, res) {
 export async function registerPrivate(req, res) {
   try {
     const creationResult = await registerUserFromService(req.body);
-    return res.status(200).json({message: "Usuario registrado con éxito", data: creationResult});
+    return res.status(201).json({message: "Usuario registrado con éxito", data: creationResult});
   } catch (error) {
     console.error(error);
     return res.status(500).json({message: "Error interno del servidor", data: null});
