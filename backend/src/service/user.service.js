@@ -26,14 +26,16 @@ export async function getUsersFromService() {
     return users;
 }
 
-export async function getUserPageFromService(page_size, page_number) {
-    const users = await queryBuilder.leftJoinAndSelect("users.carreraId", "carrera")
-                    .take(Number(page_size))
-                    .skip(Number(page_size) * Number(page_number))
-                    .getMany();
-    users.forEach((user) => {
-        delete user?.password;
-    });
+export async function getUserPagesFromService(page_size) {
+    const users = await getUsersFromService();
+    const pages = [];
+    for (let i = 0; i < users.length; i++) {
+        delete users[i].password;
+        if ((i % page_size) === 0) {
+            pages.push([]);
+        }
+        pages[pages.length - 1].push(users[i]);
+    }
 
     return users;
 }

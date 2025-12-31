@@ -1,5 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, getUserPageFromService } from "../service/user.service.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, getUserPagesFromService } from "../service/user.service.js";
 
 export async function getUsers(req, res) {
   try {
@@ -12,15 +12,18 @@ export async function getUsers(req, res) {
     }
     return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
   } catch (error) {
+    console.error(error);
     return res.status(500).json({message: "Error interno del servidor", users: null});
   }
 }
 
-export async function getUserPage(req, res) {
+export async function getUserPages(req, res) {
   try {
-    const users = await getUserPageFromService(10, req.params.id);
+    const users = await getUserPagesFromService(10, req.params.id);
+    console.log(users);
     return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
   } catch (error) {
+    console.error(error);
     return res.status(500).json({message: "Error interno del servidor", users: null});
   }
 }
@@ -69,6 +72,7 @@ export async function getProfile(req, res) {
   try {
     return res.status(200).json({message: "Perfil encontrado con éxito", userData: req.user});
   } catch (error) {
+    console.error(error);
     return res.status(500).json({message: "Error interno del servidor", userData: null});
   }
 }
@@ -78,6 +82,7 @@ export async function registerPrivate(req, res) {
     const creationResult = await registerUserFromService(req.body);
     return res.status(200).json({message: "Usuario registrado con éxito", data: creationResult});
   } catch (error) {
+    console.error(error);
     return res.status(500).json({message: "Error interno del servidor", data: null});
   }
 }
@@ -94,6 +99,7 @@ export async function logout(req, res) {
   if (logoutUserFromService) {
     return res.status(200).json({message: "¡Sesión cerrada con éxito!"});
   } else {
+    console.error(error);
     return res.status(500).json({message: "Error al cerrar sesión"});
   }
 }
