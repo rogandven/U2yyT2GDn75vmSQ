@@ -1,29 +1,29 @@
 "use strict";
 
 import { AppDataSource } from "../config/configDb.js";
-import carreraEntity from "../entity/electivo.entity.js";
+import electivoEntity from "../entity/electivo.entity.js";
 
-const careerRepository = AppDataSource.getRepository(carreraEntity);
+const electivoRepository = AppDataSource.getRepository(electivoEntity);
 const queryRunner = AppDataSource.createQueryRunner();
 
-export async function getCarreras() {
-    const careers = await careerRepository.find();
-    return careers;
+export async function getElectivos() {
+    const electivos = await electivoRepository.find();
+    return electivos;
 }
 
-export async function getCarreraById(id) {
-    const career = await careerRepository.findOne({where: {id: id}});
-    return career;
+export async function getElectivoById(id) {
+    const electivo = await electivoRepository.findOne({where: {id: id}});
+    return electivo;
 }
 
-export async function createCarrera(data) {
-    const career = await careerRepository.save(careerRepository.create(data));
-    return career;
+export async function createElectivo(data) {
+    const electivo = await electivoRepository.save(electivoRepository.create(data));
+    return electivo;
 }
 
-export async function updateCarrera(id, data) {
+export async function updateElectivo(id, data) {
     await queryRunner.startTransaction();
-    const updateResult = await careerRepository.update({id: id}, data);
+    const updateResult = await electivoRepository.update({id: id}, data);
     if (Number(updateResult?.affected) !== 1) {
         queryRunner.rollbackTransaction();
         throw new Error(`Updated ${updateResult?.affected} rows`);
@@ -32,9 +32,9 @@ export async function updateCarrera(id, data) {
     return updateResult;
 }
 
-export async function deleteCarrera(id) {
+export async function deleteElectivo(id) {
     await queryRunner.startTransaction();
-    const deleteResult = await careerRepository.delete({id: id});
+    const deleteResult = await electivoRepository.delete({id: id});
     if (Number(deleteResult?.affected) !== 1) {
         queryRunner.rollbackTransaction();
         throw new Error(`Deleted ${updateResult?.affected} rows`);
