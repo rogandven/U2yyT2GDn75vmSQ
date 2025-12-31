@@ -1,15 +1,12 @@
-import { getErrorMessage, getResultLength, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
 import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
-import carreraEntity from "../entity/carrera.entity.js";
 
 const userRepository = AppDataSource.getRepository(UserEntity);
 const queryRunner = AppDataSource.createQueryRunner();
-const queryBuilder = AppDataSource.createQueryBuilder();
 
 export async function parseCredentials(a, b) {
     if (a === b) {
