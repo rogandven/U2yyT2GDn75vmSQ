@@ -7,12 +7,12 @@ const horarioRepository = AppDataSource.getRepository(horarioEntity);
 const queryRunner = AppDataSource.createQueryRunner();
 
 export async function getHorarios() {
-    const horarios = await horarioRepository.find();
+    const horarios = await horarioRepository.find({relations: {electivo: true}});
     return horarios;
 }
 
 export async function getHorarioById(id) {
-    const horario = await horarioRepository.findOne({where: {id: id}});
+    const horario = await horarioRepository.findOne({where: {id: id}, relations: {electivo: true}});
     return horario;
 }
 

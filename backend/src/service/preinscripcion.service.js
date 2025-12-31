@@ -7,12 +7,12 @@ const preinscripcionRepository = AppDataSource.getRepository(preinscripcionEntit
 const queryRunner = AppDataSource.createQueryRunner();
 
 export async function getPreinscripciones() {
-    const preinscripciones = await preinscripcionRepository.find();
+    const preinscripciones = await preinscripcionRepository.find({relations: {usuarios: true, electivo: true}});
     return preinscripciones;
 }
 
 export async function getPreinscripcionById(id) {
-    const preinscripcion = await preinscripcionRepository.findOne({where: {id: id}});
+    const preinscripcion = await preinscripcionRepository.findOne({where: {id: id}, relations: {usuarios: true, electivo: true}});
     return preinscripcion;
 }
 

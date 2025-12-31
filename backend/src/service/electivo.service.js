@@ -7,12 +7,12 @@ const electivoRepository = AppDataSource.getRepository(electivoEntity);
 const queryRunner = AppDataSource.createQueryRunner();
 
 export async function getElectivos() {
-    const electivos = await electivoRepository.find();
+    const electivos = await electivoRepository.find({relations: {profesor: true}});
     return electivos;
 }
 
 export async function getElectivoById(id) {
-    const electivo = await electivoRepository.findOne({where: {id: id}});
+    const electivo = await electivoRepository.findOne({where: {id: id}, relations: {profesor: true}});
     return electivo;
 }
 

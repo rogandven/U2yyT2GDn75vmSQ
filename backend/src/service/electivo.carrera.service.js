@@ -7,12 +7,12 @@ const electivoCarreraRepository = AppDataSource.getRepository(electivoCarreraEnt
 const queryRunner = AppDataSource.createQueryRunner();
 
 export async function getElectivoCarreras() {
-    const electivoCarreras = await electivoCarreraRepository.find();
+    const electivoCarreras = await electivoCarreraRepository.find({relations: {electivo: true, carrera: true}});
     return electivoCarreras;
 }
 
 export async function getElectivoCarreraById(id) {
-    const electivoCarrera = await electivoCarreraRepository.findOne({where: {id: id}});
+    const electivoCarrera = await electivoCarreraRepository.findOne({where: {id: id}, relations: {electivo: true, carrera: true}});
     return electivoCarrera;
 }
 
