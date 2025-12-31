@@ -1,9 +1,9 @@
 "use strict";
-import { getElectivoCarreras as s_getElectivoCarreras } from "../service/electivoCarrera.service.js";
-import { getElectivoCarreraById as s_getElectivoCarreraById } from "../service/electivoCarrera.service.js";
-import { createElectivoCarrera as s_createElectivoCarrera } from "../service/electivoCarrera.service.js";
-import { updateElectivoCarrera as s_updateElectivoCarrera } from "../service/electivoCarrera.service.js";
-import { deleteElectivoCarrera as s_deleteElectivoCarrera } from "../service/electivoCarrera.service.js";
+import { getElectivoCarreras as s_getElectivoCarreras } from "../service/electivo.carrera.service.js";
+import { getElectivoCarreraById as s_getElectivoCarreraById } from "../service/electivo.carrera.service.js";
+import { createElectivoCarrera as s_createElectivoCarrera } from "../service/electivo.carrera.service.js";
+import { updateElectivoCarrera as s_updateElectivoCarrera } from "../service/electivo.carrera.service.js";
+import { deleteElectivoCarrera as s_deleteElectivoCarrera } from "../service/electivo.carrera.service.js";
 
 
 

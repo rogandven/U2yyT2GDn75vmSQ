@@ -12,24 +12,26 @@ export const PreinscripcionEntity=new EntitySchema({
 
         },
 
-        id_usuario:{
+        usuariosId:{
             primary:false,
             type:"integer",
             generated:false
 
         },
-        id_electivo:{
+        electivoId:{
             primary:false,
             type:"integer",
             generated:false
 
         },
-        
         estado:{
             type: String,
             nullable:false
         },
-        
+        motivo: {
+            type: String,
+            nullable:true
+        }
     },
     relations:{
         usuarios:{

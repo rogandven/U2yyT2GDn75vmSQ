@@ -4,6 +4,7 @@
 import { EntitySchema } from "typeorm";
 import { obtenerEstadosValidosComoArray } from "../helpers/electivo.helper.js";
 import { arrayDeStringAArrayDeSQL } from "../helpers/sql.helpers.js";
+import UserEntity from "./user.entity.js";
 /* export enum EstadoElectivo{
     PENDIENTE = 'pendiente'
 }*/ 
@@ -227,16 +228,16 @@ export const ElectivoEntity = new EntitySchema({
       type: "varchar",
       length: 100,
     },
-    id_profesor: {
+    profesorId: {
       type: "int",
-      nullable: false,
+      generated:false
     },
   },
   relations:{
-    usuarios:{
+    profesor:{
       type:"many-to-one",
-      target:"users",
-      JoinColumn:{name:"id_profesor"},
+      target: UserEntity,
+      JoinColumn:{name:"id"},
       onDelete:"CASCADE", 
     }
   }

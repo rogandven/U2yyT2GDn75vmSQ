@@ -1,17 +1,19 @@
 "use strict";
 import { EntitySchema } from "typeorm";
+import ElectivoEntity from "./electivo.entity.js";
+import carreraEntity from "./carrera.entity.js";
 
 export const ElectivoCarreraEntity=new EntitySchema({
     name:"ElectivoCarrera",
     table_name:"Electivo_carerras",
     columns:{
-        id_electivo:{
+        electivoId:{
             primary:true,
             type:"integer",
             generated:false
 
         },
-        id_carreras:{
+        carreraId:{
             primary:true,
             type:"integer",
             generated:false
@@ -26,14 +28,14 @@ export const ElectivoCarreraEntity=new EntitySchema({
     relations:{
         electivo:{
            type: "many-to-one",
-            target:"electivos",
-            JoinColumn:{name:"id_electivo"},
+            target:ElectivoEntity,
+            JoinColumn:{name:"id"},
             onDelete:"CASCADE", 
         },
         carrera:{
            type: "many-to-one",
-            target:"carreras",
-            JoinColumn:{name:"id_carreras"},
+            target:carreraEntity,
+            JoinColumn:{name:"id"},
             onDelete:"CASCADE",  
         }
     }

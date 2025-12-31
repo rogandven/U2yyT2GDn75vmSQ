@@ -1,7 +1,7 @@
 "use strict"; 
 import { Router } from "express";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
-import { createHorario, deleteHorario, getHorarioById, getHorarios, updateHorario } from "../controllers/electivo.controller.js";
+import { createHorario, deleteHorario, getHorarioById, getHorarios, updateHorario } from "../controllers/horario.controller.js";
 
 const router = Router();
 
