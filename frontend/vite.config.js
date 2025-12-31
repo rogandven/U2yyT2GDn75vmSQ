@@ -20,5 +20,16 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, './src/styles'),
       '@services': path.resolve(__dirname, './src/services'),
     }
-  }
+  },
+  server: {
+    host: '0.0.0.0',
+    port: 443,
+    strictPort: true
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 443,
+    strictPort: true,
+    cors: true,
+  }  
 })

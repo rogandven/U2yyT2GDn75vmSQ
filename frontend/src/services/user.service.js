@@ -52,7 +52,7 @@ export async function deleteUser(userId) {
 export async function getProfile() { 
     try {
         const response = await axios.get('/users/profile');
-        console.log(response);
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error("Error al obtener perfil:", error);
@@ -65,7 +65,7 @@ export async function FRONTEND_getUserList() {
 
     try {
         const response = await axios.get('/users/frontend_list');
-        console.log(response);
+        // console.log(response);
         const lista = response?.data?.lista;
         if (!Array.isArray(lista)) {
             return BASE_CASE;

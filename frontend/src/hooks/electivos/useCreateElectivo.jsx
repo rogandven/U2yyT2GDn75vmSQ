@@ -51,7 +51,7 @@ export const useCreateElectivo = (fetchElectivos) => {
       if (!formValues) return;
 
       const userRole = getUserRole();
-      console.log(userRole);
+      // console.log(userRole);
       if (userRole === CAREER_HEAD_ROLE) {
         response = await createElectivoJefeDeCarrera(formValues);
       } else if (getAllowedRoles().includes(userRole)) {
@@ -61,7 +61,7 @@ export const useCreateElectivo = (fetchElectivos) => {
         return;
       }
       
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchElectivos();
         fireDynamicSwal(response?.status, null, response?.data?.message || response?.data?.details);

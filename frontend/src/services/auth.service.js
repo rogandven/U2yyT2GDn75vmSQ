@@ -20,13 +20,13 @@ export async function registerService(datauser) {
 
 export async function loginService(datauser) {
     try {
-        console.log(JSON.stringify(axios.defaults));
+        // console.log(JSON.stringify(axios.defaults));
         const response = await axios.post('/auth/login', {
             email: datauser.email,
             password: datauser.password
         });
-        console.log("LA RESPUESTA: ");
-        console.log(response);
+        // console.log("LA RESPUESTA: ");
+        // console.log(response);
 
         const { status, data } = response;
         if (status === 200) {
@@ -44,7 +44,7 @@ export async function loginService(datauser) {
         }
     } catch (error) {
         console.error("Error en auth.service");
-        console.log(error);
+        // console.log(error);
         return error.response;
     }
 }

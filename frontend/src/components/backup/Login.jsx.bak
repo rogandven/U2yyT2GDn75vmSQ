@@ -14,7 +14,7 @@ const Login = () => {
 
   const loginSubmit = async (data) => {
     try {
-      console.log(API_URL);
+      // console.log(API_URL);
       const response = await loginService(data);
       if (response && response.request && response.request.status === 200) {
         navigate("/home");

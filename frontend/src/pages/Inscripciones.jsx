@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Swal from "sweetalert2";
-// import { useGetInscripciones } from "@hooks/inscripciones/useGetInscripciones.jsx";
+// import { useGetInscripciones } from "@/hooks/Inscripciones/useGetInscripciones.jsx";
 // import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
 // import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
@@ -10,10 +10,10 @@ import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../constants/InscripcionConstants
 import { DUInscripcionTable } from "../components/DUComponents/Table/DUInscripcionTable.jsx";
 import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
 import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.jsx";
-// import useCreateInscripcion from "../hooks/inscripciones/useCreateInscripcion.jsx";
+// import useCreateInscripcion from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 import useEditInscripcion from "../hooks/Inscripciones/useEditInscripcion.jsx";
 import useDeleteInscripcion from "../hooks/Inscripciones/useDeleteInscripcion.jsx";
-import useChangeInscripcionStatus from "../hooks/inscripciones/useChangeInscripcionStatus.jsx";
+import useChangeInscripcionStatus from "@hooks/Inscripciones/useChangeInscripcionStatus.jsx";
 
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";

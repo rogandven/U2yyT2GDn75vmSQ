@@ -32,7 +32,7 @@ export const AprobarElectivo = (fetchElectivos) => {
             } else {
                 errorGenerico('aprobar');
             }
-            //console.log(JSON.stringify(response));
+            //// console.log(JSON.stringify(response));
             
         } catch (error) {
             errorGenerico('aprobar');

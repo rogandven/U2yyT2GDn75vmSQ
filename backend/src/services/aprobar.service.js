@@ -28,7 +28,7 @@ export async function findElectivoById_electivo(id_electivo) {
 
 export async function updateElectivoById_Electivo(id_electivo, updateData) {
   const Electivo = await electivoRepository.findOneBy({ id_electivo });
-  console.log(Electivo);
+  // console.log(Electivo);
 
   if (!Electivo) {
     throw new Error("Usuario no encontrado");

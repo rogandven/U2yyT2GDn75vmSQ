@@ -114,7 +114,7 @@ export async function updateInscripcion(data, inscripcion, inscripcionAntigua) {
         sendMail(creador?.email, String(data?.estado).toUpperCase(), `Su inscripción para ${String(electivo?.nombre).toUpperCase()} ha sido ${String(data?.estado).toUpperCase()}.`);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
 
     return formatMessage(inscripcionEditada, dynamicMessage(inscripcionEditada));

@@ -41,8 +41,8 @@ export const useCreateInscripcion = (fetchInscripciones) => {
       if (!formValues) return;
 
       response = await private_createInscripcion(formValues);
-      console.log("LA RESPUESTA: ");
-      console.log(response);
+      // console.log("LA RESPUESTA: ");
+      // console.log(response);
       if (response) {
         await fetchInscripciones();
         fireDynamicSwal(response?.status, null, response?.data?.message || response?.data?.details);

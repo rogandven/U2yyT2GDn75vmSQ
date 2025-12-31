@@ -11,7 +11,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
     
     return {data: response.data, status: response.status, message: response.message};
   } catch (error) {
-    console.log("ERROR EN INSCRIPCION.SERVICE: ");
+    // console.log("ERROR EN INSCRIPCION.SERVICE: ");
     console.error(error);
     return {status: 500, data: error.response?.data || undefined, message: error.response?.message};
   }

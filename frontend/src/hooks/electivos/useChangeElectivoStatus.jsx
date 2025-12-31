@@ -7,13 +7,13 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
   const handleChangeElectivoStatus = async (electivoId, approve) => {
     try {
       let response = null;
-      console.log(approve);
+      // // console.log(approve);
       if (approve) {
         response = await approveElectivo(electivoId);
       } else{ 
         response = await rejectElectivo(electivoId);
       }
-      console.log(response);
+      // // console.log(response);
       if (response) {
         await fetchElectivos();
         fireDynamicSwal(response.status, null, response.message);

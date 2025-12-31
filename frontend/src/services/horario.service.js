@@ -12,7 +12,7 @@ export const getTimetables = async () => {
 
 export const assignTimetable = async (horarioData) => {
     try {
-        console.log(horarioData);
+        // console.log(horarioData);
         const idElectivo = horarioData.id_electivo;
         delete horarioData.id_electivo;
         const response = await axios.post('/horarios/asignar/' + String(idElectivo), horarioData);
@@ -34,8 +34,8 @@ export const updateTimetable = async (id_horario, updatedData) => {
     let response = null;
     try {
         delete updatedData.id_horario;
-        // console.log("¿Qué se va a actualizar?");
-        // console.log(updatedData);
+        // // console.log("¿Qué se va a actualizar?");
+        // // console.log(updatedData);
         response = await axios.patch(`/horarios/${id_horario}`, updatedData);
         const status = {status: response?.status || 500};
         Object.assign(response.data, status)

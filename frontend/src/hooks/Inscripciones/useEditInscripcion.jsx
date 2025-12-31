@@ -41,7 +41,7 @@ export const useEditInscripcion = (fetchInscripciones) => {
         response = await public_updateInscripcion(electivoId, formValues);
       }
       if (response) {
-        console.log(response);
+        // console.log(response);
         if (response.data) {
           Object.assign(response, response.data);
         }

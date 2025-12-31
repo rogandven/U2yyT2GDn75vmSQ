@@ -31,13 +31,13 @@ const Electivo = () => {
   }
 
   const isEvaluated = (electivo) => {
-    // console.log(JSON.stringify(electivo));
-    // console.log(electivo.estado);
+    // // console.log(JSON.stringify(electivo));
+    // // console.log(electivo.estado);
     if (electivo.estado && (electivo.estado === ELECTIVO_APROBADO || electivo.estado === ELECTIVO_RECHAZADO)){
-      // console.log("verdadero");
+      // // console.log("verdadero");
       return true;
     }
-    // console.log("falso");
+    // // console.log("falso");
     return false;
   }
 

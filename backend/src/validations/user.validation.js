@@ -38,32 +38,37 @@ export const integrityValidation = Joi.object({
         "string.min": `El nombre de usuario debe al menos ser de ${MIN_FULLNAME} caracteres`,
         "string.max": `El nombre de usuario no puede tener más de ${MAX_FULLNAME} caracteres`,
     }),
-    rut: Joi.string().min(1).custom(rutValidationFunction).messages({
+    rut: Joi.string().min(1).max(MAX_FULLNAME).custom(rutValidationFunction).messages({
         "string.empty": "El RUT no puede ser vacío",
         "string.min": "El RUT no puede ser vacío",
         "string.base": "El RUT debe ser un string",
+        "string.max": `El RUT no debe ser de más de ${MAX_FULLNAME} caracteres`,
     }),
-    email: Joi.string().email().min(1).custom(emailDomainValidationFunction).messages({
+    email: Joi.string().email().min(1).max(MAX_FULLNAME).custom(emailDomainValidationFunction).messages({
         "string.base": "El correo debe ser un string",
         "string.min": "El correo no puede ser vacío",
         "string.empty": "El correo no puede ser vacío",
         "string.email": "Correo malformado",
+        "string.max": `El correo no debe ser de más de ${MAX_FULLNAME} caracteres`,
     }),
-    password: Joi.string().min(1).messages({
+    password: Joi.string().min(1).max(MAX_FULLNAME).messages({
         "string.base": "La contraseña debe ser un string",
         "string.min": "La contraseña no puede ser vacía",
         "string.empty": "La contraseña no puede ser vacía",
+        "string.max": `La contraseña debe tener menos de ${MAX_FULLNAME} caracteres`,
     }),
-    role: Joi.string().min(1).custom(roleValidationFunction).messages({
+    role: Joi.string().min(1).max(MAX_FULLNAME).custom(roleValidationFunction).messages({
         "string.base": "El rol debe ser un string",
         "string.min": "El rol no puede ser vacío",
         "string.empty": "El rol no puede ser vacío",
+        "string.max": `El rol no debe ser de más de ${MAX_FULLNAME} caracteres`,
     }),
-    generation: Joi.string().min(1).pattern(GENERATION_REGEX).messages({
+    generation: Joi.string().min(1).max(MAX_FULLNAME).pattern(GENERATION_REGEX).messages({
         "string.base": "La generación debe ser un string",
         "string.min": "La generación no puede ser vacía",
         "string.pattern.base": "Generación malformada",
         "string.empty": "La generación no puede ser vacía",
+        "string.max": `La generación no puede ser de más de ${MAX_FULLNAME} caracteres`,
     }),
     createdAt: Joi.string().min(MIN_DATE_LENGTH).max(MAX_DATE_LENGTH).custom(timestampValidationFunction).messages({
         "string.base": "La fecha de creación debe ser un string",

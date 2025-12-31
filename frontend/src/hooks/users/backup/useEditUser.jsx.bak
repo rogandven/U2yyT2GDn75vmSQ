@@ -72,7 +72,7 @@ export const useEditUser = (fetchUsers) => {
       if (!formValues) return;
 
       const response = await editUser(userId, formValues);
-      console.log(response);
+      // console.log(response);
       if (response) {
         await fetchUsers();
         fireDynamicSwal(response.status, response.message === response.details ? null : response.message, response.message);
