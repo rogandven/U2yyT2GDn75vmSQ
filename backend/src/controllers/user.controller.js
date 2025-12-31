@@ -1,11 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById, RAW_getAllStudents } from "../service/user.service.js";
-import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
-import { idValidation } from "../validations/modules/id.validation.js";
-import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
-import { STUDENT_ROLE } from "../constants/user.constants.js";
-import { processCarrera } from "./utils/utils.controller.js";
-import { processRole } from "./utils/utils.controller.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, getUserPageFromService } from "../service/user.service.js";
 
 export async function getUsers(req, res) {
   try {
@@ -16,6 +10,15 @@ export async function getUsers(req, res) {
     if (users.length <= 0) {
       return res.status(201).json({message: "No hay usuarios para mostrar", users: users});
     }
+    return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
+  } catch (error) {
+    return res.status(500).json({message: "Error interno del servidor", users: null});
+  }
+}
+
+export async function getUserPage(req, res) {
+  try {
+    const users = await getUserPageFromService(10, req.params.id);
     return res.status(200).json({message: "Usuarios encontrados con éxito", users: users});
   } catch (error) {
     return res.status(500).json({message: "Error interno del servidor", users: null});
@@ -72,7 +75,7 @@ export async function getProfile(req, res) {
 
 export async function registerPrivate(req, res) {
   try {
-    const creationResult = registerUserFromService(req.body);
+    const creationResult = await registerUserFromService(req.body);
     return res.status(200).json({message: "Usuario registrado con éxito", data: creationResult});
   } catch (error) {
     return res.status(500).json({message: "Error interno del servidor", data: null});
@@ -80,15 +83,19 @@ export async function registerPrivate(req, res) {
 }
 
 export async function login(req, res) {
-  
+  const loginResult = await loginUserFromService(req.body);
+  if (!loginResult) {
+    return res.status(200).json({message: "Usuario o clave incorrectos", token: null});
+  }
+  return res.status(400).json({message: "¡Sesión iniciada con éxito!", token: loginResult});
 }
 
 export async function logout(req, res) {
- 
-}
-
-export const getUserNameById = async (id) => {
-  
+  if (logoutUserFromService) {
+    return res.status(200).json({message: "¡Sesión cerrada con éxito!"});
+  } else {
+    return res.status(500).json({message: "Error al cerrar sesión"});
+  }
 }
 
 export const getAllStudentNames = async (req, res) => {

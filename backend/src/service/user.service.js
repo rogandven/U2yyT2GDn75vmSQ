@@ -9,6 +9,7 @@ import carreraEntity from "../entity/carrera.entity.js";
 
 const userRepository = AppDataSource.getRepository(UserEntity);
 const queryRunner = AppDataSource.createQueryRunner();
+const queryBuilder = AppDataSource.createQueryBuilder();
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -22,6 +23,18 @@ export async function getUsersFromService() {
     users.forEach((user) => {
         delete user.password;
     })
+    return users;
+}
+
+export async function getUserPageFromService(page_size, page_number) {
+    const users = await queryBuilder.leftJoinAndSelect("users.carreraId", "carrera")
+                    .take(Number(page_size))
+                    .skip(Number(page_size) * Number(page_number))
+                    .getMany();
+    users.forEach((user) => {
+        delete user?.password;
+    });
+
     return users;
 }
 
