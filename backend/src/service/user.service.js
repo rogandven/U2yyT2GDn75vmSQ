@@ -37,7 +37,7 @@ export async function getUserPagesFromService(page_size) {
         pages[pages.length - 1].push(users[i]);
     }
 
-    return users;
+    return pages;
 }
 
 export async function getUserByIdFromService(id) {
