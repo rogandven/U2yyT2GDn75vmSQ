@@ -202,10 +202,6 @@ export const ElectivoEntity = new EntitySchema({
     cupos: {
       type: "int",
     },
-    inscritos: {
-      type: "int",
-      default: 0,
-    }, 
     creditos_requeridos:{
       type: "int",
       default: 0,
@@ -232,6 +228,14 @@ export const ElectivoEntity = new EntitySchema({
       type: "int",
       generated:false
     },
+    linkPrograma: {
+      type: String,
+      nullable: false,
+    },
+    motivo: {
+      type: String,
+      nullable: true,
+    }
   },
   relations:{
     profesor:{
