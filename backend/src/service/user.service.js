@@ -55,10 +55,10 @@ export async function updateUserByIdFromService(id, newData) {
     await queryRunner.startTransaction();
     const updateResult = await userRepository.update({id: id}, newData);
     if (Number(updateResult?.affected) !== 1) {
-        queryRunner.rollbackTransaction();
+        await queryRunner.rollbackTransaction();
         throw new Error(`Updated ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return updateResult;
 }
 
@@ -66,10 +66,10 @@ export async function deleteUserByIdFromService(id) {
     await queryRunner.startTransaction();
     const deleteResult = await userRepository.delete({id: id});
     if (Number(deleteResult?.affected) !== 1) {
-        queryRunner.rollbackTransaction();
+        await queryRunner.rollbackTransaction();
         throw new Error(`Deleted ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return deleteResult;
 }
 

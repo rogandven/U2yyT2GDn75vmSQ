@@ -25,10 +25,10 @@ export async function updatePreinscripcion(id, data) {
     await queryRunner.startTransaction();
     const updateResult = await preinscripcionRepository.update({id: id}, data);
     if (Number(updateResult?.affected) !== 1) {
-        queryRunner.rollbackTransaction();
+        await queryRunner.rollbackTransaction();
         throw new Error(`Updated ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return updateResult;
 }
 
@@ -36,9 +36,9 @@ export async function deletePreinscripcion(id) {
     await queryRunner.startTransaction();
     const deleteResult = await preinscripcionRepository.delete({id: id});
     if (Number(deleteResult?.affected) !== 1) {
-        queryRunner.rollbackTransaction();
+        await queryRunner.rollbackTransaction();
         throw new Error(`Deleted ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return deleteResult;
 }

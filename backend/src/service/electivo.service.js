@@ -28,7 +28,7 @@ export async function updateElectivo(id, data) {
         queryRunner.rollbackTransaction();
         throw new Error(`Updated ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return updateResult;
 }
 
@@ -36,9 +36,9 @@ export async function deleteElectivo(id) {
     await queryRunner.startTransaction();
     const deleteResult = await electivoRepository.delete({id: id});
     if (Number(deleteResult?.affected) !== 1) {
-        queryRunner.rollbackTransaction();
+        await queryRunner.rollbackTransaction();
         throw new Error(`Deleted ${updateResult?.affected} rows`);
     }
-    queryRunner.commitTransaction();
+    await queryRunner.commitTransaction();
     return deleteResult;
 }
