@@ -20,6 +20,7 @@ import authRoutes from "./auth.routes.js"
 import userRoutes from "./user.routes.js";
 import electivoRoutes from "./electivo.routes.js"
 import horarioRoutes from "./horario.routes.js";
+import carreraRoutes from "./carrera.routes.js" 
 
 // import nowRoutes from "./now.routes.js";
 import inscripcionRoutes from "./inscripcion.routes.js"
@@ -31,4 +32,5 @@ router.use("/electivos", electivoRoutes);
 router.use("/horarios", horarioRoutes);
 // router.use("/electivos3", nowRoutes);
 router.use("/inscripciones",inscripcionRoutes);
+router.use("/carreras",carreraRoutes);
 export default router;

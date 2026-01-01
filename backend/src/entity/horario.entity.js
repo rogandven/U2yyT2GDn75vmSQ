@@ -1,7 +1,7 @@
 "use strict";
 
 import { EntitySchema, JoinColumn } from "typeorm";
-import ElectivoEntity from "./electivo.entity";
+import ElectivoEntity from "./electivo.entity.js";
 
 export const HorarioEntity = new EntitySchema({
     name: "HorarioEntity",

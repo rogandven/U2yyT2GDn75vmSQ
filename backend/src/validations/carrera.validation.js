@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { MIN_CAREER, MAX_CAREER, CAREER_REGEXP } from "../../constants/validationConstants.js";
+import { MIN_CAREER, MAX_CAREER, CAREER_REGEXP } from "../constants/validationConstants.js";
 
 const OBJETO_DESCONOCIDO = "Objeto desconocido";
 
@@ -8,7 +8,7 @@ export const joiCareerValidation = Joi.object({
         "string.base": "La carrera debe ser un string",
         "string.min": "La carrera no puede ser vacía",
         "string.empty": "La carrera no puede ser vacía",
-        "string.max": `La fecha debe ser de menos de ${MAX_CAREER}`,
+        //"string.max": `La fecha debe ser de menos de ${MAX_CAREER}`,
         "string.pattern.base": "La carrera solo puede tener letras mayúsculas",
         "any.required": "La carrera es obligatoria",
     })

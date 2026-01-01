@@ -1,4 +1,4 @@
-
+import { AppDataSource } from "../config/configDb.js";
 import { CARRERA_NO_ENCONTRADA } from "../constants/career.constants.js";
 import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { carreraEntity } from "../entity/carrera.entity.js";
@@ -45,7 +45,7 @@ export async function findAllCarreras() {
   return await carreraRepository.find();
 }
 
-export async function deleteCarreraById_Electivo(id_carrera) {
+export async function deleteCarreraById_Carrera(id_carrera) {
   try {
     const carrera = await carreraRepository.findOne({where: { id_carrera: id_carrera }});
 

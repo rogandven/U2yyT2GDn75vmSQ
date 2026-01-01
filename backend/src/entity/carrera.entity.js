@@ -1,6 +1,6 @@
 "use strict";
 
-import { EntitySchema, JoinColumn } from "typeorm";
+import { EntitySchema} from "typeorm";
 
 export const carreraEntity= new EntitySchema({
     name:"Carrera",
@@ -8,7 +8,7 @@ export const carreraEntity= new EntitySchema({
     columns: {
         id_carrera:{
             primary:true,
-            type: int,
+            type: Number,
             generated:true
         },
 
@@ -22,8 +22,9 @@ export const carreraEntity= new EntitySchema({
             primary:false,
             type: String,
             nullable:false
-        }
-    },
+        },
+    }
+
 
 
 })

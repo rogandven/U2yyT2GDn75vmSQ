@@ -7,7 +7,7 @@ import { roleValidationFunction } from "./modules/role.validation.js";
 import { rutValidationFunction } from "./modules/rut.validation.js";
 import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX, MIN_CREDITOS, MAX_CREDITOS } from "../constants/user.constants.js";
 import { MIN_DATE_LENGTH, MAX_DATE_LENGTH } from "../constants/user.constants.js";
-import { careerValidationFunction } from "./modules/carrera.validation.js";
+import { careerValidationFunction } from "./carrera.validation.js";
 /*
         id
         fullname

@@ -1,8 +1,8 @@
 "use strict";
 
-import { EntitySchema,JoinColumn } from "typeorm";
+import { EntitySchema } from "typeorm";
 import { USER_ID_TYPE } from "../constants/entity.constants.js";
-import {carrera, carreraEntity} from "./carrera.entity.js"
+import { carreraEntity} from "./carrera.entity.js"
 
 export const UserEntity = new EntitySchema({
     name: "User",
@@ -66,7 +66,7 @@ export const UserEntity = new EntitySchema({
         carrera:{
             type:"many-to-one",
             target: carreraEntity,
-            JoinColumn:{name:"id_carrera"}
+            joinColumn:{name:"id_carrera"}
         }
     }
 });
