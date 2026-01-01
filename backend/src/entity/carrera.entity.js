@@ -4,7 +4,7 @@ import { EntitySchema} from "typeorm";
 
 export const carreraEntity= new EntitySchema({
     name:"Carrera",
-    table_name:"carerras",
+    tableName:"carreras",
     columns: {
         id_carrera:{
             primary:true,
@@ -23,8 +23,14 @@ export const carreraEntity= new EntitySchema({
             type: String,
             nullable:false
         },
+    },
+    relations:{
+        usuarios:{
+            type: "one-to-many",
+            target: "User",
+            inverseSide: "carreras"
+        }
     }
 
-
-
 })
+export default carreraEntity;

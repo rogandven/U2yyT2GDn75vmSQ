@@ -185,7 +185,7 @@ export async function FRONTEND_getElectivoList() {
             return BASE_CASE;
         }
         return lista || BASE_CASE;
-    } catch (error) {
-        return BASE_CASE;
+    } catch (res) {
+        return res.status(404).json({message: "Error al conseguir electivos"});
     }
 }
