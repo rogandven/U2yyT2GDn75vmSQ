@@ -1,4 +1,5 @@
 import { SEPARATOR } from "../../constants/career.constants.js";
+import { AppDataSource } from "../../config/configDb.js";
 
 export const BASE_CASE = 500;
 export const BASE_LENGTH = 0;
@@ -58,3 +59,5 @@ export const breakDownCarreraArray = (string) => {
     const stringArray = string.split(SEPARATOR);
     return stringArray;
 }
+
+export const queryRunner = AppDataSource.createQueryRunner();

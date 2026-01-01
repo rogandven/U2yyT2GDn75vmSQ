@@ -2,9 +2,9 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import electivoEntity from "../entity/electivo.entity.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const electivoRepository = AppDataSource.getRepository(electivoEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const electivoRepository = AppDataSource.getRepository(electivoEntity);
 
 export async function getElectivos() {
     const electivos = await electivoRepository.find({relations: {profesor: true}});

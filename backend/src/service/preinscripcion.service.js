@@ -2,9 +2,9 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import preinscripcionEntity from "../entity/Preinscripcion.entity.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const preinscripcionRepository = AppDataSource.getRepository(preinscripcionEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const preinscripcionRepository = AppDataSource.getRepository(preinscripcionEntity);
 
 export async function getPreinscripciones() {
     const preinscripciones = await preinscripcionRepository.find({relations: {usuarios: true, electivo: true}});

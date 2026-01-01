@@ -2,9 +2,9 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import horarioEntity from "../entity/horario.entity.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const horarioRepository = AppDataSource.getRepository(horarioEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const horarioRepository = AppDataSource.getRepository(horarioEntity);
 
 export async function getHorarios() {
     const horarios = await horarioRepository.find({relations: {electivo: true}});

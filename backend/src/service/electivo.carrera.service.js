@@ -2,9 +2,9 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import electivoCarreraEntity from "../entity/Electivo-Carrera.entity.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const electivoCarreraRepository = AppDataSource.getRepository(electivoCarreraEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const electivoCarreraRepository = AppDataSource.getRepository(electivoCarreraEntity);
 
 export async function getElectivoCarreras() {
     const electivoCarreras = await electivoCarreraRepository.find({relations: {electivo: true, carrera: true}});

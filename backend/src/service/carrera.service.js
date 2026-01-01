@@ -2,9 +2,9 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import carreraEntity from "../entity/carrera.entity.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const careerRepository = AppDataSource.getRepository(carreraEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const careerRepository = AppDataSource.getRepository(carreraEntity);
 
 export async function getCarreras() {
     const careers = await careerRepository.find();

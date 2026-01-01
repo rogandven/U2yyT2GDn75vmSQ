@@ -6,9 +6,9 @@ import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
 import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
+import { queryRunner } from "./utils/utils.service.js";
 
-const userRepository = AppDataSource.getRepository(UserEntity);
-const queryRunner = AppDataSource.createQueryRunner();
+export const userRepository = AppDataSource.getRepository(UserEntity);
 
 export async function parseCredentials(a, b) {
     if (a === b) {
