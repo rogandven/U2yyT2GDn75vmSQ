@@ -45,7 +45,7 @@ export async function findAllCarreras() {
   return await carreraRepository.find();
 }
 
-export async function deleteHorarioById_Electivo(id_carrera) {
+export async function deleteCarreraById_Electivo(id_carrera) {
   try {
     const carrera = await carreraRepository.findOne({where: { id_carrera: id_carrera }});
 

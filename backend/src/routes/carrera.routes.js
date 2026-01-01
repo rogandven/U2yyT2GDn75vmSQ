@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createCarrera } from "../controllers/carrera.controller";
+import { crearCarrera } from "../controllers/carrera.controller";
 import { authenticateJwt } from "../middleware/authentication.middleware";
 
 const router=Router();
 router.use(authenticateJwt);
-router.post("/crear", createCarrera);
+router.post("/crear", crearCarrera);
 export default router;
 
