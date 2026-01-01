@@ -35,7 +35,7 @@ export async function getElectivoById(req, res) {
 
 export async function createElectivo(req, res) {
     try {
-        const electivo = await s_createElectivo(req.body);
+        const electivo = await s_createElectivo(req.body, req.body.careerArray);
         return res.status(201).json({message: "Electivo creado con éxito", electivo: electivo});
     } catch (error) {
         return res.status(500).json({message: "Error interno del servidor", electivo: null});

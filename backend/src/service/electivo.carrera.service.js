@@ -42,3 +42,24 @@ export async function deleteElectivoCarrera(id) {
     await queryRunner.commitTransaction();
     return deleteResult;
 }
+
+export async function addMany(careerIdArray, id_electivo, transactionStarted, commit) {
+    if (!Array.isArray(careerIdArray)) {
+        throw Error("Invalid career array");
+    }
+    if (!transactionStarted) {
+        await queryRunner.startTransaction();
+    }
+    await electivoCarreraRepository.delete({electivoId: id_electivo});
+    for (let i = 0; i < careerIdArray.length; i++) {
+        try {
+            await createElectivoCarrera({electivoId: id_electivo, carreraId: careerIdArray[i]});
+        } catch (error) {
+            queryRunner.rollbackTransaction();
+            throw error;
+        }
+    }
+    if (commit) {
+        await queryRunner.commitTransaction();
+    }
+}
