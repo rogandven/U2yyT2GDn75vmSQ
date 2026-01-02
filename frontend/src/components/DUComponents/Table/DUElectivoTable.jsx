@@ -75,7 +75,7 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo2, handleCreateInscripcion_PUBLIC}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -97,6 +97,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                 <th>Profesor</th>
                 <th>Carreras</th>
                 <th>Estado</th>
+                <th>Motivo</th>
                 <th>Acciones</th>                
             </tr>
             </thead>

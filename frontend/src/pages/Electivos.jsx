@@ -24,7 +24,7 @@ const Electivos = () => {
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
   const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
-  const {handleRejectElectivo2} = useRejectElectivo();
+  const {handleRejectElectivo2} = useRejectElectivo(fetchElectivos);
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
 
