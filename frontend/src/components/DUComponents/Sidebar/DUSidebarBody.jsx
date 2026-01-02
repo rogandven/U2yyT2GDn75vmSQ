@@ -7,6 +7,7 @@ import { CgProfile } from "react-icons/cg";
 import { FaBook } from 'react-icons/fa';
 import { HiPencilAlt } from 'react-icons/hi';
 import { AiFillCalendar } from 'react-icons/ai';
+import { MdClass } from 'react-icons/md';
 import { isAdminOrProfesor } from "../../../services/admin.service.js";
 
 
@@ -40,6 +41,7 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit }) => {
                 {isAdmin && createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
                 {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
                 {createSidebarItem("Electivos", "/electivos", (<FaBook />), undefined)}
+                {isAdmin && createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}

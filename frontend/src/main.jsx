@@ -79,6 +79,7 @@ import Root from '@pages/Root'
 import Home from '@pages/Home'
 import Login from '@pages/Login'
 import Register from '@pages/Register'
+import Carreras from '@pages/Carreras'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 // import Electivo from '@pages/Electivo'
@@ -123,6 +124,10 @@ const router = createBrowserRouter([
       {
         path: "/horarios",
         element: <Timetable />,
+      },
+      { 
+        path: "/carreras",
+        element: <Carreras />,
       }
     ],
   },
