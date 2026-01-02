@@ -2,8 +2,13 @@
 
 import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
 import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
+<<<<<<< HEAD
 import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
 import { createValidation, integrityValidation, updateValidation, warningValidation } from "../validations/inscripcion.validation.js";
+=======
+import { userExists as _userExists, conditionsToSignUp, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
+import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
+>>>>>>> MERGE-02-01-2026-2
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 import { getElectivoName } from "./electivo.controller.js";

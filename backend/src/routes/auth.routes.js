@@ -5,7 +5,7 @@ import { login, registerPublic, logout } from "../controllers/user.controller.js
 const router = new Router();
 
 // Rutas de autenticación
-router.post("/register", registerPublic);
+// router.post("/register", registerPublic);
 router.post("/login", login);
 router.post("/logout", logout);
 

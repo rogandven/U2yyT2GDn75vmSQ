@@ -9,14 +9,11 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
         }
         return data;
     }
-
-    let numero = 1;
     return Array.isArray(usuarios) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">
             <thead>
             <tr>
-                <th></th>
                 <th>RUT</th>
                 <th>Nombre</th>
                 <th>Apodo</th>
@@ -33,7 +30,6 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
             {usuarios.map((usuario) => {
                 return (
                 <tr>
-                    <th>{String(numero++)}</th>
                     <td>{coalesceData(String(usuario && usuario.rut)) || "N/A"}</td>
                     <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>

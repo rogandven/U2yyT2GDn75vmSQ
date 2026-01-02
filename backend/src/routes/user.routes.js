@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { getUsers, getUserById, getProfile, updateUserById, deleteUserById, registerPrivate } from "../controllers/user.controller.js";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
-import { isAdmin } from "../middleware/authorization.middleware.js";
+import { canCrudUsers, isAdmin } from "../middleware/authorization.middleware.js";
 import { getAllStudentNames } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -15,7 +15,7 @@ router.get("/profile", getProfile);
 router.get("/frontend_list", getAllStudentNames);
 
 //middleware para verificar si el usuario es administrador
-router.use(isAdmin);
+router.use(canCrudUsers);
 
 // Rutas para obtener usuarios
 router.get("/get/", getUsers);

@@ -12,10 +12,14 @@ import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
+<<<<<<< HEAD
 import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
 import { rejectElectivo } from "../services/electivo.service.js";
+=======
+import { isAdminOrProfesor } from "../services/admin.service.js";
+>>>>>>> MERGE-02-01-2026-2
 
 const Electivos = () => {
   const userRole = getUserRole();
@@ -42,7 +46,7 @@ const Electivos = () => {
     setFiltroArea("");
   };
 
-  const electivosFiltrados = electivos.data?.filter((e) => {
+  const electivosFiltrados = electivos.filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       e.descripcion.toLowerCase().includes(busqueda.toLowerCase());

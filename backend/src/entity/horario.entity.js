@@ -1,6 +1,5 @@
 "use strict";
 
-import { EntitySchema } from "typeorm";
 
 export const HorarioEntity = new EntitySchema({
     name: "HorarioEntity",

@@ -51,8 +51,12 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
+<<<<<<< HEAD
         query = query.orderBy("electivo.id", "ASC");
 
+=======
+        query = query.addOrderBy("electivo.nombre", "ASC");
+>>>>>>> MERGE-02-01-2026-2
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
@@ -69,7 +73,7 @@ export async function getElectivosFromService(data) {
 
 export async function getElectivosSinAprobarFromService() {
   try {
-      let resultados = await electivoRepo.find();
+      let resultados = await electivoRepo.find({relations: {usuarios: true}});
 
       if (!Array.isArray(resultados)) {
           throw Error("No se pudieron parsear los electivos como arreglo");
@@ -108,7 +112,7 @@ export async function createElectivoFromService(data) {
 
 export async function getElectivoByIdFromService(id_instancia) {
 try {
-    const electivos = await electivoRepo.findOne({ where: { id: id_instancia } });
+    const electivos = await electivoRepo.findOne({ where: { id: id_instancia }, relations: {usuarios: true} });
 
     if (!electivos) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);

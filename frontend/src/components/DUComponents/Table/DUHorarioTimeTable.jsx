@@ -2,17 +2,26 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
+<<<<<<< HEAD
 // import { isAdminOrProfesor } from '../../../services/admin.service.js';
 // import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
 // const isAdmin = isAdminOrProfesor();
 // const isJefe = isJefeDeCarrera();
+=======
+import { isAdminOrProfesor } from '../../../services/admin.service.js';
+//import { isJefeDeCarrera } from '../../../services/admin.service.js';
+
+const isAdmin = isAdminOrProfesor();
+//const isJefe = isJefeDeCarrera();
+//<td>{Timetable.id_horario}</td>
+>>>>>>> MERGE-02-01-2026-2
 
 const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdmin) => {
   if (Array.isArray(data) && data.length > 0) {
       return data.map((Timetable) => (
                   <tr key={"Timetable-"+Timetable.id_horario}>
-                      <td>{Timetable.id_horario}</td>
+                      
                       <td>{(NamePlusIcon((Timetable.nombre_electivo || Timetable.id_electivo), (<GiGraduateCap className='mr-1'></GiGraduateCap>)))}</td>
                       <td>{Timetable.hora_inicio}</td>
                       <td>{Timetable.hora_termino}</td>
