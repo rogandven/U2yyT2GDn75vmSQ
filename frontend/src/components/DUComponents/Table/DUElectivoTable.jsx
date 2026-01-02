@@ -88,7 +88,6 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
         <table className="table">
             <thead>
             <tr>
-                <th></th>
                 <th>Nombre</th>
                 <th>Cupos</th>
                 <th>Inscritos</th>
@@ -105,8 +104,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
                 return electivo && mustBeDisplayed(electivo) && (
-                <tr key={"ELECTIVO" + String(numero)}>
-                    <th>{numero++}</th>
+                <tr key={"ELECTIVO" + String(numero++)}>
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>{electivo.cupos || "N/A"}</td>
                     <td>{electivo.inscritos || "N/A"}</td>
