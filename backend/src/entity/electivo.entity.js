@@ -232,6 +232,9 @@ export const ElectivoEntity = new EntitySchema({
       type: String,
       nullable: false,
     },
+    motivo: {
+      type: "text",
+    },
   },
   checks: [
       { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },

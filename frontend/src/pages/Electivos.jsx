@@ -99,7 +99,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={rejectElectivo} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo2} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
       </div>
     </div>
   );

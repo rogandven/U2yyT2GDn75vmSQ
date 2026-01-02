@@ -38,6 +38,9 @@ export async function createElectivoJefeDeCarrera(electivoData) {
 }
 
 export async function approveElectivo(id) {
+  if (typeof(id) !== "number") {
+    console.error(id);
+  }
   return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
