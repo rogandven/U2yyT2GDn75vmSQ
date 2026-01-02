@@ -39,7 +39,7 @@ export const useCreateCarrera = (fetchCarreras) => {
             const formValues = await CreateCarrera();
             if(!formValues) return;
             response = await createCarrera(formValues);
-            if (typeof(fetchHorarios) === "function") {
+            if (typeof(fetchCarreras) === "function") {
                 fetchCarreras();
             }
         } catch (error) {
