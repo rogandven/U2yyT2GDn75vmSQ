@@ -40,8 +40,17 @@ async function editCarreraInfo(carrera) {
 
 export const editCarrera=(fetchCarrera)=> {
     const handleEditCarrera = async (id_carrera,carrera) => {
+
         try {
             const formValues= await editCarreraInfo(carrera);
+
+            console.log("ID CARRERA: ");
+            console.log(id_carrera);
+            console.log("CARRERA: ");
+            console.log(carrera);
+            console.log("FORM VALUES: ");
+            console.log(formValues);
+
             if(!formValues) return;
 
             const response = await updateCarrera(id_carrera, formValues);

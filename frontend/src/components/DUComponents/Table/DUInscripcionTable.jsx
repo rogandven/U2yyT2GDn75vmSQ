@@ -44,10 +44,10 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                     </div>    
                 </td>
                 <td>
-                    <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames)}}><IoMdSettings></IoMdSettings></button>
-                    <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion)}}><MdDelete></MdDelete></button>
-                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true)}}><ImCheckmark/></button>}
-                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false)}}><TiTimes/></button>}
+                    <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>
+                    <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>
+                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true, isAdmin)}}><ImCheckmark/></button>}
+                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false, isAdmin)}}><TiTimes/></button>}
                 </td>
                 </tr>  
             )})}

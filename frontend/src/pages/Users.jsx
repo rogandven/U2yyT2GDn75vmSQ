@@ -5,23 +5,67 @@ import useEditUser from "@hooks/users/useEditUser.jsx";
 import { useEffect } from "react";
 import { DUUserTable } from "../components/DUComponents/Table/DUUserTable.jsx";
 import useCreateUser from "../hooks/users/useCreateUser.jsx";
+import useGetProfile from "@hooks/profile/useGetProfile.jsx";
+import { getUserRole, isJefeDeCarrera, ADMIN_ROLE } from "@services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import { useState } from "react";
 
 const Users = () => {
-  const { users, fetchUsers } = useGetUsers();
+  const { users, fetchUsers, setUsers } = useGetUsers();
   const { handleDeleteUser } = useDeleteUser(fetchUsers);
   const { handleEditUser } = useEditUser(fetchUsers);
   const { handleCreateUser } = useCreateUser(fetchUsers);
+  const { fetchProfile } = useGetProfile();
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    fetchUsers();
+    (async () => {
+      const profile = await fetchProfile();
+      const data = await fetchUsers();
+      try {
+        const role = getUserRole();
+        if (isJefeDeCarrera(role) && profile) {
+          const profileCareerId = profile?.id_carrera || profile?.carrera?.id || null;
+          const anyCareerInfo = (data || []).some((u) => u?.id_carrera || u?.carrera);
+          if (!profileCareerId && !anyCareerInfo) {
+            setUsers(data || []);
+            return;
+          }
+          const filtered = (data || []).filter((u) => {
+            if (profileCareerId != null) return u?.id_carrera === profileCareerId;
+            if (u?.carrera && profile?.carrera) {
+              const a = String(u.carrera?.nombre || u.carrera).toUpperCase();
+              const b = String(profile.carrera?.nombre || profile.carrera).toUpperCase();
+              return a === b;
+            }
+            return false;
+          });
+          setUsers(filtered);
+        }
+      } catch (error) {
+        
+      }
+    })();
   }, []);
+
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+
+  const currentPageContent = (Array.isArray(users) && users.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(users) && users.length) / POSTS_PER_PAGE)) || 0;
+
 
   return (
     <div className="users-page">
-      <button className="btn btn-primary m-3 mb-0" onClick={handleCreateUser}>Crear Usuario</button>
+      {getUserRole() === ADMIN_ROLE && (
+        <button className="btn btn-primary m-3 mb-0" onClick={handleCreateUser}>Crear Usuario</button>
+      )}
       <div className="users-table">
-        {DUUserTable(users, handleDeleteUser, handleEditUser)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser)}
+        <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>
   );

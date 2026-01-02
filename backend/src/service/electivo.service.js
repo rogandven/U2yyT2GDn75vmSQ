@@ -2,22 +2,30 @@ import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.j
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
-import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
 import sendMail from "../services/email.service.js";
+import { countInscripcionesAprobadas } from "./utils/utils.inscription.service.js";
+import { shallBeAllowedToMakeChanges } from "./utils/utils.career.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 
 const processElectivoArray = async (resultados) => {
     let nombre_profesor = "JUANITO PÉREZ";
     let current = null;
+    let inscritos = null;
     if (Array.isArray(resultados)) {
       for (let i = 0; i < resultados.length; i++) {
         try {
           current = await RAW_getUserById(resultados[i].id_profesor);
           nombre_profesor = String((current && current.fullname) || "JUANITO PÉREZ").toUpperCase();
-          Object.assign(resultados[i], {nombre_profesor: nombre_profesor});
-        } catch (error) {}
+          current = await countInscripcionesAprobadas(resultados[i].id);
+          // console.log(current);
+          inscritos = Number(current) || 0;
+          Object.assign(resultados[i], {nombre_profesor: nombre_profesor, inscritos: inscritos});
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     return resultados;
@@ -43,7 +51,7 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
-        
+        query = query.addOrderBy("electivo.nombre", "ASC");
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
@@ -112,27 +120,21 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia, data, carrera) {
+export async function updateElectivoFromService(id_instancia, data, carrera, user_role, careerString, electivo) {
+  if (!careerString) {
+    throw new Error("Función mal llamada");
+  }
+  
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
-
-    if (!electivo) {
-        return getServiceResult(false, null, "Electivo no encontrado", 0);
-    }
-
-    const array = breakDownCarreraArray(electivo.carreras);
-    // console.log(array);
-    if (!(array.includes(String(carrera)))) {
-      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
-    }
-
     Object.assign(electivo, data);
 
     if (String(electivo.apertura).localeCompare(String(electivo.cierre)) > 0) {
       return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
     }
 
-    await electivoRepo.save(electivo);
+    delete electivo.id;
+    const result = await electivoRepo.update({id: id_instancia}, electivo);
+    console.log(result);
 
     return getServiceResult(false, electivo, "Electivo actualizado correctamente", 1);
   } catch (error) {
@@ -141,7 +143,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera) {
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, carrera) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_career, user_role) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -152,8 +154,7 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
       return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
     }
     const array = breakDownCarreraArray(electivo.carreras);
-    // console.log(array);
-    if (!(array.includes(String(carrera)))) {
+    if ((user_role !== ADMIN_ROLE) && (!(array.includes(String(user_career))))) {
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
@@ -170,15 +171,20 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
   }
 }
 
-export async function deleteElectivoFromService(id_instancia, user_id, user_role) {
+export async function deleteElectivoFromService(id_instancia, user_id, user_role, user_career) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
     if (!electivo) {
-        return getServiceResult(false, null, "Electivo no encontrado", 0);
+        return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
+
+    if ((user_role !== ADMIN_ROLE) && (!(String(electivo.carreras).split(",").includes(String(user_career))))) {
+      return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
+    }
+
     if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {
-      return getServiceResult(false, null, "No tiene permiso para borrar este electivo", 0);
+      return getServiceResult(true, null, "No tiene permiso para borrar este electivo", 0);
     }
 
     await electivoRepo.remove(electivo);
@@ -204,7 +210,7 @@ export async function electivoExists(id_instancia) {
 
 export async function RAW_getElectivoById(id) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id});
+    const electivo = await electivoRepo.findOne({id: Number(id), where: {id: Number(id)}});
     if (!electivo) {
       throw new Error("Electivo no encontrado");
     }

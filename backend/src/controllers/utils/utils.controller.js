@@ -52,6 +52,8 @@ export const validationFunctionHelper = (array, data) => {
     return null;
 }
 
+/*
+//lo ya creado
 export const processCarrera = (carrera) => {
     try {
         if (carrera && typeof(carrera) === "string") {
@@ -62,7 +64,32 @@ export const processCarrera = (carrera) => {
         return undefined;
     }
 
-}
+}*/
+export const processCarrera = (carrera) => {
+  try {
+    if (!carrera) return undefined;
+
+    // Si viene como array (select múltiple)
+    if (Array.isArray(carrera)) {
+      return carrera.map(c =>
+        String(c).toUpperCase().trim()
+      ).join(",");
+    }
+
+    // Si viene como string
+    if (typeof carrera === "string") {
+      return carrera
+        .split(",")
+        .map(c => c.toUpperCase().trim())
+        .join(",");
+    }
+
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
 
 export const processRole = (role) => {
     if (!role || typeof(role) !== "string") {

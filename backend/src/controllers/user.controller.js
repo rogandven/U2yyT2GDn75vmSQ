@@ -3,9 +3,11 @@ import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService,
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
-import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE, STUDENT_ROLE, TEACHER_ROLE } from "../constants/user.constants.js";
 import { processCarrera } from "./utils/utils.controller.js";
 import { processRole } from "./utils/utils.controller.js";
+import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
+
 
 export async function getUsers(req, res) {
   const users = await getUsersFromService();
@@ -48,8 +50,6 @@ export async function updateUserById(req, res) {
   if (!newData) {
     return res.status(400).json(getControllerResult_NEW("Datos no proporcionados", null));
   }
-  newData.carrera = processCarrera(newData.carrera);  
-  newData.role = processRole(newData.role);
   if (!id) {
     return res.status(400).json(getControllerResult_NEW("El ID es obligatorio", null));
   }
@@ -59,6 +59,16 @@ export async function updateUserById(req, res) {
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(newData.fullname);
   }
+  if (newData.carrera) {
+    newData.carrera = processCarrera(newData.carrera);  
+  }
+  if (newData.role) {
+    newData.role = processRole(newData.role);
+  }
+  if (newData.role && !(getAllowedRolesToTamper(req.user.role || req.user.rol).includes(newData.role))) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
+  }
+
   const result = idValidation.validate({id: id});
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
@@ -73,14 +83,13 @@ export async function updateUserById(req, res) {
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
-
-  const editedUser = await updateUserByIdFromService(id, newData);
+  const editedUser = await updateUserByIdFromService(id, newData, req.user.role || req.user.rol, req.user.carrera);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }
   if (editedUser.length <= 0) {
     editedUser.error = true;
-    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado", editedUser));
+    return res.status(400).json(getControllerResult_NEW(editedUser.details || "Error desconocido", editedUser));
   }
   return res.status(200).json(getControllerResult_NEW(editedUser.details, editedUser));
 }
@@ -95,8 +104,11 @@ export async function deleteUserById(req, res) {
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
   }
+  if (id === req.user.id) {
+    return res.status(400).json(getControllerResult_NEW("No se puede eliminar a si mismo", null));
+  }
 
-  const user = await deleteUserByIdFromService(id);
+  const user = await deleteUserByIdFromService(id, req.user.role || req.user.rol, req.user.carrera);
 
   if (user.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", user));
@@ -138,11 +150,16 @@ export async function registerPrivate(req, res) {
     return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
   }
   req.body.carrera = processCarrera(req.body.carrera);
-
   req.body.fullname = fullNameProcessor(req.body.fullname);
+  req.body.role = processRole(req.body.role);
 
-  // console.log(req.body);
-  req.body.carrera = processRole(newData.role);
+  if (!(getAllowedRolesToTamper(req.user.role || req.user.rol).includes(req.body.role))) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para trabajar con ${newData.role}`))
+  }
+  if (((req.user.role || req.user.rol) !== ADMIN_ROLE) && (req.user.carrera !== req.body.carrera)) {
+    return res.status(401).json(getControllerResult_NEW(`No tiene permiso para registrar alumnos de otras carreras`));
+  }
+
   validationResult = createValidation.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
@@ -178,9 +195,7 @@ export async function registerPublic(req, res) {
     return res.status(401).json(getControllerResult_NEW("No se puede autoasignar la cantidad de créditos"), null);
   }
   req.body.role = STUDENT_ROLE;
-  // console.log(req.body.role);
   req.body.creditos = 0;
-  // console.log(req.body.creditos);
   return await registerPrivate(req, res);
 }
 
@@ -198,7 +213,7 @@ export async function login(req, res) {
   if (result.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", result));
   }
-  console.log(result.data);
+  // console.log(result.data);
   if (!(result.data && result.data.token)) {
     result.error = true;
     return res.status(400).json(getControllerResult_NEW(result.details || "Error al iniciar sesión", result));

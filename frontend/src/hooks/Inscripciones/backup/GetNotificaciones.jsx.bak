@@ -14,7 +14,7 @@ const GetNotificaciones = () => {
         return { success: false, message: data.message };
       }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       return { success: false, message: 'Error al obtener notificaciones' };
     }
   };

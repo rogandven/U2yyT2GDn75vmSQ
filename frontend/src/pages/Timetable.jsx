@@ -8,12 +8,15 @@ import { useState } from "react";
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor } from "../services/admin.service.js";
-//import { isJefeDeCarrera } from "../services/admin.service.js";
+import { isJefeDeCarrera } from "../services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 
 const Timetable = () => {
-    const isAdmin = isAdminOrProfesor();
-    //const isJefe = isJefeDeCarrera();
+    const userRole = getUserRole();
+    const isAdmin = isAdminOrProfesor(userRole);
+    const isJefe = isJefeDeCarrera(userRole);
 
     const [horarioData, setHorarioData] = useState([]);
 
@@ -50,6 +53,13 @@ const Timetable = () => {
       !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();*/
     return coincideTexto;
   });
+    const POSTS_PER_PAGE = 4;
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+    const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+    const currentPageContent = (Array.isArray(timetables?.data) && timetables?.data.slice(firstPostIndex, lastPostIndex)) || [];
+    const pageAmount = Math.abs(Math.ceil((Array.isArray(timetables?.data) && timetables?.data?.length) / POSTS_PER_PAGE)) || 0;
 
     return (
         <div className="timetable-page">
@@ -68,6 +78,8 @@ const Timetable = () => {
             <div className="timetable2-page">
                 <DUHorarioTable data={timetables?.data || []} electivosEncontrados={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
             </div>
+            <DUHorarioTable data={currentPageContent || []} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
+            <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
         </div>
     );
 };

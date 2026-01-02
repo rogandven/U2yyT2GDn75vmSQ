@@ -17,31 +17,44 @@ import useChangeInscripcionStatus from "@hooks/Inscripciones/useChangeInscripcio
 
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { getUserRole, isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import { useState } from "react";
 
 const Inscripciones = () => {
+  const userRole = getUserRole();
+  const isAdmin = isAdminOrProfesor(userRole);
+  const isJefe = isJefeDeCarrera(userRole);
+
   const { inscripciones, fetchInscripciones } = useGetInscripciones();
-  const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
+  const { handleCreateInscripcion } = useCreateInscripcion(() => {fetchInscripciones(isAdmin)});
   // const { inscripciones, fetchInscripciones } = useGetInscripciones();
   // const { handleCreateInscripcion } = useCreateInscripcion(fetchInscripciones);
-  const { handleEditInscripcion } = useEditInscripcion(fetchInscripciones);
-  const { handleDeleteInscripcion } = useDeleteInscripcion(fetchInscripciones);
-  const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(fetchInscripciones);
+  const { handleEditInscripcion } = useEditInscripcion(() => {fetchInscripciones(isAdmin)});
+  const { handleDeleteInscripcion } = useDeleteInscripcion(() => {fetchInscripciones(isAdmin)});
+  const { handleChangeInscripcionStatus } = useChangeInscripcionStatus(() => {fetchInscripciones(isAdmin)});
 
   const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
   const { userNames, fetchUserNames } = useGetUserNames();
-
-  const isAdmin = isAdminOrProfesor();
-  const isJefe = isJefeDeCarrera();
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
-    fetchInscripciones();
+    fetchInscripciones(isAdmin);
     fetchElectivoNames();
     fetchUserNames();
   }, []);
+
+
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+  const currentPageContent = (Array.isArray(inscripciones?.data) && inscripciones?.data.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(inscripciones?.data) && inscripciones?.data?.length) / POSTS_PER_PAGE)) || 0;
 
   /* const limpiarFiltros = () => {
     setBusqueda("");
@@ -84,7 +97,7 @@ const Inscripciones = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        {isAdmin && <button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames)}}>Crear Inscripcion</button>}
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => {handleCreateInscripcion(electivoNames, userNames, isAdmin, isJefe)}}>Crear Inscripcion</button>)}
         {/* <DUSelection
           options={AREAS_PERMITIDAS_EN_MAYUSCULA}
           defaultValue={"Todas las áreas"}
@@ -98,8 +111,9 @@ const Inscripciones = () => {
         ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames} isAdmin={isAdmin} isJefe={isJefe}></DUInscripcionTable>
+        <DUInscripcionTable inscripciones={currentPageContent} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames} isAdmin={isAdmin} isJefe={isJefe}></DUInscripcionTable>
       </div>
+      <DUPageBrowser pageAmount={pageAmount} currentPageNumber={currentPage} setCurrentPageNumber={setCurrentPage}></DUPageBrowser>
     </div>
   );
 };

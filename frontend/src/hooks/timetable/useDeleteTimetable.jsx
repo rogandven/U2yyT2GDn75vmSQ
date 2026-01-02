@@ -46,7 +46,7 @@ export const DeleteTimetable = (fetchTimetable) => {
         }
       }
     } catch (error) {
-      console.error("Error al eliminar el horario:", error);
+      // console.error("Error al eliminar el horario:", error);
       confirmError();
     }
   };

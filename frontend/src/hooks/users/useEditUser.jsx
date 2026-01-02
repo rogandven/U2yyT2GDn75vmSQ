@@ -14,7 +14,7 @@ async function editUserInfo(user) {
       ${createSwalField(2, "Nombre completo", (user && user.fullname) || "")}
       ${createSwalField(3, "Apodo", (user && user.username) || "")}
       ${createSwalField(4, "Correo", (user && user.email) || "")}
-      ${StaticDropdownList(VALID_ROLES, "Rol", "swal2-input5", "m-1")}
+      ${StaticDropdownList(VALID_ROLES, (user && user.role) || "Rol", "swal2-input5", "m-1", Boolean(user))}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
       ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
@@ -65,7 +65,7 @@ async function editUserInfo(user) {
       const fullname = gebi('swal2-input2')?.value;
       const username = gebi('swal2-input3')?.value;
       const email = gebi('swal2-input4')?.value;
-      const role = gebi('swal2-input6')?.value;
+      const role = gebi('swal2-input5')?.value;
       const generation = gebi('swal2-input7')?.value;
       const carrera = gebi('swal2-input8')?.value;
       const creditos = gebi('swal2-input9')?.value;
@@ -86,6 +86,7 @@ export const useEditUser = (fetchUsers) => {
       const formValues = await editUserInfo(user);
       if (!formValues) return;
 
+      console.log(formValues);
       const response = await editUser(userId, formValues);
       // console.log(response);
       if (response) {
@@ -94,7 +95,7 @@ export const useEditUser = (fetchUsers) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar usuario:", error);
+      // console.error("Error al editar usuario:", error);
     }
   };
 

@@ -12,7 +12,7 @@ export async function getCarrera(id_carrera) {
   }
 }
 
-export async function createCarrera( sigla, nombre) {
+export async function createCarrera(sigla, nombre) {
   try {
     if (!sigla || !nombre) {
       throw Error("Función mal llamada", {sigla, nombre})
@@ -29,7 +29,7 @@ export async function createCarrera( sigla, nombre) {
   }
 }
 
-export async function updateCarreraById_Carrera(carrera,id_carrera) {
+export async function updateCarreraById_Carrera(carrera, id_carrera) {
   try {
     if (!carrera) {
       throw new Error("Función mal llamada");

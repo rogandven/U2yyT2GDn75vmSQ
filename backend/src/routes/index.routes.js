@@ -30,7 +30,7 @@ router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 router.use("/electivos", electivoRoutes);
 router.use("/horarios", horarioRoutes);
-// router.use("/electivos3", nowRoutes);
 router.use("/inscripciones",inscripcionRoutes);
 router.use("/carreras",carreraRoutes);
+
 export default router;

@@ -13,10 +13,10 @@ const Register = () => {
             if (response.request.status === 201) {
                 navigate("/login");
             } else {
-                console.error("Error al registrar usuario");
+                // console.error("Error al registrar usuario");
             }
         } catch (error) {
-            console.error("Error al registrar usuario", error);
+            // console.error("Error al registrar usuario", error);
         }
     }
     return (

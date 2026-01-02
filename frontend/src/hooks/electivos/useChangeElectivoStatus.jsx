@@ -1,16 +1,20 @@
 import { approveElectivo, rejectElectivo } from "../../services/electivo.service.js";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { RejectElectivoInfo } from "./useRejectElectivo.jsx";
 
 
 export const useChangeElectivoStatus = (fetchElectivos) => {
-  const handleChangeElectivoStatus = async (electivoId, approve) => {
+  const handleChangeElectivoStatus = async (electivoId, approve, isJefe) => {
     try {
+      if (!isJefe) {
+        return fireDynamicSwal(500, null, "Acceso denegado");
+      }
       let response = null;
-      // // console.log(approve);
+      // console.log({electivoId: Number(electivoId), approve: Boolean(approve), isJefe: Boolean(isJefe)});
       if (approve) {
         response = await approveElectivo(electivoId);
-      } else{ 
+      } else { 
         response = await rejectElectivo(electivoId);
       }
       // // console.log(response);
@@ -20,7 +24,7 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar electivo:", error);
+      // console.error("Error al editar electivo:", error);
     }
   };
 

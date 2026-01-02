@@ -20,7 +20,7 @@ export async function createUsers() {
 
     const users = [
       {
-        fullname: "Roger Venegas",
+        fullname: "Roger Venegas".toUpperCase(),
         username: "rogandven",
         rut: "4825562-0",
         email: EXMAPLE_EMAIL_1,
@@ -31,7 +31,7 @@ export async function createUsers() {
         creditos: 0
       },
       {
-        fullname: "Sebastián Pinto",
+        fullname: "Sebastián Pinto".toUpperCase(),
         username: "seba",
         rut: "22849268-K",
         email: EXMAPLE_EMAIL_2,
@@ -42,7 +42,7 @@ export async function createUsers() {
         creditos: 0
       },
       {
-        fullname: "Carlos Domínguez",
+        fullname: "Carlos Domínguez".toUpperCase(),
         username: "carmanolo",
         rut: "20924430-6",
         email: EXMAPLE_EMAIL_3,
@@ -53,7 +53,7 @@ export async function createUsers() {
         creditos: 300
       },
       {
-        fullname: "Rodrigo Alarcón",
+        fullname: "Rodrigo Alarcón".toUpperCase(),
         username: "rodriser12",
         rut: "8347186-7",
         email: EXMAPLE_EMAIL_4,
@@ -64,7 +64,7 @@ export async function createUsers() {
         creditos: 300
       },
       {
-        fullname: "Fermín Millanao",
+        fullname: "Fermín Millanao".toUpperCase(),
         username: "fermin23",
         rut: "16057069-5",
         email: EXMAPLE_EMAIL_5,
@@ -75,7 +75,7 @@ export async function createUsers() {
         creditos: 0
       },
       {
-        fullname: "Andrés Opazo",
+        fullname: "Andrés Opazo".toUpperCase(),
         username: "andres123",
         rut: "4738683-7",
         email: EXMAPLE_EMAIL_6,
@@ -84,18 +84,18 @@ export async function createUsers() {
         generation: "2023-1",
         carrera: "ICINF",
         creditos: 0
-      },     
+      },
       {
-        fullname: "Juanito Perez",
-        username: "juan123",
-        rut: "6413288-1",
+        fullname: "Voger Renegas".toUpperCase(),
+        username: "voger123",
+        rut: "16117628-1",
         email: EXMAPLE_EMAIL_7,
-        password: await encryptPassword("juan123"),
+        password: await encryptPassword("renegas123"),
         role: "ADMINISTRADOR",
-        generation: "2022-1",
-        carrera: "IECI",
+        generation: "2023-1",
+        carrera: "ICINF",
         creditos: 0
-      },        
+      },                
     ];
 
     console.log("Creando usuarios base...");

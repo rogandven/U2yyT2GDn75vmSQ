@@ -3,19 +3,21 @@
 import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
 import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
-import { createValidation, integrityValidation, updateValidation } from "../validations/inscripcion.validation.js";
+import { createValidation, integrityValidation, updateValidation, warningValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { getUserNameById } from "./user.controller.js";
 import { BASE_CASE } from "../service/utils/utils.service.js";
 import { STUDENT_ROLE } from "../constants/user.constants.js";
+import { shallDisplayWarning as SERVICE_shallDisplayWarning } from "../service/inscripcion.service.js";
+import { RAW_getUserById } from "../service/user.service.js";
 
 const processInscripcionArray = async (array) => {
     let current = null;
     if (Array.isArray(array)) {
         for (let i = 0; i < array.length; i++) {
-            console.log(array[i]);
+            // console.log(array[i]);
             try {
                 current = String(await getElectivoName(array[i].id_electivo));
                 array[i].nombre_electivo = current;
@@ -91,7 +93,7 @@ const getInscripcionHelper = async (req) => {
 
     try {
         let result = await getInscripcion(req.params.id);
-        if (!result || (await isInvalidInscripcion(result.data, false, req))) {
+        if (!result) {
             return {code: 404, json: getGenericResult(null, "Inscripción no encontrada")}
         }
         await processInscripcionArray([result.data]);
@@ -125,14 +127,15 @@ export const private_getInscripcionesSinAprobar = async (req, res) => {
     }
 }
 
-const createInscriptionHelper = async (req, res, checks) => {
+const createInscriptionHelper = async (req, res, checks, user) => {
     try {
         const validationResult = validationFunctionHelper([integrityValidation, createValidation], req.body);
         if (validationResult) {
             return res.status(400).json(getGenericResult(null, validationResult));
         }
-        if (await isInvalidInscripcion(req.body, checks, req)) {
-            return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
+        const message = await isInvalidInscripcion(req.body, checks, req, user);
+        if (message) {
+            return res.status(404).json(getGenericResult(null, message));
         }
         if (await inscripcionAlreadyExists(null, req.body.id_usuario, req.body.id_electivo)) {
             return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
@@ -153,10 +156,10 @@ export const private_createInscripcion = async (req, res) => {
         return res.status(400).json(getGenericResult(null, "Datos no proporcionados"));
     }
     req.body.estado = APPROVED;
-    return await createInscriptionHelper(req, res, false);
+    return await createInscriptionHelper(req, res, false, null);
 }
 
-const updateInscriptionHelper = async (req, res, id_checks) => {
+const updateInscriptionHelper = async (req, res, id_checks, user) => {
     try {
         const idValidationResult = idValidation.validate(req.params);
         if (idValidationResult.error) {
@@ -184,13 +187,19 @@ const updateInscriptionHelper = async (req, res, id_checks) => {
         };
 
         // console.log(editedInscripcion);
-        if (await isInvalidInscripcion(editedInscripcion, id_checks, req)) {
-            return res.status(404).json(getGenericResult(null, "Usuario o electivo no encontrado"));
+        const message = await isInvalidInscripcion(editedInscripcion, id_checks, req, user);
+        if (!user) {
+            user = await RAW_getUserById(editedInscripcion.id_usuario);
+        }
+
+
+        if (message) {
+            return res.status(404).json(getGenericResult(null, message));
         }
         if (await inscripcionAlreadyExists(req.params.id, editedInscripcion.id_usuario, editedInscripcion.id_electivo)) {
             return res.status(409).json(getGenericResult(null, "Ya existe esta inscripción"));
         }
-        const inscripcionCreada = await updateInscripcion(req.body, {id_inscripcion: req.params.id});
+        const inscripcionCreada = await updateInscripcion(req.body, {id_inscripcion: req.params.id}, rawInscripcion, user);
         if (inscripcionCreada && inscripcionCreada.data) {
             return res.status(200).json(inscripcionCreada);
         }
@@ -295,7 +304,7 @@ export const public_createInscripcion = async (req, res) => {
     }
     req.body.id_usuario = req.user.id;
     req.body.estado = AWAITING;
-    return await createInscriptionHelper(req, res, true);
+    return await createInscriptionHelper(req, res, true, req.user);
 }
 
 export const public_updateInscripcion = async (req, res) => {
@@ -304,9 +313,24 @@ export const public_updateInscripcion = async (req, res) => {
     }
     req.body.estado = AWAITING;
     req.body.id_usuario = req.user.id;
-    return await updateInscriptionHelper(req, res, true);
+    return await updateInscriptionHelper(req, res, true, req.user);
 }
 
 export const public_deleteInscripcion = async (req, res) => {
     return deleteInscripcionHelper(req, res, true);
+}
+
+export const shallDisplayWarning = async (req, res) => {
+    const validationResult = warningValidation.validate(req.body);
+    if (validationResult.error) {
+        return res.status(200).json({result: true});
+    }
+    let result = true;
+    const id_electivo = (req.body && req.body.id_electivo) || 0;
+    const user_id = (req.user && req.user.id) || 0;
+    try {
+        result = await SERVICE_shallDisplayWarning(user_id, id_electivo);
+    } catch (error) {}
+     
+    return res.status(200).json({result: result});
 }

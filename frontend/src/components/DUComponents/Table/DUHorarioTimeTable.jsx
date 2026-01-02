@@ -2,14 +2,13 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
-//import { isJefeDeCarrera } from '../../../services/admin.service.js';
+// import { isAdminOrProfesor } from '../../../services/admin.service.js';
+// import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-const isAdmin = isAdminOrProfesor();
-//const isJefe = isJefeDeCarrera();
-//<td>{Timetable.id_horario}</td>
+// const isAdmin = isAdminOrProfesor();
+// const isJefe = isJefeDeCarrera();
 
-const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
+const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdmin) => {
   if (Array.isArray(data) && data.length > 0) {
       return data.map((Timetable) => (
                   <tr key={"Timetable-"+Timetable.id_horario}>
@@ -44,7 +43,7 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable) => {
   }
 }
 
-export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable}) => {
+export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -66,7 +65,7 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
             </tr>
             </thead>
             <tbody>
-              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable)}
+              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe)}
             </tbody>
         </table>
         </div>
