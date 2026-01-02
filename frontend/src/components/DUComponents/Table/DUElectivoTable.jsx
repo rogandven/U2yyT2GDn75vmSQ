@@ -11,7 +11,6 @@ import { IoMdSettings } from 'react-icons/io';
 import { FiUserPlus } from 'react-icons/fi'
 
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
-
 // import { isAdminOrProfesor } from '../../../services/admin.service.js';
 // import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
@@ -118,7 +117,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                       {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id, isAdmin)}}><MdDelete></MdDelete></button>)}
                       {(<button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>)}
                       {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true, isJefe)}}><ImCheckmark/></button>)}
-                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(isAdmin, isJefe, electivo.id)}}><TiTimes/></button>)}
+                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo,(isAdmin, isJefe, electivo.id)}}><TiTimes/></button>)}
                       {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id, isAdmin)}}><FiUserPlus /></button>)}
                     </td>
                 </tr>     

@@ -27,7 +27,7 @@ export async function RejectElectivoInfo() {
 }
 
 export const useRejectElectivo = (fetchElectivos) => {
-    const handleRejectElectivo = async (isAdmin, isJefe, id) => {
+    const handleRejectElectivo2 = async (isAdmin, isJefe, id) => {
         try {
             if (!isAdmin){
                 return fireDynamicSwal(500, null, "Acceso denegado por ser idiota");
@@ -51,7 +51,7 @@ export const useRejectElectivo = (fetchElectivos) => {
             fireDynamicSwal(500, null, null);
         }
     };
-    return {handleRejectElectivo};
+    return {handleRejectElectivo2};
 }
 
 export default useRejectElectivo;
