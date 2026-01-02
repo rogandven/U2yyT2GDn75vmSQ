@@ -66,7 +66,7 @@ export async function createHorario(id_electivo, hora_inicio, hora_termino, sala
 
 export async function getHorario(id_horario) {
   try {
-    return await horarioRepository.findOne({where: {id_horario: id_horario}});
+    return await horarioRepository.findOne({where: {id_horario: id_horario}, relations: {electivo: true}});
   } catch (error) {
     console.error(error);
     return null;
@@ -85,13 +85,13 @@ export async function updateHorarioById_Electivo(horario) {
 }
 
 export async function findAllHorarios() {
-  return await horarioRepository.find();
+  return await horarioRepository.find({relations: {electivo: true}});
 }
 
 export async function deleteHorarioById_Electivo(id_horario) {
   // console.log(id_electivo);
   try {
-    const horario = await horarioRepository.findOne({where: { id_horario: id_horario }});
+    const horario = await horarioRepository.findOne({where: { id_horario: id_horario },relations: {electivo: true}});
 
     if (!horario) {
       return {

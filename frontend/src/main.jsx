@@ -86,6 +86,7 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
+import Carrera from "@pages/Carreras";
 import { getAllowedRoles } from '@services/admin.service.js'
 import Inscripciones from '@pages/Inscripciones';
 
@@ -123,6 +124,10 @@ const router = createBrowserRouter([
       {
         path: "/horarios",
         element: <Timetable />,
+      },
+      {
+        path: "/carreras",
+        element: <Carrera />,
       }
     ],
   },

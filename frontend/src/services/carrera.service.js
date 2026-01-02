@@ -20,7 +20,7 @@ export async function createCarrera  (carreraData) {
     }
 };
 
-export const updateCarrea = async (id_carrera, updateData) => {
+export const updateCarrera = async (id_carrera, updateData) => {
 
     if (!id_carrera) {
         throw new Error("ID de carrera es requerido");
