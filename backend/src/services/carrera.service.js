@@ -40,6 +40,7 @@ export async function updateCarreraById_Carrera(carrera, id_carrera) {
   } catch (error) {
     return {data: null, message: "Error al actualizar carrera", error: error};
   }
+  
 }
 
 export async function findAllCarreras() {

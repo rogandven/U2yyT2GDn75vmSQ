@@ -18,12 +18,10 @@ async function CreateCarrera() {
     confirmButtonText: "Crear",
     cancelButtonText: "Cancelar",
     preConfirm: () => {
-      const id_carrera = String(gebi('swal2-input1')?.value).split(",")[0];
       const sigla = gebi('swal2-input2')?.value;
       const nombre = gebi('swal2-input3')?.value;
-      //Json.Strinfy()
 
-      return {id_carrera, sigla, nombre};
+      return {sigla, nombre};
     },
     theme: "dark",
   });
@@ -38,10 +36,12 @@ export const useCreateCarrera = (fetchCarreras) => {
         try {
             const formValues = await CreateCarrera();
             if(!formValues) return;
+            console.log(JSON.stringify(formValues));
             response = await createCarrera(formValues);
             if (typeof(fetchCarreras) === "function") {
                 fetchCarreras();
             }
+            
         } catch (error) {
             console.error('Error creating carrera:', error);
             response = error?.response || {status: 500, message: "Error desconocido"};

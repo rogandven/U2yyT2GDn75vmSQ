@@ -56,6 +56,7 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
   req.body.carreras = processCarrera(req.body.carreras);
   req.body.estado = estadoNuevo;
   req.body.id_profesor = req.user.id;
+  console.log(req.body);
 
   if (!shallBeAllowedToMakeChanges(req.user.role || req.user.rol, req.user.carrera || req.user.career, req.body.carreras)) {
     return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));

@@ -5,6 +5,7 @@ import editTimetable from "@hooks/timetable/useUpdateTimetable.jsx";
 import deleteTimetable from "@hooks/timetable/useDeleteTimetable.jsx";
 import { useEffect } from "react";
 import { useState } from "react";
+import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { getUserRole } from "../services/admin.service.js";
@@ -26,6 +27,10 @@ const Timetable = () => {
     const { handleDeleteTimetable } = deleteTimetable(fetchTimetable);
 
     const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
+    const [buscar, setBuscar] = useState("");
+
+
+
 
     useEffect(() => {
         if (typeof(fetchTimetable) === 'function') {
@@ -36,6 +41,18 @@ const Timetable = () => {
         }
     }, []);
 
+    const limpiarFiltros = () => {
+        setBuscar("");
+    };
+
+    const electivosEncontrados = horarioData.data?.filter((e) => {
+    const coincideTexto =
+      e.nombre.toLowerCase().includes(buscar.toLowerCase()) ||
+      e.descripcion.toLowerCase().includes(buscar.toLowerCase());
+    /*const coincideArea =
+      !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();*/
+    return coincideTexto;
+  });
     const POSTS_PER_PAGE = 4;
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -47,6 +64,20 @@ const Timetable = () => {
     return (
         <div className="timetable-page">
             {isAdmin && (<button className="create btn btn-primary ml-3 mt-3 mb-0" onClick={() => handleCreateTimetable(electivoNames)}>Crear Horario</button>)}
+            <SearchBar 
+                      customClassName={"busqueda-filtro-input ml-3"} 
+                      placeholder={"Buscar por nombre o descripción..."} 
+                      value={buscar} 
+                      onChange={(e) => setBuscar(e.target.value)}>
+            </SearchBar>
+             {(buscar ) && (
+          <button className="solicitud-limpiar-btn btn ml-5" onClick={limpiarFiltros}>
+            Limpiar
+          </button>
+        )}
+            <div className="timetable2-page">
+                <DUHorarioTable data={timetables?.data || []} electivosEncontrados={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
+            </div>
             <DUHorarioTable data={currentPageContent || []} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
             <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
         </div>

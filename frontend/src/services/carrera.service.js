@@ -12,7 +12,7 @@ export const getCarreras = async () => {
 
 export async function createCarrera  (carreraData) {
     try {
-        const response = await axios.post('/carreras', carreraData);
+        const response = await axios.post('/carreras/crear', carreraData);
         return response.data;
     } catch (error) {
         console.error('Error al crear la carrera:', error);
