@@ -1,3 +1,4 @@
+/*
 "use strict";
 
 import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
@@ -333,4 +334,173 @@ export const shallDisplayWarning = async (req, res) => {
     } catch (error) {}
      
     return res.status(200).json({result: result});
+}*/
+
+/*
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { PreinscripcionEntity } from "../entity/preinscripcion.entity.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { getControllerResult_NEW } from "./utils/utils.controller.js";
+
+
+export async function crearPreinscripcion(req, res) {
+    try {
+        if (req.user.rol !== "ESTUDIANTE") {
+            return res.status(403).json({ message: "Solo alumnos" });
+        }
+
+        const repo = AppDataSource.getRepository(PreinscripcionEntity);
+        const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+
+        const electivo = await electivoRepo.findOneBy({ id_electivo: req.body.id_electivo });
+        if (!electivo || electivo.estado !== "APROBADO") {
+            return res.status(400).json({ message: "Electivo no disponible" });
+        }
+
+        const pre = repo.create({
+            usuario: req.user,
+            electivo,
+            estado: "PENDIENTE"
+        });
+
+        await repo.save(pre);
+        return getControllerResult_NEW(res, 201, "Preinscripción creada", pre);
+    } catch (error) {
+        return res.status(500).json({ message: "Error preinscripción" });
+    }
+}
+*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { PreinscripcionEntity } from "../entity/preinscripcion.entity.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { getControllerResult_NEW } from "./utils/utils.controller.js";
+
+import {
+    userExists,
+    electivoExistsAndApproved,
+    inscripcionAlreadyExists,
+    countInscripcionesByUser,
+    countInscripciones
+} from "../service/utils/utils.inscription.service.js";
+
+import { MAX_PREINSCRIPCIONES_POR_ALUMNO } from "../constants/preinscripcion.constants.js";
+
+export async function crearPreinscripcion(req, res) {
+    try {
+        const user = req.user;
+
+        if (user.rol !== "ESTUDIANTE") {
+            return res
+                .status(403)
+                .json(getControllerResult_NEW("Solo alumnos pueden preinscribirse", null));
+        }
+
+        const { id_electivo } = req.body;
+
+        if (!id_electivo) {
+            return res
+                .status(400)
+                .json(getControllerResult_NEW("ID de electivo obligatorio", null));
+        }
+
+        const userOk = await userExists(user.id);
+        if (!userOk) {
+            return res
+                .status(404)
+                .json(getControllerResult_NEW("Alumno no existe", null));
+        }
+
+        const electivoOk = await electivoExistsAndApproved(id_electivo);
+        if (!electivoOk) {
+            return res
+                .status(400)
+                .json(getControllerResult_NEW("Electivo no aprobado o inexistente", null));
+        }
+
+        const already = await inscripcionAlreadyExists(user.id, id_electivo);
+        if (already) {
+            return res
+                .status(409)
+                .json(getControllerResult_NEW("Ya está preinscrito en este electivo", null));
+        }
+
+        const totalByUser = await countInscripcionesByUser(user.id);
+        if (totalByUser >= MAX_PREINSCRIPCIONES_POR_ALUMNO) {
+            return res
+                .status(400)
+                .json(
+                    getControllerResult_NEW(
+                        `Máximo permitido: ${MAX_PREINSCRIPCIONES_POR_ALUMNO} preinscripciones`,
+                        null
+                    )
+                );
+        }
+
+        const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+        const electivo = await electivoRepo.findOneBy({ id_electivo });
+
+        const totalInscritos = await countInscripciones(id_electivo);
+        if (totalInscritos >= electivo.cupos) {
+            return res
+                .status(400)
+                .json(getControllerResult_NEW("No hay cupos disponibles", null));
+        }
+
+        const repo = AppDataSource.getRepository(PreinscripcionEntity);
+
+        const preinscripcion = repo.create({
+            usuario: user,
+            electivo,
+            estado: "PENDIENTE",
+        });
+
+        const saved = await repo.save(preinscripcion);
+
+        return res
+            .status(201)
+            .json(getControllerResult_NEW("Preinscripción creada correctamente", saved));
+    } catch (error) {
+        console.error(error);
+        return res
+            .status(500)
+            .json(getControllerResult_NEW("Error interno al crear preinscripción", null));
+    }
+}
+
+
+export async function getPreinscripcionesByUser(req, res) {
+    try {
+        const user = req.user;
+
+        if (user.rol !== "ESTUDIANTE") {
+            return res
+                .status(403)
+                .json(getControllerResult_NEW("Solo alumnos pueden ver sus preinscripciones", null));
+        }
+
+        const repo = AppDataSource.getRepository(PreinscripcionEntity);
+
+        const preinscripciones = await repo.find({
+            where: {
+                usuario: { id: user.id },
+            },
+            relations: {
+                electivo: true,
+            },
+        });
+
+        return res
+            .status(200)
+            .json(getControllerResult_NEW("Preinscripciones obtenidas correctamente", preinscripciones));
+    } catch (error) {
+        console.error(error);
+        return res
+            .status(500)
+            .json(getControllerResult_NEW("Error al obtener preinscripciones", null));
+    }
 }

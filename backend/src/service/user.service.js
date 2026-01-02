@@ -1,3 +1,4 @@
+/*
 import { getErrorMessage, getResultLength, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import UserEntity from "../entity/user.entity.js";
@@ -77,7 +78,7 @@ export async function updateUserByIdFromService(id, newData, req_user_role, req_
             newData.password = encryptPassword(newData.password);
         }
 
-        /* fullname, username, rut, email, password, role, generation */
+       
         Object.assign(oldData, newData);
         await userRepository.update({id: id}, oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
@@ -140,7 +141,6 @@ export async function checkIfUserExists(userRepository, newData) {
 }
 
 export async function registerUserFromService(newData) {
-    /* fullname, username, rut, email, password, role, generation */
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const result = await checkIfUserExists(userRepository, newData);
@@ -230,4 +230,168 @@ export async function EMAIL_getAllCareerChiefs(career) {
     } catch (error) {
         return BASE_CASE;
     }
+}*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { UsuarioEntity } from "../entity/usuario.entity.js";
+import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../config/configEnv.js";
+
+export async function getUsersFromService() {
+  return await AppDataSource.getRepository(UsuarioEntity).find({
+    relations: { carrera: true },
+  });
+}
+
+export async function getUserByIdFromService(id) {
+  return await AppDataSource.getRepository(UsuarioEntity).findOne({
+    where: { id },
+    relations: { carrera: true },
+  });
+}
+
+export async function registerUserFromService(data) {
+  try {
+    const repo = AppDataSource.getRepository(UsuarioEntity);
+
+    const user = repo.create({
+      nombre: data.fullname,
+      rut: data.rut,
+      email: data.email,
+      clave: await encryptPassword(data.password),
+      rol: data.role,
+      creditos: data.creditos || 0,
+      carrera: data.carrera,
+    });
+
+    await repo.save(user);
+
+    return { error: false, details: "Usuario registrado", data: user };
+  } catch (error) {
+    return { error: true, details: "Error al registrar usuario", errorData: error };
+  }
+}
+
+export async function loginUserFromService(data) {
+  try {
+    const repo = AppDataSource.getRepository(UsuarioEntity);
+    const user = await repo.findOne({ where: { email: data.email } });
+
+    if (!user) return { error: true, details: "Credenciales inválidas" };
+
+    const ok = await comparePassword(data.password, user.clave);
+    if (!ok) return { error: true, details: "Credenciales inválidas" };
+
+    const token = jwt.sign(
+      { id: user.id, rol: user.rol, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "8h" }
+    );
+
+    return { error: false, data: { token } };
+  } catch (error) {
+    return { error: true, details: "Error en login", errorData: error };
+  }
+}
+
+export const RAW_getAllStudents = async () => {
+  try {
+    const userRepository = AppDataSource.getRepository(UsuarioEntity);
+
+    return await userRepository.find({
+      where: { rol: "ESTUDIANTE" },
+      select: ["id", "nombre", "email"]
+    });
+  } catch (error) {
+    return null;
+  }
+};
+
+export async function deleteUserByIdFromService(id) {
+  try {
+    const repo = AppDataSource.getRepository(UsuarioEntity);
+
+    const user = await repo.findOne({ where: { id } });
+    if (!user) {
+      return { error: true, details: "Usuario no encontrado" };
+    }
+
+    await repo.remove(user);
+
+    return { error: false, details: "Usuario eliminado correctamente" };
+  } catch (error) {
+    return {
+      error: true,
+      details: "Error al eliminar usuario",
+      errorData: error,
+    };
+  }
+}
+
+export async function logoutUserFromService() {
+  try {
+    // En JWT no se invalida el token en backend por defecto
+    // El logout real se maneja en el frontend eliminando el token
+    return {
+      error: false,
+      details: "Sesión cerrada correctamente",
+    };
+  } catch (error) {
+    return {
+      error: true,
+      details: "Error al cerrar sesión",
+      errorData: error,
+    };
+  }
+}
+
+export async function updateUserByIdFromService(id, data) {
+  try {
+    const repo = AppDataSource.getRepository(UsuarioEntity);
+
+    const user = await repo.findOne({ where: { id } });
+    if (!user) {
+      return { error: true, details: "Usuario no encontrado" };
+    }
+
+    // Solo actualizamos campos permitidos
+    Object.assign(user, {
+      nombre: data.fullname ?? user.nombre,
+      rut: data.rut ?? user.rut,
+      email: data.email ?? user.email,
+      rol: data.role ?? user.rol,
+      creditos: data.creditos ?? user.creditos,
+      carrera: data.carrera ?? user.carrera,
+    });
+
+    if (data.password) {
+      user.clave = await encryptPassword(data.password);
+    }
+
+    await repo.save(user);
+
+    return { error: false, details: "Usuario actualizado", data: user };
+  } catch (error) {
+    return { error: true, details: "Error al actualizar usuario", errorData: error };
+  }
+}
+
+export async function MIDDLEWARE_getUserByIdFromService(id) {
+  try {
+    const repo = AppDataSource.getRepository(UsuarioEntity);
+
+    const user = await repo.findOne({
+      where: { id },
+      relations: { carrera: true },
+    });
+
+    if (!user) return null;
+
+    return user;
+  } catch (error) {
+    return null;
+  }
 }

@@ -2,23 +2,17 @@
 
 import { EntitySchema } from "typeorm";
 
-export const HorarioEntity = new EntitySchema({
-    name: "Horario",
-    tableName: "horarios",
+export const ElectivoCarreraEntity = new EntitySchema({
+    name: "ElectivoCarrera",
+    tableName: "electivo_carrera",
     columns: {
-        id_horario: {
+        id_relacion: {
             type: Number,
             primary: true,
             generated: true,
         },
-        hora_inicio: {
-            type: String,
-        },
-        hora_termino: {
-            type: String,
-        },
-        dia: {
-            type: String,
+        cupos: {
+            type: Number,
         },
     },
     relations: {
@@ -28,7 +22,13 @@ export const HorarioEntity = new EntitySchema({
             joinColumn: { name: "id_electivo" },
             onDelete: "CASCADE",
         },
+        carrera: {
+            type: "many-to-one",
+            target: "Carrera",
+            joinColumn: { name: "id_carrera" },
+            onDelete: "CASCADE",
+        },
     },
 });
 
-export default HorarioEntity;
+export default ElectivoCarreraEntity;

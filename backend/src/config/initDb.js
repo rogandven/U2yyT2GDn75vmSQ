@@ -1,3 +1,4 @@
+/*
 "use strict";
 
 import User from "../entity/user.entity.js";
@@ -6,12 +7,7 @@ import { AppDataSource } from "../config/configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
 import { EXMAPLE_EMAIL_1, EXMAPLE_EMAIL_2, EXMAPLE_EMAIL_3, EXMAPLE_EMAIL_4, EXMAPLE_EMAIL_5, EXMAPLE_EMAIL_6, EXMAPLE_EMAIL_7 } from "./configEnv.js";
 
-/*
-if (!AppDataSource.isInitialized) {
-  await AppDataSource.initialize();
-  console.log("Conexión con la base de datos inicializada correctamente (initBd).");
-}
-*/ 
+
 export async function createUsers() {
   try {
     const userRepository = AppDataSource.getRepository(User);
@@ -116,155 +112,530 @@ export async function createElectivos() {
     const count = await electivoRepo.count();
 
     if (count === 0) {
-      /* const electivosIniciales = [
-        {
-          nombre: "Desarrollo Web Avanzado",
-          cupos: 30,
-          inscritos: 22,
-          apertura: "2025-03-01",
-          cierre: "2025-03-15",
-          area: "Desarrollo",
-          descripcion:
-            "Este electivo profundiza en frameworks modernos como React, Node y prácticas DevOps básicas.",
-        },
-        {
-          nombre: "Investigación en Inteligencia Artificial",
-          cupos: 25,
-          inscritos: 20,
-          apertura: "2025-04-10",
-          cierre: "2025-04-30",
-          area: "Investigación",
-          descripcion:
-            "En este electivo se revisan metodologías de investigación aplicadas al machine learning y deep learning.",
-        },
-        {
-          nombre: "Comunicación y Liderazgo",
-          cupos: 40,
-          inscritos: 33,
-          apertura: "2025-05-05",
-          cierre: "2025-05-20",
-          area: "Habilidades Sociales",
-          descripcion:
-            "El curso desarrolla habilidades interpersonales, trabajo en equipo y liderazgo efectivo.",
-        },
-        {
-          nombre: "Bases de Datos NoSQL",
-          cupos: 35,
-          inscritos: 29,
-          apertura: "2025-06-01",
-          cierre: "2025-06-15",
-          area: "Desarrollo",
-          descripcion:
-            "Se estudian bases de datos orientadas a documentos, columnas y grafos, con MongoDB y Neo4j como casos prácticos.",
-        },
-        {
-          nombre: "Metodologías Ágiles en Proyectos de Software",
-          cupos: 45,
-          inscritos: 41,
-          apertura: "2025-07-01",
-          cierre: "2025-07-20",
-          area: "Desarrollo",
-          descripcion:
-            "El curso aborda Scrum, Kanban y gestión ágil de equipos, aplicando herramientas colaborativas y control de versiones.",
-        },
-        {
-          nombre: "Ética Profesional y Responsabilidad Social",
-          cupos: 50,
-          inscritos: 44,
-          apertura: "2025-08-01",
-          cierre: "2025-08-15",
-          area: "Habilidades Sociales",
-          descripcion:
-            "Se analizan dilemas éticos en la profesión informática y el impacto de las decisiones tecnológicas en la sociedad.",
-        },
-        {
-          nombre: "Minería de Datos Aplicada",
-          cupos: 30,
-          inscritos: 26,
-          apertura: "2025-09-05",
-          cierre: "2025-09-25",
-          area: "Investigación",
-          descripcion:
-            "El electivo introduce técnicas de minería de datos, análisis predictivo y uso de herramientas como Weka y Python.",
-        },
-        {
-          nombre: "Ciberseguridad y Protección de Datos",
-          cupos: 25,
-          inscritos: 18,
-          apertura: "2025-10-01",
-          cierre: "2025-10-20",
-          area: "Investigación",
-          descripcion:
-            "Este curso enseña los fundamentos de la seguridad informática, análisis de vulnerabilidades y medidas de protección de datos.",
-        },
-        {
-          nombre: "Diseño UX/UI para Aplicaciones Web",
-          cupos: 40,
-          inscritos: 35,
-          apertura: "2025-11-01",
-          cierre: "2025-11-20",
-          area: "Desarrollo",
-          descripcion:
-            "Se estudian principios de diseño centrado en el usuario, accesibilidad y herramientas modernas para prototipado.",
-        },
-        {
-          nombre: "Gestión del Estrés y Productividad Personal",
-          cupos: 45,
-          inscritos: 39,
-          apertura: "2025-12-01",
-          cierre: "2025-12-15",
-          area: "Habilidades Sociales",
-          descripcion:
-            "El electivo entrega herramientas psicológicas y prácticas de mindfulness para mejorar la concentración y la eficiencia laboral.",
-        },
-      ]; */
-        const electivosIniciales = [
-            {
-            nombre: "Desarrollo Web Avanzado",
-            cupos: 30,
-            inscritos: 22,
-            semestre_minimo: "5 semestre",
-            apertura: "2025-03-01",
-            cierre: "2025-03-15",
-            area: "Desarrollo",
-            descripcion:
-                "Este electivo profundiza en frameworks modernos como React, Node y prácticas DevOps básicas.",
-            },
-            {
-            nombre: "Investigación en Inteligencia Artificial",
-            cupos: 25,
-            inscritos: 20,
-            semestre_minimo: "4 semestre",
-            apertura: "2025-04-10",
-            cierre: "2025-04-30",
-            area: "Investigación",
-            descripcion:
-                "En este electivo se revisan metodologías de investigación aplicadas al machine learning y deep learning.",
-            },
-            {
-            nombre: "Comunicación y Liderazgo",
-            cupos: 40,
-            inscritos: 33,
-            semestre_minimo: "3 semestre",
-            apertura: "2025-05-05",
-            cierre: "2025-05-20",
-            area: "Habilidades Sociales",
-            descripcion:
-                "El curso desarrolla habilidades interpersonales, trabajo en equipo y liderazgo efectivo.",
-            },
-        ];
-        // for (const electivo of electivosIniciales) {
-            // console.log(JSON.stringify(electivo));
-            /* await electivoRepo.save((
-                electivoRepo.create(electivo)
-            ));
-            console.log(`Electivo '${electivo.nombre}' creado exitosamente.`); */
-        // }
+
 
       await electivoRepo.save(electivosIniciales);
       console.log("Electivos insertados correctamente.");
     }
   } catch (error) {
     console.error("Error al insertar electivos:", error);
+  }
+}
+
+*/
+
+/*
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { UsuarioEntity } from "../entity/usuario.entity.js";
+import { CarreraEntity } from "../entity/carrera.entity.js";
+import { encryptPassword } from "../helpers/bcrypt.helper.js";
+import {
+  EXMAPLE_EMAIL_1,
+  EXMAPLE_EMAIL_2,
+  EXMAPLE_EMAIL_3,
+  EXMAPLE_EMAIL_4,
+  EXMAPLE_EMAIL_5,
+  EXMAPLE_EMAIL_6,
+  EXMAPLE_EMAIL_7,
+} from "./configEnv.js";
+
+
+async function createCarreras() {
+  const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+  const count = await carreraRepo.count();
+  if (count > 0) {
+    console.log("Carreras ya existen");
+    return;
+  }
+
+  await carreraRepo.save([
+    {
+      sigla: "IECI",
+      nombre: "Ingeniería de Ejecución en Computación e Informática",
+    },
+    {
+      sigla: "ICINF",
+      nombre: "Ingeniería Civil en Informática",
+    },
+  ]);
+
+  console.log("Carreras creadas correctamente");
+}
+
+async function createUsers() {
+  try {
+    const userRepo = AppDataSource.getRepository(UsuarioEntity);
+    const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+    const count = await userRepo.count();
+    if (count > 0) {
+      console.log("Usuarios ya existen");
+      return;
+    }
+
+    const ieci = await carreraRepo.findOneBy({ sigla: "IECI" });
+    const icinf = await carreraRepo.findOneBy({ sigla: "ICINF" });
+
+    if (!ieci || !icinf) {
+      throw new Error("Carreras no encontradas. Revise initDb.");
+    }
+
+    const users = [
+      {
+        nombre: "Roger Venegas",
+        rut: "4825562-0",
+        email: EXMAPLE_EMAIL_1,
+        clave: await encryptPassword("roger123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Sebastián Pinto",
+        rut: "22849268-K",
+        email: EXMAPLE_EMAIL_2,
+        clave: await encryptPassword("seba123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Carlos Domínguez",
+        rut: "20924430-6",
+        email: EXMAPLE_EMAIL_3,
+        clave: await encryptPassword("carlos123"),
+        rol: "ALUMNO",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 300,
+      },
+      {
+        nombre: "Rodrigo Alarcón",
+        rut: "8347186-7",
+        email: EXMAPLE_EMAIL_4,
+        clave: await encryptPassword("rodri123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Fermín Millanao",
+        rut: "16057069-5",
+        email: EXMAPLE_EMAIL_5,
+        clave: await encryptPassword("fermin123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Andrés Opazo",
+        rut: "4738683-7",
+        email: EXMAPLE_EMAIL_6,
+        clave: await encryptPassword("andres123"),
+        rol: "ALUMNO",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Administrador Sistema",
+        rut: "16117628-1",
+        email: EXMAPLE_EMAIL_7,
+        clave: await encryptPassword("admin123"),
+        rol: "ADMINISTRADOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+    ];
+
+    console.log("Creando usuarios base...");
+
+    for (const user of users) {
+      await userRepo.save(userRepo.create(user));
+      console.log(`Usuario '${user.email}' creado`);
+    }
+  } catch (error) {
+    console.error("Error al crear usuarios base:", error);
+    process.exit(1);
+  }
+}
+
+export async function initDb() {
+  try {
+    await createCarreras();
+    await createUsers();
+    console.log("Inicialización de la base de datos completada");
+  } catch (error) {
+    console.error("Error en initDb:", error);
+  }
+}
+*/
+
+/*
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { UsuarioEntity } from "../entity/usuario.entity.js";
+import { CarreraEntity } from "../entity/carrera.entity.js";
+import { encryptPassword } from "../helpers/bcrypt.helper.js";
+import {
+  EXMAPLE_EMAIL_1,
+  EXMAPLE_EMAIL_2,
+  EXMAPLE_EMAIL_3,
+  EXMAPLE_EMAIL_4,
+  EXMAPLE_EMAIL_5,
+  EXMAPLE_EMAIL_6,
+  EXMAPLE_EMAIL_7,
+} from "./configEnv.js";
+
+export async function createCarreras() {
+  const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+  const count = await carreraRepo.count();
+  if (count > 0) {
+    console.log("Carreras ya existen");
+    return;
+  }
+
+  await carreraRepo.save([
+    {
+      sigla: "IECI",
+      nombre: "Ingeniería de Ejecución en Computación e Informática",
+    },
+    {
+      sigla: "ICINF",
+      nombre: "Ingeniería Civil en Informática",
+    },
+  ]);
+
+  console.log("Carreras creadas correctamente");
+}
+
+export async function createUsers() {
+  try {
+    const userRepo = AppDataSource.getRepository(UsuarioEntity);
+    const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+    const count = await userRepo.count();
+    if (count > 0) {
+      console.log("Usuarios ya existen");
+      return;
+    }
+
+    const ieci = await carreraRepo.findOneBy({ sigla: "IECI" });
+    const icinf = await carreraRepo.findOneBy({ sigla: "ICINF" });
+
+    if (!ieci || !icinf) {
+      throw new Error("Carreras no encontradas. Revise initDb.");
+    }
+
+    const users = [
+      {
+        nombre: "Roger Venegas",
+        rut: "4825562-0",
+        email: EXMAPLE_EMAIL_1,
+        clave: await encryptPassword("roger123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Sebastián Pinto",
+        rut: "22849268-K",
+        email: EXMAPLE_EMAIL_2,
+        clave: await encryptPassword("seba123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Carlos Domínguez",
+        rut: "20924430-6",
+        email: EXMAPLE_EMAIL_3,
+        clave: await encryptPassword("carlos123"),
+        rol: "ALUMNO",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 300,
+      },
+      {
+        nombre: "Rodrigo Alarcón",
+        rut: "8347186-7",
+        email: EXMAPLE_EMAIL_4,
+        clave: await encryptPassword("rodri123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Fermín Millanao",
+        rut: "16057069-5",
+        email: EXMAPLE_EMAIL_5,
+        clave: await encryptPassword("fermin123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Andrés Opazo",
+        rut: "4738683-7",
+        email: EXMAPLE_EMAIL_6,
+        clave: await encryptPassword("andres123"),
+        rol: "ALUMNO",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Administrador Sistema",
+        rut: "16117628-1",
+        email: EXMAPLE_EMAIL_7,
+        clave: await encryptPassword("admin123"),
+        rol: "ADMINISTRADOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+    ];
+
+    console.log("Creando usuarios base...");
+
+    for (const user of users) {
+      await userRepo.save(userRepo.create(user));
+      console.log(`Usuario '${user.email}' creado`);
+    }
+  } catch (error) {
+    console.error("Error al crear usuarios base:", error);
+    process.exit(1);
+  }
+}
+
+export async function initDb() {
+  try {
+    await createCarreras();
+    await createUsers();
+    console.log("Inicialización de la base de datos completada");
+  } catch (error) {
+    console.error("Error en initDb:", error);
+  }
+}
+*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { UsuarioEntity } from "../entity/usuario.entity.js";
+import { CarreraEntity } from "../entity/carrera.entity.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { ElectivoCarreraEntity } from "../entity/electivoCarrera.entity.js";
+import { encryptPassword } from "../helpers/bcrypt.helper.js";
+import {
+  EXMAPLE_EMAIL_1,
+  EXMAPLE_EMAIL_2,
+  EXMAPLE_EMAIL_3,
+  EXMAPLE_EMAIL_4,
+  EXMAPLE_EMAIL_5,
+  EXMAPLE_EMAIL_6,
+  EXMAPLE_EMAIL_7,
+} from "./configEnv.js";
+
+
+export async function createCarreras() {
+  const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+  const count = await carreraRepo.count();
+  if (count > 0) {
+    console.log("Carreras ya existen");
+    return;
+  }
+
+  await carreraRepo.save([
+    {
+      sigla: "IECI",
+      nombre: "Ingeniería de Ejecución en Computación e Informática",
+    },
+    {
+      sigla: "ICINF",
+      nombre: "Ingeniería Civil en Informática",
+    },
+  ]);
+
+  console.log("Carreras creadas correctamente");
+}
+
+export async function createUsers() {
+  try {
+    const userRepo = AppDataSource.getRepository(UsuarioEntity);
+    const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+
+    const count = await userRepo.count();
+    if (count > 0) {
+      console.log("Usuarios ya existen");
+      return;
+    }
+
+    const ieci = await carreraRepo.findOneBy({ sigla: "IECI" });
+    const icinf = await carreraRepo.findOneBy({ sigla: "ICINF" });
+
+    if (!ieci || !icinf) {
+      throw new Error("Carreras no encontradas. Revise initDb.");
+    }
+
+    const users = [
+      {
+        nombre: "Roger Venegas",
+        rut: "4825562-0",
+        email: EXMAPLE_EMAIL_1,
+        clave: await encryptPassword("roger123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Sebastián Pinto",
+        rut: "22849268-K",
+        email: EXMAPLE_EMAIL_2,
+        clave: await encryptPassword("seba123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 0,
+      },
+      {
+        nombre: "Carlos Domínguez",
+        rut: "20924430-6",
+        email: EXMAPLE_EMAIL_3,
+        clave: await encryptPassword("carlos123"),
+        rol: "ESTUDIANTE",
+        generacion: "2023-1",
+        carrera: ieci,
+        creditos: 300,
+      },
+      {
+        nombre: "Rodrigo Alarcón",
+        rut: "8347186-7",
+        email: EXMAPLE_EMAIL_4,
+        clave: await encryptPassword("rodri123"),
+        rol: "JEFE_DE_CARRERA",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Fermín Millanao",
+        rut: "16057069-5",
+        email: EXMAPLE_EMAIL_5,
+        clave: await encryptPassword("fermin123"),
+        rol: "PROFESOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Andrés Opazo",
+        rut: "4738683-7",
+        email: EXMAPLE_EMAIL_6,
+        clave: await encryptPassword("andres123"),
+        rol: "ESTUDIANTE",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+      {
+        nombre: "Administrador Sistema",
+        rut: "16117628-1",
+        email: EXMAPLE_EMAIL_7,
+        clave: await encryptPassword("admin123"),
+        rol: "ADMINISTRADOR",
+        generacion: "2023-1",
+        carrera: icinf,
+        creditos: 0,
+      },
+    ];
+
+    console.log("Creando usuarios base...");
+
+    for (const user of users) {
+      await userRepo.save(userRepo.create(user));
+      console.log(`Usuario '${user.email}' creado`);
+    }
+  } catch (error) {
+    console.error("Error al crear usuarios base:", error);
+    process.exit(1);
+  }
+}
+
+export async function createElectivos() {
+  try {
+    const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+
+    const count = await electivoRepo.count();
+    if (count > 0) {
+      console.log("Electivos ya existen");
+      return;
+    }
+
+    console.log("Creando electivos base...");
+
+    const electivos = [
+      {
+        nombre_electivo: "Desarrollo Web Avanzado",
+        descripcion: "React, Node.js y buenas prácticas backend",
+        cupos: 30,
+        prerequisitos_asignaturas: null,
+        fecha_inicio: new Date("2025-03-01"),
+        fecha_fin: new Date("2025-07-15"),
+        area_electivo: "DESARROLLO",
+        creditos_minimos_aprobados: 200,
+        link_programa: null,
+        estado: "APROBADO",
+        motivo_rechazo: null,
+      },
+      {
+        nombre_electivo: "Introducción a IA",
+        descripcion: "Fundamentos de inteligencia artificial",
+        cupos: 25,
+        prerequisitos_asignaturas: null,
+        fecha_inicio: new Date("2025-03-01"),
+        fecha_fin: new Date("2025-07-15"),
+        area_electivo: "INVESTIGACION",
+        creditos_minimos_aprobados: 180,
+        link_programa: null,
+        estado: "APROBADO",
+        motivo_rechazo: null,
+      },
+    ];
+
+    for (const e of electivos) {
+      await electivoRepo.save(electivoRepo.create(e));
+      console.log(`Electivo '${e.nombre_electivo}' creado`);
+    }
+
+  } catch (error) {
+    console.error("Error al crear electivos:", error);
+  }
+}
+
+export async function initDb() {
+  try {
+    await createCarreras();
+    await createUsers();
+    await createElectivos();
+    console.log("Inicialización de la base de datos completada");
+  } catch (error) {
+    console.error("Error en initDb:", error);
   }
 }

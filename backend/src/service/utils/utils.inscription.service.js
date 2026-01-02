@@ -1,3 +1,4 @@
+/*
 import { AppDataSource } from "../../config/configDb.js";
 import { UserEntity } from "../../entity/user.entity.js";
 import ElectivoEntity from "../../entity/electivo.entity.js";
@@ -23,49 +24,7 @@ export const userExists = async (id) => {
         return false;
     }
 }
-/*
-export const isValidDate = async (electivo, req) => {
-    const today = String(parseUnixDate_ALT(Date.now().toString()));
-    if (today.localeCompare(electivo.apertura) < 0) {
-        return true;
-    }
-    if (today.localeCompare(electivo.cierre) > 0) {
-        return false;
-    }
-    const inscripciones = await countInscripcionesAprobadas(electivo.id);
-    if (electivo.cupos >= inscripciones) {
-        return false;
-    }
-    if (electivo.creditos_requeridos > req.user.creditos) {
-        return false;
-    }
-    if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
-        return false;
-    }
-    if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
-        return false;
-    }
-    return true;
-}*/
 
-/*
-export const electivoExists = async (id, checks = true, req) => {
-    try {
-        const electivo = await electivoRepository.findOne({where: {id: id}});
-        // console.log(electivo);
-        if (!electivo) {
-            return false;
-        }
-        if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-}
-*/
 
 export const inscripcionAlreadyExists = async (id_inscripcion, id_usuario, id_electivo) => {
     try {
@@ -118,4 +77,88 @@ export const countInscripcionesByUser = async (id_usuario) => {
     } catch (error) {
         return 9999;
     }
-}
+}*/
+
+"use strict";
+
+import { AppDataSource } from "../../config/configDb.js";
+import { UsuarioEntity } from "../../entity/usuario.entity.js";
+import { ElectivoEntity } from "../../entity/electivo.entity.js";
+import { PreinscripcionEntity } from "../../entity/preinscripcion.entity.js";
+import { ESTADO_PREINSCRIPCION } from "../../constants/preinscripcion.constants.js";
+
+const userRepository = AppDataSource.getRepository(UsuarioEntity);
+const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
+const inscripcionRepo = AppDataSource.getRepository(PreinscripcionEntity);
+
+
+export const userExists = async (id) => {
+    try {
+        const usuario = await userRepository.findOneBy({ id });
+        return Boolean(usuario);
+    } catch {
+        return false;
+    }
+};
+
+export const electivoExistsAndApproved = async (id_electivo) => {
+    try {
+        const electivo = await electivoRepository.findOneBy({ id_electivo });
+        if (!electivo) return false;
+        return electivo.estado === "APROBADO";
+    } catch {
+        return false;
+    }
+};
+
+export const inscripcionAlreadyExists = async (usuarioId, electivoId) => {
+    try {
+        const count = await inscripcionRepo.count({
+            where: {
+                usuario: { id: usuarioId },
+                electivo: { id_electivo: electivoId },
+            },
+        });
+        return count > 0;
+    } catch {
+        return true;
+    }
+};
+
+export const countInscripciones = async (id_electivo) => {
+    try {
+        return await inscripcionRepo.count({
+            where: {
+                electivo: { id_electivo },
+            },
+        });
+    } catch {
+        return 9999;
+    }
+};
+
+
+export const countInscripcionesAprobadas = async (id_electivo) => {
+    try {
+        return await inscripcionRepo.count({
+            where: {
+                electivo: { id_electivo },
+                estado: ESTADO_PREINSCRIPCION.APROBADA,
+            },
+        });
+    } catch {
+        return 9999;
+    }
+};
+
+export const countInscripcionesByUser = async (id_usuario) => {
+    try {
+        return await inscripcionRepo.count({
+            where: {
+                usuario: { id: id_usuario },
+            },
+        });
+    } catch {
+        return 9999;
+    }
+};

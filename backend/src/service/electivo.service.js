@@ -1,3 +1,4 @@
+/*
 import { breakDownCarreraArray, getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
@@ -231,5 +232,159 @@ export async function RAW_getAllApprovedElectivos() {
     return electivos;
   } catch (error) {
     return BASE_CASE;
+  }
+}*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { ElectivoCarreraEntity } from "../entity/electivoCarrera.entity.js";
+import { CarreraEntity } from "../entity/carrera.entity.js";
+
+
+
+export async function crearElectivoService(data, usuario) {
+  try {
+    const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+    const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+    const electivoCarreraRepo = AppDataSource.getRepository(ElectivoCarreraEntity);
+
+    const electivo = electivoRepo.create({
+      nombre_electivo: data.nombre_electivo,
+      descripcion: data.descripcion,
+      cupos: data.cupos,
+      fecha_inicio: data.fecha_inicio,
+      fecha_fin: data.fecha_fin,
+      area_electivo: data.area_electivo,
+      creditos_minimos_aprobados: data.creditos_minimos_aprobados,
+      profesor: usuario,
+      estado: "PENDIENTE",
+    });
+
+    const electivoGuardado = await electivoRepo.save(electivo);
+
+    for (const idCarrera of data.carreras) {
+      const carrera = await carreraRepo.findOneBy({ id: idCarrera });
+      if (!carrera) continue;
+
+      const relacion = electivoCarreraRepo.create({
+        electivo: electivoGuardado,
+        carrera,
+        cupos: data.cupos,
+      });
+
+      await electivoCarreraRepo.save(relacion);
+    }
+
+    return {
+      error: false,
+      details: "Electivo creado correctamente",
+      data: electivoGuardado,
+    };
+  } catch (error) {
+    return { error: true, details: "Error al crear electivo", errorData: error };
+  }
+}
+
+export async function listarElectivosService(usuario) {
+  try {
+    const repo = AppDataSource.getRepository(ElectivoEntity);
+
+    let where = {};
+    if (usuario.rol === "PROFESOR") {
+      where = { profesor: { id: usuario.id } };
+    }
+    if (usuario.rol === "JEFE_DE_CARRERA") {
+      where = { estado: "PENDIENTE" };
+    }
+    if (usuario.rol === "ESTUDIANTE") {
+      where = { estado: "APROBADO" };
+    }
+
+    const electivos = await repo.find({
+      where,
+      relations: {
+        profesor: true,
+        carreras: { carrera: true },
+        horarios: true,
+      },
+    });
+
+    return { error: false, data: electivos };
+  } catch (error) {
+    return { error: true, details: "Error al listar electivos", errorData: error };
+  }
+}
+
+export async function aprobarElectivoService(id) {
+  try {
+    const repo = AppDataSource.getRepository(ElectivoEntity);
+    const electivo = await repo.findOneBy({ id_electivo: id });
+
+    if (!electivo) {
+      return { error: true, details: "Electivo no encontrado" };
+    }
+
+    electivo.estado = "APROBADO";
+    electivo.motivo_rechazo = null;
+
+    await repo.save(electivo);
+
+    return { error: false, details: "Electivo aprobado", data: electivo };
+  } catch (error) {
+    return { error: true, details: "Error al aprobar electivo", errorData: error };
+  }
+}
+
+export async function rechazarElectivoService(id, motivo) {
+  try {
+    const repo = AppDataSource.getRepository(ElectivoEntity);
+    const electivo = await repo.findOneBy({ id_electivo: id });
+
+    if (!electivo) {
+      return { error: true, details: "Electivo no encontrado" };
+    }
+
+    electivo.estado = "RECHAZADO";
+    electivo.motivo_rechazo = motivo;
+
+    await repo.save(electivo);
+
+    return { error: false, details: "Electivo rechazado", data: electivo };
+  } catch (error) {
+    return { error: true, details: "Error al rechazar electivo", errorData: error };
+  }
+}
+
+export async function editarElectivoService(id, data, usuario) {
+  try {
+    const repo = AppDataSource.getRepository(ElectivoEntity);
+    const electivo = await repo.findOne({
+      where: { id_electivo: id },
+      relations: { profesor: true },
+    });
+
+    if (!electivo) {
+      return { error: true, details: "Electivo no encontrado" };
+    }
+
+    if (electivo.profesor.id !== usuario.id) {
+      return { error: true, details: "No autorizado" };
+    }
+
+    if (electivo.estado !== "RECHAZADO") {
+      return { error: true, details: "Solo se pueden editar electivos rechazados" };
+    }
+
+    Object.assign(electivo, data);
+    electivo.estado = "PENDIENTE";
+    electivo.motivo_rechazo = null;
+
+    await repo.save(electivo);
+
+    return { error: false, details: "Electivo reenviado", data: electivo };
+  } catch (error) {
+    return { error: true, details: "Error al editar electivo", errorData: error };
   }
 }

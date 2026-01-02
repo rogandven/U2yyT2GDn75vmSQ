@@ -1,4 +1,4 @@
-import UserEntity from "../entity/user.entity.js";
+import UserEntity from "../entity/usuario.entity.js";
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 

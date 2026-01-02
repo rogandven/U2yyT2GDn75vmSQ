@@ -22,7 +22,7 @@ import electivoRoutes from "./electivo.routes.js"
 import horarioRoutes from "./horario.routes.js";
 
 // import nowRoutes from "./now.routes.js";
-import inscripcionRoutes from "./inscripcion.routes.js"
+import inscripcionRoutes from "./preinscripcion.routes.js"
 const router = new Router();
 
 router.use("/auth", authRoutes);

@@ -1,8 +1,9 @@
 "use strict";
 import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
-import { isAdminFromService } from "../service/authorization.service.js";
+//import { isAdminFromService } from "../service/authorization.service.js";
 import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
+/*
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
   const result = await isAdminFromService(ALLOWED_ROLES, email);
@@ -18,7 +19,31 @@ const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
     result.error = true;
     return res.status(403).json(getTrueMiddlewareResponse("Acceso denegado", result));
   }
-}
+}*/
+
+const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
+  if (!req.user || !req.user.rol) {
+    return res.status(401).json(
+      getTrueMiddlewareResponse("Usuario no autenticado", { error: true })
+    );
+  }
+
+  if (!ALLOWED_ROLES.includes(req.user.rol)) {
+    return res.status(403).json(
+      getTrueMiddlewareResponse(
+        "Acceso denegado",
+        {
+          error: true,
+          details: `Solo se permiten los siguientes roles: ${ALLOWED_ROLES.join(", ")}`
+        }
+      )
+    );
+  }
+
+  next();
+};
+
+
 
 export async function isAdmin(req, res, next) {
   return await isAdminHelper(req, res, next, VALID_ADMIN_ROLES);
@@ -29,8 +54,9 @@ export async function isAdminOrProfesor(req, res, next) {
 }
 
 export async function isJefeDeCarrera(req, res, next) {
-  return await isAdminHelper(req, res, next, [CAREER_HEAD_ROLE]);
+  return await isAdminHelper(req, res, next, [CAREER_HEAD_ROLE, "ADMINISTRADOR"]);
 }
+
 
 export async function isJefe(req, res, next) {
   return await isJefeDeCarrera(req, res, next);
@@ -41,6 +67,9 @@ export function authorizeRoles(rolesPermitidos) {
     return await isAdminHelper(req, res, next, rolesPermitidos);
   };
 }
+
+
+
 
 /*
 export function authorizeRoles(rolesPermitidos) {

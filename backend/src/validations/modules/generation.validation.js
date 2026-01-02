@@ -1,3 +1,4 @@
+/*
 import { MAX_GENERATION, MAX_SEMESTER, MIN_GENERATION, MIN_SEMESTER } from "../../constants/generation.constants.js";
 import { MIN_FULLNAME, MAX_FULLNAME } from "../../constants/user.constants.js";
 import { GENERATION_REGEX } from "../../constants/user.constants.js";
@@ -44,3 +45,33 @@ export const validateGeneration = (value, helpers) => {
 }
 
 export default validateGeneration;
+*/
+
+"use strict";
+
+import Joi from "joi";
+import { MIN_GENERATION, MAX_GENERATION, MIN_SEMESTER, MAX_SEMESTER } from "../../constants/generation.constants.js";
+
+export const generationValidation = Joi.object({
+    year: Joi.number()
+        .integer()
+        .min(MIN_GENERATION)
+        .max(MAX_GENERATION)
+        .required()
+        .messages({
+            "number.base": "El año debe ser numérico",
+            "number.min": "Año fuera de rango",
+            "number.max": "Año fuera de rango",
+        }),
+
+    semester: Joi.number()
+        .integer()
+        .min(MIN_SEMESTER)
+        .max(MAX_SEMESTER)
+        .required()
+        .messages({
+            "number.base": "El semestre debe ser numérico",
+            "number.min": "Semestre inválido",
+            "number.max": "Semestre inválido",
+        }),
+});

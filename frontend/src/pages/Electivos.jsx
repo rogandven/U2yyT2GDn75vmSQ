@@ -7,10 +7,17 @@ import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTabl
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA, ESTADOS_VALIDOS } from "../constants/ElectivoConstants.jsx";
+/*
 import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
 import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
+*/
+import { useCreateElectivo } from "../hooks/electivos/useCreateElectivo.jsx";
+import { useEditElectivo } from "../hooks/electivos/useEditElectivo.jsx";
+import { useDeleteElectivo } from "../hooks/electivos/useDeleteElectivo.jsx";
+import { useChangeElectivoStatus } from "../hooks/electivos/useChangeElectivoStatus.jsx";
+
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";

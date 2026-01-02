@@ -1,241 +1,77 @@
-
 "use strict";
 
 import { EntitySchema } from "typeorm";
-import { obtenerEstadosValidosComoArray } from "../helpers/electivo.helper.js";
-import { arrayDeStringAArrayDeSQL } from "../helpers/sql.helpers.js";
-/* export enum EstadoElectivo{
-    PENDIENTE = 'pendiente'
-}*/ 
 
-
-export const ARRAY_ESTADOS_VALIDOS = obtenerEstadosValidosComoArray();
-
-/*
 export const ElectivoEntity = new EntitySchema({
     name: "Electivo",
-    tableName: "Electivo",
+    tableName: "electivos",
     columns: {
-        id: {
+        id_electivo: {
             type: Number,
             primary: true,
             generated: true,
         },
-        nombre: {
+        nombre_electivo: {
             type: String,
-            unique: false,
-            nullable: false,
         },
-        profesor: {
-            type: String,
-            unique: false,
-            nullable: false,
+        descripcion: {
+            type: "text",
         },
         cupos: {
             type: Number,
-            unique: false,
-            nullable: false,
         },
-        creditos: {
-            type: Number,
-            unique: false,
-            nullable: false
+        prerequisitos_asignaturas: {
+            type: "text",
+            nullable: true,
         },
-        descripcion: {
+        fecha_inicio: {
+            type: "date",
+        },
+        fecha_fin: {
+            type: "date",
+        },
+        area_electivo: {
             type: String,
-            nullable: false,
+        },
+        creditos_minimos_aprobados: {
+            type: Number,
+        },
+        link_programa: {
+            type: String,
+            nullable: true,
         },
         estado: {
             type: String,
-            unique: false,
-            nullable: false,
+            default: "PENDIENTE", 
+        },
+        motivo_rechazo: {
+            type: "text",
+            nullable: true, 
         },
     },
-    checks: [
-        { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
-    ],
-});
-
-export default ElectivoEntity;
-
-/*
-import { EntitySchema } from "typeorm";
-
-export const ElectivoEntity=new EntitySchema({
-  name: "Electivo",
-  tableName: "electivos",
-  columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
+    relations: {
+        profesor: {
+            type: "many-to-one",
+            target: "Usuario",
+            joinColumn: { name: "id_profesor" },
+            onDelete: "CASCADE",
+        },
+        carreras: {
+            type: "one-to-many",
+            target: "ElectivoCarrera",
+            inverseSide: "electivo",
+        },
+        preinscripciones: {
+            type: "one-to-many",
+            target: "Preinscripcion",
+            inverseSide: "electivo",
+        },
+        horarios: {
+            type: "one-to-many",
+            target: "Horario",
+            inverseSide: "electivo",
+        },
     },
-    nombre: {
-      type: "varchar",
-      length: 255,
-    },
-    cupos: {
-      type: "int",
-    },
-    inscritos: {
-      type: "int",
-      default: 0,
-    },
-    apertura: {
-      type: "date",
-    },
-    cierre: {
-      type: "date",
-    },
-    area: {
-      type: "varchar",
-      length: 100,
-    },
-    descripcion: {
-      type: "text",
-    },
-  },
-});
-
-export default ElectivoEntity;
-*/
-/*
-"use strict";
-
-import { EntitySchema } from "typeorm";
-
-export const ElectivoEntity = new EntitySchema({
-  name: "Electivo",
-  tableName: "electivos",
-
-  columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
-    },
-
-    nombre: {
-      type: "varchar",
-      length: 255,
-      nullable: false,
-    },
-
-    descripcion: {
-      type: "text",
-      nullable: false,
-    },
-
-    cupos: {
-      type: "int",
-      nullable: false,
-    },
-
-    inscritos: {
-      type: "int",
-      default: 0,
-    },
-
-    apertura: {
-      type: "date",
-      nullable: false,
-    },
-
-    cierre: {
-      type: "date",
-      nullable: false,
-    },
-
-    area: {
-      type: "varchar",
-      length: 100,
-      nullable: false,
-    },
-
-    //campos del mer demas compas opcional
-    cupos_por_carrera: {
-      type: "int",
-      nullable: true,
-    },
-
-    creditos_requeridos: {
-      type: "int",
-      nullable: true,
-    },
-
-    semestre_minimo: {
-      type: "int",
-      nullable: true,
-    },
-
-    estado: {
-      type: "varchar",
-      length: 50,
-      nullable: true,
-    },
-  },
-
-  relations: {},
-});
-
-export default ElectivoEntity;
-*/
-// import { EntitySchema } from "typeorm";
-
-export const ElectivoEntity = new EntitySchema({
-  name: "Electivo",
-  tableName: "electivos",
-  columns: {
-    id: {
-      primary: true,
-      type: "int",
-      generated: true,
-    },
-    nombre: {
-      type: "varchar",
-      length: 255,
-    }, 
-    descripcion: {
-      type: "text",
-    },
-    cupos: {
-      type: "int",
-    },
-    creditos_requeridos:{
-      type: "int",
-      default: 0,
-      nullable: false,
-    },
-    semestre_minimo:{
-      type: "varchar",
-      length: 10,
-    },
-    estado:{
-      type: String,
-      default: true,
-    },
-    apertura: {
-      type: "date",
-    },
-    cierre: {
-      type: "date",
-    },
-    area: {
-      type: "varchar",
-      length: 100,
-    },
-    id_profesor: {
-      type: "int",
-      nullable: false,
-    },
-    carreras: {
-      type: String,
-      nullable: false,
-    },
-  },
-  checks: [
-      { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
-  ],
 });
 
 export default ElectivoEntity;

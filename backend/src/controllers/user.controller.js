@@ -1,3 +1,4 @@
+/*
 "use strict";
 import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById, RAW_getAllStudents } from "../service/user.service.js";
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
@@ -261,4 +262,188 @@ export const getAllStudentNames = async (req, res) => {
   } catch (error) {
     return res.status(200).json({lista: BASE_CASE});
   }
+}*/
+
+"use strict";
+
+import {
+  getUsersFromService,
+  getUserByIdFromService,
+  updateUserByIdFromService,
+  deleteUserByIdFromService,
+  registerUserFromService,
+  loginUserFromService,
+  logoutUserFromService,
+  RAW_getAllStudents
+} from "../service/user.service.js";
+
+import {
+  getControllerResult_NEW,
+  fullNameProcessor,
+  robustErrorMessage
+} from "./utils/utils.controller.js";
+
+import { idValidation } from "../validations/modules/id.validation.js";
+import {
+  updateValidation,
+  integrityValidation,
+  createValidation,
+  loginValidation
+} from "../validations/user.validation.js";
+
+import {
+  ADMIN_ROLE,
+  CAREER_HEAD_ROLE,
+  STUDENT_ROLE,
+  TEACHER_ROLE
+} from "../constants/user.constants.js";
+
+import { AppDataSource } from "../config/configDb.js";
+import { CarreraEntity } from "../entity/carrera.entity.js";
+import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
+
+export async function getUsers(req, res) {
+  const users = await getUsersFromService();
+  if (users.error) {
+    return res.status(500).json(getControllerResult_NEW("Error en el servidor", users));
+  }
+  if (users.length <= 0) {
+    return res.status(404).json(getControllerResult_NEW("No hay usuarios", users));
+  }
+  return res.status(200).json(getControllerResult_NEW("Usuarios encontrados con éxito", users));
 }
+
+export async function getUserById(req, res) {
+  const { id } = req.params;
+
+  const result = idValidation.validate({ id });
+  if (result.error) {
+    return res.status(400).json(getControllerResult_NEW(result.error.message));
+  }
+
+  const user = await getUserByIdFromService(id);
+  if (!user || user.error) {
+    return res.status(404).json(getControllerResult_NEW("Usuario no encontrado"));
+  }
+
+  return res.status(200).json(getControllerResult_NEW("Usuario encontrado", user));
+}
+
+export async function updateUserById(req, res) {
+  const { id } = req.params;
+  const newData = req.body;
+
+  if (id === req.user.id) {
+    return res.status(403).json(getControllerResult_NEW("No puede actualizarse a sí mismo"));
+  }
+
+  if (newData.fullname) {
+    newData.fullname = fullNameProcessor(newData.fullname);
+  }
+
+  if (newData.carrera) {
+    const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+    const carrera = await carreraRepo.findOneBy({ id: newData.carrera });
+
+    if (!carrera) {
+      return res.status(400).json(getControllerResult_NEW("Carrera inválida"));
+    }
+
+    newData.carrera = carrera;
+  }
+
+  if (newData.role) {
+    if (!getAllowedRolesToTamper(req.user.role).includes(newData.role)) {
+      return res.status(403).json(getControllerResult_NEW("No autorizado para asignar ese rol"));
+    }
+  }
+
+  const validation = updateValidation.validate(newData);
+  if (validation.error) {
+    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validation.error.message)));
+  }
+
+  const updated = await updateUserByIdFromService(id, newData, req.user.role, req.user.carrera);
+  return res.status(200).json(getControllerResult_NEW("Usuario actualizado", updated));
+}
+
+
+export async function deleteUserById(req, res) {
+  const { id } = req.params;
+
+  if (id === req.user.id) {
+    return res.status(400).json(getControllerResult_NEW("No puede eliminarse a sí mismo"));
+  }
+
+  const deleted = await deleteUserByIdFromService(id, req.user.role, req.user.carrera);
+  return res.status(200).json(getControllerResult_NEW("Usuario eliminado", deleted));
+}
+
+
+export async function getProfile(req, res) {
+  const user = await getUserByIdFromService(req.user.id);
+  return res.status(200).json(getControllerResult_NEW("Perfil obtenido", user));
+}
+
+export async function registerPrivate(req, res) {
+  const body = req.body;
+
+  body.fullname = fullNameProcessor(body.fullname);
+
+  if (!getAllowedRolesToTamper(req.user.role).includes(body.role)) {
+    return res.status(403).json(getControllerResult_NEW("Rol no permitido"));
+  }
+
+  const carreraRepo = AppDataSource.getRepository(CarreraEntity);
+  const carrera = await carreraRepo.findOneBy({ id: body.carrera });
+
+  if (!carrera) {
+    return res.status(400).json(getControllerResult_NEW("Carrera inválida"));
+  }
+
+  body.carrera = carrera;
+
+  const validation = createValidation.validate(body);
+  if (validation.error) {
+    return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validation.error.message)));
+  }
+
+  const user = await registerUserFromService(body);
+  return res.status(201).json(getControllerResult_NEW("Usuario registrado", user));
+}
+
+
+export async function registerPublic(req, res) {
+  req.body.role = STUDENT_ROLE;
+  req.body.creditos = 0;
+  return await registerPrivate(req, res);
+}
+
+
+export async function login(req, res) {
+  const validation = loginValidation.validate(req.body);
+  if (validation.error) {
+    return res.status(400).json(getControllerResult_NEW(validation.error.message));
+  }
+
+  const result = await loginUserFromService(req.body);
+  return res.status(200).json(getControllerResult_NEW("Sesión iniciada", result));
+}
+
+
+export async function logout(req, res) {
+  logoutUserFromService(res.clearCookie);
+  return res.status(200).json(getControllerResult_NEW("Sesión cerrada"));
+}
+
+
+export const getUserNameById = async (id) => {
+  const user = await RAW_getUserById(id);
+  return user?.fullname || "USUARIO";
+};
+
+export const getAllStudentNames = async (req, res) => {
+  const users = await RAW_getAllStudents();
+  const names = users.map(u => `${u.id}. ${(u.fullname || u.username).toUpperCase()}`);
+  return res.status(200).json({ lista: names });
+};

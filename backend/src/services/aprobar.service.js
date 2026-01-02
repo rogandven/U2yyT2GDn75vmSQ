@@ -1,3 +1,4 @@
+/*
 import { AppDataSource } from "../config/configDb.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 // import electivoRepository from "../controllers/electivo.controller.js";
@@ -85,4 +86,46 @@ export async function aprobarElectivoById_Electivo(id_electivo) {
 
 export async function rechazarElectivoById_Electivo(id_electivo) {
   return await cambiarEstadoHelper(id_electivo, ESTADOS_VALIDOS.RECHAZADO);
+}*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
+
+const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+
+export async function aprobarElectivo(id_electivo) {
+    const electivo = await electivoRepo.findOneBy({ id_electivo });
+
+    if (!electivo) {
+        throw new Error("Electivo no encontrado");
+    }
+
+    if (electivo.estado === ESTADOS_VALIDOS.APROBADO) {
+        throw new Error("El electivo ya está aprobado");
+    }
+
+    electivo.estado = ESTADOS_VALIDOS.APROBADO;
+    electivo.motivo_rechazo = null;
+
+    return await electivoRepo.save(electivo);
+}
+
+export async function rechazarElectivo(id_electivo, motivo_rechazo) {
+    if (!motivo_rechazo) {
+        throw new Error("El motivo de rechazo es obligatorio");
+    }
+
+    const electivo = await electivoRepo.findOneBy({ id_electivo });
+
+    if (!electivo) {
+        throw new Error("Electivo no encontrado");
+    }
+
+    electivo.estado = ESTADOS_VALIDOS.RECHAZADO;
+    electivo.motivo_rechazo = motivo_rechazo;
+
+    return await electivoRepo.save(electivo);
 }

@@ -1,9 +1,10 @@
+/*
 "use strict";
 
 import { Router } from "express";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor } from "../middleware/authorization.middleware.js"; 
-import { private_getInscripciones, private_getInscripcionesByUser, private_getInscripcion, private_getInscripcionesSinAprobar, private_createInscripcion, private_updateInscripcion, private_deleteInscripcion, private_approveInscripcion, private_rejectInscripcion, public_getInscripcion, public_getInscripcionesByUser, public_createInscripcion, public_updateInscripcion, public_deleteInscripcion, shallDisplayWarning } from "../controllers/inscripcion.controller.js";
+import { private_getInscripciones, private_getInscripcionesByUser, private_getInscripcion, private_getInscripcionesSinAprobar, private_createInscripcion, private_updateInscripcion, private_deleteInscripcion, private_approveInscripcion, private_rejectInscripcion, public_getInscripcion, public_getInscripcionesByUser, public_createInscripcion, public_updateInscripcion, public_deleteInscripcion, shallDisplayWarning } from "../controllers/preinscripcion.controller.js";
 const router = Router();
 
 router.get("/admin/", isAuthenticated, isAdminOrProfesor, private_getInscripciones);
@@ -23,5 +24,26 @@ router.patch("/:id", isAuthenticated, public_updateInscripcion);
 router.delete("/:id", isAuthenticated, public_deleteInscripcion);
 
 router.get("/sdw/", isAuthenticated, shallDisplayWarning);
+
+export default router;
+*/
+
+"use strict";
+
+import { Router } from "express";
+import {
+  crearPreinscripcion,
+  getPreinscripcionesByUser,
+} from "../controllers/preinscripcion.controller.js";
+
+import { authenticateJwt } from "../middleware/authentication.middleware.js";
+
+const router = Router();
+
+// Alumno crea preinscripción
+router.post("/", authenticateJwt, crearPreinscripcion);
+
+// Alumno ve sus preinscripciones
+router.get("/mis-preinscripciones", authenticateJwt, getPreinscripcionesByUser);
 
 export default router;

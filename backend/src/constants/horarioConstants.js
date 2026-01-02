@@ -1,3 +1,4 @@
+/*
 export const HORARIO_PATTERN=/^([0-9]{2})\:([0-9]{2})$/;
 export const SALA_PATTERN=/^[a-zA-Z0-9_ ]+$/;
 export const MIN_STRING=3;
@@ -10,3 +11,23 @@ export const CAMPOS_ADICIONALES="No se permiten campos adicionales.";
 // export const DIAS_SEMANA=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 export const DIAS_SEMANA=["lunes","martes","miercoles","jueves","viernes","sabado"];
 export const HORARIO_NO_ENCONTRADO = "Horario no encontrado";
+*/
+
+
+export const HORARIO_PATTERN = /^([0-9]{2})\:([0-9]{2})$/;
+
+
+export const DIAS_SEMANA = [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado",
+];
+
+export const DIA_OBLIGATORIO = "El día es obligatorio.";
+export const HORA_INICIO_OBLIGATORIA = "La hora de inicio es obligatoria.";
+export const HORA_TERMINO_OBLIGATORIA = "La hora de término es obligatoria.";
+
+export const HORARIO_NO_ENCONTRADO = "Horario no encontrado.";

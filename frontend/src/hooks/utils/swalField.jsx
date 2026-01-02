@@ -1,3 +1,4 @@
+/*
 export const createSwalField = (inputId, label, value) => {
     return `
         <div class="input m-1 form-group">
@@ -22,4 +23,42 @@ export const createSwalDateField = (inputId, label, value) => {
         <input type="date" id="swal2-input${Number(inputId)}" value="${value || getToday()}" />
     </label>
     `
-}
+}*/
+
+
+export const createSwalField = (inputId, label, value) => {
+  return `
+    <div class="input m-1 form-group">
+      <label for="swal2-input${inputId}" class="label">${label}</label>  
+      <input 
+        id="swal2-input${inputId}" 
+        placeholder="${label}" 
+        value="${value ?? ""}">
+    </div>
+  `;
+};
+
+export const createSwalTextarea = (inputId, label, value) => {
+  return `
+    <div class="input m-1 form-group">
+      <label for="swal2-input${inputId}" class="label">${label}</label>  
+      <textarea 
+        id="swal2-input${inputId}" 
+        rows="5"
+        placeholder="${label}">${value ?? ""}</textarea>
+    </div>
+  `;
+};
+
+export const createSwalDateField = (inputId, label, value = "") => {
+  return `
+    <label class="input m-1">
+      <span class="label">${label}</span>
+      <input 
+        type="date" 
+        id="swal2-input${inputId}" 
+        value="${value ?? ""}" />
+    </label>
+  `;
+};
+

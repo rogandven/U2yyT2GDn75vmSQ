@@ -1,4 +1,4 @@
-
+/*
 "use strict";
 import Joi from "joi";
 import { timeValidationFunction } from "./modules/timestamp.validation.js";
@@ -189,3 +189,110 @@ export const dateCreationValidation = Joi.object({
       "date.min": "La fecha de cierre especificada ya pasó",
     }),
 }).unknown(true);
+*/
+
+"use strict";
+import Joi from "joi";
+
+//Estados válidos según tu entity actual
+const ESTADOS_ELECTIVO = ["PENDIENTE", "APROBADO", "RECHAZADO"];
+
+//si quieres permitir que profesor cree electivo siempre PENDIENTE,
+//en createValidation no exigimos "estado" (lo pone el backend).
+export const electivoIntegrityValidation = Joi.object({
+  id_electivo: Joi.number().integer().min(1),
+  nombre_electivo: Joi.string().min(3).max(120).messages({
+    "string.base": "El nombre del electivo debe ser texto.",
+    "string.min": "El nombre del electivo debe tener al menos 3 caracteres.",
+    "string.max": "El nombre del electivo no puede exceder 120 caracteres.",
+  }),
+  descripcion: Joi.string().min(5).messages({
+    "string.base": "La descripción debe ser texto.",
+    "string.min": "La descripción debe tener al menos 5 caracteres.",
+  }),
+  cupos: Joi.number().integer().min(1).max(500).messages({
+    "number.base": "Los cupos deben ser un número.",
+    "number.integer": "Los cupos deben ser un entero.",
+    "number.min": "Los cupos deben ser al menos 1.",
+    "number.max": "Los cupos no pueden superar 500.",
+  }),
+  prerequisitos_asignaturas: Joi.string().allow(null, ""),
+  fecha_inicio: Joi.date().messages({
+    "date.base": "La fecha de inicio debe tener formato válido (AAAA-MM-DD).",
+  }),
+  fecha_fin: Joi.date().greater(Joi.ref("fecha_inicio")).messages({
+    "date.base": "La fecha de fin debe tener formato válido (AAAA-MM-DD).",
+    "date.greater": "La fecha de fin debe ser posterior a la fecha de inicio.",
+    "any.greater": "La fecha de fin debe ser posterior a la fecha de inicio.",
+  }),
+  area_electivo: Joi.string().min(3).max(80),
+  creditos_minimos_aprobados: Joi.number().integer().min(0).max(1000),
+  link_programa: Joi.string().uri().allow(null, "").messages({
+    "string.uri": "El link_programa debe ser una URL válida.",
+  }),
+  estado: Joi.string().valid(...ESTADOS_ELECTIVO),
+  motivo_rechazo: Joi.string().allow(null, ""),
+  carreras: Joi.array().items(Joi.number().integer().min(1)).messages({
+    "array.base": "Carreras debe ser un arreglo de IDs.",
+  }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
+
+export const createElectivoValidation = Joi.object({
+  nombre_electivo: Joi.any().required().messages({
+    "any.required": "El nombre del electivo es obligatorio.",
+  }),
+  descripcion: Joi.any().required().messages({
+    "any.required": "La descripción es obligatoria.",
+  }),
+  cupos: Joi.any().required().messages({
+    "any.required": "Los cupos son obligatorios.",
+  }),
+  fecha_inicio: Joi.any().required().messages({
+    "any.required": "La fecha de inicio es obligatoria.",
+  }),
+  fecha_fin: Joi.any().required().messages({
+    "any.required": "La fecha de fin es obligatoria.",
+  }),
+  area_electivo: Joi.any().required().messages({
+    "any.required": "El área del electivo es obligatoria.",
+  }),
+  creditos_minimos_aprobados: Joi.any().required().messages({
+    "any.required": "Los créditos mínimos aprobados son obligatorios.",
+  }),
+  carreras: Joi.any().required().messages({
+    "any.required": "Debe indicar al menos una carrera (IDs).",
+  }),
+  prerequisitos_asignaturas: Joi.any(),
+  link_programa: Joi.any(),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
+
+export const updateElectivoValidation = Joi.object({
+  nombre_electivo: Joi.any(),
+  descripcion: Joi.any(),
+  cupos: Joi.any(),
+  prerequisitos_asignaturas: Joi.any(),
+  fecha_inicio: Joi.any(),
+  fecha_fin: Joi.any(),
+  area_electivo: Joi.any(),
+  creditos_minimos_aprobados: Joi.any(),
+  link_programa: Joi.any(),
+})
+  .min(1)
+  .unknown(false)
+  .messages({
+    "object.min": "Debe proporcionar al menos un campo para actualizar.",
+    "object.unknown": "No se permiten campos adicionales",
+  });
+
+export const rejectElectivoValidation = Joi.object({
+  motivo_rechazo: Joi.string().min(3).required().messages({
+    "any.required": "El motivo de rechazo es obligatorio.",
+    "string.min": "El motivo de rechazo debe tener al menos 3 caracteres.",
+  }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });

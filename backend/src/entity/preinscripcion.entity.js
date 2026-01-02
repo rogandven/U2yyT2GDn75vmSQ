@@ -2,26 +2,27 @@
 
 import { EntitySchema } from "typeorm";
 
-export const HorarioEntity = new EntitySchema({
-    name: "Horario",
-    tableName: "horarios",
+export const PreinscripcionEntity = new EntitySchema({
+    name: "Preinscripcion",
+    tableName: "preinscripciones",
     columns: {
-        id_horario: {
+        id: {
             type: Number,
             primary: true,
             generated: true,
         },
-        hora_inicio: {
+        estado: {
             type: String,
-        },
-        hora_termino: {
-            type: String,
-        },
-        dia: {
-            type: String,
+            default: "PENDIENTE",
         },
     },
     relations: {
+        usuario: {
+            type: "many-to-one",
+            target: "Usuario",
+            joinColumn: { name: "id_usuario" },
+            onDelete: "CASCADE",
+        },
         electivo: {
             type: "many-to-one",
             target: "Electivo",
@@ -31,4 +32,5 @@ export const HorarioEntity = new EntitySchema({
     },
 });
 
-export default HorarioEntity;
+export default PreinscripcionEntity;
+

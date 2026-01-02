@@ -1,3 +1,4 @@
+/*
 import Swal from "sweetalert2";
 import { deleteElectivo } from "@services/electivo.service";
 import { fireDynamicSwal } from "../utils/dynamicSwal";
@@ -65,3 +66,43 @@ export const useDeleteElectivo = (fetchElectivos) => {
 };
 
 export default useDeleteElectivo;
+*/
+
+import Swal from "sweetalert2";
+import { deleteElectivo } from "@services/electivo.service";
+import { fireDynamicSwal } from "../utils/dynamicSwal";
+
+export const useDeleteElectivo = (fetchElectivos) => {
+  const handleDeleteElectivo = async (electivo, isAdmin) => {
+
+    if (!isAdmin) {
+      return fireDynamicSwal(403, null, "Acceso denegado");
+    }
+
+    if (electivo.estado !== "PENDIENTE") {
+      return fireDynamicSwal(
+        400,
+        null,
+        "Solo se pueden eliminar electivos en estado PENDIENTE"
+      );
+    }
+
+    const result = await Swal.fire({
+      title: "¿Eliminar electivo?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      theme: "dark",
+    });
+
+    if (!result.isConfirmed) return;
+
+    const response = await deleteElectivo(electivo.id_electivo);
+
+    await fetchElectivos();
+    fireDynamicSwal(response.status, null, response.message);
+  };
+
+  return { handleDeleteElectivo };
+};

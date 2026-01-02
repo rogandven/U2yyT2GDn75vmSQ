@@ -15,7 +15,7 @@ id_electivo: {
     type: ELECTIVO_ID_TYPE,
 }, */
 
-
+/*
 "use strict";
 import Joi from "joi";
 import { idValidationFunction } from "./modules/id.validation.js";
@@ -76,4 +76,42 @@ export const findValidation = Joi.object({
 
 export const warningValidation = Joi.object({
     id_electivo: Joi.number().required(),
-}).unknown(false);
+}).unknown(false);*/
+
+"use strict";
+import Joi from "joi";
+
+const ESTADOS_PREINSCRIPCION = ["PENDIENTE", "APROBADA", "RECHAZADA"];
+
+export const preinscripcionIntegrityValidation = Joi.object({
+  id: Joi.number().integer().min(1),
+  estado: Joi.string().valid(...ESTADOS_PREINSCRIPCION).messages({
+    "string.base": "El estado debe ser texto.",
+    "any.only": `El estado debe ser uno de: ${ESTADOS_PREINSCRIPCION.join(", ")}`,
+  }),
+  id_usuario: Joi.number().integer().min(1),
+  id_electivo: Joi.number().integer().min(1),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
+
+//crear preinscripción: el alumno manda el id_electivo.
+//el backend pone usuario desde req.user y estado por defecto.
+export const createPreinscripcionValidation = Joi.object({
+  id_electivo: Joi.number().integer().min(1).required().messages({
+    "any.required": "El id_electivo es obligatorio.",
+    "number.base": "El id_electivo debe ser un número.",
+  }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
+
+//si después agregas aprobación/rechazo de preinscripción:
+export const updatePreinscripcionEstadoValidation = Joi.object({
+  estado: Joi.string().valid(...ESTADOS_PREINSCRIPCION).required().messages({
+    "any.required": "El estado es obligatorio.",
+    "any.only": `El estado debe ser uno de: ${ESTADOS_PREINSCRIPCION.join(", ")}`,
+  }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });

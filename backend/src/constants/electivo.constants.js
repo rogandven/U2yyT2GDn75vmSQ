@@ -1,3 +1,4 @@
+/*
 export const ESTADOS_VALIDOS = {
     PENDIENTE: 'pendiente',
     APROBADO: 'aprobado',
@@ -31,3 +32,16 @@ export const DeleteNotification = (electivoData, deletedBy) => {
         ${new Date().getFullYear()}`,
     }
 };
+*/
+
+
+
+export const ESTADO_ELECTIVO = {
+    PENDIENTE: "PENDIENTE",   
+    APROBADO: "APROBADO",     
+    RECHAZADO: "RECHAZADO",   
+};
+
+
+export const MIN_CUPOS = 1;
+export const MAX_CUPOS = 500;

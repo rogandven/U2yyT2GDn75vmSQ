@@ -1,3 +1,4 @@
+/*
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
@@ -213,4 +214,45 @@ export async function deleteInscripcion(inscripcion) {
 
 export async function inscripcionAlreadyExists(id_inscripcion, id_usuario, id_electivo) {
   return await IAE_helper(id_inscripcion, id_usuario, id_electivo);
+}*/
+
+"use strict";
+
+import { AppDataSource } from "../config/configDb.js";
+import { PreinscripcionEntity } from "../entity/preinscripcion.entity.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+
+export async function crearPreinscripcionService(idElectivo, usuario) {
+  try {
+    const repo = AppDataSource.getRepository(PreinscripcionEntity);
+    const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+
+    const electivo = await electivoRepo.findOneBy({ id_electivo: idElectivo });
+    if (!electivo || electivo.estado !== "APROBADO") {
+      return { error: true, details: "Electivo no disponible" };
+    }
+
+    const existe = await repo.findOne({
+      where: {
+        usuario: { id: usuario.id },
+        electivo: { id_electivo: idElectivo },
+      },
+    });
+
+    if (existe) {
+      return { error: true, details: "Ya estás preinscrito" };
+    }
+
+    const pre = repo.create({
+      usuario,
+      electivo,
+      estado: "PENDIENTE",
+    });
+
+    await repo.save(pre);
+
+    return { error: false, details: "Preinscripción creada", data: pre };
+  } catch (error) {
+    return { error: true, details: "Error en preinscripción", errorData: error };
+  }
 }

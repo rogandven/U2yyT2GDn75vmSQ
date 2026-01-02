@@ -1,3 +1,4 @@
+/*
 "use strict";
 import { assignationValidation, integrityValidation, updateValidation, validateHourBusiness, validateHourIntegrity } from "../validations/horario.validation.js";
 import { handleSuccess, handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
@@ -62,18 +63,7 @@ const joiValidationHelper = (validationFunction, integrityFunction, body) => {
     return null;
 }
 
-/*
-const electivoExistanceCheckerHelper = async (id_electivo) => {
-    const electivoReallyExists = (await electivoExists(id_electivo));
 
-    if (electivoReallyExists === null) {
-      return {message: String("Error interno del servidor"), status: 500};
-    }
-    if (electivoReallyExists === false) {
-      return {message: String("Electivo no encontrado"), status: 400};
-    }
-    return null;
-}*/
 
 export async function asignarHorario(req, res) {
   try {
@@ -266,6 +256,138 @@ export async function deleteHorario(req, res) {
     return handleErrorServer(res, 500, "Error al eliminar el horario", error.message);
   }
 }
+*/
 
+"use strict";
 
+import { AppDataSource } from "../config/configDb.js";
+import { HorarioEntity } from "../entity/horario.entity.js";
+import { ElectivoEntity } from "../entity/electivo.entity.js";
+import { getControllerResult_NEW } from "./utils/utils.controller.js";
+
+/**
+ * Asignar (crear) un horario a un electivo
+ * POST /horario/:id_electivo
+ */
+export async function asignarHorario(req, res) {
+  try {
+    const { id_electivo } = req.params;
+    const { dia, hora_inicio, hora_termino, sala } = req.body;
+
+    const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+    const horarioRepo = AppDataSource.getRepository(HorarioEntity);
+
+    const electivo = await electivoRepo.findOneBy({ id_electivo });
+    if (!electivo) {
+      return res.status(404).json({ message: "Electivo no encontrado" });
+    }
+
+    const horario = horarioRepo.create({
+      dia,
+      hora_inicio,
+      hora_termino,
+      sala,
+      electivo,
+    });
+
+    await horarioRepo.save(horario);
+
+    return getControllerResult_NEW(
+      res,
+      201,
+      "Horario asignado correctamente",
+      horario
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al asignar horario" });
+  }
+}
+
+/**
+ * Obtener horarios (todos o por electivo)
+ * GET /horario
+ * GET /horario/:id_electivo
+ */
+export async function getHorarios(req, res) {
+  try {
+    const { id_electivo } = req.params;
+    const horarioRepo = AppDataSource.getRepository(HorarioEntity);
+
+    const where = id_electivo
+      ? { electivo: { id_electivo } }
+      : {};
+
+    const horarios = await horarioRepo.find({
+      where,
+      relations: { electivo: true },
+    });
+
+    return getControllerResult_NEW(
+      res,
+      200,
+      "Horarios obtenidos correctamente",
+      horarios
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al obtener horarios" });
+  }
+}
+
+/**
+ * Actualizar horario
+ * PATCH /horario/:id
+ */
+export async function patchHorario(req, res) {
+  try {
+    const { id } = req.params;
+    const horarioRepo = AppDataSource.getRepository(HorarioEntity);
+
+    const horario = await horarioRepo.findOneBy({ id });
+    if (!horario) {
+      return res.status(404).json({ message: "Horario no encontrado" });
+    }
+
+    Object.assign(horario, req.body);
+    await horarioRepo.save(horario);
+
+    return getControllerResult_NEW(
+      res,
+      200,
+      "Horario actualizado correctamente",
+      horario
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al actualizar horario" });
+  }
+}
+
+/**
+ * Eliminar horario
+ * DELETE /horario/:id
+ */
+export async function deleteHorario(req, res) {
+  try {
+    const { id } = req.params;
+    const horarioRepo = AppDataSource.getRepository(HorarioEntity);
+
+    const horario = await horarioRepo.findOneBy({ id });
+    if (!horario) {
+      return res.status(404).json({ message: "Horario no encontrado" });
+    }
+
+    await horarioRepo.remove(horario);
+
+    return getControllerResult_NEW(
+      res,
+      200,
+      "Horario eliminado correctamente"
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al eliminar horario" });
+  }
+}
 

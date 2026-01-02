@@ -1,4 +1,4 @@
-
+/*
 "use strict";
 import Joi from "joi";
 
@@ -100,3 +100,100 @@ export const loginValidation = Joi.object({
   .messages({
     "object.unknown": "No se permiten campos adicionales",
   });
+*/
+
+"use strict";
+import Joi from "joi";
+
+
+
+const VALID_LOGIN_DOMAINS = ["@ubiobio.cl", "@alumnos.ubiobio.cl"];
+const VALID_STUDENT_DOMAIN = ["@alumnos.ubiobio.cl"];
+
+const domainEmailValidator = (domains) => (value, helpers) => {
+  const ok = domains.some((d) => String(value).toLowerCase().endsWith(d));
+  if (!ok) return helpers.message("El correo electrónico debe ser de la UBB.");
+  return value;
+};
+
+//si tu registro PUBLICO es para estudiante:
+export const registerPublicValidation = Joi.object({
+  rut: Joi.string()
+    .required()
+    .pattern(/^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/)
+    .messages({
+      "string.empty": "El rut no puede estar vacío.",
+      "string.base": "El rut debe ser de tipo string.",
+      "string.pattern.base": "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
+    }),
+
+  nombre: Joi.string()
+    .min(2)
+    .max(60)
+    .required()
+    .messages({
+      "string.min": "El nombre debe tener al menos 2 caracteres.",
+      "string.max": "El nombre no puede exceder los 60 caracteres.",
+      "string.empty": "El nombre es obligatorio.",
+    }),
+
+  email: Joi.string()
+    .email()
+    .required()
+    .min(10)
+    .max(80)
+    .custom(domainEmailValidator(VALID_STUDENT_DOMAIN), "Dominio alumno UBB")
+    .messages({
+      "string.email": "El correo electrónico debe ser válido.",
+      "string.min": "El correo electrónico debe tener al menos 10 caracteres.",
+      "string.max": "El correo electrónico no puede exceder los 80 caracteres.",
+      "string.empty": "El correo electrónico es obligatorio.",
+    }),
+
+  clave: Joi.string()
+    .min(8)
+    .max(26)
+    .required()
+    .messages({
+      "string.empty": "La contraseña no puede estar vacía.",
+      "any.required": "La contraseña es obligatoria.",
+      "string.base": "La contraseña debe ser de tipo texto.",
+      "string.min": "La contraseña debe tener al menos 8 caracteres.",
+      "string.max": "La contraseña debe tener como máximo 26 caracteres.",
+    }),
+
+  //si quieres pedir generacion en el registro publico, lo dejas; si no, lo quitas
+  generacion: Joi.string()
+    .min(3)
+    .max(20)
+    .required()
+    .messages({
+      "string.empty": "La generación es obligatoria.",
+    }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
+
+export const loginValidation = Joi.object({
+  email: Joi.string()
+    .email()
+    .required()
+    .custom(domainEmailValidator(VALID_LOGIN_DOMAINS), "Dominio UBB")
+    .messages({
+      "string.email": "El correo electrónico debe ser válido.",
+      "string.empty": "El correo electrónico es obligatorio.",
+    }),
+
+  clave: Joi.string()
+    .min(8)
+    .max(26)
+    .required()
+    .messages({
+      "string.empty": "La contraseña no puede estar vacía.",
+      "any.required": "La contraseña es obligatoria.",
+      "string.min": "La contraseña debe tener al menos 8 caracteres.",
+      "string.max": "La contraseña debe tener como máximo 26 caracteres.",
+    }),
+})
+  .unknown(false)
+  .messages({ "object.unknown": "No se permiten campos adicionales" });
