@@ -50,7 +50,7 @@ export const useCreateElectivo = (fetchElectivos) => {
   const handleCreateElectivo = async (isAdmin, isJefe) => {
     try {
       if (!isAdmin) {
-        return fireDynamicSwal(500, null, "Acceso denegado");;
+        return fireDynamicSwal(500, null, "Acceso denegado");
       }
 
       let response = null;

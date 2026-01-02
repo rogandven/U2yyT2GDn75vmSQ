@@ -14,6 +14,7 @@ import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
 
 const Electivos = () => {
   const userRole = getUserRole();
@@ -25,7 +26,9 @@ const Electivos = () => {
   const { handleEditElectivo } = useEditElectivo(fetchElectivos);
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
   const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
+  const { handleRejectElectivo } = useRejectElectivo(fetchElectivos);
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
+
 
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
@@ -96,7 +99,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
       </div>
     </div>
   );

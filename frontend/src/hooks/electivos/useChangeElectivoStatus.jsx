@@ -1,6 +1,7 @@
 import { approveElectivo, rejectElectivo } from "../../services/electivo.service.js";
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
+import { RejectElectivoInfo } from "./useRejectElectivo.jsx";
 
 
 export const useChangeElectivoStatus = (fetchElectivos) => {

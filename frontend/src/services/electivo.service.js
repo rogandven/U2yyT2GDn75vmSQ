@@ -41,8 +41,8 @@ export async function approveElectivo(id) {
   return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
-export async function rejectElectivo(id) {
-  return await routeHelper(`/electivos/private/reject/${id}`, undefined, axios.post);
+export async function rejectElectivo(id, formValues) {
+  return await routeHelper(`/electivos/private/reject/${id}`, formValues, axios.post);
 }
 
 export async function editElectivo(id, electivoData) {
