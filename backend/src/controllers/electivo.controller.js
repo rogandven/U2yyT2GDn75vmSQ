@@ -9,7 +9,7 @@ import {
 } from "../validations/electivo.validation.js";
 import { getElectivosFromService, createElectivoFromService, getElectivoByIdFromService, updateElectivoFromService, deleteElectivoFromService, getElectivosSinAprobarFromService, changeElectivoEstadoFromService, RAW_getElectivoById, RAW_getAllApprovedElectivos } from "../service/electivo.service.js";
 import { fullNameProcessor, getControllerResult_NEW, processCarrera } from "./utils/utils.controller.js";
-import { getElectivosIntegrityValidation } from "../validations/electivo.validation.js";
+import { getElectivosIntegrityValidation, rejectElectivoValidation } from "../validations/electivo.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
@@ -170,24 +170,36 @@ const changeElectivoEstado = async (req, res, estado) => {
     if (!estado || !ARRAY_ESTADOS_VALIDOS.includes(estado)) {
       return getControllerResult_NEW(`Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`, null);
     }
+    
     const { id } = req.params;
     if (!id) {
       return res.status(400).json(getControllerResult_NEW("ID no proporcionado", null));
     }
+    
     const validationResult = idValidation.validate({id: id});
     if (validationResult.error) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
-    console.log(req.user.carrera);;
-    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.carrera || req.user.career, req.user.rol || req.user.role);
+    
+    const serviceResult = await changeElectivoEstadoFromService(
+      id, 
+      estado, 
+      req.user.carrera || req.user.career, 
+      req.user.rol || req.user.role,
+      req 
+    );
+    
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
+    
     if (serviceResult.length <= 0) {
       serviceResult.error = true;
       return res.status(401).json(getControllerResult_NEW(serviceResult.details, serviceResult));
     }
+    
     return res.status(200).json(getControllerResult_NEW(`Electivo ${String(estado).toLowerCase()} con éxito`, serviceResult));
+    
   } catch (error) {
     console.error("Error al actualizar electivo", error);
     return res.status(500).json(getControllerResult_NEW("Error al modificar electivo", null));
@@ -199,7 +211,23 @@ export async function approveElectivo(req, res) {
 }
 
 export async function rejectElectivo(req, res) {
-  return await changeElectivoEstado(req, res, ESTADOS_VALIDOS.RECHAZADO);
+  try {
+          const {error} = rejectElectivoValidation.validate(req.body);
+          
+          if(error){
+              return res.status(400).json({
+                  message: "Error de validación",
+                  errors: error.details.map(e => e.message)
+              });
+          }
+          
+  
+          req.body.estado = ESTADOS_VALIDOS.RECHAZADO;
+          return await changeElectivoEstado(req, res, ESTADOS_VALIDOS.RECHAZADO);
+      } catch(error) {
+          console.error("Error en Electivo:", error);
+          return res.status(500).json({ message: "Error interno del servidor" });
+      }
 }
 
 export async function deleteElectivo(req, res) {

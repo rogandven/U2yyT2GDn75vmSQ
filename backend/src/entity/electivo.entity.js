@@ -234,10 +234,10 @@ export const ElectivoEntity = new EntitySchema({
       type: String,
       nullable: false,
     },
-    motivo: {
+    motivo_rechazo: {
       type: String,
-      nullable: true,
-    }
+      nullable: true,  
+    },
   },
   relations:{
     usuarios:{

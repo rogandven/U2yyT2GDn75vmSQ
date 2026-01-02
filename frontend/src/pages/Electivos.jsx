@@ -91,6 +91,10 @@ const Electivos = () => {
 
   return (
     <div className="users-page">
+       <SolicitudForm
+      electivos={electivos.data || []}
+      onSubmit={handleCreateSolicitud}
+       />
       <div className="solicitud-filtros-container flex flex-row mt-3">
         {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe)}>Crear Electivo</button>)}
         <SearchBar 
