@@ -11,7 +11,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
 }
 
 export async function getElectivos() {
-  return await routeHelper("/electivos/get/", null, axios.get);
+  return (await routeHelper("/electivos/get/", null, axios.get))?.data;
 }
 
 export async function getElectivoById(id) {
@@ -49,6 +49,7 @@ export async function updateElectivo(id, electivoData) {
 export async function deleteElectivo(id) {
   return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
+
 
 /* export async function getElectivos() {
     try {
