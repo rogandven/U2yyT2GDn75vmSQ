@@ -27,8 +27,7 @@ export const updateCarrera = async (id_carrera, updateData) => {
     }
 
     try {
-        const response = await axios.patch(`/:id`, {
-            id_carrera: updateData.id_carrera,
+        const response = await axios.patch(`/carreras/${Number(id_carrera)}`, {
             sigla: updateData.sigla,
             nombre: updateData.nombre
         });

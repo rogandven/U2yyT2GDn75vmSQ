@@ -1,5 +1,5 @@
 "use strict";
-import { handleErrorClient } from "../handlers/response.handlers.js";
+import { handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { createCarrera,deleteCarreraById_Carrera,findAllCarreras,getCarrera, updateCarreraById_Carrera } from "../services/carrera.service.js";
 import { careerValidationFunction } from "../validations/carrera.validation.js";
 import { handleSuccess } from "../handlers/response.handlers.js";
@@ -54,7 +54,7 @@ export async function patchCarrera(req,res) {
             }
             Object.assign(carreraToUpdate, req.body);
 
-        const updatedCarrera = await updateCarreraById_Carrera(updatedCarrera);
+        const updatedCarrera = await updateCarreraById_Carrera(req.body, id);
         if (!(updatedCarrera.data)) {
         if (!(updatedCarrera.error)) {
             return handleErrorClient(res, 500, updatedCarrera.message);

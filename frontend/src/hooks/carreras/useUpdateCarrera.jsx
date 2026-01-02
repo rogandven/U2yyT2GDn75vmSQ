@@ -40,11 +40,20 @@ async function editCarreraInfo(carrera) {
 
 export const editCarrera=(fetchCarrera)=> {
     const handleEditCarrera = async (id_carrera,carrera) => {
+
         try {
             const formValues= await editCarreraInfo(carrera);
+
+            console.log("ID CARRERA: ");
+            console.log(id_carrera);
+            console.log("CARRERA: ");
+            console.log(carrera);
+            console.log("FORM VALUES: ");
+            console.log(formValues);
+
             if(!formValues) return;
 
-            const response = await updateCarrera(carrera, formValues);
+            const response = await updateCarrera(id_carrera, formValues);
             if(response){
                 fireDynamicSwal(response?.status, null, response.message || response.details || response.data?.message || response.data?.details);
                 await fetchCarrera();
