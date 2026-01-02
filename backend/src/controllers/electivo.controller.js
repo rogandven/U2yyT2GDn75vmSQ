@@ -531,6 +531,7 @@ import {
     prerequisitosStringToArray,
     parseDateToISO
 } from "../helpers/electivo.helper.js";
+import { SimpleConsoleLogger } from "typeorm";
 
 
 export async function crearElectivo(req, res) {
@@ -735,6 +736,7 @@ export async function listarElectivos(req, res) {
                     .json(getControllerResult_NEW("Rol no autorizado para listar electivos", null));
         }
 
+
         const electivos = await repo.find({
             where,
             relations: {
@@ -746,6 +748,8 @@ export async function listarElectivos(req, res) {
                 id_electivo: "DESC"
             }
         });
+
+        console.log("Electivos encontrados:", electivos[0]);
 
         if (!electivos || electivos.length === 0) {
             return res
@@ -759,6 +763,7 @@ export async function listarElectivos(req, res) {
             prerequisitos_asignaturas: prerequisitosStringToArray(e.prerequisitos_asignaturas)
         }));
 
+        console.log(electivosFormateados);
         return res
             .status(200)
             .json(getControllerResult_NEW(

@@ -36,7 +36,7 @@ router.get("/frontend_list/", isAuthenticated, getAllElectivoNames);
 
 
 export default router;*/
-
+/*
 "use strict";
 
 import { Router } from "express";
@@ -92,5 +92,57 @@ router.patch(
   isAdminOrProfesor,
   editarElectivo
 );
+
+
+
+export default router;
+*/
+
+"use strict";
+
+import { Router } from "express";
+import {
+  crearElectivo,
+  listarElectivos,
+  aprobarElectivo,
+  rechazarElectivo,
+  editarElectivo,
+  eliminarElectivo
+} from "../controllers/electivo.controller.js";
+
+import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
+import {
+  isAdminOrProfesor,
+  isJefeDeCarrera
+} from "../middleware/authorization.middleware.js";
+
+const router = Router();
+//LISTAR ELECTIVOS
+//alumnos y usuarios autenticados
+router.get("/get",isAuthenticated, listarElectivos);
+
+//CREAR ELECTIVO  
+//solo profesor, profesor jefe carrera y admin
+router.post("/", isAuthenticated, isAdminOrProfesor, crearElectivo);
+
+
+//APROBAR ELECTIVO
+//solo jefe de carrera
+router.post("/:id/aprobar", isAuthenticated, isJefeDeCarrera, aprobarElectivo);
+
+
+//RECHAZAR ELECTIVO
+//solo jefe de carrera
+router.post("/:id/rechazar", isAuthenticated, isJefeDeCarrera, rechazarElectivo);
+
+
+//MODIFICAR ELECTIVO
+//solo profesor y admin
+router.patch("/:id", isAuthenticated, isAdminOrProfesor, editarElectivo);
+
+
+//ELIMINAR ELECTIVO
+//solo profesor y admin
+router.delete("/:id", isAuthenticated, isAdminOrProfesor, eliminarElectivo);
 
 export default router;

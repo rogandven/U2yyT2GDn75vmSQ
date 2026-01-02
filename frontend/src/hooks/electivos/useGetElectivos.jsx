@@ -1,3 +1,4 @@
+/*
 import { useState } from 'react';
 import { getElectivos } from '@services/electivo.service.js';
 
@@ -16,4 +17,19 @@ export const useGetElectivos = () => {
     return { electivos, setElectivos, fetchElectivos };
 }
 
-export default useGetElectivos;
+export default useGetElectivos;*/
+
+import { useState } from "react";
+import { getElectivos } from "@services/electivo.service";
+
+export const useGetElectivos = () => {
+  const [electivos, setElectivos] = useState({ data: [] });
+
+  const fetchElectivos = async () => {
+    const response = await getElectivos();
+    console.log(response);
+    setElectivos(response);
+  };
+
+  return { electivos, fetchElectivos };
+};

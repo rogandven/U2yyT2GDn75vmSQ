@@ -249,7 +249,7 @@ async function createElectivoInfo() {
     title: "Crear Electivo",
     html: `
       ${createSwalField(1, "Nombre")}
-      ${createSwalTextarea(2, "Descripción")}
+      ${createSwalField(2, "Descripción")}
       ${createSwalField(3, "Cupos")}
       ${createSwalField(4, "Créditos minimos")}
       ${createSwalDateField(5, "Fecha inicio")}

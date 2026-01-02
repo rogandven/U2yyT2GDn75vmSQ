@@ -4,7 +4,8 @@ const routeHelper = async (URL, body, axiosFunction) => {
   let response = null;
   try {
     response = await axiosFunction(URL, body);
-    return {data: response.data?.data, status: response.status, message: response.data?.message};
+
+    return {data: response?.data?.serviceResult || response?.data?.data || response?.data, status: response.status, message: response.data?.message};
   } catch (error) {
     console.log(error);
     response = error.response;

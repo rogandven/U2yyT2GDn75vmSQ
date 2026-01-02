@@ -46,6 +46,7 @@ const Electivos = () => {
     setFiltroArea("");
   };
 
+/*
   const electivosFiltrados = electivos.data?.filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -54,6 +55,20 @@ const Electivos = () => {
       !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();
     return coincideTexto && coincideArea;
   });
+*/
+console.log(electivos);
+
+const electivosFiltrados = electivos?.data?.filter((e) => {
+  const coincideTexto =
+    e.nombre_electivo.toLowerCase().includes(busqueda.toLowerCase()) ||
+    e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
+
+  const coincideArea =
+    !filtroArea || e.area_electivo === filtroArea;
+
+  return coincideTexto && coincideArea;
+});
+
 
   const mostrarDescripcion = (nombre, descripcion) => {
     Swal.fire({

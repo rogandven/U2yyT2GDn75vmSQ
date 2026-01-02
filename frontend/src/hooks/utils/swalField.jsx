@@ -40,13 +40,12 @@ export const createSwalField = (inputId, label, value) => {
 
 export const createSwalTextarea = (inputId, label, value) => {
   return `
-    <div class="input m-1 form-group">
-      <label for="swal2-input${inputId}" class="label">${label}</label>  
-      <textarea 
-        id="swal2-input${inputId}" 
-        rows="5"
-        placeholder="${label}">${value ?? ""}</textarea>
-    </div>
+  <legend for="swal2-input${inputId}" class="fieldset-legend center content-center">${label}</legend>
+  <div class="textarea-container m-1 form-group center content-center justify-center align-center center-items">
+    <fieldset class="fieldset">
+      <textarea class="textarea h-24" id="swal2-input${inputId}" placeholder="${value ?? ""}"></textarea>
+    </fieldset> 
+  </div>
   `;
 };
 
