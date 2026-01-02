@@ -7,6 +7,8 @@ import { DUUserTable } from "../components/DUComponents/Table/DUUserTable.jsx";
 import useCreateUser from "../hooks/users/useCreateUser.jsx";
 import useGetProfile from "@hooks/profile/useGetProfile.jsx";
 import { getUserRole, isJefeDeCarrera, ADMIN_ROLE } from "@services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import { useState } from "react";
 
 const Users = () => {
   const { users, fetchUsers, setUsers } = useGetUsers();
@@ -46,13 +48,24 @@ const Users = () => {
     })();
   }, []);
 
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+
+  const currentPageContent = (Array.isArray(users) && users.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(users) && users.length) / POSTS_PER_PAGE)) || 0;
+
+
   return (
     <div className="users-page">
       {getUserRole() === ADMIN_ROLE && (
         <button className="btn btn-primary m-3 mb-0" onClick={handleCreateUser}>Crear Usuario</button>
       )}
       <div className="users-table">
-        {DUUserTable(users, handleDeleteUser, handleEditUser)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser)}
+        <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>
   );

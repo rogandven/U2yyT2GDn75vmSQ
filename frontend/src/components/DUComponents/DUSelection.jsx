@@ -1,3 +1,4 @@
+/*
 export const DUSelection = ({options, defaultValue, onChange, className}) => {
     if (!Array.isArray(options)) {
         return (<div>lo hiciste mal po</div>);
@@ -13,5 +14,33 @@ export const DUSelection = ({options, defaultValue, onChange, className}) => {
             </select>
         </div>
     );
-}
+}*/
+
+export const DUSelection = ({ options, defaultValue, onChange, className }) => {
+    if (!Array.isArray(options)) {
+        return (<div>lo hiciste mal po</div>);
+    }
+
+    return (
+        <div>
+            <select
+                className={`select solicitud-filtro-select ${className}`}
+                defaultValue={defaultValue}
+                onChange={onChange}
+            >
+                <option disabled={true}>{defaultValue}</option>
+                {options.map((option) => {
+                    const value = String(option);
+                    return (
+                        <option key={value} value={value}>
+                            {value}
+                        </option>
+                    );
+                })}
+            </select>
+        </div>
+    );
+};
+
+
 
