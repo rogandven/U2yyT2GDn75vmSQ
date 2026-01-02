@@ -12,7 +12,7 @@ export const getCarreras = async () => {
 
 export async function createCarrera  (carreraData) {
     try {
-        const response = await axios.post('/carreras', carreraData);
+        const response = await axios.post('/carreras/crear', carreraData);
         return response.data;
     } catch (error) {
         console.error('Error al crear la carrera:', error);
@@ -27,7 +27,7 @@ export const updateCarrera = async (id_carrera, updateData) => {
     }
 
     try {
-        const response = await axios.patch(`/:id`, {
+        const response = await axios.patch(`carreras/${id_carrera}`, {
             id_carrera: updateData.id_carrera,
             sigla: updateData.sigla,
             nombre: updateData.nombre

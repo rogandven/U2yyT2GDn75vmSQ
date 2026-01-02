@@ -44,7 +44,7 @@ export const editCarrera=(fetchCarrera)=> {
             const formValues= await editCarreraInfo(carrera);
             if(!formValues) return;
 
-            const response = await updateCarrera(carrera, formValues);
+            const response = await updateCarrera(id_carrera, formValues);
             if(response){
                 fireDynamicSwal(response?.status, null, response.message || response.details || response.data?.message || response.data?.details);
                 await fetchCarrera();

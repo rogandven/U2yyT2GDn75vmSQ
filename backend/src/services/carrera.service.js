@@ -12,13 +12,12 @@ export async function getCarrera(id_carrera) {
   }
 }
 
-export async function createCarrera(id_carrera, sigla, nombre) {
+export async function createCarrera( sigla, nombre) {
   try {
-    if (!id_carrera || !sigla || !nombre) {
-      throw Error("Función mal llamada", {id_carrera, sigla, nombre})
+    if (!sigla || !nombre) {
+      throw Error("Función mal llamada", {sigla, nombre})
     }
     const newCarrera = carreraRepository.create({
-      id_carrera,
       sigla,
       nombre,
     });
@@ -30,15 +29,18 @@ export async function createCarrera(id_carrera, sigla, nombre) {
   }
 }
 
-export async function updateCarreraById_Carrera(carrera) {
+export async function updateCarreraById_Carrera(carrera,id_carrera) {
   try {
     if (!carrera) {
       throw new Error("Función mal llamada");
     }
-    return {data: await carreraRepository.save(carrera), message: "Carrera actualizado con éxito", error: null};
+    console.log(carrera);
+    console.log(id_carrera);
+    return {data: await carreraRepository.update({id_carrera: id_carrera}, carrera), message: "Carrera actualizado con éxito", error: null};
   } catch (error) {
     return {data: null, message: "Error al actualizar carrera", error: error};
   }
+  
 }
 
 export async function findAllCarreras() {
