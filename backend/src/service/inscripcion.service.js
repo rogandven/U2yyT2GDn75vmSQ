@@ -75,11 +75,9 @@ export async function createInscripcion(data) {
   const dynamicMessage = (inscripcion) => {
     return inscripcion ? "¡Inscripcion creada!" : "No se pudo crear la inscripción";
   }
-
   try {
     let nuevaInscripcion = inscripcionRepo.create(data);
     nuevaInscripcion = await inscripcionRepo.save(nuevaInscripcion);
-    // console.log(JSON.stringify(nuevaInscripcion));
     return formatMessage(nuevaInscripcion, dynamicMessage(nuevaInscripcion));
   } catch (error) {
     console.error(error);
