@@ -19,7 +19,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
 
     } catch (error) {
       if (error.response) {
-        console.error("Error del backend:", error.response.data);
+        // console.error("Error del backend:", error.response.data);
       }
     }
   };

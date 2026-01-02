@@ -12,7 +12,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
     return {data: response.data, status: response.status, message: response.message};
   } catch (error) {
     // console.log("ERROR EN INSCRIPCION.SERVICE: ");
-    console.error(error);
+    // console.error(error);
     return {status: 500, data: error.response?.data || undefined, message: error.response?.message};
   }
 }
@@ -70,5 +70,19 @@ export async function public_updateInscripcion(id, inscripcionData) {
 }
 
 export async function public_deleteInscripcion(id) {
-  return await routeHelper(`/inscripciones/${id}`, undefined, axios.patch);
+  return await routeHelper(`/inscripciones/${id}`, undefined, axios.delete);
+}
+
+export async function shallDisplayWarning(id_electivo, id_usuario) {
+  return await SDWrouteHelper(`/inscripciones/sdw`, {id_electivo: Number(id_electivo), id_usuario: Number(id_usuario)});
+}
+
+const SDWrouteHelper = async (URL, body) => {
+  try {
+    let response = null;
+    response = await axios.get(URL, body, { withCredentials: true });
+    return Boolean(response?.result) || false;
+  } catch (error) {
+    return true;
+  }
 }

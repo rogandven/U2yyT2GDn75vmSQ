@@ -1,9 +1,9 @@
 import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
-import { isAdmin } from '../../../services/admin.service.js';
+import { isAdminOrProfesor } from '../../../services/admin.service.js';
 //import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-const esAdmininstardor = isAdmin();
+const esAdmininstardor = isAdminOrProfesor();
 
 
 const mostrarCarreras = (data, handleEditCarrera, handleDeleteCarrera) => {
@@ -42,7 +42,7 @@ export const DUCarreraTable = ({data, handleEditCarrera, handleDeleteCarrera}) =
             </tr>
             </thead>
             <tbody>
-              {mostrarCarreras(data, handleEditCarrera, handleDeleteCarrera)}
+            {mostrarCarreras(data, handleEditCarrera, handleDeleteCarrera)}
             </tbody>
         </table>
         </div>

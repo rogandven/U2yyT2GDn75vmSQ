@@ -9,6 +9,7 @@ import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
 import sendMail from "../services/email.service.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 
 const processHorarioArray = async (array) => {
@@ -49,16 +50,19 @@ const timeValidationHelper = (hora_inicio, hora_termino) => {
 
 const joiValidationHelper = (validationFunction, integrityFunction, body) => {
     let result = validationFunction.validate(body);
+    // console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
     result=integrityFunction.validate(body);
+    // console.log(result);
     if (result.error) {
       return String(result.error.message);
     }
     return null;
 }
 
+/*
 const electivoExistanceCheckerHelper = async (id_electivo) => {
     const electivoReallyExists = (await electivoExists(id_electivo));
 
@@ -69,7 +73,7 @@ const electivoExistanceCheckerHelper = async (id_electivo) => {
       return {message: String("Electivo no encontrado"), status: 400};
     }
     return null;
-}
+}*/
 
 export async function asignarHorario(req, res) {
   try {
@@ -79,6 +83,9 @@ export async function asignarHorario(req, res) {
     }
     if (req.body.dia) {
       req.body.dia = String(req.body.dia).toLowerCase().trim();
+    }
+    if (req.body.dia === "día" || req.body.dia === "dia") {
+      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
     }
     const { id_electivo } = req.params;
     let validationResult = idValidation.validate({id: id_electivo});
@@ -93,9 +100,27 @@ export async function asignarHorario(req, res) {
     if (result) {
       return res.status(400).json({ message: String(result) });
     } 
-    const electivoReallyExists = await electivoExistanceCheckerHelper(id_electivo);
-    if (electivoReallyExists) {
-      return res.status(electivoReallyExists.status).json({message: electivoReallyExists.message});
+
+    const electivo = await RAW_getElectivoById(id_electivo);
+    console.log(electivo);
+    if (!electivo) {
+      return handleErrorClient(res, 404, "Electivo no encontrado");
+    }
+
+    const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
+
+    console.log(req.user.id);
+    console.log(electivo.id_profesor);
+    console.log(electivo.carreras);
+    console.log(req.user.carrera);
+
+    if (!canSkipChecks) {
+       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
+        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
+       }
+      if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
+        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      }
     }
 
     const { hora_inicio, hora_termino, sala, dia } = req.body;
@@ -140,7 +165,16 @@ export async function patchHorario(req, res) {
     if (validationResult.error) {
       return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
     }
-    validationResult = joiValidationHelper(updateValidation, integrityValidation);
+
+    if (req.body.dia) {
+      req.body.dia = String(req.body.dia).toLowerCase().trim();
+    }
+    if (req.body.dia === "día" || req.body.dia === "dia") {
+      return res.status(400).json({ message: "Debe seleccionar un día de la semana"});
+    }
+
+    validationResult = joiValidationHelper(updateValidation, integrityValidation, req.body);
+    // console.log(validationResult);
     if (validationResult) {
       return res.status(400).json({message: String(validationResult)});
     }
@@ -149,6 +183,22 @@ export async function patchHorario(req, res) {
     if (!horarioToUpdate) {
       return handleErrorClient(res, 404, "Horario no encontrado");
     }
+    const electivo = await RAW_getElectivoById(horarioToUpdate.id_electivo);
+    if (!electivo) {
+      return handleErrorClient(res, 404, "Electivo no encontrado");
+    }
+
+    const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
+
+    if (!canSkipChecks) {
+       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
+        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
+       }
+      if (((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
+        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      }
+    }
+    
     Object.assign(horarioToUpdate, req.body);
 
     let result = timeValidationHelper(horarioToUpdate.hora_inicio, horarioToUpdate.hora_termino);

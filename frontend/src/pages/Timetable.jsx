@@ -7,13 +7,15 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
+import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor } from "../services/admin.service.js";
 import { isJefeDeCarrera } from "../services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 
 const Timetable = () => {
-    const isAdmin = isAdminOrProfesor();
-    const isJefe = isJefeDeCarrera();
+    const userRole = getUserRole();
+    const isAdmin = isAdminOrProfesor(userRole);
+    const isJefe = isJefeDeCarrera(userRole);
 
     const [horarioData, setHorarioData] = useState([]);
 

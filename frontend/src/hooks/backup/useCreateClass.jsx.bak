@@ -98,7 +98,7 @@ export const useCreateClass = () => {
 
             await assignClass(formValues);
         } catch (error) {
-            console.error('Error creating class:', error);
+            // console.error('Error creating class:', error);
         }
     };
 

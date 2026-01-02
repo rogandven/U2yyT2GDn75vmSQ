@@ -22,7 +22,7 @@ const Login = () => {
         setLoginError("Usuario o contraseña incorrectos");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

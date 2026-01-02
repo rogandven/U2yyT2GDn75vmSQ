@@ -70,7 +70,7 @@ export const useEditElectivo = (fetchElectivos) => {
           Swal.fire("Actualizado", "El electivo fue actualizado correctamente", "success");
           await fetchElectivos();
         } catch (error) {
-          console.error("Error al actualizar electivo:", error);
+          // console.error("Error al actualizar electivo:", error);
           Swal.fire("Error", "No se pudo actualizar el electivo", "error");
         }
       }
@@ -256,7 +256,7 @@ export const useEditElectivo = (fetchElectivos) => {
           Swal.fire("Actualizado", "El electivo fue actualizado correctamente", "success");
           await fetchElectivos();
         } catch (error) {
-          console.error("Error al actualizar electivo:", error);
+          // console.error("Error al actualizar electivo:", error);
           Swal.fire("Error", "No se pudo actualizar el electivo", "error");
         }
       }

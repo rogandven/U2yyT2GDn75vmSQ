@@ -4,7 +4,11 @@ import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
-  const handleChangeInscripcionStatus = async (inscripcionId, approve) => {
+  const handleChangeInscripcionStatus = async (inscripcionId, approve, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+
     try {
       let response = null;
       // console.log(approve);
@@ -23,7 +27,7 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar inscripcion:", error);
+      // console.error("Error al editar inscripcion:", error);
     }
   };
 

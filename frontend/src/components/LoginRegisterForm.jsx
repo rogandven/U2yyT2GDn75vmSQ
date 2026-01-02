@@ -6,7 +6,7 @@ import { DEFAULT_MARGIN_STYLES } from "../constants/TailwindConstants.jsx";
 const MIN_FIELD = 1;
 const MAX_FIELD = 500;
 
-const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
+const LoginRegisterForm = ({ mode = "login", onSubmit}) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
     } catch (error) {
       if (error.response) {
         // Error from the backend
-        console.error("Error del backend:", error.response.data);
+        // console.error("Error del backend:", error.response.data);
       }
     }
   };

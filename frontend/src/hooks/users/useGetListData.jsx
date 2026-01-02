@@ -10,7 +10,7 @@ export const useGetUserNames = () => {
             // console.log(data);
             setUserNames(data);
         } catch (error) {
-            console.error("Error consiguiendo usuarios:", error);
+            // console.error("Error consiguiendo usuarios:", error);
         }
     };
 
@@ -25,7 +25,7 @@ export const useGetElectivoNames = () => {
             const data = await FRONTEND_getUserList();
             setElectivoNames(data);
         } catch (error) {
-            console.error("Error consiguiendo usuarios:", error);
+            // console.error("Error consiguiendo usuarios:", error);
         }
     };
 

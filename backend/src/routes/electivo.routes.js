@@ -29,7 +29,7 @@ router.patch("/:id", canCrudElectivos, updateElectivo);
 router.delete("/:id", canCrudElectivos, deleteElectivo);
 
 router.get("/get_private/", canApproveElectivos, getElectivosSinAprobar);
-router.post("/private", canApproveElectivos, createElectivoJefeDeCarrera);
+// El JEFE_DE_CARRERA solo puede aprobar/rechazar; no debe crear electivos.
 router.post("/private/approve/:id", canApproveElectivos, approveElectivo);
 router.post("/private/reject/:id", canApproveElectivos, rejectElectivo);
 

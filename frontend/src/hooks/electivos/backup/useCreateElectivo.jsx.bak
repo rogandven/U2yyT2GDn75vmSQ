@@ -60,7 +60,7 @@ export const useCreateElectivo = (fetchElectivos) => {
         Swal.fire("Éxito", "Electivo creado correctamente", "success");
         await fetchElectivos();
       } catch (error) {
-        console.error("Error al crear electivo:", error);
+        // console.error("Error al crear electivo:", error);
         Swal.fire("Error", "No se pudo crear el electivo", "error");
       }
     }
@@ -165,7 +165,7 @@ export const useCreateElectivo = (fetchElectivos) => {
         Swal.fire("Éxito", "Electivo creado correctamente", "success");
         await fetchElectivos();
       } catch (error) {
-        console.error("Error al crear electivo:", error);
+        // console.error("Error al crear electivo:", error);
         Swal.fire("Error", "No se pudo crear el electivo", "error");
       }
     }
@@ -291,7 +291,7 @@ export const useCreateElectivo = (fetchElectivos) => {
         Swal.fire("Éxito", "Electivo creado correctamente", "success");
         await fetchElectivos();
       } catch (error) {
-        console.error("Error al crear electivo:", error);
+        // console.error("Error al crear electivo:", error);
         Swal.fire("Error", "No se pudo crear el electivo", "error");
       }
     }

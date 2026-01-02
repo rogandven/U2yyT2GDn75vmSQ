@@ -13,7 +13,7 @@ export async function registerService(datauser) {
 
         return response
     } catch (error) {
-        console.error("Error en auth.service");
+        // console.error("Error en auth.service");
         return error.response;
     }
 }
@@ -43,8 +43,8 @@ export async function loginService(datauser) {
             }
         }
     } catch (error) {
-        console.error("Error en auth.service");
-        // console.log(error);
+        // console.error("Error en auth.service");
+        console.log(error.response);
         return error.response;
     }
 }
@@ -56,6 +56,6 @@ export async function logout() {
         cookies.remove('jwt');
         cookies.remove('jwt-auth');
     } catch (error) {
-        console.error('Error al cerrar sesión', error)
+        // console.error('Error al cerrar sesión', error)
     }
 }

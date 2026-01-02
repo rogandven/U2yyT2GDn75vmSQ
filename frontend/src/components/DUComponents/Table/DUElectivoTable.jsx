@@ -9,17 +9,12 @@ import { TiTimes } from 'react-icons/ti';
 import { BsClockFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io';
 import { FiUserPlus } from 'react-icons/fi'
-
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
+// import { isAdminOrProfesor } from '../../../services/admin.service.js';
+// import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
-import { isJefeDeCarrera } from '../../../services/admin.service.js';
-
-const isAdmin = isAdminOrProfesor();
-const isJefe = isJefeDeCarrera();
-
-const mustBeDisplayed = (electivo) => {
-  return isAdmin || isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
+const mustBeDisplayed = (electivo, isAdmin) => {
+  return isAdmin || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
 }
 /*
         <table className="solicitud-table">
@@ -75,7 +70,7 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -90,7 +85,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tr>
                 <th>Nombre</th>
                 <th>Cupos</th>
-                <th>Inscritos</th>
+                <th>Créditos Requeridos</th>
                 <th>Área</th>
                 <th>Apertura</th>
                 <th>Cierre</th>
@@ -103,11 +98,12 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tbody>
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
-                return electivo && mustBeDisplayed(electivo) && (
-                <tr key={"ELECTIVO" + String(numero++)}>
+                return (electivo && mustBeDisplayed(electivo, isAdmin)) && (
+                <tr key={"ELECTIVO" + String(numero)}>
+                    <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
-                    <td>{electivo.cupos || "N/A"}</td>
-                    <td>{electivo.inscritos || "N/A"}</td>
+                    <td>{`${Number(electivo.inscritos || 0)} / ${Number(electivo.cupos || 0)}`}</td>
+                    <td>{(electivo.creditos_requeridos || 0)}</td>
                     <td>{electivo.area || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
@@ -115,12 +111,12 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>
-                      {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo)}}><IoMdSettings></IoMdSettings></button>)}
-                      {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>)}
+                      {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
+                      {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id, isAdmin)}}><MdDelete></MdDelete></button>)}
                       {(<button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>)}
-                      {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>)}
-                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false)}}><TiTimes/></button>)}
-                      {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id)}}><FiUserPlus /></button>)}
+                      {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true, isJefe)}}><ImCheckmark/></button>)}
+                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(isAdmin, isJefe, electivo.id)}}><TiTimes/></button>)}
+                      {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id, isAdmin)}}><FiUserPlus /></button>)}
                     </td>
                 </tr>     
                 )           
