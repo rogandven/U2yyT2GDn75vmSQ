@@ -20,26 +20,30 @@ import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js
 import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
 import { rejectElectivo } from "../services/electivo.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
-
+import SolicitudForm from "../components/SolicitudForm.jsx";
+import useCreateSolicitud from "../hooks/solicitudes/useCreateSolicitud.jsx";
+import useGetSolicitudes from "../hooks/solicitudes/useGetSolicitudes.jsx";
 const Electivos = () => {
   const userRole = getUserRole();
   const isAdmin = isAdminOrProfesor(userRole);
   const isJefe = isJefeDeCarrera(userRole);
 
   const { electivos, fetchElectivos } = useGetElectivos();
+  const { solicitudes, fetchSolicitudes } = useGetSolicitudes();
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
   const { handleEditElectivo } = useEditElectivo(fetchElectivos);
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
   const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
-  const { handleRejectElectivo2, } = useRejectElectivo(fetchElectivos);
+  const { handleRejectElectivo } = useRejectElectivo(fetchElectivos);
+  const { handleCreateSolicitud } = useCreateSolicitud(fetchSolicitudes);
 
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
     fetchElectivos();
-  }, [fetchElectivos]);
+  }, []);
 
   const limpiarFiltros = () => {
     setBusqueda("");

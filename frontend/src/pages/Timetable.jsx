@@ -47,8 +47,8 @@ const Timetable = () => {
 
     const electivosEncontrados = horarioData.data?.filter((e) => {
     const coincideTexto =
-      e.nombre.toLowerCase().includes(buscar.toLowerCase()) ||
-      e.descripcion.toLowerCase().includes(buscar.toLowerCase());
+      e?.nombre?.toLowerCase().includes(String(buscar || "")?.toLowerCase()) ||
+      e?.descripcion?.toLowerCase().includes(String(buscar || "")?.toLowerCase()) || true;
     /*const coincideArea =
       !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();*/
     return coincideTexto;
