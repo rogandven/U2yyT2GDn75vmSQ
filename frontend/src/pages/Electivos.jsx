@@ -12,10 +12,12 @@ import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
-import { isAdminOrProfesor } from "../services/admin.service.js";
+import { isAdminOrProfesor} from "../services/admin.service.js";
+import { getUserRole } from "../services/admin.service.js";
 
 const Electivos = () => {
-  const isAdmin = isAdminOrProfesor();
+  const userRole = getUserRole();
+  const isAdmin = isAdminOrProfesor(userRole);
 
   const { electivos, fetchElectivos } = useGetElectivos();
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);

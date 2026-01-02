@@ -10,6 +10,16 @@ export const getTimetables = async () => {
     }
 };
 
+/*export async function getHorariosByIdElectivo(id) {
+  try{
+    const response = await axios.get(`/horarios/${id}`);
+    return response.data;
+  }catch(error){
+    console.error('Error al obtener los horarios:', error);
+        throw error;
+  }
+}*/
+
 export const assignTimetable = async (horarioData) => {
     try {
         // console.log(horarioData);

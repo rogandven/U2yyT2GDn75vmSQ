@@ -1,8 +1,21 @@
 "use strict";
 import { handleErrorClient } from "../handlers/response.handlers.js";
 import { createCarrera,deleteCarreraById_Carrera,findAllCarreras,getCarrera, updateCarreraById_Carrera } from "../services/carrera.service.js";
-import { careerValidationFunction } from "../validations/carrera.validation.js";
+import { createValidation,integrityValidation } from "../validations/carrera.validation.js";
 import { handleSuccess,handleErrorServer } from "../handlers/response.handlers.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+
+const joiValidationHelper = (validationFunction, integrityFunction, body) => {
+    let result = validationFunction.validate(body);
+    if (result.error) {
+      return String(result.error.message);
+    }
+    result=integrityFunction.validate(body);
+    if (result.error) {
+      return String(result.error.message);
+    }
+    return null;
+}
 
 export async function createCarreras(req,res){
     try{
@@ -10,6 +23,11 @@ export async function createCarreras(req,res){
         if(!req.body || !req.params){
             return res.status(400).json({message: "Datos no proporcionados"});
         }
+
+       let  validationResult = joiValidationHelper(createValidation, integrityValidation, req.body);
+            if (validationResult) {
+              return res.status(400).json({message: validationResult});
+            }
 
         
         const { sigla,nombre } = req.body;
