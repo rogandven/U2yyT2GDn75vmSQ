@@ -95,6 +95,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                 <th>Profesor</th>
                 <th>Carreras</th>
                 <th>Estado</th>
+                <th>EstadoDetalle</th>
                 <th>Acciones</th>                
             </tr>
             </thead>
@@ -113,6 +114,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{electivo.nombre_profesor || electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
+                    <td>{electivo.estado === ESTADOS_VALIDOS.RECHAZADO && electivo.motivo_rechazo ? electivo.motivo_rechazo : "-"}</td>
                     <td>
                       {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
                       {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id, isAdmin)}}><MdDelete></MdDelete></button>)}

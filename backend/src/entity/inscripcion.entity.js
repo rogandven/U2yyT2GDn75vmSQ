@@ -31,6 +31,10 @@ export const InscripcionEntity=new EntitySchema({
         type: ELECTIVO_ID_TYPE,
         nullable: false,
     },
+    motivo_rechazo: {
+      type: String,
+      nullable: true,  
+    },
   },
 });
 

@@ -14,6 +14,9 @@ import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
 import { VALID_ADMIN_ROLES } from "./services/admin.service.js";
 import Inscripciones from '@pages/Inscripciones';
+import Solicitudes from "./pages/Solicitudes.jsx";
+import NuevaSolicitud from "./pages/Nuevasolicitud.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -34,9 +37,17 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
+      { 
        path: "/inscripciones", 
        element: <Inscripciones/>,
+      },
+       { 
+       path: "/Solicitudes", 
+       element: <Solicitudes/>,
+      },
+       { 
+       path: "/NuevaSolicitud", 
+       element: <NuevaSolicitud/>,
       },
       {
         path: "/electivos",

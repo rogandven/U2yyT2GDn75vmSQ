@@ -144,7 +144,7 @@ export async function updateElectivoFromService(id_instancia, data, carrera, use
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_career, user_role) {
+export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_career, user_role, req) {
   try {
     const electivo = await electivoRepo.findOneBy({ id: id_instancia });
 
@@ -159,11 +159,24 @@ export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado
       return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
     }
 
-    Object.assign(electivo, { estado: nuevo_estado });
+    const motivo_rechazo = req?.body?.motivo_rechazo || null;
+    
+    Object.assign(electivo, { 
+      estado: nuevo_estado,
+      motivo_rechazo: motivo_rechazo 
+    });
+    
     await electivoRepo.save(electivo);
 
     const creador = (await RAW_getUserById(electivo.id_profesor))?.email;
-    sendMail(creador, "Rechazo", `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido rechazado.`);
+    
+    
+    let mensajeEmail = `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido rechazado.`;
+    if (motivo_rechazo) {
+      mensajeEmail += ` Motivo: ${motivo_rechazo}`;
+    }
+    
+    sendMail(creador, "Rechazo", mensajeEmail);
 
     return getServiceResult(false, electivo, `Electivo ${nuevo_estado} correctamente`, 1);
   } catch (error) {

@@ -5,7 +5,7 @@ import { timeValidationFunction } from "./modules/timestamp.validation.js";
 import { FULLNAME_REGEX, MAX_CREDITOS, MAX_DATE_LENGTH, MIN_CREDITOS, MIN_DATE_LENGTH } from "../constants/user.constants.js";
 import { MIN_FULLNAME, MAX_FULLNAME } from "../constants/user.constants.js";
 import { fullnameRegexMessageGenerator } from "../constants/user.constants.js";
-import { MAX_CUPOS, MIN_CUPOS } from "../constants/electivo.constants.js";
+import { MAX_CUPOS, MIN_CUPOS, MIN_STATUS } from "../constants/electivo.constants.js";
 import validateGeneration from "./modules/generation.validation.js"; 
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { careerArrayValidationFunction } from "./modules/carreraArray.validation.js";
@@ -118,9 +118,20 @@ export const integrityValidation = Joi.object({
       "string.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`,
       "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
+   motivo_rechazo: Joi.string().max(500).allow('', null).messages({
+        "string.base": "El motivo debe ser texto",
+        "string.max": "El motivo no puede exceder los 500 caracteres",
+    }),
   semestre_minimo: Joi.custom(validateGeneration),
   carreras: Joi.custom(careerArrayValidationFunction),
   id_profesor: Joi.custom(idValidationFunction)
+});
+export const rejectElectivoValidation = Joi.object({
+  motivo_rechazo: Joi.string().min(MIN_STATUS).required().messages({
+   "string.base": "El estado debe ser tipo texto",
+   "string.min":"El estado no puede ser vacio",
+   "string.required":"El estado es obligatorio"
+  })
 });
 
 
@@ -174,6 +185,7 @@ export const updateValidation = Joi.object({
   carreras: Joi.any(),
   id_profesor: Joi.any(),
   creditos_requeridos: Joi.any(),
+  motivo_rechazo: Joi.any(),
 }).min(1).messages({
   "object.min":"Debe proporcionar un campo para actualizar",
   "any.min":"Debe proporcionar un campo para actualizar",

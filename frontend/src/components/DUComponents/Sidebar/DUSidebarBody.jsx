@@ -42,6 +42,8 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}
                 {createSidebarItem("Cerrar Sesión", "/login", (<FaSignOutAlt />), logoutSubmit)}
+                {createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />))}
+                {createSidebarItem("Solicitudes", "/Solicitudes", (<HiPencilAlt />))}
             {/* button to open/close drawer */}
             </ul>
             <div className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Abrir">

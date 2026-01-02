@@ -20,7 +20,7 @@ import authRoutes from "./auth.routes.js"
 import userRoutes from "./user.routes.js";
 import electivoRoutes from "./electivo.routes.js"
 import horarioRoutes from "./horario.routes.js";
-
+import solicitudRoutes from "./solicitud.routes.js"
 // import nowRoutes from "./now.routes.js";
 import inscripcionRoutes from "./inscripcion.routes.js"
 const router = new Router();
@@ -29,6 +29,7 @@ router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
 router.use("/electivos", electivoRoutes);
 router.use("/horarios", horarioRoutes);
+router.use("/solicitudes",solicitudRoutes);
 // router.use("/electivos3", nowRoutes);
 router.use("/inscripciones",inscripcionRoutes);
 export default router;

@@ -49,8 +49,8 @@ export async function private_approveInscripcion(id) {
   return await routeHelper(`/inscripciones/aprobar/${id}`, undefined, axios.post);
 }
 
-export async function private_rejectInscripcion(id) {
-  return await routeHelper(`/inscripciones/rechazar/${id}`, undefined, axios.post);
+export async function private_rejectInscripcion(id, motivoData) {
+  return await routeHelper(`/inscripciones/rechazar/${id}`, motivoData, undefined, axios.post);
 }
 
 export async function public_getInscripcion(id) {
