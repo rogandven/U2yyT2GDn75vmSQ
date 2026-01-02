@@ -36,6 +36,10 @@ export const integrityValidation = Joi.object({
         "string.min":"El estado no puede ser vacío",
         "string.max":`El estado no puede ser de más de ${MAX_STATUS} caracteres`,
     }),
+     motivo_rechazo: Joi.string().max(500).allow('', null).messages({
+        "string.base": "El motivo debe ser texto",
+        "string.max": "El motivo no puede exceder los 500 caracteres",
+    }),
     id_usuario: Joi.any().custom(idValidationFunction),
     id_electivo: Joi.any().custom(idValidationFunction),
 });
@@ -54,12 +58,20 @@ export const createValidation = Joi.object({
     "any.unknown": "No se permiten campos adicionales",
     "object.unknown": "No se permiten campos adicionales",
 });
+export const rejectInscripcionValidation = Joi.object({
+  motivo_rechazo: Joi.string().min(MIN_STATUS).required().messages({
+   "string.base": "El estado debe ser tipo texto",
+   "string.min":"El estado no puede ser vacio",
+   "string.required":"El estado es obligatorio"
+  })
+});
 
 export const updateValidation = Joi.object({
     estado: Joi.any(),
     fecha_hora: Joi.any(),
     id_usuario: Joi.any(),
     id_electivo: Joi.any(),
+     motivo_rechazo: Joi.any(),
 }).unknown(false).min(1).messages({
     "any.unknown": "No se permiten campos adicionales",
     "object.unknown": "No se permiten campos adicionales",
