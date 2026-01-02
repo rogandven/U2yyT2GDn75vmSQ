@@ -12,10 +12,19 @@ import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
+<<<<<<< HEAD
+import { getUserRole } from "../services/admin.service.js";
+import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
+import { rejectElectivo } from "../services/electivo.service.js";
+=======
 import { isAdminOrProfesor } from "../services/admin.service.js";
+>>>>>>> MERGE-02-01-2026-2
 
 const Electivos = () => {
-  const isAdmin = isAdminOrProfesor();
+  const userRole = getUserRole();
+  const isAdmin = isAdminOrProfesor(userRole);
+  const isJefe = isJefeDeCarrera(userRole);
 
   const { electivos, fetchElectivos } = useGetElectivos();
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
@@ -23,6 +32,7 @@ const Electivos = () => {
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
   const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
+  const { handleRejectElectivo2, } = useRejectElectivo(fetchElectivos);
 
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
@@ -73,7 +83,7 @@ const Electivos = () => {
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={handleCreateElectivo}>Crear Electivo</button>)}
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe)}>Crear Electivo</button>)}
         <SearchBar 
           customClassName={"solicitud-filtro-input ml-3"} 
           placeholder={"Buscar por nombre o descripción..."} 
@@ -93,7 +103,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo2} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
       </div>
     </div>
   );

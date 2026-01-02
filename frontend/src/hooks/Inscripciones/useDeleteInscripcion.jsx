@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import { private_deleteInscripcion } from "../../services/inscripcion.service.js";
 import { public_deleteInscripcion } from "../../services/inscripcion.service.js";
-import { isAdminOrProfesor } from "../../services/admin.service.js";
+// import { isAdminOrProfesor } from "../../services/admin.service.js";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 async function confirmDeleteInscripcion() {
@@ -38,12 +38,12 @@ async function confirmError() {
 }
 
 export const useDeleteInscripcion = (fetchInscripciones) => {
-  const handleDeleteInscripcion = async (inscripcionId) => {
+  const handleDeleteInscripcion = async (inscripcionId, isAdmin, isJefe) => {
     try {
       let response = null;
       const isConfirmed = await confirmDeleteInscripcion();
       if (isConfirmed) {
-        if (isAdminOrProfesor()) {
+        if (isAdmin) {
           response = await private_deleteInscripcion(inscripcionId);
         } else {
           response = await public_deleteInscripcion(inscripcionId);
@@ -57,7 +57,7 @@ export const useDeleteInscripcion = (fetchInscripciones) => {
         }
       }
     } catch (error) {
-      console.error("Error al eliminar inscripcion:", error);
+      // console.error("Error al eliminar inscripcion:", error);
       confirmError();
     }
   };

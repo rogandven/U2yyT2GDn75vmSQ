@@ -117,7 +117,7 @@ export async function deleteHorarioById_Electivo(id_horario) {
 export const isFirstHorario = async (id_electivo) => {
   try {
     const cantidad = Number(await horarioRepository.count({where: {id_electivo: Number(id_electivo)}}));
-    console.log(cantidad);
+    // console.log(cantidad);
     return cantidad < 1;
   } catch (error) {
     return false;

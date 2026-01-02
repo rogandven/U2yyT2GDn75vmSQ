@@ -5,17 +5,19 @@ import { createSwalField } from "../utils/swalField.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
+import { createSwalDateField } from "../utils/swalField.jsx";
 
 async function editElectivoInfo(electivo) {
   const { value: formValues } = await Swal.fire({
-    title: "Editar Usuario",
+    title: "Editar Electivo",
     html: `
       ${createSwalField(1, "Nombre", electivo.nombre)}
       ${createSwalField(2, "Descripcion", electivo.descripcion)}
       ${createSwalField(3, "Cupos", electivo.cupos)}
-      ${createSwalField(4, "Apertura", electivo.apertura)}
-      ${createSwalField(5, "Cierre", electivo.cierre)}
-      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input6", "m-1")}
+      ${createSwalField(9, "Créditos Requeridos", electivo.creditos_requeridos)}
+      ${createSwalDateField(4, electivo.apertura || "Apertura", electivo.apertura)}
+      ${createSwalDateField(5, electivo.cierre || "Cierre", electivo.cierre)}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, String(electivo.area).toUpperCase() || "Área", "swal2-input6", "m-1", false)}
       ${createSwalField(7, "Semestre Mínimo", electivo.semestre_minimo)}
       ${createSwalField(8, "Carreras", electivo.carreras)}
         `,
@@ -70,8 +72,9 @@ async function editElectivoInfo(electivo) {
       const area = gebi('swal2-input6')?.value;
       const semestre_minimo = gebi('swal2-input7')?.value;
       const carreras = gebi('swal2-input8')?.value;
+      const creditos_requeridos = gebi('swal2-input9')?.value;
 
-      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras};
+      return {nombre, descripcion, cupos, apertura, cierre, area, semestre_minimo, carreras, creditos_requeridos};
     },
   });
   if (formValues) {
@@ -80,7 +83,11 @@ async function editElectivoInfo(electivo) {
 }
 
 export const useEditElectivo = (fetchElectivos) => {
-  const handleEditElectivo = async (electivoId, electivo) => {
+  const handleEditElectivo = async (electivoId, electivo, isAdmin) => {
+    if (!isAdmin) {
+      return fireDynamicSwal(500, null, "Acceso denegado");
+    }
+    
     try {
       const formValues = await editElectivoInfo(electivo);
       if (!formValues) return;
@@ -94,7 +101,7 @@ export const useEditElectivo = (fetchElectivos) => {
       }
     } catch (error) {
       fireDynamicSwal(500, null, null);
-      console.error("Error al editar electivo:", error);
+      // console.error("Error al editar electivo:", error);
     }
   };
 

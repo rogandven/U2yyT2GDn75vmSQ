@@ -4,6 +4,7 @@ import ElectivoEntity from "../../entity/electivo.entity.js";
 import InscripcionEntity from "../../entity/inscripcion.entity.js";
 import { ESTADOS_VALIDOS } from "../../constants/electivo.constants.js";
 import { parseUnixDate_ALT } from "../../helpers/date.helper.js";
+import { APPROVED, VALID_STATUS_ARRAY } from "../../constants/inscripcion.constants.js";
 
 const userRepository = AppDataSource.getRepository(UserEntity);
 const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
@@ -22,7 +23,7 @@ export const userExists = async (id) => {
         return false;
     }
 }
-
+/*
 export const isValidDate = async (electivo, req) => {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(electivo.apertura) < 0) {
@@ -31,14 +32,21 @@ export const isValidDate = async (electivo, req) => {
     if (today.localeCompare(electivo.cierre) > 0) {
         return false;
     }
+<<<<<<< HEAD
+    const inscripciones = await countInscripcionesAprobadas(electivo.id);
+=======
     return true;
 }
 
 export const conditionsToSignUp = async (electivoId) => {
     const inscripciones = await countInscripciones(electivoId);
     const electivo = await electivoRepository.findOne({where: {id: id}});
+>>>>>>> MERGE-02-01-2026-2
     if (electivo.cupos >= inscripciones) {
         return "No hay suficientes cupos";
+    }
+    if (electivo.creditos_requeridos > req.user.creditos) {
+        return false;
     }
     if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
         return "No pertenece a la generación correspondiente";
@@ -46,8 +54,14 @@ export const conditionsToSignUp = async (electivoId) => {
     if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
         return "No tiene los créditos requeridos";
     }
+<<<<<<< HEAD
+    return true;
+}*/
+=======
 }
+>>>>>>> MERGE-02-01-2026-2
 
+/*
 export const electivoExists = async (id, checks = true, req) => {
     try {
         const electivo = await electivoRepository.findOne({where: {id: id}});
@@ -58,18 +72,13 @@ export const electivoExists = async (id, checks = true, req) => {
         if (electivo.estado !== ESTADOS_VALIDOS.APROBADO) {
             return false;
         }
-        if (checks) {
-            if (!(await isValidDate(electivo, req))) {
-                return false;
-            }
-        }
         return true;
     } catch (error) {
         console.error(error);
         return false;
     }
 }
-
+*/
 
 export const inscripcionAlreadyExists = async (id_inscripcion, id_usuario, id_electivo) => {
     try {
@@ -100,6 +109,15 @@ export const inscripcionBelongsToUser = (inscripcion, id_usuario) => {
 export const countInscripciones = async (id_electivo) => {
     try {
         const cantidad = await inscripcionRepo.count({where: {id_electivo: id_electivo}});
+        return Number(cantidad);
+    } catch (error) {
+        return 9999;
+    }
+}
+
+export const countInscripcionesAprobadas = async (id_electivo) => {
+    try {
+        const cantidad = await inscripcionRepo.count({where: {id_electivo: id_electivo, estado: APPROVED}});
         return Number(cantidad);
     } catch (error) {
         return 9999;

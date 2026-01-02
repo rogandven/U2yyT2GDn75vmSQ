@@ -10,7 +10,7 @@ export const useGetUsers = () => {
             dataLogged(data);
             setUsers(data);
         } catch (error) {
-            console.error("Error consiguiendo usuarios:", error);
+            // console.error("Error consiguiendo usuarios:", error);
         }
     };
     
@@ -24,7 +24,7 @@ export const useGetUsers = () => {
                 }
             }
         } catch (error) {
-            console.error("Error procesando datos de usuario:", error);
+            // console.error("Error procesando datos de usuario:", error);
         }
     }
 

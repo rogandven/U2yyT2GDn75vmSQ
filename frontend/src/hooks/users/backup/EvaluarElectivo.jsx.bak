@@ -36,7 +36,7 @@ export const AprobarElectivo = (fetchElectivos) => {
             
         } catch (error) {
             errorGenerico('aprobar');
-            console.error("Error al aprobar electivo:", error);
+            // console.error("Error al aprobar electivo:", error);
         }
     };
     return { handleAprobarElectivo };
@@ -54,7 +54,7 @@ export const RechazarElectivo = (fetchElectivos) => {
                 errorGenerico('rechazar');
             }
         } catch (error) {
-            console.error("Error al aprobar electivo:", error);
+            // console.error("Error al aprobar electivo:", error);
             errorGenerico('rechazar');
         }
     };

@@ -14,7 +14,8 @@ import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { AWAITING } from "../constants/validationConstants.js";
-import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { shallBeAllowedToMakeChanges } from "../service/utils/utils.career.service.js";
 
 export async function getElectivos(req, res) {
   if (req.query && req.query.area && typeof(req.query.area) === "string") {
@@ -56,7 +57,7 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
   req.body.estado = estadoNuevo;
   req.body.id_profesor = req.user.id;
 
-  if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
+  if (!shallBeAllowedToMakeChanges(req.user.role || req.user.rol, req.user.carrera || req.user.career, req.body.carreras)) {
     return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
   }
 
@@ -132,17 +133,23 @@ export async function updateElectivo(req, res) {
     if (req.body.nombre) {
       req.body.nombre = fullNameProcessor(req.body.nombre);
     }
-    // console.log(req.body.carreras);
-
-    req.body.carreras = processCarrera(req.body.carreras);
-    if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
-      return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+    if (req.body.carreras) {
+      req.body.carreras = processCarrera(req.body.carreras);
+      if (String(req.body.carreras).search(String(req.user.career || req.user.carrera)) === -1) {
+        return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
+      }
     }
-
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {
-      req.body.estado = AWAITING;
+      req.body.estado = ESTADOS_VALIDOS.PENDIENTE;
     }
-    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera));
+    const electivo = await RAW_getElectivoById(id);
+    if (!electivo) {
+      return res.status(404).json(getControllerResult_NEW("Electivo no encontrado", null));
+    }
+    if (!shallBeAllowedToMakeChanges(req.user.rol || req.user.role, req.user.career || req.user.carrera, electivo.carreras)) {
+      return res.status(401).json(getControllerResult_NEW("No pertenece a la carrera correspondiente al electivo"));
+    }
+    const serviceResult = await updateElectivoFromService(id, req.body, (req.user.carrera), req.user.role || req.user.rol, req.body.carreras, electivo);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
@@ -170,7 +177,8 @@ const changeElectivoEstado = async (req, res, estado) => {
     if (validationResult.error) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
-    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.carrera);
+    console.log(req.user.carrera);;
+    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.carrera || req.user.career, req.user.rol || req.user.role);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
@@ -201,9 +209,9 @@ export async function deleteElectivo(req, res) {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
     
-    const serviceResult = await deleteElectivoFromService(id, req.user.id, (req.user.role || req.user.rol));
+    const serviceResult = await deleteElectivoFromService(id, req.user.id, (req.user.role || req.user.rol), req.user.career || req.user.carrera);
     if (serviceResult.error) {
-      return res.status(500).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+      return res.status(400).json(getControllerResult_NEW(serviceResult.details, serviceResult));
     }
     return res.status(200).json(getControllerResult_NEW(serviceResult.details, serviceResult));
   } catch (error) {

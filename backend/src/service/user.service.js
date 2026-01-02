@@ -4,7 +4,8 @@ import UserEntity from "../entity/user.entity.js";
 import { encryptPassword, comparePassword } from "../helpers/bcrypt.helper.js";
 import { JWT_SECRET } from "../config/configEnv.js";
 import jwt from 'jsonwebtoken';
-import { CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
+import { ADMIN_ROLE, CAREER_HEAD_ROLE, STUDENT_ROLE } from "../constants/user.constants.js";
+import { getAllowedRolesToTamper } from "../helpers/user.helper.js";
 
 export async function parseCredentials(a, b) {
     if (a === b) {
@@ -47,7 +48,12 @@ export async function getUserByIdFromService(id) {
 export async function MIDDLEWARE_getUserByIdFromService(id) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
+<<<<<<< HEAD
+        const user = await userRepository.findOne({where: {id: Number(id)}});
+        // console.log(user);
+=======
         const user = await userRepository.findOne({ where: { id },relations: {carrera: true} });
+>>>>>>> MERGE-02-01-2026-2
         if (!user) {
             return null;
         } 
@@ -58,20 +64,26 @@ export async function MIDDLEWARE_getUserByIdFromService(id) {
     }
 }
 
-export async function updateUserByIdFromService(id, newData) {
+export async function updateUserByIdFromService(id, newData, req_user_role, req_user_carrera) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
         const oldData = await userRepository.findOne({ where: { id },relations: {carrera: true} });
         if (!oldData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         }
+        if (oldData.role && !(getAllowedRolesToTamper(req_user_role).includes(oldData.role))) {
+            return getServiceResult(false, null, `No tiene permiso para trabajar con ${oldData.role}`, 0);
+        }
+        if ((req_user_role !== ADMIN_ROLE) && (oldData.carrera !== req_user_carrera)) {
+            return getServiceResult(false, null, "No tiene permiso para actualizar usuarios de otra carrera")
+        }
         if (newData.password) {
             newData.password = encryptPassword(newData.password);
         }
+
         /* fullname, username, rut, email, password, role, generation */
         Object.assign(oldData, newData);
-
-        await userRepository.save(oldData);
+        await userRepository.update({id: id}, oldData);
         return getServiceResult(false, oldData, "Usuario actualizado con éxito", 1);
     } catch (error) {
         console.error(error);
@@ -79,7 +91,7 @@ export async function updateUserByIdFromService(id, newData) {
     }
 }
 
-export async function deleteUserByIdFromService(id) {
+export async function deleteUserByIdFromService(id, req_user_role, req_user_carrera) {
     var queryRunner = {};
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
@@ -90,6 +102,12 @@ export async function deleteUserByIdFromService(id) {
         if (!userData) {
             return getServiceResult(false, null, "Usuario no encontrado", 0);
         } 
+        if (userData.role && !(getAllowedRolesToTamper(req_user_role).includes(userData.role))) {
+            return getServiceResult(false, null, `No tiene permiso para trabajar con ${userData.role}`, 0);
+        }
+        if ((req_user_role !== ADMIN_ROLE) && (userData.carrera !== req_user_carrera)) {
+            return getServiceResult(false, null, "No tiene permiso para eliminar usuarios de otra carrera");
+        }
         const result = await userRepository.remove(userData);
         if (result.affected && result.affected !== 1) {
             throw new Error("No se pudo eliminar el usuario");
@@ -172,6 +190,7 @@ export async function loginUserFromService(data) {
             rut: userFound.rut,
             rol: userFound.role,
         };
+        console.log((String(payload?.username).toUpperCase() || "JUANITO PÉREZ") + " entró al sistema");
         const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
         return getServiceResult(false, { token: accessToken }, "Inicio de sesión exitoso!", 1);

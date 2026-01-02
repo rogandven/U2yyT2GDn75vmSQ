@@ -9,7 +9,7 @@ export const GetElectivo = () => {
             const data = await getElectivos();
             setElectivos(data);
         } catch (error) {
-            console.error("Error consiguiendo electivos:", error);
+            // console.error("Error consiguiendo electivos:", error);
         }
     };
     
@@ -30,7 +30,7 @@ export const GetElectivo = () => {
                 }
             }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
         }
     }
 
