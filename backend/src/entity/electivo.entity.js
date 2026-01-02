@@ -233,8 +233,14 @@ export const ElectivoEntity = new EntitySchema({
       nullable: false,
     },
     motivo: {
+<<<<<<< Updated upstream
       type: "text",
     },
+=======
+      type: String,
+      nullable: true,
+    }
+>>>>>>> Stashed changes
   },
   checks: [
       { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
