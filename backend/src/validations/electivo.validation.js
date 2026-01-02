@@ -150,8 +150,11 @@ export const createValidation = Joi.object({
   id_profesor: Joi.any().required().messages({
     "any.required": "El ID del profesor es obligatorio",
   }),
-  motivo: Joi.any().required().messages({
-    "any.required": "El motivo es requerido",
+  motivo: Joi.string().min(100).max(500).required().messages({
+      "string.empty": "El motivo no puede estar vacío",
+      "string.min": "El motivo debe tener al menos 100 caracteres",
+      "string.max": "El motivo no puede superar los 500 caracteres",
+      "any.required": "El motivo es requerido",
   })
 }).unknown(false).messages({
     "any.unknown": "No se permiten campos adicionales"
@@ -182,12 +185,6 @@ export const dateCreationValidation = Joi.object({
   cierre: Joi.date().min(Date.now()).messages({
       "date.base": "La fecha de cierre debe tener un formato válido (AAAA-MM-DD).",
       "date.min": "La fecha de cierre especificada ya pasó",
-    }),
-    motivo: Joi.string().min(100).max(500).required().messages({
-      "string.empty": "El motivo no puede estar vacío",
-      "string.min": "El motivo debe tener al menos 100 caracteres",
-      "string.max": "El motivo no puede superar los 500 caracteres",
-      "any.required": "El motivo es requerido",
     }),
 }).unknown(true);
 
