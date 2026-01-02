@@ -66,7 +66,8 @@ export const UserEntity = new EntitySchema({
         carrera:{
             type:"many-to-one",
             target: carreraEntity,
-            joinColumn:{name:"id_carrera"}
+            joinColumn:{name:"id_carrera"},
+            inverseSide: "users"
         }
     }
 });
