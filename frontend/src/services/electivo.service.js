@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
@@ -199,7 +198,6 @@ export async function FRONTEND_getElectivoList() {
     } catch (error) {
         return BASE_CASE;
     }
-=======
 import axios from '@services/root.service.js';
 
 const routeHelper = async (URL, body, axiosFunction) => {
@@ -390,5 +388,4 @@ export async function FRONTEND_getElectivoList() {
     } catch (res) {
         return res.status(404).json({message: "Error al conseguir electivos"});
     }
->>>>>>> MERGE-02-01-2026-2
 }

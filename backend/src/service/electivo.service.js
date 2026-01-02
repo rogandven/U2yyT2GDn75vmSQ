@@ -51,12 +51,7 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
-<<<<<<< HEAD
-        query = query.orderBy("electivo.id", "ASC");
-
-=======
         query = query.addOrderBy("electivo.nombre", "ASC");
->>>>>>> MERGE-02-01-2026-2
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
