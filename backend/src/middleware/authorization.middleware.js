@@ -75,6 +75,10 @@ export async function canCrudUsers(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_USERS);
 }
 
+export async function canViewUsers(req, res, next) {
+  return await isAdminHelper(req, res, next, ["ADMINISTRADOR", "JEFE_DE_CARRERA"]);
+}
+
 /*
 export function authorizeRoles(rolesPermitidos) {
   return async (req, res, next) => {

@@ -9,24 +9,12 @@ import { TiTimes } from 'react-icons/ti';
 import { BsClockFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io';
 import { FiUserPlus } from 'react-icons/fi'
-
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
 // import { isAdminOrProfesor } from '../../../services/admin.service.js';
 // import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-<<<<<<< HEAD
 const mustBeDisplayed = (electivo, isAdmin) => {
   return isAdmin || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
-=======
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
-import { isJefeDeCarrera } from '../../../services/admin.service.js';
-
-const isAdmin = isAdminOrProfesor();
-const isJefe = isJefeDeCarrera();
-
-const mustBeDisplayed = (electivo) => {
-  return isAdmin || isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
->>>>>>> MERGE-02-01-2026-2
 }
 /*
         <table className="solicitud-table">
@@ -110,14 +98,9 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tbody>
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
-<<<<<<< HEAD
                 return (electivo && mustBeDisplayed(electivo, isAdmin)) && (
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
-=======
-                return electivo && mustBeDisplayed(electivo) && (
-                <tr key={"ELECTIVO" + String(numero++)}>
->>>>>>> MERGE-02-01-2026-2
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>{`${Number(electivo.inscritos || 0)} / ${Number(electivo.cupos || 0)}`}</td>
                     <td>{(electivo.creditos_requeridos || 0)}</td>

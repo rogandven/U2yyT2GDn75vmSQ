@@ -5,11 +5,11 @@ import deleteCarrera from "@hooks/carreras/useDeleteCarrera.jsx";
 import { useEffect } from "react";
 import { useState } from "react";
 import { DUCarreraTable } from "../components/DUComponents/Table/DUCarreraTable.jsx";
-import { isAdmin } from "../services/admin.service.js";
+import { isAdminOrProfesor } from "../services/admin.service.js";
 //import { isJefeDeCarrera } from "../services/admin.service.js";
 
 const Carreras = () => {
-    const esAdmininstardor = isAdmin();
+    const esAdmininstardor = isAdminOrProfesor();
     //const isJefe = isJefeDeCarrera();
 
     const [carreraData, setCarreraData] = useState([]);

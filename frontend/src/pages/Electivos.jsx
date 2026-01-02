@@ -35,14 +35,14 @@ const Electivos = () => {
 
   useEffect(() => {
     fetchElectivos();
-  }, []);
+  }, [fetchElectivos]);
 
   const limpiarFiltros = () => {
     setBusqueda("");
     setFiltroArea("");
   };
 
-  const electivosFiltrados = electivos.filter((e) => {
+  const electivosFiltrados = (electivos?.data || []).filter((e) => {
     const coincideTexto =
       e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
       e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
@@ -99,7 +99,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo2} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
+        <DUElectivoTable data={electivos?.data || []} electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo2} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
       </div>
     </div>
   );

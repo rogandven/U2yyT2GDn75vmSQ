@@ -14,6 +14,7 @@ import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
 import { VALID_ADMIN_ROLES } from "./services/admin.service.js";
 import Inscripciones from '@pages/Inscripciones';
+import Carreras from "@pages/Carreras";
 
 
 const router = createBrowserRouter([
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/carreras",
-        element: <Carrera />,
+        element: <Carreras />,
       }
     ],
   },

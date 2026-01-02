@@ -1,6 +1,7 @@
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io'
+import { getUserRole, ADMIN_ROLE } from '@services/admin.service.js';
 
 export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
     const coalesceData = (data) => {
@@ -22,14 +23,14 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                 <th>Generación</th>
                 <th>Carrera</th>
                 <th>Créditos</th>
-                <th>Acciones</th>
+                {getUserRole() === ADMIN_ROLE && (<th>Acciones</th>)}
             </tr>
             </thead>
             <tbody>
             {/* row 1 */}
-            {usuarios.map((usuario) => {
+            {usuarios.map((usuario, _index) => {
                 return (
-                <tr>
+                <tr key={usuario?.id || usuario?.email || _index}>
                     <td>{coalesceData(String(usuario && usuario.rut)) || "N/A"}</td>
                     <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
@@ -46,14 +47,22 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     </td>
                     <td>
                         <div className="badge badge-accent">
-                            {coalesceData(String(usuario && usuario.carrera)) || "N/A"}
+                            {(() => {
+                                const c = usuario?.carrera;
+                                if (!c) return "N/A";
+                                if (typeof c === 'string') return coalesceData(c);
+                                // object case, try common fields
+                                return coalesceData(String(c.nombre || c.nombre_carrera || c.id || JSON.stringify(c)));
+                            })()}
                         </div>
                     </td>
                     <td>{Number(usuario.creditos)}</td>
+                    {getUserRole() === ADMIN_ROLE && (
                     <td>
                         <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}><IoMdSettings></IoMdSettings></button>
                         <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}><MdDelete></MdDelete></button>
                     </td>
+                    )}
                 </tr>     
                 )           
             })}
