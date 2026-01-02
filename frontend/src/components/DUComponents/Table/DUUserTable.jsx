@@ -9,8 +9,6 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
         }
         return data;
     }
-
-    let numero = 1;
     return Array.isArray(usuarios) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">
