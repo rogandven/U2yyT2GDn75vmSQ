@@ -4,7 +4,7 @@ import User from "../entity/user.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
-import { EXMAPLE_EMAIL_1, EXMAPLE_EMAIL_2, EXMAPLE_EMAIL_3, EXMAPLE_EMAIL_4, EXMAPLE_EMAIL_5, EXMAPLE_EMAIL_6 } from "./configEnv.js";
+import { EXMAPLE_EMAIL_1, EXMAPLE_EMAIL_2, EXMAPLE_EMAIL_3, EXMAPLE_EMAIL_4, EXMAPLE_EMAIL_5, EXMAPLE_EMAIL_6, EXMAPLE_EMAIL_7 } from "./configEnv.js";
 
 /*
 if (!AppDataSource.isInitialized) {
@@ -84,7 +84,18 @@ export async function createUsers() {
         generation: "2023-1",
         carrera: "ICINF",
         creditos: 0
-      },      
+      },     
+      {
+        fullname: "Juanito Perez",
+        username: "juan123",
+        rut: "6413288-1",
+        email: EXMAPLE_EMAIL_7,
+        password: await encryptPassword("juan123"),
+        role: "ADMINISTRADOR",
+        generation: "2022-1",
+        carrera: "IECI",
+        creditos: 0
+      },        
     ];
 
     console.log("Creando usuarios base...");

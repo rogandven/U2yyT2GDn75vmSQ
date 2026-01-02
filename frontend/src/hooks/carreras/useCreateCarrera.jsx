@@ -21,6 +21,7 @@ async function CreateCarrera() {
       const id_carrera = String(gebi('swal2-input1')?.value).split(",")[0];
       const sigla = gebi('swal2-input2')?.value;
       const nombre = gebi('swal2-input3')?.value;
+      //Json.Strinfy()
 
       return {id_carrera, sigla, nombre};
     },

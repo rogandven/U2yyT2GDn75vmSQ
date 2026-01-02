@@ -17,13 +17,24 @@ export const getUserRole = () => {
     let parsedUser = null;
     let role = STUDENT_ROLE;
     try {
+        console.log(user);
         parsedUser = JSON.parse(user || {});
         if (parsedUser && parsedUser.rol) {
             role = String(parsedUser.rol);
         }
-    } catch (error) {}
+    } catch (error) {
+        console.error(error);
+    }
 
     return role.toUpperCase();
+}
+
+export const isAdmin = () => {
+    const userRole = getUserRole();
+    // console.log(userRole);
+    const result = (userRole && (userRole === ADMIN_ROLE)) || false;
+    // console.log(result);
+    return result;
 }
 
 export const isAdminOrProfesor = () => {
