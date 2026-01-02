@@ -4,7 +4,7 @@ import { authenticateJwt} from "../middleware/authentication.middleware.js";
 
 const router=Router();
 router.use(authenticateJwt);
-router.post("/crear", createCarreras);
+router.post("/", createCarreras);
 router.get("/",getCarreras);
 router.patch("/:id",patchCarrera);
 router.delete("/:id",deleteCarrera);
