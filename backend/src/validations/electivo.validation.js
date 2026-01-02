@@ -115,7 +115,13 @@ export const integrityValidation = Joi.object({
   }),
   semestre_minimo: Joi.custom(validateGeneration),
   carreras: Joi.custom(careerArrayValidationFunction),
-  id_profesor: Joi.custom(idValidationFunction)
+  id_profesor: Joi.custom(idValidationFunction),
+  motivo: Joi.string().min(100).max(500).required().messages({
+      "string.empty": "El motivo no puede estar vacío",
+      "string.min": "El motivo debe tener al menos 100 caracteres",
+      "string.max": "El motivo no puede superar los 500 caracteres",
+      "any.required": "El motivo es requerido",
+    }),
 });
 
 
