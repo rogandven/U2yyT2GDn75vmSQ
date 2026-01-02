@@ -2,6 +2,7 @@
 import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
 import { isAdminFromService } from "../service/authorization.service.js";
 import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
+import { CAN_APPROVE_SUBJECTS, CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_TIMETABLES, CAN_DO_CRUD_ON_USERS, CAN_MODERATE_INSCRIPTIONS, CAN_SIGN_UP_TO_SUBJECTS } from "../admin/permissions.admin.js";
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
@@ -40,6 +41,38 @@ export function authorizeRoles(rolesPermitidos) {
   return async (req, res, next) => {
     return await isAdminHelper(req, res, next, rolesPermitidos);
   };
+}
+
+export async function canCrudCareers() {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_CAREERS);
+}
+
+export async function canCrudElectivos() {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_SUBJECTS);
+}
+
+export async function canApproveElectivos(){
+  return await isAdminHelper(req, res, next, CAN_APPROVE_SUBJECTS);
+}
+
+export async function canCrudHorarios() {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_TIMETABLES);
+}
+
+export async function canCrudInscripciones() {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_INSCRIPTIONS);
+}
+
+export async function canModerateInscripciones() {
+  return await isAdminHelper(req, res, next, CAN_MODERATE_INSCRIPTIONS);
+}
+
+export async function canSignUpToElectivos() {
+  return await isAdminHelper(req, res, next, CAN_SIGN_UP_TO_SUBJECTS);
+}
+
+export async function canCrudUsers() {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_USERS);
 }
 
 /*
