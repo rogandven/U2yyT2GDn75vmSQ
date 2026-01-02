@@ -84,7 +84,6 @@ export async function createUsers() {
         generation: "2023-1",
         carrera: "ICINF",
         creditos: 0
-<<<<<<< HEAD
       },
       {
         fullname: "Voger Renegas".toUpperCase(),
@@ -97,20 +96,6 @@ export async function createUsers() {
         carrera: "ICINF",
         creditos: 0
       },                
-=======
-      },     
-      {
-        fullname: "Juanito Perez",
-        username: "juan123",
-        rut: "6413288-1",
-        email: EXMAPLE_EMAIL_7,
-        password: await encryptPassword("juan123"),
-        role: "ADMINISTRADOR",
-        generation: "2022-1",
-        carrera: "IECI",
-        creditos: 0
-      },        
->>>>>>> MERGE-02-01-2026-2
     ];
 
     console.log("Creando usuarios base...");
