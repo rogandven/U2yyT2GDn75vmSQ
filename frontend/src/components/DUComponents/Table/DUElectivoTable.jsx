@@ -120,7 +120,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                       {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id)}}><MdDelete></MdDelete></button>)}
                       {(<button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>)}
                       {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true)}}><ImCheckmark/></button>)}
-                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo2(electivo.id, false)}}><TiTimes/></button>)}
+                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo2(isAdmin, isJefe, electivo.id, false)}}><TiTimes/></button>)}
                       {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id)}}><FiUserPlus /></button>)}
                     </td>
                 </tr>     
