@@ -16,7 +16,6 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
         <table className="table">
             <thead>
             <tr>
-                <th></th>
                 <th>RUT</th>
                 <th>Nombre</th>
                 <th>Apodo</th>
@@ -33,7 +32,6 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
             {usuarios.map((usuario) => {
                 return (
                 <tr>
-                    <th>{String(numero++)}</th>
                     <td>{coalesceData(String(usuario && usuario.rut)) || "N/A"}</td>
                     <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>

@@ -19,7 +19,7 @@ const isAdmin = isAdminOrProfesor();
 const isJefe = isJefeDeCarrera();
 
 const mustBeDisplayed = (electivo) => {
-  return isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
+  return isAdmin || isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
 }
 /*
         <table className="solicitud-table">

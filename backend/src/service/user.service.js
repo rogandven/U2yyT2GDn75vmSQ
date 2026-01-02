@@ -16,7 +16,7 @@ export async function parseCredentials(a, b) {
 export async function getUsersFromService() {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
-        let users = await userRepository.find({relations: {carrera: true}});
+        let users = await userRepository.find({relations: {carrera: true}, order: {email: true}});
         if (users && Array.isArray(users)) {
             for (let i = 0; i < users.length; i++) {
                 delete users[i].password;

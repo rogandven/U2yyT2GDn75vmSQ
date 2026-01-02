@@ -43,7 +43,7 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
-        
+        query = query.addOrderBy("electivo.nombre", "ASC");
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
