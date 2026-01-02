@@ -190,9 +190,8 @@ export async function FRONTEND_getElectivoList() {
         return res.status(404).json({message: "Error al conseguir electivos"});
     }
 }
-import axios from '@services/root.service.js';
 
-const routeHelper = async (URL, body, axiosFunction) => {
+const routeHelper3 = async (URL, body, axiosFunction) => {
   let response = null;
   try {
     response = await axiosFunction(URL, body);
@@ -209,46 +208,46 @@ const routeHelper = async (URL, body, axiosFunction) => {
   }
 }
 
-export async function getElectivos() {
+export async function getElectivos2() {
   return await routeHelper("/electivos/get/", null, axios.get);
 }
 
-export async function getElectivoById(id) {
+export async function getElectivoById2(id) {
   return await routeHelper(`/electivos/get/${id}`, null, axios.get);
 }
 
-export async function getElectivosSinAprobar() {
+export async function getElectivosSinAprobar2() {
   return await routeHelper(`/electivos/get_private`, null, axios.get);
 }
 
-export async function createElectivoProfesor(electivoData) {
+export async function createElectivoProfesor2(electivoData) {
   return await routeHelper("/electivos", electivoData, axios.post);
 }
 
-export async function createElectivoJefeDeCarrera(electivoData) {
+export async function createElectivoJefeDeCarrera2(electivoData) {
   return await routeHelper(`/electivos/private`, electivoData, axios.post);
 }
 
-export async function approveElectivo(id) {
+export async function approveElectivo2(id) {
   if (typeof(id) !== "number") {
     console.error(id);
   }
   return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
-export async function rejectElectivo(id, motivoData) {
+export async function rejectElectivo2(id, motivoData) {
   return await routeHelper(`/electivos/private/reject/${id}`, motivoData, undefined, axios.post);
 }
 
-export async function editElectivo(id, electivoData) {
+export async function editElectivo2(id, electivoData) {
   return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
 }
 
-export async function updateElectivo(id, electivoData) {
+export async function updateElectivo2(id, electivoData) {
   return await editElectivo(id, electivoData);
 }
 
-export async function deleteElectivo(id) {
+export async function deleteElectivo2(id) {
   return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
 
@@ -501,7 +500,7 @@ export async function deleteElectivo(electivoId) {
     */
 
 
-export async function FRONTEND_getElectivoList() {
+export async function FRONTEND_getElectivoList2() {
     const BASE_CASE = [];
 
     try {
@@ -692,9 +691,7 @@ export async function FRONTEND_getElectivoList() {
 }
 */
 
-import axios from '@services/root.service.js';
-
-const routeHelper = async (URL, body, axiosFunction) => {
+const routeHelper2 = async (URL, body, axiosFunction) => {
   try {
     let response;
 
