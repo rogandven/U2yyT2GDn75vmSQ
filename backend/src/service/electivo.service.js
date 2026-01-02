@@ -19,7 +19,7 @@ const processElectivoArray = async (resultados) => {
         try {
           current = await RAW_getUserById(resultados[i].id_profesor);
           nombre_profesor = String((current && current.fullname) || "JUANITO PÉREZ").toUpperCase();
-          current = await countInscripcionesAprobadas(resultados.id);
+          current = await countInscripcionesAprobadas(resultados[i].id);
           // console.log(current);
           inscritos = Number(current) || 0;
           Object.assign(resultados[i], {nombre_profesor: nombre_profesor, inscritos: inscritos});
