@@ -43,35 +43,35 @@ export function authorizeRoles(rolesPermitidos) {
   };
 }
 
-export async function canCrudCareers() {
+export async function canCrudCareers(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_CAREERS);
 }
 
-export async function canCrudElectivos() {
+export async function canCrudElectivos(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_SUBJECTS);
 }
 
-export async function canApproveElectivos(){
+export async function canApproveElectivos(req, res, next){
   return await isAdminHelper(req, res, next, CAN_APPROVE_SUBJECTS);
 }
 
-export async function canCrudHorarios() {
+export async function canCrudHorarios(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_TIMETABLES);
 }
 
-export async function canCrudInscripciones() {
+export async function canCrudInscripciones(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_INSCRIPTIONS);
 }
 
-export async function canModerateInscripciones() {
+export async function canModerateInscripciones(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_MODERATE_INSCRIPTIONS);
 }
 
-export async function canSignUpToElectivos() {
+export async function canSignUpToElectivos(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_SIGN_UP_TO_SUBJECTS);
 }
 
-export async function canCrudUsers() {
+export async function canCrudUsers(req, res, next) {
   return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_USERS);
 }
 
