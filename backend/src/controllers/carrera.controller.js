@@ -2,7 +2,7 @@
 import { handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { createCarrera,deleteCarreraById_Carrera,findAllCarreras,getCarrera, updateCarreraById_Carrera } from "../services/carrera.service.js";
 import { createValidation,integrityValidation } from "../validations/carrera.validation.js";
-import { handleSuccess,handleErrorServer } from "../handlers/response.handlers.js";
+import { handleSuccess } from "../handlers/response.handlers.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 
 const joiValidationHelper = (validationFunction, integrityFunction, body) => {
