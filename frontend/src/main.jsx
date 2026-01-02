@@ -12,12 +12,7 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
-<<<<<<< HEAD
 import { VALID_ADMIN_ROLES } from "./services/admin.service.js";
-=======
-import Carrera from "@pages/Carreras";
-import { getAllowedRoles } from '@services/admin.service.js'
->>>>>>> MERGE-02-01-2026-2
 import Inscripciones from '@pages/Inscripciones';
 
 

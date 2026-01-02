@@ -2,20 +2,11 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
-<<<<<<< HEAD
 // import { isAdminOrProfesor } from '../../../services/admin.service.js';
 // import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
 // const isAdmin = isAdminOrProfesor();
 // const isJefe = isJefeDeCarrera();
-=======
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
-//import { isJefeDeCarrera } from '../../../services/admin.service.js';
-
-const isAdmin = isAdminOrProfesor();
-//const isJefe = isJefeDeCarrera();
-//<td>{Timetable.id_horario}</td>
->>>>>>> MERGE-02-01-2026-2
 
 const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdmin) => {
   if (Array.isArray(data) && data.length > 0) {
@@ -74,7 +65,7 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
             </tr>
             </thead>
             <tbody>
-              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin)}
+              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe)}
             </tbody>
         </table>
         </div>

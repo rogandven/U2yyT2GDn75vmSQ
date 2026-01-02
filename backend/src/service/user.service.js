@@ -48,12 +48,8 @@ export async function getUserByIdFromService(id) {
 export async function MIDDLEWARE_getUserByIdFromService(id) {
     try {
         const userRepository = AppDataSource.getRepository(UserEntity);
-<<<<<<< HEAD
         const user = await userRepository.findOne({where: {id: Number(id)}});
         // console.log(user);
-=======
-        const user = await userRepository.findOne({ where: { id },relations: {carrera: true} });
->>>>>>> MERGE-02-01-2026-2
         if (!user) {
             return null;
         } 

@@ -54,12 +54,8 @@ export const conditionsToSignUp = async (electivoId) => {
     if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
         return "No tiene los créditos requeridos";
     }
-<<<<<<< HEAD
     return true;
 }*/
-=======
-}
->>>>>>> MERGE-02-01-2026-2
 
 /*
 export const electivoExists = async (id, checks = true, req) => {
