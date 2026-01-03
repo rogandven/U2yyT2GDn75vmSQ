@@ -4,6 +4,7 @@ import { createCarrera,deleteCarreraById_Carrera,findAllCarreras,getCarrera, upd
 import { createValidation,integrityValidation } from "../validations/carrera.validation.js";
 import { handleSuccess } from "../handlers/response.handlers.js";
 import { idValidation } from "../validations/modules/id.validation.js";
+import { getCarreraNames as s_getCarreraNames } from "../services/carrera.service.js";
 
 const joiValidationHelper = (validationFunction, integrityFunction, body) => {
     let result = validationFunction.validate(body);
@@ -106,5 +107,15 @@ export async function deleteCarrera(req, res) {
     return handleErrorClient(res, 400, result.message, result.result);
   } catch (error) {
     return handleErrorServer(res, 500, "Error al eliminar la Carrera", error.message);
+  }
+}
+
+export const getCarreraNames = async (req, res) => {
+  try {
+    const carreraNames = await s_getCarreraNames() || [];
+    return res.status(200).json({names: carreraNames});
+  } catch (error) {
+    console.error(error);
+    return res.status(200).json({names: []});
   }
 }

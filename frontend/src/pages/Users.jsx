@@ -9,6 +9,7 @@ import useGetProfile from "@hooks/profile/useGetProfile.jsx";
 import { getUserRole, isJefeDeCarrera, ADMIN_ROLE } from "@services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import { useState } from "react";
+import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
 
 const Users = () => {
   const { users, fetchUsers, setUsers } = useGetUsers();
@@ -17,11 +18,14 @@ const Users = () => {
   const { handleCreateUser } = useCreateUser(fetchUsers);
   const { fetchProfile } = useGetProfile();
 
+  const { carreraNames, fetchCarreraNames } = useGetCarreraNames();
+
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     (async () => {
       const profile = await fetchProfile();
       const data = await fetchUsers();
+      await fetchCarreraNames()
       try {
         const role = getUserRole();
         if (isJefeDeCarrera(role) && profile) {
@@ -57,14 +61,15 @@ const Users = () => {
   const currentPageContent = (Array.isArray(users) && users.slice(firstPostIndex, lastPostIndex)) || [];
   const pageAmount = Math.abs(Math.ceil((Array.isArray(users) && users.length) / POSTS_PER_PAGE)) || 0;
 
+  console.log(carreraNames);
 
   return (
     <div className="users-page">
       {getUserRole() === ADMIN_ROLE && (
-        <button className="btn btn-primary m-3 mb-0" onClick={handleCreateUser}>Crear Usuario</button>
+        <button className="btn btn-primary m-3 mb-0" onClick={() => {handleCreateUser(fetchUsers, carreraNames)}}>Crear Usuario</button>
       )}
       <div className="users-table">
-        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames)}
         <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io'
 import { getUserRole, ADMIN_ROLE } from '@services/admin.service.js';
 
-export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
+export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames) => {
     const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";

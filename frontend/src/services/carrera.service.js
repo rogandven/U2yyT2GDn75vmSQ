@@ -48,3 +48,12 @@ export const deleteCarrera = async (id_carrera) => {
         throw error;
     }
 };
+
+export const getCarreraNames = async () => {
+    try {
+        const response = await axios.get(`/carreras/frontend_list`);
+        return response?.data?.names || [];
+    } catch (error) {
+        return [];
+    }
+};
