@@ -39,6 +39,7 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
   if (!(String(electivo.carreras).split(",").includes(user.carrera))) {
     return `El usuario ${user.fullname || user.username || user.id} no pertenece a ninguna de las carreras requeridas`;
   }
+/*
   if (addtionalChecks) {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(electivo.cierre) > 0) {
@@ -55,9 +56,32 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
         return "No posee los suficientes créditos para inscribir este electivo";
       }
     }
+  }*/
+  
+
+ //tree: Validaciones de fecha en formato Date
+
+  if (addtionalChecks) {
+  const today = new Date();
+  const apertura = new Date(electivo.apertura);
+  const cierre = new Date(electivo.cierre);
+
+  if (today < apertura) {
+    return "Las inscripciones aún no se encuentran abiertas para este electivo";
   }
-  return null;
+  if (today > cierre) {
+    return "Ya se cerraron las inscripciones para este electivo";
+  }
+  if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
+    return "No posee los suficientes créditos para inscribir este electivo";
+  }
+  if (Number(req.user.generacion) < Number(electivo.semestre_minimo)) {
+    return "No pertenece a la generación establecida";
+  }
 }
+return null;
+}
+
 
 export const shallDisplayWarning = async (usuario_id, electivo_id) => {
   const electivo = await RAW_getElectivoById(electivo_id);
