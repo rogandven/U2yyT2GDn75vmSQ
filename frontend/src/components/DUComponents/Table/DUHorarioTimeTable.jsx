@@ -12,7 +12,7 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdm
   if (Array.isArray(data) && data.length > 0) {
       return data.map((Timetable) => (
                   <tr key={"Timetable-"+Timetable.id_horario}>
-                      <td>{Timetable.id_horario}</td>
+                      
                       <td>{(NamePlusIcon((Timetable.nombre_electivo || Timetable.id_electivo), (<GiGraduateCap className='mr-1'></GiGraduateCap>)))}</td>
                       <td>{Timetable.hora_inicio}</td>
                       <td>{Timetable.hora_termino}</td>
@@ -65,7 +65,7 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
             </tr>
             </thead>
             <tbody>
-              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin)}
+              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe)}
             </tbody>
         </table>
         </div>

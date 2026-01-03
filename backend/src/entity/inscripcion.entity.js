@@ -23,6 +23,7 @@ export const InscripcionEntity=new EntitySchema({
         nullable: false,
         default: AWAITING,
     },
+
     id_usuario: {
         type: USER_ID_TYPE,
         nullable: false,
@@ -30,6 +31,10 @@ export const InscripcionEntity=new EntitySchema({
     id_electivo: {
         type: ELECTIVO_ID_TYPE,
         nullable: false,
+    },
+    motivo_rechazo: {
+      type: String,
+      nullable: true,  
     },
   },
 });

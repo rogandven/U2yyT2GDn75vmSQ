@@ -8,13 +8,23 @@ import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTabl
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA, ESTADOS_VALIDOS } from "../constants/ElectivoConstants.jsx";
-import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
-import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
+//import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
+//import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
+import { useCreateElectivo } from "../hooks/electivos/useCreateElectivo.jsx";
+import { useEditElectivo } from "../hooks/electivos/useEditElectivo.jsx";
+
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
+import { rejectElectivo } from "../services/electivo.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import SolicitudForm from "../components/SolicitudForm.jsx";
+import useCreateSolicitud from "../hooks/solicitudes/useCreateSolicitud.jsx";
+import useGetSolicitudes from "../hooks/solicitudes/useGetSolicitudes.jsx";
+import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
 
 const Electivos = () => {
   const userRole = getUserRole();
@@ -22,17 +32,23 @@ const Electivos = () => {
   const isJefe = isJefeDeCarrera(userRole);
 
   const { electivos, fetchElectivos } = useGetElectivos();
+  const { solicitudes, fetchSolicitudes } = useGetSolicitudes();
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
   const { handleEditElectivo } = useEditElectivo(fetchElectivos);
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
   const { handleChangeElectivoStatus } = useChangeElectivoStatus(fetchElectivos);
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
+  const { handleRejectElectivo } = useRejectElectivo(fetchElectivos);
+  const { handleCreateSolicitud } = useCreateSolicitud(fetchSolicitudes);
+  const { carreraNames, fetchCarreraNames } = useGetCarreraNames();
+
 
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
     fetchElectivos();
+    fetchCarreraNames();
   }, []);
 
 
@@ -42,14 +58,15 @@ const Electivos = () => {
     setFiltroArea("");
   };
 
-  const electivosFiltrados = electivos.data?.filter((e) => {
-    const coincideTexto =
-      e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideArea =
-      !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();
+  console.log("ELECTIVOS NO FILTRADOS: " + JSON.stringify(electivos));
+
+  const electivosFiltrados = ((Array.isArray(electivos) && electivos) || []).filter((e) => {
+    const coincideTexto = !(busqueda.trim("").replace(" ", "")) || (e.nombre.toLowerCase().includes(busqueda.toLowerCase()) || e.descripcion.toLowerCase().includes(busqueda.toLowerCase()));
+    const coincideArea = !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();
     return coincideTexto && coincideArea;
   });
+
+  console.log("ELECTIVOS FILTRADOS: " + JSON.stringify(electivosFiltrados));
 
   const mostrarDescripcion = (nombre, descripcion) => {
     Swal.fire({
@@ -76,10 +93,22 @@ const Electivos = () => {
     });
   };
 
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+  const currentPageContent = (Array.isArray(electivosFiltrados) && electivosFiltrados.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(electivosFiltrados) && electivosFiltrados.length) / POSTS_PER_PAGE)) || 0;
+
   return (
     <div className="users-page">
+       <SolicitudForm
+      electivos={electivos || []}
+      onSubmit={handleCreateSolicitud}
+       />
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe)}>Crear Electivo</button>)}
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe, carreraNames)}>Crear Electivo</button>)}
         <SearchBar 
           customClassName={"solicitud-filtro-input ml-3"} 
           placeholder={"Buscar por nombre o descripción..."} 
@@ -99,8 +128,9 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} carreraNames={carreraNames} isAdmin={isAdmin}></DUElectivoTable>
       </div>
+      <DUPageBrowser pageAmount={pageAmount} setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage}></DUPageBrowser>
     </div>
   );
 };

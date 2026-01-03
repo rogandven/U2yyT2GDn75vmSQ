@@ -9,8 +9,10 @@ export const useGetUsers = () => {
             const data = await getUsers();
             dataLogged(data);
             setUsers(data);
+            return data;
         } catch (error) {
             // console.error("Error consiguiendo usuarios:", error);
+            return [];
         }
     };
     

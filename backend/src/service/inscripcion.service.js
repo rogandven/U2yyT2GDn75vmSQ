@@ -16,6 +16,15 @@ import { AWAITING } from "../constants/inscripcion.constants.js";
 const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+export async function inscribirAlumnoElectivo(id_estudiante, id_electivo) {
+  const data = {
+    id_usuario: id_estudiante,
+    id_electivo: id_electivo,
+    estado: AWAITING
+  };
+
+  return await createInscripcion(data);
+}
 
 export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, user_PARAM) => {
   let user = null;
@@ -161,11 +170,9 @@ export async function createInscripcion(data) {
   const dynamicMessage = (inscripcion) => {
     return inscripcion ? "¡Inscripcion creada!" : "No se pudo crear la inscripción";
   }
-
   try {
     let nuevaInscripcion = inscripcionRepo.create(data);
     nuevaInscripcion = await inscripcionRepo.save(nuevaInscripcion);
-    // console.log(JSON.stringify(nuevaInscripcion));
     return formatMessage(nuevaInscripcion, dynamicMessage(nuevaInscripcion));
   } catch (error) {
     console.error(error);

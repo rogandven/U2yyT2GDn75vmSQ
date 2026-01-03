@@ -6,7 +6,8 @@ import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 const electivoRepository = AppDataSource.getRepository(ElectivoEntity);
 
 export async function createElectivo(data) {
-  const newElectivo = electivoRepositoryRepository.create({
+  const { nombre, profesor, descripcion, cupos, creditos, estado } = data || {};
+  const newElectivo = electivoRepository.create({
     nombre,
     profesor,
     descripcion,
@@ -55,17 +56,21 @@ const formatEstado = (estado) => {
   if (!estado || (typeof(estado) !== "string") || estado.length <= 0) {
     return "Estado desconocido";
   }
-  return estado.toLowerCase().replace('_', ' ').trim();
+  return estado.toLowerCase().replace(/_/g, ' ').trim();
 } 
 
 const cambiarEstadoHelper = async (id_electivo, nuevoEstado) => {
   const nuevoEstadoParseado = String(nuevoEstado);
-  const Electivo = await electivoRepository.findOneBy({ id: id_electivo });
+  const Electivo = await electivoRepository.findOneBy({ id_electivo });
   if (!Electivo) {
-    throw Error("Electivo no encontrado", {code: 404});
+    const err = new Error("Electivo no encontrado");
+    err.code = 404;
+    throw err;
   }
   if (Electivo.estado === nuevoEstadoParseado) {
-    throw Error(`El electivo ya está ${formatEstado(nuevoEstadoParseado)}`, {code: 400});
+    const err = new Error(`El electivo ya está ${formatEstado(nuevoEstadoParseado)}`);
+    err.code = 400;
+    throw err;
   }
   Object.assign(Electivo, {estado: nuevoEstadoParseado});
   try {

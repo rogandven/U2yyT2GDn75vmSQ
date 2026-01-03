@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { getUsers, getUserById, getProfile, updateUserById, deleteUserById, registerPrivate } from "../controllers/user.controller.js";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
-import { isAdmin } from "../middleware/authorization.middleware.js";
+import { canCrudUsers, canViewUsers, isAdmin } from "../middleware/authorization.middleware.js";
 import { getAllStudentNames } from "../controllers/user.controller.js";
 
 const router = Router();
@@ -14,12 +14,14 @@ router.use(authenticateJwt);
 router.get("/profile", getProfile);
 router.get("/frontend_list", getAllStudentNames);
 
-//middleware para verificar si el usuario es administrador
-router.use(isAdmin);
+// Rutas para obtener usuarios (vista): permiten ADMINISTRADOR y JEFE_DE_CARRERA
+router.get("/get/", canViewUsers, getUsers);
+router.get("/get/:id", canViewUsers, getUserById);
 
-// Rutas para obtener usuarios
-router.get("/get/", getUsers);
-router.get("/get/:id", getUserById);
+//middleware para operaciones de modificación/eliminación/registro: solo CRUD users
+router.use(canCrudUsers);
+
+// Rutas que requieren permisos de CRUD
 router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
 router.post("/", registerPrivate);

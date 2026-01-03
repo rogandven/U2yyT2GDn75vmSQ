@@ -1,6 +1,6 @@
 import DUSidebarItem from "./DUSidebarItem";
 import { DEFAULT_ICON_MARGIN_STYLES } from "../../../constants/TailwindConstants.jsx";
-
+import { MdClass } from 'react-icons/md'
 import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
 import { MdLibraryBooks } from 'react-icons/md';
 import { CgProfile } from "react-icons/cg";
@@ -38,10 +38,13 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
                 {isAdmin && createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
                 {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
                 {createSidebarItem("Electivos", "/electivos", (<FaBook />), undefined)}
+                {createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}
                 {createSidebarItem("Cerrar Sesión", "/login", (<FaSignOutAlt />), logoutSubmit)}
+                {createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />))}
+                {createSidebarItem("Solicitudes", "/Solicitudes", (<HiPencilAlt />))}
             {/* button to open/close drawer */}
             </ul>
             <div className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Abrir">

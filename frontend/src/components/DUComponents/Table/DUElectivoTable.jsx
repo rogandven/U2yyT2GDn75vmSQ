@@ -10,10 +10,12 @@ import { TiTimes } from 'react-icons/ti';
 import { BsClockFill } from 'react-icons/bs';
 import { IoMdSettings } from 'react-icons/io';
 import { FiUserPlus } from 'react-icons/fi'
-
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
+// import { isAdminOrProfesor } from '../../../services/admin.service.js';
+// import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
 const mustBeDisplayed = (electivo, isAdmin) => {
+  console.log(isAdmin);
   return isAdmin || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
 }
 const estadoConverter = (estado) => {
@@ -27,29 +29,40 @@ const estadoConverter = (estado) => {
 }
 
 export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe, carreraNames}) => {
+    console.log(isAdmin);  
+  /* const coalesceData = (data) => {
+        if (data === null || data === "null" || data === undefined || data === "undefined") {
+            return "";
+        }
+        return data;
+    } */
     let numero = 1;
     return Array.isArray(electivosFiltrados) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">
             <thead>
             <tr>
-                <th></th>
                 <th>Nombre</th>
                 <th>Cupos</th>
-                <th>Créditos Requeridos</th>
+                <th>Crédito</th>
                 <th>Área</th>
                 <th>Apertura</th>
                 <th>Cierre</th>
                 <th>Profesor</th>
                 <th>Carreras</th>
+                <th>Motivo</th>
                 <th>Estado</th>
+                <th>Plazo de renovación</th>
                 <th>Acciones</th>                
             </tr>
             </thead>
             <tbody>
             
+            {/* row 1 */}
+            {console.log("ELECTIVOS FILTRADOS: " + JSON.stringify(electivosFiltrados))}
             {electivosFiltrados.map((electivo) => {
-                return (electivo && mustBeDisplayed(electivo, isAdmin)) && (
+                return (((electivo && mustBeDisplayed(electivo, isAdmin)))) && (
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
@@ -60,13 +73,18 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
                     <td>{electivo.nombre_profesor || electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
+                    <td style={{maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={electivo.estado === ESTADOS_VALIDOS.RECHAZADO ? (electivo.motivo || "") : ""}>
+                      {electivo.estado === ESTADOS_VALIDOS.RECHAZADO ? (electivo.motivo || "") : ""}
+                    </td>
+                    <td>{electivo.plazo_renovacion || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
+                    <td>{electivo.estado === ESTADOS_VALIDOS.RECHAZADO && electivo.motivo_rechazo ? electivo.motivo_rechazo : "-"}</td>
                     <td>
                       {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
                       {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id, isAdmin)}}><MdDelete></MdDelete></button>)}
                       {(<button className="btn btn-accent m-1" onClick={() => {mostrarDescripcion(electivo.nombre, electivo.descripcion)}}><TiInfoLarge/></button>)}
                       {isJefe && (<button className="btn btn-success m-1" onClick={() => {handleApproveElectivo(electivo.id, true, isJefe)}}><ImCheckmark/></button>)}
-                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(electivo.id, false, isJefe)}}><TiTimes/></button>)}
+                      {isJefe && (<button className="btn btn-error m-1" onClick={() => {handleRejectElectivo(isAdmin, isJefe, electivo.id)}}><TiTimes/></button>)}
                       {!isAdmin && (<button className='btn btn-info m-1' onClick={() => {handleCreateInscripcion_PUBLIC(electivo.id, isAdmin)}}><FiUserPlus /></button>)}
                     </td>
                 </tr>     
