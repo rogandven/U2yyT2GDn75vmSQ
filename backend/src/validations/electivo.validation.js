@@ -193,6 +193,7 @@ export const updateValidation = Joi.object({
   "any.min":"Debe proporcionar un campo para actualizar",
 });
 
+//lo comente para poder crear electivos y que puedan ser tomados hoy
 export const dateCreationValidation = Joi.object({
   apertura: Joi.date().min(Date.now()).messages({
       "date.base": "La fecha de apertura debe tener un formato válido (AAAA-MM-DD).",

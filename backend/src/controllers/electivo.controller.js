@@ -70,6 +70,8 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
   }
+
+  //lo comente para poder crear electivos y que puedan ser tomados hoy
   result = dateCreationValidation.validate(req.body);
   if (result.error) {
     return res.status(400).json(getControllerResult_NEW(result.error.message, null));
