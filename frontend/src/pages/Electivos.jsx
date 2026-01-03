@@ -55,14 +55,15 @@ const Electivos = () => {
     setFiltroArea("");
   };
 
-  const electivosFiltrados = (electivos?.data || []).filter((e) => {
-    const coincideTexto =
-      e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      e.descripcion.toLowerCase().includes(busqueda.toLowerCase());
-    const coincideArea =
-      !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();
+  console.log("ELECTIVOS NO FILTRADOS: " + JSON.stringify(electivos));
+
+  const electivosFiltrados = ((Array.isArray(electivos) && electivos) || []).filter((e) => {
+    const coincideTexto = !(busqueda.trim("").replace(" ", "")) || (e.nombre.toLowerCase().includes(busqueda.toLowerCase()) || e.descripcion.toLowerCase().includes(busqueda.toLowerCase()));
+    const coincideArea = !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();
     return coincideTexto && coincideArea;
   });
+
+  console.log("ELECTIVOS FILTRADOS: " + JSON.stringify(electivosFiltrados));
 
   const mostrarDescripcion = (nombre, descripcion) => {
     Swal.fire({
@@ -94,13 +95,13 @@ const Electivos = () => {
 
   const lastPostIndex  = currentPage * POSTS_PER_PAGE;
   const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
-  const currentPageContent = (Array.isArray(electivosFiltrados?.data) && electivosFiltrados?.data.slice(firstPostIndex, lastPostIndex)) || [];
-  const pageAmount = Math.abs(Math.ceil((Array.isArray(electivosFiltrados?.data) && electivosFiltrados?.data?.length) / POSTS_PER_PAGE)) || 0;
+  const currentPageContent = (Array.isArray(electivosFiltrados) && electivosFiltrados.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(electivosFiltrados) && electivosFiltrados.length) / POSTS_PER_PAGE)) || 0;
 
   return (
     <div className="users-page">
        <SolicitudForm
-      electivos={electivos.data || []}
+      electivos={electivos || []}
       onSubmit={handleCreateSolicitud}
        />
       <div className="solicitud-filtros-container flex flex-row mt-3">
@@ -124,7 +125,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} carreraNames={carreraNames}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} carreraNames={carreraNames} isAdmin={isAdmin}></DUElectivoTable>
       </div>
       <DUPageBrowser pageAmount={pageAmount} setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage}></DUPageBrowser>
     </div>
