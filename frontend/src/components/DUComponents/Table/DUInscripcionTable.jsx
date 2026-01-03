@@ -27,6 +27,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                 <th>Electivo</th>
                 <th>Fecha</th>     
                 <th>Estado</th>  
+                <th>EstadoDetalle</th>
                 <th>Acciones</th>   
             </tr>
             </thead>
@@ -43,6 +44,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                         {String(inscripcion.estado).toUpperCase().replaceAll("_", " ")}
                     </div>    
                 </td>
+                 <td> {inscripcion.estado === ESTADOS_VALIDOS.RECHAZADO && inscripcion.motivo_rechazo ? inscripcion.motivo_rechazo : "-"}</td>
                 <td>
                     <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>
                     <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>

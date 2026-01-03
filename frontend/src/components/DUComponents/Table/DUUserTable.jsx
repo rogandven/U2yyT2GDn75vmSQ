@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io'
 import { getUserRole, ADMIN_ROLE } from '@services/admin.service.js';
 
-export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
+export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames) => {
     const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -48,6 +48,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>
                         <div className="badge badge-accent">
                             {(() => {
+                                console.log(usuario);
                                 const c = usuario?.carrera;
                                 if (!c) return "N/A";
                                 if (typeof c === 'string') return coalesceData(c);
@@ -59,7 +60,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser) => {
                     <td>{Number(usuario.creditos)}</td>
                     {getUserRole() === ADMIN_ROLE && (
                     <td>
-                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}><IoMdSettings></IoMdSettings></button>
+                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario, carreraNames)}}><IoMdSettings></IoMdSettings></button>
                         <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}><MdDelete></MdDelete></button>
                     </td>
                     )}

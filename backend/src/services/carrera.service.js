@@ -40,6 +40,7 @@ export async function updateCarreraById_Carrera(carrera, id_carrera) {
   } catch (error) {
     return {data: null, message: "Error al actualizar carrera", error: error};
   }
+  
 }
 
 export async function findAllCarreras() {
@@ -69,6 +70,22 @@ export async function deleteCarreraById_Carrera(id_carrera) {
   }
 }
 
+export const getCarreraNames = async () => {
+  try {
+    const names = [];
+    const carreras = await carreraRepository.find();
+    if (!Array.isArray(carreras)) {
+      return [];
+    }
+    for (let i = 0; i < carreras.length; i++) {
+      names.push(String(carreras[i].id_carrera) + ". " + String(carreras[i].nombre) + " (" + String(carreras[i].sigla) + ")");
+    }
+    return names;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 
 
 

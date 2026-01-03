@@ -1,3 +1,4 @@
+
 import { ADMIN_ROLE } from "../../constants/user.constants.js";
 
 export const shallBeAllowedToMakeChanges = (user_role, user_career, careerString) => {
@@ -8,10 +9,8 @@ export const shallBeAllowedToMakeChanges = (user_role, user_career, careerString
         return true;
     }
     if (!user_career) {
-        // No career info for non-admin user: deny instead of throwing
         return false;
     }
-    // Normalize user_career: accept object with 'sigla' or 'nombre', or string
     let userCareerString = "";
     try {
         if (typeof user_career === 'string') {

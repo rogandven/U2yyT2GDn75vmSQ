@@ -6,7 +6,7 @@ import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { gebi } from "../utils/getElementById.jsx";
 import { VALID_ROLES } from "../../services/admin.service.js";
 
-async function editUserInfo(user) {
+async function editUserInfo(user, carreraNames) {
   const { value: formValues } = await Swal.fire({
     title: "Editar Usuario",
     html: `
@@ -16,7 +16,7 @@ async function editUserInfo(user) {
       ${createSwalField(4, "Correo", (user && user.email) || "")}
       ${StaticDropdownList(VALID_ROLES, (user && user.role) || "Rol", "swal2-input5", "m-1", Boolean(user))}
       ${createSwalField(7, "Generación", (user && user.generation) || "")}
-      ${createSwalField(8, "Carrera", (user && user.carrera) || "")}
+      ${StaticDropdownList(carreraNames, "Carrera", "swal2-input8", "m-1", Boolean(user))}
       ${createSwalField(9, "Créditos", (user && user.creditos) || "")}
         `,
     focusConfirm: false,
@@ -67,10 +67,10 @@ async function editUserInfo(user) {
       const email = gebi('swal2-input4')?.value;
       const role = gebi('swal2-input5')?.value;
       const generation = gebi('swal2-input7')?.value;
-      const carrera = gebi('swal2-input8')?.value;
+      const id_carrera = Number(String(gebi('swal2-input8')?.value).split(".")[0]);
       const creditos = gebi('swal2-input9')?.value;
 
-      return {rut, fullname, username, email, role, generation, carrera, creditos};
+      return {rut, fullname, username, email, role, generation, id_carrera, creditos};
     },
     theme: "dark"
   });
@@ -81,9 +81,10 @@ async function editUserInfo(user) {
 }
 
 export const useEditUser = (fetchUsers) => {
-  const handleEditUser = async (userId, user) => {
+  const handleEditUser = async (userId, user, carreraNames) => {
     try {
-      const formValues = await editUserInfo(user);
+      console.log("CARRERA NAMES: " + JSON.stringify(carreraNames));
+      const formValues = await editUserInfo(user, carreraNames);
       if (!formValues) return;
 
       console.log(formValues);

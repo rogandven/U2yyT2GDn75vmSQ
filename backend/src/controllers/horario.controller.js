@@ -9,6 +9,8 @@ import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
 import sendMail from "../services/email.service.js";
+import {getControllerResult_NEW} from "./utils/utils.controller.js";
+import {getElectivoByIdFromService} from "../service/electivo.service.js"
 import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 
@@ -152,6 +154,19 @@ export async function asignarHorario(req, res) {
   }
 }
 
+export async function getHorariosByIdElectivo(req, res) {
+    const { id_electivo } = req.params;
+    const validationResult = idValidation.validate({id_electivo: id_electivo});
+    if (validationResult.error) {
+      return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
+    }
+    const serviceResult = await getElectivoByIdFromService(id_electivo);
+    if (serviceResult.error) {
+      return res.status(500).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+    }
+    return res.status(200).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+}
+
 export async function patchHorario(req, res) {
   try {
     if (!req || !req.params || !req.body) {
@@ -231,6 +246,21 @@ export function getPublicClass(req, res) {
   handleSuccess(res, 200, "Horarios obtenidas exitosamente", {
     message: "¡Hola! Este es un perfil público. Cualquiera puede verlo.",
   });
+}
+
+export async function getElectivoById(id_electivo) {
+try {
+    const electivos = await electivoRepo.findOne({ where: { id: id_instancia } });
+
+    if (!electivos) {
+        return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+
+    return getServiceResult(false, electivos, "Electivo encontrado", 1);
+  } catch (error) {
+    console.error("Error en electivo.controller.js -> getUserById(): ", error);
+    return getServiceResult(true, null, error.message? error.message : "Error al encontrar electivo", 0);
+  }
 }
 
 export async function getHorarios(req, res) {

@@ -7,7 +7,42 @@ export const VALID_ROLES = [TEACHER_ROLE, STUDENT_ROLE, ADMIN_ROLE, CAREER_HEAD_
 export const VALID_ADMIN_ROLES = [TEACHER_ROLE, ADMIN_ROLE, CAREER_HEAD_ROLE];
 export const VALID_SUPERADMIN_ROLES = [ADMIN_ROLE, CAREER_HEAD_ROLE];
 
+export const getAllowedRoles = () => {
+    return VALID_ADMIN_ROLES;
+}
+
 export const getUserRole = () => {
+   try {
+        const user = JSON.parse(sessionStorage.getItem('usuario'));
+        const rol = String(user?.rol) || STUDENT_ROLE;
+        // console.log("ROL ACTUAL: " + rol);
+        return rol;
+    } catch (error) {
+        console.error(error);
+        return STUDENT_ROLE;
+    }
+}
+
+export const isAdmin = () => {
+    const userRole = getUserRole();
+    // console.log(userRole);
+    const result = (userRole && (userRole === ADMIN_ROLE)) || false;
+    // console.log(result);
+    return result;
+}
+
+export const isAdminOrProfesor = (role) => {
+    return VALID_ADMIN_ROLES.includes(String(role));
+}
+export const isJefeDeCarrera = () => {
+    const userRole = getUserRole();
+    // console.log(userRole);
+    const result = (userRole && (userRole === CAREER_HEAD_ROLE)) || false;
+    // console.log(result);
+    return result;
+}
+
+export const getUserRole2 = () => {
     try {
         const user = JSON.parse(sessionStorage.getItem('usuario'));
         const rol = String(user?.rol) || STUDENT_ROLE;
@@ -19,11 +54,11 @@ export const getUserRole = () => {
     }
 }
 
-export const isAdminOrProfesor = (role) => {
+export const isAdminOrProfesor2 = (role) => {
     return VALID_ADMIN_ROLES.includes(String(role));
 }
 
-export const isJefeDeCarrera = (role) => {
+export const isJefeDeCarrera2 = (role) => {
     return CAREER_HEAD_ROLE === String(role);
 }
 

@@ -12,7 +12,7 @@ export const getCarreras = async () => {
 
 export async function createCarrera  (carreraData) {
     try {
-        const response = await axios.post('/carreras', carreraData);
+        const response = await axios.post('/carreras/crear', carreraData);
         return response.data;
     } catch (error) {
         console.error('Error al crear la carrera:', error);
@@ -46,5 +46,14 @@ export const deleteCarrera = async (id_carrera) => {
     } catch (error) {
         console.error('Error al eliminar la carreras:', error);
         throw error;
+    }
+};
+
+export const getCarreraNames = async () => {
+    try {
+        const response = await axios.get(`/carreras/frontend_list`);
+        return response?.data?.names || [];
+    } catch (error) {
+        return [];
     }
 };

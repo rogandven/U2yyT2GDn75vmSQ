@@ -14,6 +14,7 @@ import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
 // import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
 const mustBeDisplayed = (electivo, isAdmin) => {
+  console.log(isAdmin);
   return isAdmin || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
 }
 /*
@@ -70,8 +71,9 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe}) => {
-    /* const coalesceData = (data) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe, carreraNames}) => {
+    console.log(isAdmin);  
+  /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
         }
@@ -99,8 +101,9 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             </thead>
             <tbody>
             {/* row 1 */}
+            {console.log("ELECTIVOS FILTRADOS: " + JSON.stringify(electivosFiltrados))}
             {electivosFiltrados.map((electivo) => {
-                return (electivo && mustBeDisplayed(electivo, isAdmin)) && (
+                return (((electivo && mustBeDisplayed(electivo, isAdmin)))) && (
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>
@@ -116,6 +119,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     </td>
                     <td>{electivo.plazo_renovacion || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
+                    <td>{electivo.estado === ESTADOS_VALIDOS.RECHAZADO && electivo.motivo_rechazo ? electivo.motivo_rechazo : "-"}</td>
                     <td>
                       {isAdmin && (<button className="btn btn-primary m-1" onClick={() => {handleEditElectivo(electivo.id, electivo, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
                       {isAdmin && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteElectivo(electivo.id, isAdmin)}}><MdDelete></MdDelete></button>)}

@@ -1,6 +1,7 @@
 import UserEntity from "../entity/user.entity.js";
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
+import { VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
 export async function isAdminFromService(VALID_ADMIN_ROLES, email) {
   try {
@@ -22,7 +23,7 @@ export async function isAdminFromService(VALID_ADMIN_ROLES, email) {
     const rolUser = userFound.role;
 
     for(var i = 0; i < VALID_ADMIN_ROLES.length; i++) {
-        // console.log(VALID_ADMIN_ROLES[i]);
+         console.log(VALID_ADMIN_ROLES[i]);
         if (String(rolUser).toUpperCase() === VALID_ADMIN_ROLES[i].toUpperCase()) {
             return null;
         }

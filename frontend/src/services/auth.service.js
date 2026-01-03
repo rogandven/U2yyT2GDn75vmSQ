@@ -21,7 +21,7 @@ export async function registerService(datauser) {
 export async function loginService(datauser) {
     try {
         // console.log(JSON.stringify(axios.defaults));
-        const response = await ('/auth/login', {
+        const response = await axios.post('/auth/login', {
             email: datauser.email,
             password: datauser.password
         });
@@ -51,7 +51,7 @@ export async function loginService(datauser) {
 
 export async function logout() {
     try {
-        await ('/auth/logout');
+        await axios.post('/auth/logout');
         sessionStorage.removeItem('usuario');
         cookies.remove('jwt');
         cookies.remove('jwt-auth');

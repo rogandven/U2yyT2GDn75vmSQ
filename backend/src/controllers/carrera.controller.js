@@ -1,8 +1,22 @@
 "use strict";
 import { handleErrorClient, handleErrorServer } from "../handlers/response.handlers.js";
 import { createCarrera,deleteCarreraById_Carrera,findAllCarreras,getCarrera, updateCarreraById_Carrera } from "../services/carrera.service.js";
-import { careerValidationFunction } from "../validations/carrera.validation.js";
+import { createValidation,integrityValidation } from "../validations/carrera.validation.js";
 import { handleSuccess } from "../handlers/response.handlers.js";
+import { idValidation } from "../validations/modules/id.validation.js";
+import { getCarreraNames as s_getCarreraNames } from "../services/carrera.service.js";
+
+const joiValidationHelper = (validationFunction, integrityFunction, body) => {
+    let result = validationFunction.validate(body);
+    if (result.error) {
+      return String(result.error.message);
+    }
+    result=integrityFunction.validate(body);
+    if (result.error) {
+      return String(result.error.message);
+    }
+    return null;
+}
 
 export async function createCarreras(req,res){
     try{
@@ -10,6 +24,11 @@ export async function createCarreras(req,res){
         if(!req.body || !req.params){
             return res.status(400).json({message: "Datos no proporcionados"});
         }
+
+       let  validationResult = joiValidationHelper(createValidation, integrityValidation, req.body);
+            if (validationResult) {
+              return res.status(400).json({message: validationResult});
+            }
 
         
         const { sigla,nombre } = req.body;
@@ -88,5 +107,15 @@ export async function deleteCarrera(req, res) {
     return handleErrorClient(res, 400, result.message, result.result);
   } catch (error) {
     return handleErrorServer(res, 500, "Error al eliminar la Carrera", error.message);
+  }
+}
+
+export const getCarreraNames = async (req, res) => {
+  try {
+    const carreraNames = await s_getCarreraNames() || [];
+    return res.status(200).json({names: carreraNames});
+  } catch (error) {
+    console.error(error);
+    return res.status(200).json({names: []});
   }
 }

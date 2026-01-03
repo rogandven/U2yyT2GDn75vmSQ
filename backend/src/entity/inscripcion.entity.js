@@ -24,14 +24,18 @@ export const InscripcionEntity=new EntitySchema({
         default: AWAITING,
     },
 
-    /*id_usuario: {
+    id_usuario: {
         type: USER_ID_TYPE,
         nullable: false,
     },
     id_electivo: {
         type: ELECTIVO_ID_TYPE,
         nullable: false,
-    },*/
+    },
+    motivo_rechazo: {
+      type: String,
+      nullable: true,  
+    },
   },
 });
 

@@ -163,7 +163,7 @@ import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants
 import { CARRERAS_PERMITIDAS } from "../../constants/CareerConstants.jsx";
 import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
 
-async function createElectivoInfo() {
+async function createElectivoInfo(carreraNames) {
   const { value } = await Swal.fire({
     title: "Crear Electivo",
     html: `
@@ -175,7 +175,7 @@ async function createElectivoInfo() {
       ${createSwalDateField(6, "Apertura")}
       ${createSwalDateField(7, "Cierre")}
       ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input8", "m-1")}
-      ${StaticDropdownList(CARRERAS_PERMITIDAS, "Carrera", "swal2-input9", "m-1")}
+      ${StaticDropdownList(carreraNames, "Carrera", "swal2-input9", "m-1")}
     `,
     showCancelButton: true,
     confirmButtonText: "Crear",
@@ -189,7 +189,7 @@ async function createElectivoInfo() {
       apertura: gebi("swal2-input6")?.value,
       cierre: gebi("swal2-input7")?.value,
       area: gebi("swal2-input8")?.value,
-      carreras: gebi("swal2-input9")?.value,
+      carreraIdCarrera: Number(String(gebi("swal2-input9")?.value).split(".")[0]),
     }),
   });
 
@@ -197,9 +197,9 @@ async function createElectivoInfo() {
 }
 
 export const useCreateElectivo = (fetchElectivos) => {
-  const handleCreateElectivo = async () => {
+  const handleCreateElectivo = async (isAdmin, isJefe, carreraNames) => {
     try {
-      const formValues = await createElectivoInfo();
+      const formValues = await createElectivoInfo(carreraNames);
       if (!formValues) return;
 
       const role = getUserRole();

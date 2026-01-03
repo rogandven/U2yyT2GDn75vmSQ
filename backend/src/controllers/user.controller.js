@@ -146,10 +146,11 @@ export async function getProfile(req, res) {
 }
 
 export async function registerPrivate(req, res) {
+  console.log(req.body);
   if (!req.body) {
     return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
   }
-  req.body.carrera = processCarrera(req.body.carrera);
+  // req.body.carrera = processCarrera(req.body.carrera);
   req.body.fullname = fullNameProcessor(req.body.fullname);
   req.body.role = processRole(req.body.role);
 
