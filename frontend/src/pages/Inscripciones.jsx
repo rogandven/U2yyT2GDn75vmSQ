@@ -18,7 +18,6 @@ import useChangeInscripcionStatus from "@hooks/Inscripciones/useChangeInscripcio
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { getUserRole, isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
-import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import { useState } from "react";
 

@@ -19,7 +19,6 @@ import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
 import { rejectElectivo } from "../services/electivo.service.js";
-import { isAdminOrProfesor } from "../services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 
 const Electivos = () => {
