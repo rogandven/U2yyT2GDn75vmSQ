@@ -193,3 +193,5 @@ export const useEditElectivo = (fetchElectivos) => {
 
   return { handleEditElectivo };
 };
+
+export default useEditElectivo;

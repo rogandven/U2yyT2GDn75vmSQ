@@ -36,7 +36,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             return "";
         }
         return data;
-    } */
+    } 
     let numero = 1;
     return Array.isArray(electivosFiltrados) && (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
@@ -58,8 +58,6 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             </tr>
             </thead>
             <tbody>
-            
-            {/* row 1 */}
             {console.log("ELECTIVOS FILTRADOS: " + JSON.stringify(electivosFiltrados))}
             {electivosFiltrados.map((electivo) => {
                 return (((electivo && mustBeDisplayed(electivo, isAdmin)))) && (
@@ -239,6 +237,7 @@ export const DUElectivoTable = ({
                               onClick={() =>
                                 handleApproveElectivo(
                                   electivo.id,
+                                  "minecraft",
                                   true,
                                   isJefe
                                 )
@@ -252,6 +251,7 @@ export const DUElectivoTable = ({
                               onClick={() =>
                                 handleRejectElectivo(
                                   electivo.id,
+                                  {"motivo":"Las buenas prácticas"},
                                   false,
                                   isJefe
                                 )

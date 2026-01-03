@@ -223,3 +223,5 @@ export const useCreateElectivo = (fetchElectivos) => {
 
   return { handleCreateElectivo };
 };
+
+export default useCreateElectivo;

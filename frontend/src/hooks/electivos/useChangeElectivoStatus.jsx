@@ -7,6 +7,7 @@ import { RejectElectivoInfo } from "./useRejectElectivo.jsx";
 export const useChangeElectivoStatus = (fetchElectivos) => {
   const handleChangeElectivoStatus = async (electivoId, motivo, approve, isJefe) => {
     try {
+      console.log(isJefe);
       if (!isJefe) {
         return fireDynamicSwal(500, null, "Acceso denegado");
       }

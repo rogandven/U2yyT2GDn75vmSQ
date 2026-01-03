@@ -60,253 +60,13 @@ export async function deleteElectivo(id) {
   return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
 
-/* export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        // console.error("Error al obtener electivos:", error);
-    }
-}
-
-const cambiarEstadoHelper = async (verbo, id) => {
-    try {
-        const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // // console.log(response);
-        return {data: response.data, code: response.status || 500};
-    } catch (error) {
-        // console.error("Error al aprobar el electivo: ", error);
-        return null;
-    }
-}
-
-export async function aprobarElectivos(id) {
-    return await cambiarEstadoHelper('aprobar', id);
-}
-
-export async function rechazarElectivos(id) {
-    return await cambiarEstadoHelper('rechazar', id);
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al eliminar el electivo:", error);
-    }
-}
-
-
-// import axios from "@services/root.service.js";
-/* import axios from "@services/root.service.js";
-
-
-export async function getElectivos(query = "") {
-  try {
-    const response = await axios.get(`/electivos${query}`);
-    return response.data.data || [];
-  } catch (error) {
-    // console.error("Error al obtener electivos:", error);
-    throw error;
-  }
-}
-
-export async function createElectivo(electivoData) {
-  try {
-    const response = await axios.post("/electivos", electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al crear electivo:", error);
-    throw error;
-  }
-}
-
-export async function updateElectivo(id, electivoData) {
-  try {
-    const response = await axios.patch(`/electivos/${id}`, electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al actualizar electivo:", error);
-    throw error;
-  }
-}
-
-
-export async function deleteElectivo(id) {
-  try {
-    const response = await axios.delete(`/electivos/${id}`);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al eliminar electivo:", error);
-    throw error;
-  }
-}
-*/
 
 // import axios from '@services/root.service.js';
-/*
-export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        // console.error("Error al obtener electivos:", error);
-    }
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al eliminar el electivo:", error);
-    }
-}
-    */
 
 
 
-/* export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-const cambiarEstadoHelper = async (verbo, id) => {
-    try {
-        const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // // console.log(response);
-        return {data: response.data, code: response.status || 500};
-    } catch (error) {
-        console.error("Error al aprobar el electivo: ", error);
-        return null;
-    }
-}
-
-export async function aprobarElectivos(id) {
-    return await cambiarEstadoHelper('aprobar', id);
-}
-
-export async function rechazarElectivos(id) {
-    return await cambiarEstadoHelper('rechazar', id);
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-
-
-// import axios from "@services/root.service.js";
-/* import axios from "@services/root.service.js";
-
-
-export async function getElectivos(query = "") {
-  try {
-    const response = await axios.get(`/electivos${query}`);
-    return response.data.data || [];
-  } catch (error) {
-    console.error("Error al obtener electivos:", error);
-    throw error;
-  }
-}
-
-export async function createElectivo(electivoData) {
-  try {
-    const response = await axios.post("/electivos", electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al crear electivo:", error);
-    throw error;
-  }
-}
-
-export async function updateElectivo(id, electivoData) {
-  try {
-    const response = await axios.patch(`/electivos/${id}`, electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al actualizar electivo:", error);
-    throw error;
-  }
-}
-
-
-export async function deleteElectivo(id) {
-  try {
-    const response = await axios.delete(`/electivos/${id}`);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al eliminar electivo:", error);
-    throw error;
-  }
-}
-*/
 
 // import axios from '@services/root.service.js';
-/*
-export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-    */
 
 
 export async function FRONTEND_getElectivoList() {
@@ -324,185 +84,11 @@ export async function FRONTEND_getElectivoList() {
         return res.status(404).json({message: "Error al conseguir electivos"});
     }
 }
-/*
-import axios from '@services/root.service.js';
-
-const routeHelper = async (URL, body, axiosFunction) => {
-  try {
-    const response = await axiosFunction(URL, body);
-    return {data: response.data?.data, status: response.status, message: response.data?.message};
-  } catch (error) {
-    console.error(error);
-    return error.response?.data || null;
-  }
-}
-
-export async function getElectivos() {
-  return (await routeHelper("/electivos/get/", null, axios.get))?.data;
-}
-
-export async function getElectivoById(id) {
-  return await routeHelper(`/electivos/get/${id}`, null, axios.get);
-}
-
-export async function getElectivosSinAprobar() {
-  return await routeHelper(`/electivos/get_private`, null, axios.get);
-}
-
-export async function createElectivoProfesor(electivoData) {
-  return await routeHelper("/electivos", electivoData, axios.post);
-}
-
-export async function createElectivoJefeDeCarrera(electivoData) {
-  return await routeHelper(`/electivos/private`, electivoData, axios.post);
-}
-
-export async function approveElectivo(id) {
-  return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
-}
-
-export async function rejectElectivo(id) {
-  return await routeHelper(`/electivos/private/reject/${id}`, undefined, axios.post);
-}
-
-export async function editElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
-
-export async function updateElectivo(id, electivoData) {
-  return await editElectivo(id, electivoData, axios.patch);
-}
-
-export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
-}
-
-
-export async function FRONTEND_getElectivoList() {
-    const BASE_CASE = [];
-
-    try {
-        const response = await axios.get('/electivos/frontend_list');
-        // console.log(response);
-        const lista = response?.data?.lista;
-        if (!Array.isArray(lista)) {
-            return BASE_CASE;
-        }
-        return lista || BASE_CASE;
-    } catch (res) {
-        return res.status(404).json({message: "Error al conseguir electivos"});
-    }
-}*/
-
-/*
-import axios from '@services/root.service.js';
-
-
-const routeHelper = async (URL, body, axiosFunction) => {
-  try {
-    const token = sessionStorage.getItem("token");
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response =
-      axiosFunction === axios.get || axiosFunction === axios.delete
-        ? await axiosFunction(URL, config)
-        : await axiosFunction(URL, body, config);
-
-    return {
-      data: response.data?.data,
-      status: response.status,
-      message: response.data?.message,
-    };
-  } catch (error) {
-    console.error(error);
-    return error.response?.data || null;
-  }
-};
-
-
-export async function getElectivos() {
-  return (await routeHelper("/electivos/get/", null, axios.get))?.data;
-}
-
-export async function getElectivoById(id) {
-  return await routeHelper(`/electivos/get/${id}`, null, axios.get);
-}
-
-export async function getElectivosSinAprobar() {
-  return await routeHelper(`/electivos/get_private`, null, axios.get);
-}
-
-
-export async function createElectivoProfesor(electivoData) {
-  return await routeHelper("/electivos", electivoData, axios.post);
-}
-
-export async function createElectivoJefeDeCarrera(electivoData) {
-  return await routeHelper(`/electivos/private`, electivoData, axios.post);
-}
-
-
-export async function approveElectivo(id) {
-  return await routeHelper(
-    `/electivos/private/approve/${id}`,
-    undefined,
-    axios.post
-  );
-}
-
-export async function rejectElectivo(id) {
-  return await routeHelper(
-    `/electivos/private/reject/${id}`,
-    undefined,
-    axios.post
-  );
-}
-
-
-export async function editElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
-
-
-export async function updateElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
 
 
 
-export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
-}
 
-
-
-export async function FRONTEND_getElectivoList() {
-  const BASE_CASE = [];
-
-  try {
-    const response = await axios.get('/electivos/frontend_list');
-    const lista = response?.data?.lista;
-
-    if (!Array.isArray(lista)) {
-      return BASE_CASE;
-    }
-
-    return lista;
-  } catch (error) {
-    console.log("Error al obtener electivos: ", error);
-    return BASE_CASE;
-  }
-}
-*/
-
-
-
-const routeHelper2 = async (URL, body, axiosFunction) => {
+const routeHelper4 = async (URL, body, axiosFunction) => {
   try {
     let response;
 
@@ -571,9 +157,9 @@ export async function FRONTEND_getElectivoList2() {
     return BASE_CASE;
   }
 }
-import axios from '@services/root.service.js';
+// import axios from '@services/root.service.js';
 
-const routeHelper = async (URL, body, axiosFunction) => {
+const routeHelper5 = async (URL, body, axiosFunction) => {
   try {
     const response = await axiosFunction(URL, body);
     return {data: response.data?.data, status: response.status, message: response.data?.message};
@@ -583,172 +169,52 @@ const routeHelper = async (URL, body, axiosFunction) => {
   }
 }
 
-export async function getElectivos() {
+export async function getElectivos5() {
   return (await routeHelper("/electivos/get/", null, axios.get))?.data;
 }
 
-export async function getElectivoById(id) {
+export async function getElectivoById5(id) {
   return await routeHelper(`/electivos/get/${id}`, null, axios.get);
 }
 
-export async function getElectivosSinAprobar() {
+export async function getElectivosSinAprobar5() {
   return await routeHelper(`/electivos/get_private`, null, axios.get);
 }
 
-export async function createElectivoProfesor(electivoData) {
+export async function createElectivoProfesor5(electivoData) {
   return await routeHelper("/electivos", electivoData, axios.post);
 }
 
-export async function createElectivoJefeDeCarrera(electivoData) {
+export async function createElectivoJefeDeCarrera5(electivoData) {
   return await routeHelper(`/electivos/private`, electivoData, axios.post);
 }
 
-export async function approveElectivo(id) {
+export async function approveElectivo5(id) {
   return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
-export async function rejectElectivo(id) {
+export async function rejectElectivo5(id) {
   return await routeHelper(`/electivos/private/reject/${id}`, undefined, axios.post);
 }
 
-export async function editElectivo(id, electivoData) {
+export async function editElectivo5(id, electivoData) {
   return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
 }
 
-export async function updateElectivo(id, electivoData) {
+export async function updateElectivo5(id, electivoData) {
   return await editElectivo(id, electivoData, axios.patch);
 }
 
-export async function deleteElectivo(id) {
+export async function deleteElectivo5(id) {
   return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
 
 
-/* export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-const cambiarEstadoHelper = async (verbo, id) => {
-    try {
-        const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // // console.log(response);
-        return {data: response.data, code: response.status || 500};
-    } catch (error) {
-        console.error("Error al aprobar el electivo: ", error);
-        return null;
-    }
-}
-
-export async function aprobarElectivos(id) {
-    return await cambiarEstadoHelper('aprobar', id);
-}
-
-export async function rechazarElectivos(id) {
-    return await cambiarEstadoHelper('rechazar', id);
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-
-
-// import axios from "@services/root.service.js";
-/* import axios from "@services/root.service.js";
-
-
-export async function getElectivos(query = "") {
-  try {
-    const response = await axios.get(`/electivos${query}`);
-    return response.data.data || [];
-  } catch (error) {
-    console.error("Error al obtener electivos:", error);
-    throw error;
-  }
-}
-
-export async function createElectivo(electivoData) {
-  try {
-    const response = await axios.post("/electivos", electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al crear electivo:", error);
-    throw error;
-  }
-}
-
-export async function updateElectivo(id, electivoData) {
-  try {
-    const response = await axios.patch(`/electivos/${id}`, electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al actualizar electivo:", error);
-    throw error;
-  }
-}
-
-
-export async function deleteElectivo(id) {
-  try {
-    const response = await axios.delete(`/electivos/${id}`);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al eliminar electivo:", error);
-    throw error;
-  }
-}
-*/
 
 // import axios from '@services/root.service.js';
-/*
-export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-    */
 
 
-export async function FRONTEND_getElectivoList() {
+export async function FRONTEND_getElectivoList5() {
     const BASE_CASE = [];
 
     try {
@@ -781,38 +247,38 @@ const routeHelper3 = async (URL, body, axiosFunction) => {
   }
 }
 
-export async function getElectivos2() {
+export async function getElectivos6() {
   return await routeHelper("/electivos/get/", null, axios.get);
 }
 
-export async function getElectivoById2(id) {
+export async function getElectivoById6(id) {
   return await routeHelper(`/electivos/get/${id}`, null, axios.get);
 }
 
-export async function getElectivosSinAprobar2() {
+export async function getElectivosSinAprobar6() {
   return await routeHelper(`/electivos/get_private`, null, axios.get);
 }
 
-export async function createElectivoProfesor2(electivoData) {
+export async function createElectivoProfesor6(electivoData) {
   return await routeHelper("/electivos", electivoData, axios.post);
 }
 
-export async function createElectivoJefeDeCarrera2(electivoData) {
+export async function createElectivoJefeDeCarrera6(electivoData) {
   return await routeHelper(`/electivos/private`, electivoData, axios.post);
 }
 
-export async function approveElectivo2(id) {
+export async function approveElectivo6(id) {
   if (typeof(id) !== "number") {
     console.error(id);
   }
   return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
 }
 
-export async function rejectElectivo2(id, motivoData) {
+export async function rejectElectivo6(id, motivoData) {
   return await routeHelper(`/electivos/private/reject/${id}`, motivoData, undefined, axios.post);
 }
 
-export async function editElectivo2(id, electivoData) {
+export async function editElectivo6(id, electivoData) {
   return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
 }
 
@@ -820,260 +286,20 @@ export async function updateElectivo2(id, electivoData) {
   return await editElectivo(id, electivoData);
 }
 
-export async function deleteElectivo2(id) {
+export async function deleteElectivo6(id) {
   return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
 }
 
-/* export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        // console.error("Error al obtener electivos:", error);
-    }
-}
-
-const cambiarEstadoHelper = async (verbo, id) => {
-    try {
-        const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // // console.log(response);
-        return {data: response.data, code: response.status || 500};
-    } catch (error) {
-        // console.error("Error al aprobar el electivo: ", error);
-        return null;
-    }
-}
-
-export async function aprobarElectivos(id) {
-    return await cambiarEstadoHelper('aprobar', id);
-}
-
-export async function rechazarElectivos(id) {
-    return await cambiarEstadoHelper('rechazar', id);
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al eliminar el electivo:", error);
-    }
-}
-
-
-// import axios from "@services/root.service.js";
-/* import axios from "@services/root.service.js";
-
-
-export async function getElectivos(query = "") {
-  try {
-    const response = await axios.get(`/electivos${query}`);
-    return response.data.data || [];
-  } catch (error) {
-    // console.error("Error al obtener electivos:", error);
-    throw error;
-  }
-}
-
-export async function createElectivo(electivoData) {
-  try {
-    const response = await axios.post("/electivos", electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al crear electivo:", error);
-    throw error;
-  }
-}
-
-export async function updateElectivo(id, electivoData) {
-  try {
-    const response = await axios.patch(`/electivos/${id}`, electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al actualizar electivo:", error);
-    throw error;
-  }
-}
-
-
-export async function deleteElectivo(id) {
-  try {
-    const response = await axios.delete(`/electivos/${id}`);
-    return response.data.data || response.data;
-  } catch (error) {
-    // console.error("Error al eliminar electivo:", error);
-    throw error;
-  }
-}
-*/
 
 // import axios from '@services/root.service.js';
-/*
-export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        // console.error("Error al obtener electivos:", error);
-    }
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        // console.error("Error al eliminar el electivo:", error);
-    }
-}
-    */
 
 
 
-/* export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-const cambiarEstadoHelper = async (verbo, id) => {
-    try {
-        const response = await axios.post(`/electivos/${id}/${verbo}`);
-        // // console.log(response);
-        return {data: response.data, code: response.status || 500};
-    } catch (error) {
-        console.error("Error al aprobar el electivo: ", error);
-        return null;
-    }
-}
-
-export async function aprobarElectivos(id) {
-    return await cambiarEstadoHelper('aprobar', id);
-}
-
-export async function rechazarElectivos(id) {
-    return await cambiarEstadoHelper('rechazar', id);
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-
-
-// import axios from "@services/root.service.js";
-/* import axios from "@services/root.service.js";
-
-
-export async function getElectivos(query = "") {
-  try {
-    const response = await axios.get(`/electivos${query}`);
-    return response.data.data || [];
-  } catch (error) {
-    console.error("Error al obtener electivos:", error);
-    throw error;
-  }
-}
-
-export async function createElectivo(electivoData) {
-  try {
-    const response = await axios.post("/electivos", electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al crear electivo:", error);
-    throw error;
-  }
-}
-
-export async function updateElectivo(id, electivoData) {
-  try {
-    const response = await axios.patch(`/electivos/${id}`, electivoData);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al actualizar electivo:", error);
-    throw error;
-  }
-}
-
-
-export async function deleteElectivo(id) {
-  try {
-    const response = await axios.delete(`/electivos/${id}`);
-    return response.data.data || response.data;
-  } catch (error) {
-    console.error("Error al eliminar electivo:", error);
-    throw error;
-  }
-}
-*/
 
 // import axios from '@services/root.service.js';
-/*
-export async function getElectivos() {
-    try {
-        const response = await axios.get('/electivos');
-        return response.data.data;
-    } catch (error) {
-        console.error("Error al obtener electivos:", error);
-    }
-}
-
-export async function editElectivo(electivoId, electivoData) { 
-    try {
-        const response = await axios.patch(`/electivos/${electivoId}`, electivoData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al editar el electivo:", error);
-    }
-}
-
-export async function deleteElectivo(electivoId) {
-    try {
-        const response = await axios.delete(`/electivos/${electivoId}`);
-        return response.data;
-    } catch (error) {
-        console.error("Error al eliminar el electivo:", error);
-    }
-}
-    */
 
 
-export async function FRONTEND_getElectivoList2() {
+export async function FRONTEND_getElectivoList6() {
     const BASE_CASE = [];
 
     try {
@@ -1088,181 +314,7 @@ export async function FRONTEND_getElectivoList2() {
         return res.status(404).json({message: "Error al conseguir electivos"});
     }
 }
-/*
-import axios from '@services/root.service.js';
 
-const routeHelper = async (URL, body, axiosFunction) => {
-  try {
-    const response = await axiosFunction(URL, body);
-    return {data: response.data?.data, status: response.status, message: response.data?.message};
-  } catch (error) {
-    console.error(error);
-    return error.response?.data || null;
-  }
-}
-
-export async function getElectivos() {
-  return (await routeHelper("/electivos/get/", null, axios.get))?.data;
-}
-
-export async function getElectivoById(id) {
-  return await routeHelper(`/electivos/get/${id}`, null, axios.get);
-}
-
-export async function getElectivosSinAprobar() {
-  return await routeHelper(`/electivos/get_private`, null, axios.get);
-}
-
-export async function createElectivoProfesor(electivoData) {
-  return await routeHelper("/electivos", electivoData, axios.post);
-}
-
-export async function createElectivoJefeDeCarrera(electivoData) {
-  return await routeHelper(`/electivos/private`, electivoData, axios.post);
-}
-
-export async function approveElectivo(id) {
-  return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
-}
-
-export async function rejectElectivo(id) {
-  return await routeHelper(`/electivos/private/reject/${id}`, undefined, axios.post);
-}
-
-export async function editElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
-
-export async function updateElectivo(id, electivoData) {
-  return await editElectivo(id, electivoData, axios.patch);
-}
-
-export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
-}
-
-
-export async function FRONTEND_getElectivoList() {
-    const BASE_CASE = [];
-
-    try {
-        const response = await axios.get('/electivos/frontend_list');
-        // console.log(response);
-        const lista = response?.data?.lista;
-        if (!Array.isArray(lista)) {
-            return BASE_CASE;
-        }
-        return lista || BASE_CASE;
-    } catch (res) {
-        return res.status(404).json({message: "Error al conseguir electivos"});
-    }
-}*/
-
-/*
-import axios from '@services/root.service.js';
-
-
-const routeHelper = async (URL, body, axiosFunction) => {
-  try {
-    const token = sessionStorage.getItem("token");
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response =
-      axiosFunction === axios.get || axiosFunction === axios.delete
-        ? await axiosFunction(URL, config)
-        : await axiosFunction(URL, body, config);
-
-    return {
-      data: response.data?.data,
-      status: response.status,
-      message: response.data?.message,
-    };
-  } catch (error) {
-    console.error(error);
-    return error.response?.data || null;
-  }
-};
-
-
-export async function getElectivos() {
-  return (await routeHelper("/electivos/get/", null, axios.get))?.data;
-}
-
-export async function getElectivoById(id) {
-  return await routeHelper(`/electivos/get/${id}`, null, axios.get);
-}
-
-export async function getElectivosSinAprobar() {
-  return await routeHelper(`/electivos/get_private`, null, axios.get);
-}
-
-
-export async function createElectivoProfesor(electivoData) {
-  return await routeHelper("/electivos", electivoData, axios.post);
-}
-
-export async function createElectivoJefeDeCarrera(electivoData) {
-  return await routeHelper(`/electivos/private`, electivoData, axios.post);
-}
-
-
-export async function approveElectivo(id) {
-  return await routeHelper(
-    `/electivos/private/approve/${id}`,
-    undefined,
-    axios.post
-  );
-}
-
-export async function rejectElectivo(id) {
-  return await routeHelper(
-    `/electivos/private/reject/${id}`,
-    undefined,
-    axios.post
-  );
-}
-
-
-export async function editElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
-
-
-export async function updateElectivo(id, electivoData) {
-  return await routeHelper(`/electivos/${id}`, electivoData, axios.patch);
-}
-
-
-
-export async function deleteElectivo(id) {
-  return await routeHelper(`/electivos/${id}`, undefined, axios.delete);
-}
-
-
-
-export async function FRONTEND_getElectivoList() {
-  const BASE_CASE = [];
-
-  try {
-    const response = await axios.get('/electivos/frontend_list');
-    const lista = response?.data?.lista;
-
-    if (!Array.isArray(lista)) {
-      return BASE_CASE;
-    }
-
-    return lista;
-  } catch (error) {
-    console.log("Error al obtener electivos: ", error);
-    return BASE_CASE;
-  }
-}
-*/
 
 const routeHelper2 = async (URL, body, axiosFunction) => {
   try {
