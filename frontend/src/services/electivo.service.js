@@ -37,11 +37,11 @@ export async function createElectivoJefeDeCarrera(electivoData) {
   return await routeHelper(`/electivos/private`, electivoData, axios.post);
 }
 
-export async function approveElectivo(id) {
+export async function approveElectivo(id, body = undefined) {
   if (typeof(id) !== "number") {
     console.error(id);
   }
-  return await routeHelper(`/electivos/private/approve/${id}`, undefined, axios.post);
+  return await routeHelper(`/electivos/private/approve/${id}`, body, axios.post);
 }
 
 export async function rejectElectivo(id, formValues) {

@@ -233,6 +233,14 @@ export const ElectivoEntity = new EntitySchema({
       type: String,
       nullable: false,
     },
+    plazo_renovacion: {
+      type: "varchar",
+      nullable: true,
+    },
+    fecha_renovacion: {
+      type: "date",
+      nullable: true,
+    },
     motivo: {
       type: String,
       nullable: true,

@@ -178,7 +178,10 @@ const changeElectivoEstado = async (req, res, estado) => {
       return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
     }
     console.log(req.user.carrera);;
-    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.carrera || req.user.career, req.user.rol || req.user.role);
+    const motivo = (req.body && req.body.motivo) ? String(req.body.motivo) : null;
+    // accept a period string like '2026-1' or a numeric plazo (days)
+    const periodo = (req.body && (req.body.periodo_renovacion || req.body.plazo_renovacion || req.body.plazo)) ? req.body.periodo_renovacion || req.body.plazo_renovacion || req.body.plazo : null;
+    const serviceResult = await changeElectivoEstadoFromService(id, estado, req.user.id, req.user.carrera || req.user.career, req.user.rol || req.user.role, periodo, motivo);
     if (serviceResult.error) {
       return res.status(500).json(getControllerResult_NEW("Error interno del servidor", serviceResult));
     }
