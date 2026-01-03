@@ -7,8 +7,8 @@ import { createHorario, findAllHorarios, getConflictingHorarios, deleteHorarioBy
 import { getHorario, updateHorarioById_Electivo } from "../services/horario.service.js";
 import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
-import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
-import sendMail from "../services/email.service.js";
+import { EMAIL_getAllCareerChiefs, getUserByIdFromService } from "../service/user.service.js";
+import { sendMail } from "../services/email.service.js";
 import {getControllerResult_NEW} from "./utils/utils.controller.js";
 import {getElectivoByIdFromService} from "../service/electivo.service.js"
 
@@ -86,6 +86,7 @@ export async function asignarHorario(req, res) {
     if (validationResult.error) {
       return res.status(400).json({message: validationResult.error?.message || "ID inválido"});
     }
+    const electivo = await RAW_getElectivoById(id_electivo);
     validationResult = joiValidationHelper(assignationValidation, integrityValidation, req.body);
     if (validationResult) {
       return res.status(400).json({message: validationResult});
@@ -100,6 +101,7 @@ export async function asignarHorario(req, res) {
     }
 
     const { hora_inicio, hora_termino, sala, dia } = req.body;
+    const user =getUserByIdFromService(4);
 
     const existingHorarioSala = await getConflictingHorarios(hora_inicio, hora_termino, sala, dia);
     if (existingHorarioSala.length > 0) {
@@ -108,7 +110,6 @@ export async function asignarHorario(req, res) {
     
     if (await isFirstHorario(id_electivo)) {
       const chiefs = await EMAIL_getAllCareerChiefs(req.user.carrera || req.user.career);
-      const electivo = await RAW_getElectivoById(id_electivo);
       const nombre = String(electivo?.nombre || "Electivo desconocido");
 
       chiefs.forEach((chief) => {
@@ -118,6 +119,54 @@ export async function asignarHorario(req, res) {
 
 
     if (newHorario = await createHorario(id_electivo, hora_inicio, hora_termino, sala, dia)) {
+      const subject = " Nueva propuesta de electivo";
+      const mensaje = `
+      Buenas tardes hago envío de este mensaje para pedir que se realize el electivo ${electivo.nombre}, esperando su respuesta
+      se despide atentamente 
+      `
+      const mensajeHTML = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #ff6b00, #ff8c00); color: white; padding: 25px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="margin: 0; font-size: 28px;">Mensaje para electivos</h1>
+          <p style="margin: 10px 0 0 0; font-size: 16px;">Sistema de Rally</p>
+        </div>
+
+        <div style="background-color: #ffffff; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <h2 style="color: #ff6b00; margin-top: 0;">${electivo.nombre}</h2>
+
+          <div style="background-color: #fff3e0; border-left: 4px solid #ff6b00; padding: 15px; margin: 20px 0;">
+            <p style="margin: 0 0 10px 0;"><strong>📍 Lugar:</strong> ${evento.lugar}</p>
+            <p style="margin: 10px 0 0 0; color: #555;">${mensaje}</p>
+          </div>
+
+          <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+            <p style="color: #666; font-size: 12px; margin: 0;">
+              Atentamente,<br><strong>profesor ubb</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Enviar correo a cada usuario
+    const promesasEmail = user.map(async (user) => {
+      if (user.email) {
+        try {
+          await sendEmail(
+            user.email,
+            subject,
+            mensaje,
+            mensajeHTML
+          );
+          console.log(`✓ Email enviado a: ${user.email}`);
+        } catch (error) {
+          console.error(`✗ Error enviando email a ${user.email}:`, error.message);
+        }
+      }
+    });
+
+    // Esperar a que todos los correos se envíen
+    await Promise.all(promesasEmail);
       return res.status(201).json({ message: "Horario registrado exitosamente!", data: newHorario });
     } else {
       return res.status(500).json({message: "Error al registrar horario"});

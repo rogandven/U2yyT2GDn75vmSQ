@@ -8,11 +8,13 @@ import { useState } from "react";
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUHorarioTable } from "../components/DUComponents/Table/DUHorarioTimeTable.jsx";
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
-import { isAdminOrProfesor } from "../services/admin.service.js";
+import { isAdminOrProfesor, getUserRole} from "../services/admin.service.js";
+import { GiTurret } from "react-icons/gi";
 //import { isJefeDeCarrera } from "../services/admin.service.js";
 
 const Timetable = () => {
-    const isAdmin = isAdminOrProfesor();
+    const userRole = getUserRole();
+    const isAdmin = isAdminOrProfesor(userRole);
     //const isJefe = isJefeDeCarrera();
 
     const [horarioData, setHorarioData] = useState([]);
@@ -42,14 +44,16 @@ const Timetable = () => {
         setBuscar("");
     };
 
+    // console.log(horarioData.data);
+
     const electivosEncontrados = horarioData.data?.filter((e) => {
-    const coincideTexto =
-      e.nombre.toLowerCase().includes(buscar.toLowerCase()) ||
-      e.descripcion.toLowerCase().includes(buscar.toLowerCase());
-    /*const coincideArea =
-      !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase();*/
-    return coincideTexto;
-  });
+      // console.log(buscar);
+      const coincideTexto =
+        e.nombre_electivo?.toLowerCase().includes(buscar.toLowerCase());
+      /* const coincideArea =
+        !filtroArea || e.area.toLowerCase() === filtroArea.toLowerCase(); */
+      return coincideTexto;
+    });
 
     return (
         <div className="timetable-page">
@@ -66,7 +70,7 @@ const Timetable = () => {
           </button>
         )}
             <div className="timetable2-page">
-                <DUHorarioTable data={timetables?.data || []} electivosEncontrados={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
+                <DUHorarioTable data={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} isAdmin={isAdmin} />
             </div>
         </div>
     );

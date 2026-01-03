@@ -3,7 +3,7 @@ import { AppDataSource } from "../config/configDb.js";
 import InscripcionEntity from "../entity/inscripcion.entity.js";
 import { electivoExists, formatMessage, userExists } from "./utils/utils.inscription.service.js";
 import { inscripcionAlreadyExists as IAE_helper } from "./utils/utils.inscription.service.js";
-import sendMail from "../services/email.service.js";
+import { sendMail } from "../services/email.service.js";
 import { RAW_getUserById } from "./user.service.js";
 import { RAW_getElectivoById } from "./electivo.service.js";
 // import UserEntity from "../entity/user.entity.js";

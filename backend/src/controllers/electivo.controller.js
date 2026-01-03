@@ -57,9 +57,10 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
   req.body.id_profesor = req.user.id;
   console.log(req.body);
 
+  /*
   if (!(req.body.carreras && String(req.body.carreras).includes(req.user.carrera))) {
     return res.status(401).json(getControllerResult_NEW("Debe pertenecer a una de las carreras listadas"));
-  }
+  } */
 
   let result = createValidation.validate(req.body);
   if (result.error) {

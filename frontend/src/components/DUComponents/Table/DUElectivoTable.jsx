@@ -12,13 +12,8 @@ import { FiUserPlus } from 'react-icons/fi'
 
 import { ESTADOS_VALIDOS } from '../../../constants/ElectivoConstants.jsx';
 
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
-import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-const isAdmin = isAdminOrProfesor();
-const isJefe = isJefeDeCarrera();
-
-const mustBeDisplayed = (electivo) => {
+const mustBeDisplayed = (electivo, isJefe) => {
   return isJefe || (electivo.estado && (electivo.estado === ESTADOS_VALIDOS.APROBADO));
 }
 /*
@@ -75,7 +70,7 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -104,7 +99,7 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tbody>
             {/* row 1 */}
             {electivosFiltrados.map((electivo) => {
-                return electivo && mustBeDisplayed(electivo) && (
+                return electivo && mustBeDisplayed(electivo, isJefe) && (
                 <tr key={"ELECTIVO" + String(numero)}>
                     <th>{numero++}</th>
                     <td>{electivo.nombre || "N/A"}</td>

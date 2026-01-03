@@ -4,7 +4,7 @@ import ElectivoEntity, { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 import { RAW_getUserById } from "./user.service.js";
-import sendMail from "../services/email.service.js";
+import { sendMail } from "../services/email.service.js";
 
 const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
 

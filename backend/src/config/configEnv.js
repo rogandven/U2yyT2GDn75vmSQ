@@ -23,6 +23,7 @@ export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const EMAIL=process.env.EMAIL;
 export const EMAIL_PROVIDER=process.env.EMAIL_PROVIDER;
 export const EMAIL_PASSWORD=process.env.EMAIL_PASSWORD;
+export const EMAIL_PASSWORD_PROFE=process.env.EMAIL_PASSWORD_PROFE;
 export const JWT_SECRET = SESSION_SECRET;
 
 export const EXMAPLE_EMAIL_1 = process.env.EXMAPLE_EMAIL_1;

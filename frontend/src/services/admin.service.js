@@ -32,6 +32,11 @@ export const isAdmin = () => {
 }
 
 export const isAdminOrProfesor = (role) => {
+    if (!role) {
+        throw Error("Función mal llamada");
+    }
+    // console.log("¿Es administrador el usuario?: " + String(Boolean(VALID_ADMIN_ROLES.includes(String(role)))));
+    // console.log("Rol: " + JSON.stringify(role));
     return VALID_ADMIN_ROLES.includes(String(role));
 }
 export const isJefeDeCarrera = () => {

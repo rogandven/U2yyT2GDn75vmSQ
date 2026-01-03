@@ -17,7 +17,7 @@ import useChangeInscripcionStatus from "@hooks/Inscripciones/useChangeInscripcio
 
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
-import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import { isAdminOrProfesor, isJefeDeCarrera, getUserRole } from "../services/admin.service.js";
 
 const Inscripciones = () => {
   const { inscripciones, fetchInscripciones } = useGetInscripciones();
@@ -31,8 +31,9 @@ const Inscripciones = () => {
   const { electivoNames, fetchElectivoNames } = useGetElectivoNames();
   const { userNames, fetchUserNames } = useGetUserNames();
 
-  const isAdmin = isAdminOrProfesor();
-  const isJefe = isJefeDeCarrera();
+  const userRole = getUserRole();
+  const isAdmin = isAdminOrProfesor(userRole);
+  const isJefe = isJefeDeCarrera(userRole);
 
   // const [busqueda, setBusqueda] = useState("");
   // const [filtroArea, setFiltroArea] = useState("");
