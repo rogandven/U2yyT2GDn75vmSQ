@@ -18,6 +18,9 @@ import useChangeInscripcionStatus from "@hooks/Inscripciones/useChangeInscripcio
 import { useGetElectivoNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { useGetUserNames } from "../hooks/Inscripciones/useGetNames.jsx";
 import { getUserRole, isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import { useState } from "react";
 
 const Inscripciones = () => {
   const userRole = getUserRole();
@@ -43,6 +46,15 @@ const Inscripciones = () => {
     fetchElectivoNames();
     fetchUserNames();
   }, []);
+
+
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+  const currentPageContent = (Array.isArray(inscripciones?.data) && inscripciones?.data.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(inscripciones?.data) && inscripciones?.data?.length) / POSTS_PER_PAGE)) || 0;
 
   /* const limpiarFiltros = () => {
     setBusqueda("");
@@ -99,8 +111,9 @@ const Inscripciones = () => {
         ) */}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUInscripcionTable inscripciones={inscripciones} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames} isAdmin={isAdmin} isJefe={isJefe}></DUInscripcionTable>
+        <DUInscripcionTable inscripciones={currentPageContent} handleEditInscripcion={handleEditInscripcion} handleDeleteInscripcion={handleDeleteInscripcion} handleChangeInscripcionStatus={handleChangeInscripcionStatus} electivoNames={electivoNames} userNames={userNames} isAdmin={isAdmin} isJefe={isJefe}></DUInscripcionTable>
       </div>
+      <DUPageBrowser pageAmount={pageAmount} currentPageNumber={currentPage} setCurrentPageNumber={setCurrentPage}></DUPageBrowser>
     </div>
   );
 };

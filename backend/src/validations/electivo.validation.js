@@ -119,7 +119,13 @@ export const integrityValidation = Joi.object({
       "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
   semestre_minimo: Joi.custom(validateGeneration),
-  carreras: Joi.custom(careerArrayValidationFunction),
+  //lo que si funciona
+  //carreras: Joi.custom(careerArrayValidationFunction),
+  carreras: Joi.string().min(5).required().messages({
+  "string.base": "Las carreras deben ser un texto válido",
+  "string.empty": "Las carreras no pueden estar vacías",
+  "any.required": "Las carreras son obligatorias",
+}),
   id_profesor: Joi.custom(idValidationFunction)
 });
 

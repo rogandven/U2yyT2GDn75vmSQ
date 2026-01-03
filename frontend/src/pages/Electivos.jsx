@@ -7,8 +7,11 @@ import { DUElectivoTable } from "../components/DUComponents/Table/DUElectivoTabl
 import { SearchBar } from "../components/DUComponents/SearchBar/SearchBar.jsx";
 import { DUSelection } from "../components/DUComponents/DUSelection.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA, ESTADOS_VALIDOS } from "../constants/ElectivoConstants.jsx";
-import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
-import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
+//import useCreateElectivo from "../hooks/electivos/useCreateElectivo.jsx";
+//import useEditElectivo from "../hooks/electivos/useEditElectivo.jsx";
+import { useCreateElectivo } from "../hooks/electivos/useCreateElectivo.jsx";
+import { useEditElectivo } from "../hooks/electivos/useEditElectivo.jsx";
+
 import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
@@ -16,6 +19,8 @@ import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import useRejectElectivo from "../hooks/electivos/useRejectElectivo.jsx";
 import { rejectElectivo } from "../services/electivo.service.js";
+import { isAdminOrProfesor } from "../services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 
 const Electivos = () => {
   const userRole = getUserRole();
@@ -76,6 +81,14 @@ const Electivos = () => {
     });
   };
 
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+  const currentPageContent = (Array.isArray(electivosFiltrados?.data) && electivosFiltrados?.data.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(electivosFiltrados?.data) && electivosFiltrados?.data?.length) / POSTS_PER_PAGE)) || 0;
+
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
@@ -99,8 +112,9 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable data={electivos?.data || []} electivosFiltrados={electivosFiltrados} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleRejectElectivo2} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} isAdmin={isAdmin} isJefe={isJefe}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC}></DUElectivoTable>
       </div>
+      <DUPageBrowser pageAmount={pageAmount} setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage}></DUPageBrowser>
     </div>
   );
 };
