@@ -359,21 +359,8 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
     req.body.nombre = fullNameProcessor(req.body.nombre);
   }
 
-  req.body.carreras = processCarrera(req.body.carreras);
   req.body.estado = estadoNuevo;
-  req.body.id_profesor = req.user.id;
-
-  // ✅ CORRECCIÓN: validar carreras como arreglo (no includes directo)
-  const carrerasArray = String(req.body.carreras).split(",");
-
-  if (!carrerasArray.includes(req.user.carrera)) {
-    return res.status(401).json(
-      getControllerResult_NEW(
-        "Debe pertenecer a una de las carreras listadas",
-        null
-      )
-    );
-  }
+  req.body.usuariosId = req.user.id;
 
   let result = createValidation.validate(req.body);
   if (result.error) {
@@ -482,20 +469,6 @@ export async function updateElectivo(req, res) {
 
     if (req.body.nombre) {
       req.body.nombre = fullNameProcessor(req.body.nombre);
-    }
-
-    req.body.carreras = processCarrera(req.body.carreras);
-
-    // ✅ CORRECCIÓN: validar carreras correctamente
-    const carrerasArray = String(req.body.carreras).split(",");
-
-    if (!carrerasArray.includes(req.user.carrera)) {
-      return res.status(401).json(
-        getControllerResult_NEW(
-          "Debe pertenecer a una de las carreras listadas",
-          null
-        )
-      );
     }
 
     if ((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) {

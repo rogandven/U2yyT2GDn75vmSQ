@@ -125,12 +125,8 @@ export const integrityValidation = Joi.object({
   semestre_minimo: Joi.custom(validateGeneration),
   //lo que si funciona
   //carreras: Joi.custom(careerArrayValidationFunction),
-  carreras: Joi.string().min(5).required().messages({
-  "string.base": "Las carreras deben ser un texto válido",
-  "string.empty": "Las carreras no pueden estar vacías",
-  "any.required": "Las carreras son obligatorias",
-}),
-  id_profesor: Joi.custom(idValidationFunction)
+  carreraIdCarrera: Joi.custom(idValidationFunction),
+  usuariosId: Joi.custom(idValidationFunction)
 });
 export const rejectElectivoValidation = Joi.object({
   motivo_rechazo: Joi.string().min(MIN_STATUS).required().messages({
@@ -166,10 +162,10 @@ export const createValidation = Joi.object({
   semestre_minimo: Joi.any().required().messages({
     "any.required": "El semestre mínimo es obligatorio",
   }),
-  carreras: Joi.any().required().messages({
+  carreraIdCarrera: Joi.any().required().messages({
     "any.required": "Las carreras son obligatorias",
   }),
-  id_profesor: Joi.any().required().messages({
+  usuariosId: Joi.any().required().messages({
     "any.required": "El ID del profesor es obligatorio",
   }),
   creditos_requeridos: Joi.any().required().messages({
@@ -188,8 +184,8 @@ export const updateValidation = Joi.object({
   descripcion: Joi.any(),
   aprobado: Joi.any(),
   semestre_minimo: Joi.any(),
-  carreras: Joi.any(),
-  id_profesor: Joi.any(),
+  carreraIdCarrera: Joi.any(),
+  usuariosId: Joi.any(),
   creditos_requeridos: Joi.any(),
   motivo_rechazo: Joi.any(),
 }).min(1).messages({

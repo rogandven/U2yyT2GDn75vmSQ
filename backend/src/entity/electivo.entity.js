@@ -226,12 +226,12 @@ export const ElectivoEntity = new EntitySchema({
       type: "varchar",
       length: 100,
     },
-    id_profesor: {
+    usuariosId: {
       type: "int",
       nullable: false,
     },
-    carreras: {
-      type: String,
+    carreraIdCarrera: {
+      type: "int",
       nullable: false,
     },
     motivo_rechazo: {
@@ -248,9 +248,10 @@ export const ElectivoEntity = new EntitySchema({
     },
     carrera:{
       type:"many-to-one",
-      target:carreraEntity,
-      JoinColumn:{name:"carreras"},
+      target: carreraEntity,
+      joinColumn:{name:"carreraIdCarrera"},
       onDelete:"CASCADE",
+      inverseSide: 'electivo',
     }
   }
 });

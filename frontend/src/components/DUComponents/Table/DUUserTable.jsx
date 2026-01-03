@@ -48,6 +48,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                     <td>
                         <div className="badge badge-accent">
                             {(() => {
+                                console.log(usuario);
                                 const c = usuario?.carrera;
                                 if (!c) return "N/A";
                                 if (typeof c === 'string') return coalesceData(c);
@@ -59,7 +60,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                     <td>{Number(usuario.creditos)}</td>
                     {getUserRole() === ADMIN_ROLE && (
                     <td>
-                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario)}}><IoMdSettings></IoMdSettings></button>
+                        <button className="btn btn-primary m-1" onClick={() => {handleEditUser(usuario.id, usuario, carreraNames)}}><IoMdSettings></IoMdSettings></button>
                         <button className="btn btn-secondary m-1" onClick={() => {handleDeleteUser(usuario.id, usuario)}}><MdDelete></MdDelete></button>
                     </td>
                     )}

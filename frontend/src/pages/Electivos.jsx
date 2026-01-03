@@ -23,6 +23,8 @@ import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import SolicitudForm from "../components/SolicitudForm.jsx";
 import useCreateSolicitud from "../hooks/solicitudes/useCreateSolicitud.jsx";
 import useGetSolicitudes from "../hooks/solicitudes/useGetSolicitudes.jsx";
+import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
+
 const Electivos = () => {
   const userRole = getUserRole();
   const isAdmin = isAdminOrProfesor(userRole);
@@ -37,12 +39,15 @@ const Electivos = () => {
   const { handleCreateInscripcion_PUBLIC } = useCreateInscripcion_PUBLIC();
   const { handleRejectElectivo } = useRejectElectivo(fetchElectivos);
   const { handleCreateSolicitud } = useCreateSolicitud(fetchSolicitudes);
+  const { carreraNames, fetchCarreraNames } = useGetCarreraNames();
+
 
   const [busqueda, setBusqueda] = useState("");
   const [filtroArea, setFiltroArea] = useState("");
 
   useEffect(() => {
     fetchElectivos();
+    fetchCarreraNames();
   }, []);
 
   const limpiarFiltros = () => {
@@ -99,7 +104,7 @@ const Electivos = () => {
       onSubmit={handleCreateSolicitud}
        />
       <div className="solicitud-filtros-container flex flex-row mt-3">
-        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe)}>Crear Electivo</button>)}
+        {isAdmin && (<button className="btn btn-primary ml-3 mb-0" onClick={() => handleCreateElectivo(isAdmin, isJefe, carreraNames)}>Crear Electivo</button>)}
         <SearchBar 
           customClassName={"solicitud-filtro-input ml-3"} 
           placeholder={"Buscar por nombre o descripción..."} 
@@ -119,7 +124,7 @@ const Electivos = () => {
         )}
       </div>
       <div className="solicitud-tabla-wrapper">
-        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC}></DUElectivoTable>
+        <DUElectivoTable electivosFiltrados={currentPageContent} mostrarDescripcion={mostrarDescripcion} handleEditElectivo={handleEditElectivo} handleDeleteElectivo={handleDeleteElectivo} handleApproveElectivo={handleChangeElectivoStatus} handleRejectElectivo={handleChangeElectivoStatus} handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC} carreraNames={carreraNames}></DUElectivoTable>
       </div>
       <DUPageBrowser pageAmount={pageAmount} setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage}></DUPageBrowser>
     </div>

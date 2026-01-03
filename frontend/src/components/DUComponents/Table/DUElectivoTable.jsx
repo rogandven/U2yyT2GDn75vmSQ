@@ -70,7 +70,7 @@ const estadoConverter = (estado) => {
   }
 }
 
-export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe}) => {
+export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleEditElectivo, handleDeleteElectivo, handleApproveElectivo, handleRejectElectivo, handleCreateInscripcion_PUBLIC, isAdmin, isJefe, carreraNames}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";

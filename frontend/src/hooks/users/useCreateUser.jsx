@@ -34,10 +34,10 @@ async function createUserInfo(carreraNames) {
       const password = gebi('swal2-input5')?.value;
       const role = gebi('swal2-input6')?.value;
       const generation = gebi('swal2-input7')?.value;
-      const carreraId = Number(String(gebi('swal2-input8')?.value).split(".")[0]);
+      const id_carrera = Number(String(gebi('swal2-input8')?.value).split(".")[0]);
       const creditos = gebi('swal2-input9')?.value;
 
-      return {rut, fullname, username, email, password, role, generation, carreraId, creditos};
+      return {rut, fullname, username, email, password, role, generation, id_carrera, creditos};
     },
     theme: "dark",
   });

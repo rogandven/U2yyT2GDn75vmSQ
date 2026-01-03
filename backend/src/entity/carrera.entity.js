@@ -1,6 +1,7 @@
 "use strict";
 
 import { EntitySchema} from "typeorm";
+import ElectivoEntity from "./electivo.entity.js";
 
 export const carreraEntity= new EntitySchema({
     name:"Carrera",
@@ -29,6 +30,13 @@ export const carreraEntity= new EntitySchema({
             type: "one-to-many",
             target: "User",
             inverseSide: "carreras"
+        },
+        electivo: {
+            type:"one-to-many",
+            target: "electivos",
+            joinColumn:{name:"id_carrera"},
+            onDelete:"RESTRICT",
+            inverseSide: 'electivo',
         }
     }
 
