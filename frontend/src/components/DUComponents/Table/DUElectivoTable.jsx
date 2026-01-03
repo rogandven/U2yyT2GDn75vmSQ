@@ -87,14 +87,15 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
             <tr>
                 <th>Nombre</th>
                 <th>Cupos</th>
-                <th>Créditos Requeridos</th>
+                <th>Crédito</th>
                 <th>Área</th>
                 <th>Apertura</th>
                 <th>Cierre</th>
                 <th>Profesor</th>
                 <th>Carreras</th>
+                <th>Motivo</th>
                 <th>Estado</th>
-                <th>EstadoDetalle</th>
+                <th>Plazo de renovación</th>
                 <th>Acciones</th>                
             </tr>
             </thead>
@@ -113,6 +114,10 @@ export const DUElectivoTable = ({electivosFiltrados, mostrarDescripcion, handleE
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
                     <td>{electivo.nombre_profesor || electivo.id_profesor || "N/A"}</td>
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
+                    <td style={{maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}} title={electivo.estado === ESTADOS_VALIDOS.RECHAZADO ? (electivo.motivo || "") : ""}>
+                      {electivo.estado === ESTADOS_VALIDOS.RECHAZADO ? (electivo.motivo || "") : ""}
+                    </td>
+                    <td>{electivo.plazo_renovacion || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>{electivo.estado === ESTADOS_VALIDOS.RECHAZADO && electivo.motivo_rechazo ? electivo.motivo_rechazo : "-"}</td>
                     <td>

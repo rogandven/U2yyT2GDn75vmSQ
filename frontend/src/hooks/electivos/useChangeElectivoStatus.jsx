@@ -13,8 +13,30 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
       let response = null;
       // console.log({electivoId: Number(electivoId), approve: Boolean(approve), isJefe: Boolean(isJefe)});
       if (approve) {
-        response = await approveElectivo(electivoId);
+        const now = new Date();
+        const year = now.getFullYear();
+        const inputOptions = {};
+        for (let y = year; y <= year + 2; y++) {
+          inputOptions[`${y}-1`] = `${y}-1`;
+          inputOptions[`${y}-2`] = `${y}-2`;
+        }
+        const { value: periodo } = await Swal.fire({
+          title: 'Periodo de renovación',
+          input: 'select',
+          inputOptions: inputOptions,
+          inputValue: `${year}-1`,
+          showCancelButton: true,
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar',
+        });
+        if (!periodo) {
+          return;
+        }
+        response = await approveElectivo(electivoId, { periodo_renovacion: periodo });
       } else { 
+        const formValues = await RejectElectivoInfo();
+        if (!formValues) return;
+        response = await rejectElectivo(electivoId, formValues);
         let motivoData = motivo;
                 
                 if (!motivoData) {

@@ -22,7 +22,7 @@ export async function RejectElectivoInfo() {
         }
     });
     if (formValues){
-        return frameElement;
+        return formValues;
     }
 }
 
