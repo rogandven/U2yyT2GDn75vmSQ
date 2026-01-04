@@ -14,6 +14,9 @@ import { CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin
 import { getUserCareerId } from "../services/admin.service.js";
 
 const Users = () => {
+  const role = getUserRole();
+  const isJefe = isJefeDeCarrera(role);
+
   const { users, fetchUsers, setUsers } = useGetUsers();
   const { handleDeleteUser } = useDeleteUser(fetchUsers);
   const { handleEditUser } = useEditUser(fetchUsers);
@@ -44,11 +47,11 @@ const Users = () => {
 
   return (
     <div className="users-page">
-      {getUserRole() === ADMIN_ROLE && (
+      {role === ADMIN_ROLE && (
         <button className="btn btn-primary m-3 mb-0" onClick={() => {handleCreateUser(fetchUsers, carreraNames)}}>Crear Usuario</button>
       )}
       <div className="users-table">
-        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames, isJefe, role)}
         <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>

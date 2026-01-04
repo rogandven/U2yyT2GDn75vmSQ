@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io'
 import { getUserRole, ADMIN_ROLE } from '@services/admin.service.js';
 
-export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames) => {
+export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames, isJefe, role) => {
     const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -19,9 +19,9 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                 <th>Nombre</th>
                 <th>Apodo</th>
                 <th>Correo</th>
-                <th>Rol</th>
+                {!isJefe && (<th>Rol</th>)}
                 <th>Generación</th>
-                <th>Carrera</th>
+                {!isJefe && (<th>Carrera</th>)} 
                 <th>Créditos</th>
                 {getUserRole() === ADMIN_ROLE && (<th>Acciones</th>)}
             </tr>
@@ -35,17 +35,17 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                     <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
-                    <td>
+                    {!isJefe && (<td>
                         <div className="badge badge-primary">
                             {coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}
                         </div>
-                    </td>
+                    </td>)}
                     <td>
                         <div className="badge badge-secondary">
                             {coalesceData(String(usuario && usuario.generation)) || "N/A"}
                         </div>
                     </td>
-                    <td>
+                    {!isJefe && (<td>
                         <div className="badge badge-accent">
                             {(() => {
                                 console.log(usuario);
@@ -56,7 +56,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                                 return coalesceData(String(c.nombre || c.nombre_carrera || c.id || JSON.stringify(c)));
                             })()}
                         </div>
-                    </td>
+                    </td>)}
                     <td>{Number(usuario.creditos)}</td>
                     {getUserRole() === ADMIN_ROLE && (
                     <td>
