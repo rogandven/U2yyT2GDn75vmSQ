@@ -93,7 +93,7 @@ export async function FRONTEND_getElectivoList() {
 
 
 
-const routeHelper4 = async (URL, body, axiosFunction) => {
+/*const routeHelper4 = async (URL, body, axiosFunction) => {
   try {
     let response;
 
@@ -113,7 +113,7 @@ const routeHelper4 = async (URL, body, axiosFunction) => {
     console.error(error);
     return error.response?.data || null;
   }
-};
+};*/
 
 export async function getElectivos2() {
   return (await routeHelper("/electivos/get/", null, axios.get))?.data;
@@ -164,7 +164,7 @@ export async function FRONTEND_getElectivoList2() {
 }
 // import axios from '@services/root.service.js';
 
-const routeHelper5 = async (URL, body, axiosFunction) => {
+/*const routeHelper5 = async (URL, body, axiosFunction) => {
   try {
     const response = await axiosFunction(URL, body);
     return {data: response.data?.data, status: response.status, message: response.data?.message};
@@ -172,7 +172,7 @@ const routeHelper5 = async (URL, body, axiosFunction) => {
     console.error(error);
     return error.response?.data || null;
   }
-}
+}*/
 
 export async function getElectivos5() {
   return (await routeHelper("/electivos/get/", null, axios.get))?.data;
