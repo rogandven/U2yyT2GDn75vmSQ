@@ -36,7 +36,7 @@ export const useCreateCarrera = (fetchCarreras) => {
         try {
             const formValues = await CreateCarrera();
             if(!formValues) return;
-            console.log(JSON.stringify(formValues));
+            // console.log(JSON.stringify(formValues));
             response = await createCarrera(formValues);
             if (typeof(fetchCarreras) === "function") {
                 fetchCarreras();

@@ -7,7 +7,7 @@ import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { VALID_ROLES } from "../../services/admin.service.js";
 
 async function createUserInfo(carreraNames) {
-  console.log(carreraNames);
+  // console.log(carreraNames);
 
   const { value: formValues } = await Swal.fire({
     title: "Crear Usuario",

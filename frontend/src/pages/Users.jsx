@@ -10,7 +10,7 @@ import { getUserRole, ADMIN_ROLE } from "@services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import { useState } from "react";
 import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
-import { canViewUsers as s_canViewUsers } from "../services/admin.service.js";
+import { canCrudUsers, canViewUsers as s_canViewUsers } from "../services/admin.service.js";
 
 const Users = () => {
   const role = getUserRole();
@@ -42,7 +42,7 @@ const Users = () => {
   const currentPageContent = (Array.isArray(users) && users.slice(firstPostIndex, lastPostIndex)) || [];
   const pageAmount = Math.abs(Math.ceil((Array.isArray(users) && users.length) / POSTS_PER_PAGE)) || 0;
 
-  console.log(carreraNames);
+  // console.log(carreraNames);
 
   return (
     <div className="users-page">
@@ -50,7 +50,7 @@ const Users = () => {
         <button className="btn btn-primary m-3 mb-0" onClick={() => {handleCreateUser(fetchUsers, carreraNames)}}>Crear Usuario</button>
       )}
       <div className="users-table">
-        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames, canViewUsers, role)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames, canViewUsers, role, canCrudUsers)}
         <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>

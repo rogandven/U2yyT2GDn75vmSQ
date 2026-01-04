@@ -10,7 +10,7 @@ const routeHelper = async (URL, body, axiosFunction) => {
       message: response.data?.message
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     response = error.response;
 
     Object.assign(response.data, { status: response.status });

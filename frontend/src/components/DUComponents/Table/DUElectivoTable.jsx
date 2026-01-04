@@ -142,7 +142,7 @@ export const DUElectivoTable = ({
   let numero = 1;
 
 
-  console.log(carreraNames);
+  // console.log(carreraNames);
 
   const alumnoYaInscrito = (idElectivo) => {
     return misInscripciones.some(

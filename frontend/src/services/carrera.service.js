@@ -31,7 +31,7 @@ export const updateCarrera = async (id_carrera, updateData) => {
             sigla: updateData.sigla,
             nombre: updateData.nombre
         });
-        console.log("Respuesta del servidor:", response.data);
+        // console.log("Respuesta del servidor:", response.data);
         return response.data.data;
     } catch (error) {
         console.error("Error al actualizar carrera service:", error);

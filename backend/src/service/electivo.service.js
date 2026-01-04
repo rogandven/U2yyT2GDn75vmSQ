@@ -24,7 +24,7 @@ const processElectivoArray = async (resultados) => {
           inscritos = Number(current) || 0;
           Object.assign(resultados[i], {nombre_profesor: nombre_profesor, inscritos: inscritos});
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     }

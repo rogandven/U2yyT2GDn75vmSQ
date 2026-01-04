@@ -190,7 +190,7 @@ export async function loginUserFromService(data) {
             rol: userFound.role,
             id_carrera: userFound.id_carrera,
         };
-        console.log(payload);
+        // console.log(payload);
         console.log((String(payload?.username).toUpperCase() || "JUANITO PÉREZ") + " entró al sistema");
         const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 

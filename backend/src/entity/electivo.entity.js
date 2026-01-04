@@ -4,7 +4,7 @@
 import { EntitySchema } from "typeorm";
 import { obtenerEstadosValidosComoArray } from "../helpers/electivo.helper.js";
 import { arrayDeStringAArrayDeSQL } from "../helpers/sql.helpers.js";
-import UserEntity from "./user.entity.js";
+import { UserEntity } from "./user.entity.js";
 import carreraEntity from "./carrera.entity.js";
 /* export enum EstadoElectivo{
     PENDIENTE = 'pendiente'

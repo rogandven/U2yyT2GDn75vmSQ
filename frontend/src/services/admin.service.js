@@ -1,4 +1,4 @@
-import { CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
+import { CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
 
 export const TEACHER_ROLE = 'PROFESOR';
 export const STUDENT_ROLE = 'ESTUDIANTE';
@@ -82,6 +82,10 @@ export const isStudent = (role) => {
 export const canViewUsers = (role) => {
     return CAN_VIEW_USERS.includes(String(role));
 }
+
+export const canCrudUsers = (role) => {
+    return CAN_DO_CRUD_ON_USERS.includes(String(role));
+} 
 
 /*
 export const getAllowedRoles = () => {

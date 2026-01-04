@@ -34,8 +34,8 @@ export async function updateCarreraById_Carrera(carrera, id_carrera) {
     if (!carrera) {
       throw new Error("Función mal llamada");
     }
-    console.log(carrera);
-    console.log(id_carrera);
+    // console.log(carrera);
+    // console.log(id_carrera);
     return {data: await carreraRepository.update({id_carrera: id_carrera}, carrera), message: "Carrera actualizado con éxito", error: null};
   } catch (error) {
     return {data: null, message: "Error al actualizar carrera", error: error};

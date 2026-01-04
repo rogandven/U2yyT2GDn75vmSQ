@@ -104,17 +104,17 @@ export async function asignarHorario(req, res) {
     } 
 
     const electivo = await RAW_getElectivoById(id_electivo);
-    console.log(electivo);
+    // console.log(electivo);
     if (!electivo) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
     const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
-    console.log(req.user.id);
+    /* console.log(req.user.id);
     console.log(electivo.id_profesor);
     console.log(electivo.carreras);
-    console.log(req.user.carrera);
+    console.log(req.user.carrera); */
 
     if (!canSkipChecks) {
        if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {

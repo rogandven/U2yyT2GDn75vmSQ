@@ -87,7 +87,7 @@ export const useEditUser = (fetchUsers) => {
       const formValues = await editUserInfo(user, carreraNames);
       if (!formValues) return;
 
-      console.log(formValues);
+      // console.log(formValues);
       const response = await editUser(userId, formValues);
       // console.log(response);
       if (response) {

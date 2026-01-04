@@ -19,7 +19,7 @@ export async function authenticateJwt(req, res, next) {
   try {
     // Verificar y decodificar el token usando la clave secreta
     const decoded = jwt.verify(token, SESSION_SECRET);
-    console.log("DECODED: " + JSON.stringify(decoded));
+    // console.log("DECODED: " + JSON.stringify(decoded));
     req.user = decoded;
     const additionalData = await MIDDLEWARE_getUserByIdFromService(req.user.id);
     if (!additionalData) {
