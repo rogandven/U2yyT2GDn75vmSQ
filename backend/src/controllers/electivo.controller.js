@@ -320,6 +320,7 @@ export async function getElectivos(req, res) {
   }
 
   const serviceResult = await getElectivosFromService(req.query);
+  
   if (serviceResult.error) {
     return res.status(500).json(
       getControllerResult_NEW("Error al obtener electivos", serviceResult)

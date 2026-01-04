@@ -45,8 +45,8 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
   if (user.role !== STUDENT_ROLE){
     return `El usuario ${user.fullname || user.username || user.id} no es un estudiante.`;
   }
-  if (!(String(electivo.carreras).split(",").includes(user.carrera))) {
-    return `El usuario ${user.fullname || user.username || user.id} no pertenece a ninguna de las carreras requeridas`;
+  if (req.user.id_carrera !== electivo.carreraIdCarrera) {
+    return `El usuario ${user.fullname || user.username || user.id} no pertenece a la carrera`;
   }
 /*
   if (addtionalChecks) {
@@ -121,7 +121,7 @@ const cleanUpInscripcionArray = async (array, req) => {
   let current = null;
   for (let i = 0; i < array.length; i++) {
     current = array[i];
-    if (await isInvalidInscripcion(current, false, req)) {
+    if (await isInvalidInscripcion(current, false, req, req.user)) {
       array[i] = undefined;
     }
   }
@@ -144,7 +144,7 @@ export async function getInscripciones(req) {
     if (!inscripciones) {
       return formatMessage(BASE_CASE, dynamicMessage(BASE_CASE));
     }
-    inscripciones = await cleanUpInscripcionArray(inscripciones, req);
+    // inscripciones = await cleanUpInscripcionArray(inscripciones, req);
     return formatMessage(inscripciones, dynamicMessage(inscripciones));
   } catch (error) {
     console.error(error);

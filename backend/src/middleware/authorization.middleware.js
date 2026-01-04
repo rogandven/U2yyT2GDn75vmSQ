@@ -2,7 +2,7 @@
 import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
 import { isAdminFromService } from "../service/authorization.service.js";
 import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
-import { CAN_APPROVE_SUBJECTS, CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_TIMETABLES, CAN_DO_CRUD_ON_USERS, CAN_MODERATE_INSCRIPTIONS, CAN_SIGN_UP_TO_SUBJECTS } from "../admin/permissions.admin.js";
+import { CAN_VIEW_USERS, CAN_APPROVE_SUBJECTS, CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_TIMETABLES, CAN_DO_CRUD_ON_USERS, CAN_MODERATE_INSCRIPTIONS, CAN_SIGN_UP_TO_SUBJECTS, CAN_MAKE_REQUESTS, CAN_CRUD_REQUEST } from "../admin/permissions.admin.js";
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
@@ -76,8 +76,17 @@ export async function canCrudUsers(req, res, next) {
 }
 
 export async function canViewUsers(req, res, next) {
-  return await isAdminHelper(req, res, next, ["ADMINISTRADOR", "JEFE_DE_CARRERA"]);
+  return await isAdminHelper(req, res, next, CAN_VIEW_USERS);
 }
+
+export async function canMakeRequests(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_MAKE_REQUESTS);
+}
+
+export async function canCrudRequests(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_CRUD_REQUEST);
+} 
+
 
 /*
 export function authorizeRoles(rolesPermitidos) {

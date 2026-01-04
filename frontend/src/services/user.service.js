@@ -22,6 +22,16 @@ export async function getUsers() {
         return response.data?.data;
     } catch (error) {
         // console.error("Error al obtener usuarios:", error);
+        return [];
+    }
+}
+
+export async function getUsersJefeDeCarrera() {
+    try {
+        const response = await axios.get('/users/get/raw/jefedecarrera');
+        return response?.data?.users || [];
+    } catch (error) {
+        return error?.response?.data?.users || [];
     }
 }
 

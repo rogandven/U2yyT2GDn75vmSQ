@@ -10,6 +10,8 @@ import { getUserRole, isJefeDeCarrera, ADMIN_ROLE } from "@services/admin.servic
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import { useState } from "react";
 import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
+import { CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin.js";
+import { getUserCareerId } from "../services/admin.service.js";
 
 const Users = () => {
   const { users, fetchUsers, setUsers } = useGetUsers();
@@ -25,31 +27,7 @@ const Users = () => {
     (async () => {
       const profile = await fetchProfile();
       const data = await fetchUsers();
-      await fetchCarreraNames()
-      try {
-        const role = getUserRole();
-        if (isJefeDeCarrera(role) && profile) {
-          const profileCareerId = profile?.id_carrera || profile?.carrera?.id || null;
-          console.log(profileCareerId);
-          const anyCareerInfo = (data || []).some((u) => u?.id_carrera || u?.carrera);
-          if (!profileCareerId && !anyCareerInfo) {
-            setUsers(data || []);
-            return;
-          }
-          const filtered = (data || []).filter((u) => {
-            if (profileCareerId != null) return u?.id_carrera === profileCareerId;
-            if (u?.carrera && profile?.carrera) {
-              const a = String(u.carrera?.nombre || u.carrera).toUpperCase();
-              const b = String(profile.carrera?.nombre || profile.carrera).toUpperCase();
-              return a === b;
-            }
-            return false;
-          });
-          setUsers(filtered);
-        }
-      } catch (error) {
-        
-      }
+      await fetchCarreraNames();
     })();
   }, []);
 

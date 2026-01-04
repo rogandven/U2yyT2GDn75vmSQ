@@ -64,7 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/carreras",
-        element: <Carreras />,
+        element: (
+          <ProtectedRoute allowedRoles={VALID_ADMIN_ROLES}>
+            <Carreras />
+          </ProtectedRoute>
+        ),
       }
     ],
   },

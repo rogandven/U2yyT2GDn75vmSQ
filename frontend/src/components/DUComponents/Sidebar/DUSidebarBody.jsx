@@ -38,7 +38,7 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
                 {isAdmin && createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
                 {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
                 {createSidebarItem("Electivos", "/electivos", (<FaBook />), undefined)}
-                {createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
+                {isAdmin && createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}

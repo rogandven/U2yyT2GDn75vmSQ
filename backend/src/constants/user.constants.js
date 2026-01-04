@@ -11,7 +11,6 @@ export const CAREER_HEAD_ROLE = 'JEFE_DE_CARRERA';
 export const VALID_ROLES = [TEACHER_ROLE, STUDENT_ROLE, ADMIN_ROLE, CAREER_HEAD_ROLE];
 export const VALID_ADMIN_ROLES = [TEACHER_ROLE, ADMIN_ROLE, CAREER_HEAD_ROLE];
 export const VALID_SUPERADMIN_ROLES = [ADMIN_ROLE, CAREER_HEAD_ROLE];
-export const MINECRAFT = "Minecraft";
 
 export const VALID_EMAIL_DOMAINS = ['@ubiobio.cl', '@alumnos.ubiobio.cl'];
 export const MIN_CREDITOS = 0;

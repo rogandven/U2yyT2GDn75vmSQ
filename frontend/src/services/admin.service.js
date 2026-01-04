@@ -11,6 +11,17 @@ export const getAllowedRoles = () => {
     return VALID_ADMIN_ROLES;
 }
 
+export const getUserCareerId = () => {
+    try {
+        const user = JSON.parse(sessionStorage.getItem('usuario'));
+        console.log("USER: " + JSON.stringify(user));
+        const carreraId = user?.id_carrera || -1;
+        return carreraId;
+    } catch (error) {
+        return -1;
+    }
+}
+ 
 export const getUserRole = () => {
    try {
         const user = JSON.parse(sessionStorage.getItem('usuario'));

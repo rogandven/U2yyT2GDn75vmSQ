@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { getUsers } from '@services/user.service.js';
+import { getUsersJefeDeCarrera } from '../../services/user.service.js';
+import { CAREER_HEAD_ROLE, getUserRole } from '../../services/admin.service.js';
 
 export const useGetUsers = () => { 
     const [users, setUsers] = useState([]);
     
     const fetchUsers = async () => {
+        let data = [];
         try {
-            const data = await getUsers();
+            if (getUserRole() === CAREER_HEAD_ROLE) {
+                data = await getUsersJefeDeCarrera();
+            } else {
+                data = await getUsers();
+            }
             dataLogged(data);
             setUsers(data);
             return data;

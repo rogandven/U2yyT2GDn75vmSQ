@@ -70,7 +70,7 @@ export async function updateUserByIdFromService(id, newData, req_user_role, req_
         if (oldData.role && !(getAllowedRolesToTamper(req_user_role).includes(oldData.role))) {
             return getServiceResult(false, null, `No tiene permiso para trabajar con ${oldData.role}`, 0);
         }
-        if ((req_user_role !== ADMIN_ROLE) && (oldData.carrera !== req_user_carrera)) {
+        if ((req_user_role !== ADMIN_ROLE) && (oldData.id_carrera !== req_user_carrera)) {
             return getServiceResult(false, null, "No tiene permiso para actualizar usuarios de otra carrera")
         }
         if (newData.password) {
@@ -185,7 +185,9 @@ export async function loginUserFromService(data) {
             email: userFound.email,
             rut: userFound.rut,
             rol: userFound.role,
+            id_carrera: userFound.id_carrera,
         };
+        console.log(payload);
         console.log((String(payload?.username).toUpperCase() || "JUANITO PÉREZ") + " entró al sistema");
         const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 
@@ -201,7 +203,7 @@ export async function logoutUserFromService(clearCookieFunction) {
     clearCookieFunction("jwt", { httpOnly: true });
     return getServiceResult(false, null, "Sesión cerrada exitosamente", 0);
   } catch (error) {
-    console.error("Error en auth.controller.js -> login(): ", error);
+    // console.error("Error en auth.controller.js -> login(): ", error);
     return getServiceResult(true, null, "Error al cerrar sesión", 0);
   }
 }
@@ -228,6 +230,22 @@ export async function EMAIL_getAllCareerChiefs(career) {
         const chiefs = await userRepository.find({where: {carrera: String(career).toUpperCase(), role: CAREER_HEAD_ROLE},relations: {carrera: true}});
         return chiefs || BASE_CASE;
     } catch (error) {
+        return BASE_CASE;
+    }
+}
+export async function RAW_getAllStudentsByCareer(id_carrera) {
+    const BASE_CASE = [];
+    try {
+        const userRepository = AppDataSource.getRepository(UserEntity);
+        const users = await userRepository.find({where: {id_carrera: id_carrera, role: STUDENT_ROLE}});
+        if (!users) {
+            return BASE_CASE;
+        }
+        users.forEach((user) => {
+            delete user.password;
+        });
+        return users;
+    } catch (error) {  
         return BASE_CASE;
     }
 }
