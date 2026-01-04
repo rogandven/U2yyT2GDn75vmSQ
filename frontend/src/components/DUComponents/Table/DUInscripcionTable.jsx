@@ -13,8 +13,11 @@ import { IoMdSettings } from 'react-icons/io'
 import { ESTADOS_VALIDOS } from '../../../constants/InscripcionConstants.jsx';
 import { NamePlusIcon } from './utils/NamePlusIcon.jsx';
 import { GiGraduateCap } from 'react-icons/gi';
+import { getUserRole } from '../../../services/admin.service.js';
+import { STUDENT_ROLE } from '../../../constants/PermissionsConstants.jsx';
 
 export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe}) => {
+    const userRole = getUserRole();
     let numero = 1;
     const data = (inscripciones || []);
     return (
@@ -23,11 +26,11 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             <thead>
             <tr>
                 {/* <th></th> */}
-                <th>Usuario</th>   
+                {(userRole !== STUDENT_ROLE) && (<th>Usuario</th>)} 
                 <th>Electivo</th>
                 <th>Fecha</th>     
                 <th>Estado</th>  
-                <th>EstadoDetalle</th>
+                <th>Motivo</th>
                 <th>Acciones</th>   
             </tr>
             </thead>
@@ -36,7 +39,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             return inscripcion && (
                 <tr key={String(inscripcion.id_inscripcion) + String(numero)}>
                 {/* <th>{numero++}</th> */}
-                <td>{NamePlusIcon((inscripcion.nombre_usuario || inscripcion.id_usuario), (<FaUser className='mr-1'/>))}</td>
+                {(userRole !== STUDENT_ROLE) && (<td>{NamePlusIcon((inscripcion.nombre_usuario || inscripcion.id_usuario), (<FaUser className='mr-1'/>))}</td>)}
                 <td>{NamePlusIcon((inscripcion.nombre_electivo || inscripcion.id_electivo), (<GiGraduateCap className='mr-1'></GiGraduateCap>))}</td>
                 <td>{parse_SQLDate(inscripcion.fecha_hora)}</td>
                 <td>
