@@ -120,12 +120,16 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia, data, electivo) {
+export async function updateElectivoFromService(id_instancia, data, electivo, userId) {
   try {
     Object.assign(electivo, data);
 
+    if (electivo.usuariosId !== userId) {
+      return getServiceResult(false, null, "No tiene permiso para actualizar este electivo.", 0);
+    }
+
     if (String(electivo.apertura).localeCompare(String(electivo.cierre)) > 0) {
-      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
+      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre", 0);
     }
 
     delete electivo.id;
@@ -170,12 +174,12 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
       return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
     }
 
-    if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {
+    if ((electivo.usuariosId !== user_id) && user_role !== CAREER_HEAD_ROLE) {
       return getServiceResult(true, null, "No tiene permiso para borrar este electivo", 0);
     }
 
-    await electivoRepo.remove(electivo);
-    return getServiceResult(false, null, "Electivo eliminado correctamente", 0);
+    const result = await electivoRepo.remove(electivo);
+    return getServiceResult(false, result, "Electivo eliminado correctamente", 1);
   } catch (error) {
     console.error("Error al eliminar electivo:", error);
     return getServiceResult(true, null, error.message ? error.message : "Error al eliminar electivo", 0);

@@ -229,6 +229,9 @@ export async function updateElectivo(req, res) {
       );
     }
 
+    if (serviceResult.length !== 1) {
+      return res.status(400).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+    }
     return res.status(200).json(
       getControllerResult_NEW("Electivo actualizado con éxito", serviceResult)
     );
@@ -290,6 +293,7 @@ const changeElectivoEstado = async (req, res, estado) => {
     }
 
     const serviceResult = await changeElectivoEstadoFromService(req.body, electivo);
+
     if (!serviceResult.data || serviceResult.error) {
       return res.status(400).json(getControllerResult_NEW(serviceResult.details, serviceResult));
     }
@@ -336,6 +340,9 @@ export async function deleteElectivo(req, res) {
       req.user.role || req.user.rol,
       req.user.id_carrera
     );
+    if (serviceResult.length !== 1) {
+      return res.status(400).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+    }
 
     return res.status(200).json(
       getControllerResult_NEW(serviceResult.details, serviceResult)

@@ -245,3 +245,16 @@ export async function deleteInscripcion(inscripcion) {
 export async function inscripcionAlreadyExists(id_inscripcion, id_usuario, id_electivo) {
   return await IAE_helper(id_inscripcion, id_usuario, id_electivo);
 }
+
+/*
+export async function getInscripcionesProfesor_NOWARNING(req) {
+  const BASE_CASE = [];
+  
+  try {
+    const 
+    const inscripciones = await inscripcionRepo.find({where: {id_electivo}}) 
+  } catch (error) {
+
+  }
+  
+} */

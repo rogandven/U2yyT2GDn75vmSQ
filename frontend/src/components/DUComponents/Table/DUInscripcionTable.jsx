@@ -22,7 +22,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
         <table className="table">
             <thead>
             <tr>
-                <th></th>
+                {/* <th></th> */}
                 <th>Usuario</th>   
                 <th>Electivo</th>
                 <th>Fecha</th>     
@@ -35,7 +35,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             {Array.isArray(data) && data.map((inscripcion) => {
             return inscripcion && (
                 <tr key={String(inscripcion.id_inscripcion) + String(numero)}>
-                <th>{numero++}</th>
+                {/* <th>{numero++}</th> */}
                 <td>{NamePlusIcon((inscripcion.nombre_usuario || inscripcion.id_usuario), (<FaUser className='mr-1'/>))}</td>
                 <td>{NamePlusIcon((inscripcion.nombre_electivo || inscripcion.id_electivo), (<GiGraduateCap className='mr-1'></GiGraduateCap>))}</td>
                 <td>{parse_SQLDate(inscripcion.fecha_hora)}</td>
