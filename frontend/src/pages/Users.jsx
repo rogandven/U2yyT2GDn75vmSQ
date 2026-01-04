@@ -30,6 +30,7 @@ const Users = () => {
         const role = getUserRole();
         if (isJefeDeCarrera(role) && profile) {
           const profileCareerId = profile?.id_carrera || profile?.carrera?.id || null;
+          console.log(profileCareerId);
           const anyCareerInfo = (data || []).some((u) => u?.id_carrera || u?.carrera);
           if (!profileCareerId && !anyCareerInfo) {
             setUsers(data || []);

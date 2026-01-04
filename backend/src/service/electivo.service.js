@@ -120,11 +120,7 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia, data, carrera, user_role, careerString, electivo) {
-  if (!careerString) {
-    throw new Error("Función mal llamada");
-  }
-  
+export async function updateElectivoFromService(id_instancia, data, electivo) {
   try {
     Object.assign(electivo, data);
 
@@ -237,22 +233,7 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     if (!electivo) {
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
-
-    try {
-      if (typeof user_career === 'string') {
-        userCareerString = user_career;
-      } else if (user_career && typeof user_career === 'object') {
-        userCareerString = (user_career.sigla || user_career.nombre || user_career.id_carrera || "");
-      } else {
-        userCareerString = String(user_career || "");
-      }
-    } catch (e) {
-      userCareerString = String(user_career || "");
-    }
-    const normalizedUserCareer2 = String(userCareerString || "").trim().toUpperCase();
-    const careerArray2 = String(electivo.carreras).split(",");
-    const careerMatch2 = careerArray2.some((c) => String(c || "").trim().toUpperCase() === normalizedUserCareer2);
-    if ((user_role !== ADMIN_ROLE) && (user_role !== CAREER_HEAD_ROLE) && (!careerMatch2)) {
+    if ((user_role !== ADMIN_ROLE) && (user_career !== electivo.carreraIdCarrera)) {
       return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
     }
 

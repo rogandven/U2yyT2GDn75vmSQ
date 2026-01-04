@@ -473,10 +473,15 @@ export async function updateElectivo(req, res) {
       req.body.estado = AWAITING;
     }
 
+    const electivo = await RAW_getElectivoById(id);
+    if (!electivo) {
+      return res.status(404).json(getControllerResult_NEW("Electivo no encontrado", null));
+    }
+
     const serviceResult = await updateElectivoFromService(
       id,
       req.body,
-      req.user.carrera
+      electivo
     );
 
     if (serviceResult.error) {
@@ -559,7 +564,8 @@ export async function deleteElectivo(req, res) {
     const serviceResult = await deleteElectivoFromService(
       id,
       req.user.id,
-      req.user.role || req.user.rol
+      req.user.role || req.user.rol,
+      req.user.id_carrera
     );
 
     return res.status(200).json(

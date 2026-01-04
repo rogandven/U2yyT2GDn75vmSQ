@@ -154,6 +154,8 @@ import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateIns
 import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
 import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
+import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
 
 const Electivos = () => {
   const userRole = getUserRole();
@@ -161,6 +163,8 @@ const Electivos = () => {
   const isJefe = isJefeDeCarrera(userRole);
 
   const { electivos, fetchElectivos } = useGetElectivos();
+  const { carreraNames, fetchCarreraNames } = useGetCarreraNames();
+
   const { handleCreateElectivo } = useCreateElectivo(fetchElectivos);
   const { handleEditElectivo } = useEditElectivo(fetchElectivos);
   const { handleDeleteElectivo } = useDeleteElectivo(fetchElectivos);
@@ -173,7 +177,10 @@ const Electivos = () => {
 
   useEffect(() => {
     fetchElectivos();
-    fetchInscripciones(false); 
+    fetchCarreraNames();
+    if (!isAdmin && !isJefe) {
+      fetchInscripciones(false); 
+    }
   }, []);
 
   const limpiarFiltros = () => {
@@ -215,13 +222,21 @@ const Electivos = () => {
     });
   };
 
+  const POSTS_PER_PAGE = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const lastPostIndex  = currentPage * POSTS_PER_PAGE;
+  const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
+  const currentPageContent = (Array.isArray(electivosFiltrados) && electivosFiltrados?.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(electivosFiltrados) && electivosFiltrados?.length) / POSTS_PER_PAGE)) || 0;
+
   return (
     <div className="users-page">
       <div className="solicitud-filtros-container flex flex-row mt-3">
         {isAdmin && (
           <button
             className="btn btn-primary ml-3 mb-0"
-            onClick={() => handleCreateElectivo(isAdmin, isJefe)}
+            onClick={() => handleCreateElectivo(isAdmin, isJefe, carreraNames)}
           >
             Crear Electivo
           </button>
@@ -253,7 +268,7 @@ const Electivos = () => {
 
       <div className="solicitud-tabla-wrapper">
         <DUElectivoTable
-          electivosFiltrados={electivosFiltrados}
+          electivosFiltrados={currentPageContent}
           mostrarDescripcion={mostrarDescripcion}
           handleEditElectivo={handleEditElectivo}
           handleDeleteElectivo={handleDeleteElectivo}
@@ -263,7 +278,9 @@ const Electivos = () => {
           isAdmin={isAdmin}
           isJefe={isJefe}
           misInscripciones={inscripciones?.data?.data || []}
+          carreraNames={carreraNames}
         />
+        <DUPageBrowser currentPageNumber={currentPage} setCurrentPageNumber={setCurrentPage} pageAmount={pageAmount}></DUPageBrowser>        
       </div>
     </div>
   );

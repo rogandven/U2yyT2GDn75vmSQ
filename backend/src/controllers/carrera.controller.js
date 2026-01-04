@@ -36,7 +36,7 @@ export async function createCarreras(req,res){
         //let result=careerValidationFunction
 
          if (newCarrera = await createCarrera(sigla,nombre)) {
-            return res.status(201).json({ message: "Carrera registrado exitosamente!", data: newCarrera });
+            return res.status(201).json({ message: "Carrera registrada exitosamente!", data: newCarrera });
         } else {
               return res.status(500).json({message: "Error al registrar carrera"});
         }
@@ -50,11 +50,11 @@ export async function createCarreras(req,res){
 export async function getCarreras(req,res) {
     const carreraData= await findAllCarreras();
     if(!carreraData){
-        return handleErrorClient(res,400,"horarios no encontrados");
+        return handleErrorClient(res,400,"Carreras no encontradas");
     }
 
     //await getCarrera(carreraData);
-      return handleSuccess(res, 200, "Horarios obtenidos exitosamente", carreraData);
+      return handleSuccess(res, 200, "Carreras obtenidas exitosamente", carreraData);
 }
 
 export async function patchCarrera(req,res) {
@@ -75,15 +75,12 @@ export async function patchCarrera(req,res) {
 
         const updatedCarrera = await updateCarreraById_Carrera(req.body, id);
         if (!(updatedCarrera.data)) {
-        if (!(updatedCarrera.error)) {
+          if (!(updatedCarrera.error)) {
             return handleErrorClient(res, 500, updatedCarrera.message);
+          }
+          return handleErrorClient(res, 400, updatedCarrera.message);
         }
-            return handleErrorClient(res, 400, updatedCarrera.message);
-        }
-         return handleSuccess(res, 200, "¡Carrera actualizado con éxito!", updatedCarrera.data);
-
-    
-        
+         return handleSuccess(res, 200, "¡Carrera actualizada con éxito!", updatedCarrera.data);
     }catch(error){
         return handleErrorServer(res, 500, "Error interno del servidor", error);
     }
@@ -95,10 +92,8 @@ export async function deleteCarrera(req, res) {
     if (!id) {
       return res.status(400).json({ message: "El ID de la carrera es obligatorio" });
     }
-
-
     const result = await deleteCarreraById_Carrera(id);
-    if (result && result.result && result.result.affected >= 1) {
+    if (result && result.result && result.result.affected === 1) {
       return handleSuccess(res, 200, "Carrera eliminada exitosamente", result);
     }
     if (result.message === HORARIO_NO_ENCONTRADO) {

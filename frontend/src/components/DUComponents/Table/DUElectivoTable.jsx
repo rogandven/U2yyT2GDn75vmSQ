@@ -137,8 +137,12 @@ export const DUElectivoTable = ({
   isAdmin,
   isJefe,
   misInscripciones,
+  carreraNames
 }) => {
   let numero = 1;
+
+
+  console.log(carreraNames);
 
   const alumnoYaInscrito = (idElectivo) => {
     return misInscripciones.some(
@@ -198,7 +202,7 @@ export const DUElectivoTable = ({
                             handleEditElectivo(
                               electivo.id,
                               electivo,
-                              isAdmin
+                              carreraNames
                             )
                           }
                         >
