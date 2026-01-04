@@ -76,7 +76,7 @@ async function editInscripcionInfo_PUBLIC(inscripcion, electivoNames) {
 }
 
 export const useEditInscripcion = (fetchInscripciones) => {
-  const handleEditInscripcion = async (inscripcionId, inscripcion, electivoNames, userNames, isAdmin, isJefe) => {
+  const handleEditInscripcion = async (inscripcionId, inscripcion, electivoNames, userNames, canModerateInscriptions) => {
     try {
       let response = null;
       let formValues = null;

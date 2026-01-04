@@ -3,8 +3,8 @@ import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
-  const handleChangeInscripcionStatus = async (inscripcionId, motivo, approve, isAdmin, isJefe) => {
-    if (!isAdmin || !isJefe) {
+  const handleChangeInscripcionStatus = async (inscripcionId, approve, canModerateInscriptions) => {
+    if (!canModerateInscriptions) {
       return fireDynamicSwal(500, null, "Acceso denegado");
     }
 
@@ -12,9 +12,9 @@ export const useChangeInscripcionStatus = (fetchInscripciones) => {
       let response = null;
       // console.log(approve);
       if (approve) {
-        response = await private_approveInscripcion(inscripcionId);
+        response = await private_approveInscripcion(inscripcionId, {});
       } else{ 
-         let motivoData = motivo;
+         let motivoData = null;
         
         if (!motivoData) {
           const { value: motivoInput } = await Swal.fire({

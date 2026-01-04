@@ -1,4 +1,4 @@
-import { CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_USERS, CAN_MAKE_REQUESTS, CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
+import { CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_USERS, CAN_MAKE_REQUESTS, CAN_MODERATE_INSCRIPTIONS, CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
 
 export const TEACHER_ROLE = 'PROFESOR';
 export const STUDENT_ROLE = 'ESTUDIANTE';
@@ -101,6 +101,10 @@ export const canMakeRequests = (role) => {
 
 export const canCrudInscriptions = (role) => {
     return CAN_DO_CRUD_ON_INSCRIPTIONS.includes(String(role));
+}
+
+export const canModerateInscriptions = (role) => {
+    return CAN_MODERATE_INSCRIPTIONS.includes(String(role));
 }
 
 /*

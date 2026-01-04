@@ -45,12 +45,12 @@ export async function private_deleteInscripcion(id) {
   return await routeHelper(`/inscripciones/admin/${id}`, undefined, axios.delete);
 }
 
-export async function private_approveInscripcion(id) {
-  return await routeHelper(`/inscripciones/aprobar/${id}`, undefined, axios.post);
+export async function private_approveInscripcion(id, body) {
+  return await routeHelper(`/inscripciones/aprobar/${id}`, body, axios.post);
 }
 
-export async function private_rejectInscripcion(id) {
-  return await routeHelper(`/inscripciones/rechazar/${id}`, undefined, axios.post);
+export async function private_rejectInscripcion(id, body) {
+  return await routeHelper(`/inscripciones/rechazar/${id}`, body, axios.post);
 }
 
 export async function public_getInscripcion(id) {

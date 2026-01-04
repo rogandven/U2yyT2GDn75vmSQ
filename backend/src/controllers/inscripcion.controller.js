@@ -255,11 +255,15 @@ const changeInscriptionStatusHelper = async (req, res, status, motivo = null) =>
 } 
 
 export const private_approveInscripcion = async (req, res) => {
-    return await changeInscriptionStatusHelper(req, res, APPROVED);
+    return await changeInscriptionStatusHelper(req, res, APPROVED, null);
 }
 
 export const private_rejectInscripcion = async (req, res) => {
     try {
+        console.log(req?.body || {});
+        if (!req?.body) {
+            throw Error("Función mal llamada");
+        }
         const {error} = rejectInscripcionValidation.validate(req.body);
         
         if(error){
@@ -272,7 +276,7 @@ export const private_rejectInscripcion = async (req, res) => {
 
         req.body.estado = REJECTED;
         
-        return await changeInscriptionStatusHelper(req, res, REJECTED);
+        return await changeInscriptionStatusHelper(req, res, REJECTED, req.body?.motivo_rechazo);
     } catch(error) {
         console.error("Error en private_rejectInscripcion:", error);
         return res.status(500).json({ message: "Error interno del servidor" });

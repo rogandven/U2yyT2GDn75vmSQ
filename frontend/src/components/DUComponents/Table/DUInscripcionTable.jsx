@@ -16,7 +16,7 @@ import { GiGraduateCap } from 'react-icons/gi';
 import { getUserRole } from '../../../services/admin.service.js';
 import { STUDENT_ROLE } from '../../../constants/PermissionsConstants.jsx';
 
-export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe, canCrudInscriptions}) => {
+export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe, canModerateInscriptions}) => {
     const userRole = getUserRole();
     let numero = 1;
     const data = (inscripciones || []);
@@ -36,6 +36,7 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
             </thead>
             <tbody>
             {Array.isArray(data) && data.map((inscripcion) => {
+                console.log(inscripcion);
             return inscripcion && (
                 <tr key={String(inscripcion.id_inscripcion) + String(numero)}>
                 {/* <th>{numero++}</th> */}
@@ -47,12 +48,12 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                         {String(inscripcion.estado).toUpperCase().replaceAll("_", " ")}
                     </div>    
                 </td>
-                 <td> {inscripcion.estado === ESTADOS_VALIDOS.RECHAZADO && inscripcion.motivo_rechazo ? inscripcion.motivo_rechazo : "-"}</td>
+                 <td> {(inscripcion['motivo_rechazo']) ? inscripcion['motivo_rechazo'] : "-"}</td>
                 <td>
-                    {canCrudInscriptions && (<button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
-                    {canCrudInscriptions && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>)}
-                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true, isAdmin, canCrudInscriptions)}}><ImCheckmark/></button>}
-                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false, isAdmin, canCrudInscriptions)}}><TiTimes/></button>}
+                    {canModerateInscriptions && (<button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
+                    {canModerateInscriptions && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>)}
+                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true, canModerateInscriptions)}}><ImCheckmark/></button>}
+                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false, canModerateInscriptions)}}><TiTimes/></button>}
                 </td>
                 </tr>  
             )})}
