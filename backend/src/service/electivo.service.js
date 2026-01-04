@@ -170,8 +170,8 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     if (!electivo) {
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
-    if ((user_role !== ADMIN_ROLE) && (user_career !== electivo.carreraIdCarrera)) {
-      return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
+    if ((user_role !== ADMIN_ROLE) && (user_id !== electivo.usuariosId)) {
+      return getServiceResult(true, null, "No puede eliminar un electivo que no es suyo", 0);
     }
 
     if ((electivo.usuariosId !== user_id) && user_role !== CAREER_HEAD_ROLE) {
