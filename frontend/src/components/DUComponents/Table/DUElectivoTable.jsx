@@ -137,7 +137,8 @@ export const DUElectivoTable = ({
   isAdmin,
   isJefe,
   misInscripciones,
-  carreraNames
+  carreraNames,
+  canCrudElectivos
 }) => {
   let numero = 1;
 
@@ -195,7 +196,7 @@ export const DUElectivoTable = ({
                     <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>
-                      {isAdmin && (
+                      {canCrudElectivos && (
                         <button
                           className="btn btn-primary m-1"
                           onClick={() =>
@@ -210,7 +211,7 @@ export const DUElectivoTable = ({
                         </button>
                       )}
 
-                      {isAdmin && (
+                      {canCrudElectivos && (
                         <button
                           className="btn btn-secondary m-1"
                           onClick={() =>
