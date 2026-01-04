@@ -209,7 +209,7 @@ export async function updateElectivo(req, res) {
     }
 
     req.body.estado = AWAITING;
-    req.body.motivo_rechazo = null;
+    req.body.motivo = null;
     req.body.plazo_renovacion = null;
 
     const electivo = await RAW_getElectivoById(id);
@@ -220,7 +220,8 @@ export async function updateElectivo(req, res) {
     const serviceResult = await updateElectivoFromService(
       id,
       req.body,
-      electivo
+      electivo,
+      req.user.id
     );
 
     if (serviceResult.error) {

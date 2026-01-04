@@ -184,9 +184,9 @@ export const useEditElectivo = (fetchElectivos) => {
 
       const response = await editElectivo(id, values);
       console.log(response);
-      
+
       await fetchElectivos();
-      fireDynamicSwal(response.status, null, response?.data?.message);
+      fireDynamicSwal(response.status, null, response.message || response.details);
     } catch (error) {
       console.error(error);
       fireDynamicSwal(500, null, "Error al editar electivo");
