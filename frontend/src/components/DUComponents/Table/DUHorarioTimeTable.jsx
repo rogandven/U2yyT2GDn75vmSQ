@@ -55,7 +55,7 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
         <table className="table">
             <thead>
             <tr>
-                <th></th>
+                {/*<th></th> */}
                 <th>Electivo</th>
                 <th>Hora Inicio</th>
                 <th>Hora Término</th>
