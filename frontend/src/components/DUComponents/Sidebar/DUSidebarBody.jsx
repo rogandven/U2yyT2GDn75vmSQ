@@ -13,7 +13,7 @@ const shallChangeName = () => {
     return [CAREER_HEAD_ROLE, TEACHER_ROLE].includes(getUserRole());
 }
 
-export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin, canCrudCareers }) => {
+export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin, canCrudCareers, canMakeRequests, isStudent}) => {
 
 
     const createSidebarItem = (label, destination, icon, logoutSubmit) => {
@@ -47,7 +47,7 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin, canCrudCaree
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}
-                {createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />), undefined)}
+                {isStudent && createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Solicitudes", "/Solicitudes", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Cerrar Sesión", "/login", (<FaSignOutAlt />), logoutSubmit)}
             {/* button to open/close drawer */}

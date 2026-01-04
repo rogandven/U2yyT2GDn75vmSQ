@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
 import DUSidebarBody from "./DUComponents/Sidebar/DUSidebarBody.jsx";
-import { getUserRole, isAdminOrProfesor, isJefeDeCarrera2, canCrudCareers as s_canCrudCareers } from "../services/admin.service.js";
+import { getUserRole, isAdminOrProfesor, isJefeDeCarrera2, canCrudCareers as s_canCrudCareers, canMakeRequests as s_canMakeRequests } from "../services/admin.service.js";
+import { canMakeRequests } from "../services/admin.service.js";
+import { TEACHER_ROLE } from "../constants/PermissionsConstants.jsx";
 // import "@styles/Sidebar.css";
 
 const Sidebar = ({PageContent}) => {
@@ -10,6 +12,9 @@ const Sidebar = ({PageContent}) => {
   const userRole = getUserRole();
   const isAdmin = isAdminOrProfesor(userRole);
   const canCrudCareers = s_canCrudCareers(userRole);
+  const isStudent = (userRole === TEACHER_ROLE);
+
+  console.log(canCrudCareers);
 
   const logoutSubmit = () => {
     try {
@@ -22,7 +27,7 @@ const Sidebar = ({PageContent}) => {
 
   return (
     <div className="sidebar">
-      <DUSidebarBody PageContent={PageContent} logoutSubmit={logoutSubmit} isAdmin={isAdmin} canCrudCareers={canCrudCareers}></DUSidebarBody>
+      <DUSidebarBody PageContent={PageContent} logoutSubmit={logoutSubmit} isAdmin={isAdmin} canCrudCareers={canCrudCareers} canMakeRequests={canMakeRequests} isStudent={isStudent}></DUSidebarBody>
     </div>
   );
 };

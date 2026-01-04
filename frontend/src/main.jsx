@@ -17,6 +17,7 @@ import Inscripciones from '@pages/Inscripciones';
 import Carreras from "@pages/Carreras";
 import Solicitudes from "./pages/Solicitudes.jsx";
 import NuevaSolicitud from "./pages/Nuevasolicitud.jsx";
+import { STUDENT_ROLE } from "./constants/PermissionsConstants.jsx";
 
 
 
@@ -47,8 +48,12 @@ const router = createBrowserRouter([
        element: <Solicitudes/>,
       },
        { 
-       path: "/NuevaSolicitud", 
-       element: <NuevaSolicitud/>,
+       path: "/NuevaSolicitud",
+       element: (
+        <ProtectedRoute allowedRoles={[STUDENT_ROLE]}>
+          <NuevaSolicitud/>
+        </ProtectedRoute>
+       ),
       },
       {
         path: "/electivos",
