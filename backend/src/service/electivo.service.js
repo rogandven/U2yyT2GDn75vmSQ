@@ -220,3 +220,15 @@ export async function RAW_getAllApprovedElectivos() {
   }
 }
 
+export async function RAW_getElectivosProfesor(req) {
+  const BASE_CASE = [];
+  try {
+    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, carreraIdCarrera: req.user.id_carrera}});
+    if (!electivos || !Array.isArray(electivos)) {
+      return BASE_CASE;
+    }
+    return electivos;
+  } catch (error) {
+    return BASE_CASE;
+  }
+}

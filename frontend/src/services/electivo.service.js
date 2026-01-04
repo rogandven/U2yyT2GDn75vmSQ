@@ -21,6 +21,11 @@ export async function getElectivos() {
   return await routeHelper("/electivos/get/", null, axios.get);
 }
 
+export async function getElectivosProfesor() {
+  // console.log("GET ELECTIVOS PROFESOR");
+  return await routeHelper("/electivos/electivos_profesor/", null, axios.get);
+}
+
 export async function getElectivoById(id) {
   return await routeHelper(`/electivos/get/${id}`, null, axios.get);
 }

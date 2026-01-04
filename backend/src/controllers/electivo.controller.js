@@ -18,7 +18,8 @@ import {
   getElectivosSinAprobarFromService,
   changeElectivoEstadoFromService,
   RAW_getElectivoById,
-  RAW_getAllApprovedElectivos
+  RAW_getAllApprovedElectivos,
+  RAW_getElectivosProfesor
 } from "../service/electivo.service.js";
 
 import {
@@ -75,8 +76,9 @@ export async function getElectivosSinAprobar(req, res) {
   );
 }
 
-export async function getElectivosProfesor(req, res) {
-  
+export async function getElectivosProfesor_NOWARNING(req, res) {
+  const serviceResult = await RAW_getElectivosProfesor(req);
+  return res.status(200).json({data: serviceResult});
 }
 
 /* ===========================

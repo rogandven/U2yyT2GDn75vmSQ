@@ -12,6 +12,7 @@ import {
   rejectElectivo,
   getElectivoById,
   getAllElectivoNames,
+  getElectivosProfesor_NOWARNING,
 } from "../controllers/electivo.controller.js";
 import { authenticateJwt as isAuthenticated } from "../middleware/authentication.middleware.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../middleware/authorization.middleware.js"; 
@@ -27,6 +28,7 @@ router.get("/get/:id", getElectivoById);
 router.post("/", canCrudElectivos, createElectivoProfesor);
 router.patch("/:id", canCrudElectivos, updateElectivo);
 router.delete("/:id", canCrudElectivos, deleteElectivo);
+router.get("/electivos_profesor/", canCrudElectivos, getElectivosProfesor_NOWARNING);
 
 router.get("/get_private/", canApproveElectivos, getElectivosSinAprobar);
 // El JEFE_DE_CARRERA solo puede aprobar/rechazar; no debe crear electivos.
@@ -34,6 +36,7 @@ router.post("/private/approve/:id", canApproveElectivos, approveElectivo);
 router.post("/private/reject/:id", canApproveElectivos, rejectElectivo);
 
 router.get("/frontend_list/", getAllElectivoNames);
+
 
 
 export default router;
