@@ -16,7 +16,7 @@ import { GiGraduateCap } from 'react-icons/gi';
 
 export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe}) => {
     let numero = 1;
-    const data = (inscripciones?.data?.data || []);
+    const data = (inscripciones || []);
     return (
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-3 max-h-full">
         <table className="table">

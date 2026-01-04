@@ -19,7 +19,8 @@ import {
   changeElectivoEstadoFromService,
   RAW_getElectivoById,
   RAW_getAllApprovedElectivos,
-  RAW_getElectivosProfesor
+  RAW_getElectivosProfesor,
+  RAW_getElectivosAprobadosProfesor
 } from "../service/electivo.service.js";
 
 import {
@@ -33,7 +34,7 @@ import { idValidation } from "../validations/modules/id.validation.js";
 import { ESTADOS_VALIDOS } from "../constants/electivo.constants.js";
 import { ARRAY_ESTADOS_VALIDOS } from "../entity/electivo.entity.js";
 import { AWAITING } from "../constants/validationConstants.js";
-import { CAREER_HEAD_ROLE } from "../constants/user.constants.js";
+import { CAREER_HEAD_ROLE, TEACHER_ROLE } from "../constants/user.constants.js";
 
 /* ===========================
    OBTENER ELECTIVOS
@@ -360,7 +361,12 @@ export const getElectivoName = async (id) => {
 };
 
 export const getAllElectivoNames = async (req, res) => {
-  const electivos = await RAW_getAllApprovedElectivos();
+  let electivos = null;
+  if ((req.user.rol || req.user.role) === TEACHER_ROLE) {
+    electivos = await RAW_getElectivosAprobadosProfesor();
+  } else {
+    electivos = await RAW_getAllApprovedElectivos();
+  }
   const nombres = electivos.map(
     e => `${e.id}. ${String(e.nombre).toUpperCase()}`
   );

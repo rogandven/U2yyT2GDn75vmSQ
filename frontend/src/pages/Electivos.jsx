@@ -152,7 +152,7 @@ import useDeleteElectivo from "../hooks/electivos/useDeleteElectivo.jsx";
 import useChangeElectivoStatus from "../hooks/electivos/useChangeElectivoStatus.jsx";
 import { useCreateInscripcion_PUBLIC } from "../hooks/Inscripciones/useCreateInscripcion.jsx";
 import useGetInscripciones from "../hooks/Inscripciones/useGetInscripciones.jsx";
-import { canCrudElectivos as s_canCrudElectivos, getUserRole } from "../services/admin.service.js";
+import { canCrudElectivos as s_canCrudElectivos, getUserRole, TEACHER_ROLE } from "../services/admin.service.js";
 import { isAdminOrProfesor, isJefeDeCarrera } from "../services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
@@ -162,6 +162,7 @@ const Electivos = () => {
   const isAdmin = isAdminOrProfesor(userRole);
   const isJefe = isJefeDeCarrera(userRole);
   const canCrudElectivos = s_canCrudElectivos(userRole);
+  const isProfesor = (userRole === TEACHER_ROLE);
 
   const { electivos, fetchElectivos } = useGetElectivos();
   const { carreraNames, fetchCarreraNames } = useGetCarreraNames();
@@ -278,6 +279,7 @@ const Electivos = () => {
           handleCreateInscripcion_PUBLIC={handleCreateInscripcion_PUBLIC}
           isAdmin={isAdmin}
           isJefe={isJefe}
+          isProfesor={isProfesor}
           misInscripciones={inscripciones?.data?.data || []}
           carreraNames={carreraNames}
           canCrudElectivos={canCrudElectivos}

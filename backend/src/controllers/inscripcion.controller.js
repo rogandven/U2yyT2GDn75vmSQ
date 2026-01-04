@@ -43,6 +43,7 @@ const invalidResult = (result) => {
 export const private_getInscripciones = async (req, res) => {
     try {
         const result = await getInscripciones(req);
+        // console.log(result);
         if (invalidResult(result) || result.data.length <= 0) {
             result.message = "No hay inscripciones para mostrar";
             return res.status(204).json(result);

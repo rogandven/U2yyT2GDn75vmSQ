@@ -136,6 +136,7 @@ export const DUElectivoTable = ({
   handleCreateInscripcion_PUBLIC,
   isAdmin,
   isJefe,
+  isProfesor,
   misInscripciones,
   carreraNames,
   canCrudElectivos
@@ -157,15 +158,15 @@ export const DUElectivoTable = ({
         <table className="table">
           <thead>
             <tr>
-              <th></th>
+              {/* <th></th> */}
               <th>Nombre</th>
               <th>Cupos</th>
               <th>Créditos Requeridos</th>
               <th>Área</th>
               <th>Apertura</th>
               <th>Cierre</th>
-              <th>Profesor</th>
-              <th>Carreras</th>
+              {!isProfesor && (<th>Profesor</th>)}
+              {(!isProfesor && !isJefe) && (<th>Carreras</th>)}
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
@@ -177,7 +178,7 @@ export const DUElectivoTable = ({
                 electivo &&
                 mustBeDisplayed(electivo, isAdmin) && (
                   <tr key={"ELECTIVO" + String(numero)}>
-                    <th>{numero++}</th>
+                    {/* <th>{numero++}</th> */}
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>
                       {`${Number(electivo.inscritos || 0)} / ${Number(
@@ -188,12 +189,12 @@ export const DUElectivoTable = ({
                     <td>{electivo.area || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.apertura, "-") || "N/A"}</td>
                     <td>{parse_AAAA_MM_DD(electivo.cierre, "-") || "N/A"}</td>
-                    <td>
+                    {!isProfesor && (<td>
                       {electivo.nombre_profesor ||
                         electivo.id_profesor ||
                         "N/A"}
-                    </td>
-                    <td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>
+                    </td>)}
+                    {(!isProfesor && !isJefe) && (<td>{DUCareerSplitter(electivo.carreras) || "N/A"}</td>)}
                     <td>{estadoConverter(electivo.estado)}</td>
                     <td>
                       {canCrudElectivos && (

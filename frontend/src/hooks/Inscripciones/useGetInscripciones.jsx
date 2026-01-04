@@ -14,8 +14,9 @@ export const useGetInscripciones = () => {
             } else {
                 data = await public_getInscripcionesByUser();
             }
-            setInscripciones(data);
+            setInscripciones(data?.data?.data || []);
         } catch (error) {
+            console.log(error);
             // console.error("Error consiguiendo inscripciones:", error);
             setInscripciones(BASE_CASE);
         }

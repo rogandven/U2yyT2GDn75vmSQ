@@ -52,8 +52,8 @@ const Inscripciones = () => {
 
   const lastPostIndex  = currentPage * POSTS_PER_PAGE;
   const firstPostIndex = lastPostIndex - POSTS_PER_PAGE;
-  const currentPageContent = (Array.isArray(inscripciones?.data) && inscripciones?.data.slice(firstPostIndex, lastPostIndex)) || [];
-  const pageAmount = Math.abs(Math.ceil((Array.isArray(inscripciones?.data) && inscripciones?.data?.length) / POSTS_PER_PAGE)) || 0;
+  const currentPageContent = (Array.isArray(inscripciones) && inscripciones.slice(firstPostIndex, lastPostIndex)) || [];
+  const pageAmount = Math.abs(Math.ceil((Array.isArray(inscripciones) && inscripciones?.length) / POSTS_PER_PAGE)) || 0;
 
   /* const limpiarFiltros = () => {
     setBusqueda("");
