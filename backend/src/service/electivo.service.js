@@ -233,6 +233,7 @@ export async function RAW_getElectivosProfesor(req) {
     }
     return electivos;
   } catch (error) {
+    console.error(error);
     return BASE_CASE;
   }
 }
@@ -241,12 +242,12 @@ export async function RAW_getElectivosAprobadosProfesor(req) {
   const BASE_CASE = [];
   try {
     const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, estado: ESTADOS_VALIDOS.APROBADO}});
-    console.log(electivos);
     if (!electivos || !Array.isArray(electivos)) {
       return BASE_CASE;
     }
     return electivos;
   } catch (error) {
+    console.error(error);
     return BASE_CASE;
   }
 }

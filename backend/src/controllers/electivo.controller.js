@@ -79,6 +79,7 @@ export async function getElectivosSinAprobar(req, res) {
 
 export async function getElectivosProfesor_NOWARNING(req, res) {
   const serviceResult = await RAW_getElectivosProfesor(req);
+  // console.log(serviceResult);
   return res.status(200).json({data: serviceResult});
 }
 
@@ -371,7 +372,7 @@ export const getElectivoName = async (id) => {
 export const getAllElectivoNames = async (req, res) => {
   let electivos = null;
   if ((req.user.rol || req.user.role) === TEACHER_ROLE) {
-    electivos = await RAW_getElectivosAprobadosProfesor();
+    electivos = await RAW_getElectivosAprobadosProfesor(req);
   } else {
     electivos = await RAW_getAllApprovedElectivos();
   }

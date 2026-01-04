@@ -79,7 +79,6 @@ export async function FRONTEND_getElectivoList() {
 
     try {
         const response = await axios.get('/electivos/frontend_list');
-        // console.log(response);
         const lista = response?.data?.lista;
         if (!Array.isArray(lista)) {
             return BASE_CASE;
