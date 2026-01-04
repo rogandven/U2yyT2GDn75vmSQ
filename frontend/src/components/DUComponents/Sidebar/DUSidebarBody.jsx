@@ -7,8 +7,13 @@ import { CgProfile } from "react-icons/cg";
 import { FaBook } from 'react-icons/fa';
 import { HiPencilAlt } from 'react-icons/hi';
 import { AiFillCalendar } from 'react-icons/ai';
+import { CAREER_HEAD_ROLE, getUserRole, TEACHER_ROLE } from "../../../services/admin.service.js";
 
-export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
+const shallChangeName = () => {
+    return [CAREER_HEAD_ROLE, TEACHER_ROLE].includes(getUserRole());
+}
+
+export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin, canCrudCareers }) => {
 
 
     const createSidebarItem = (label, destination, icon, logoutSubmit) => {
@@ -35,16 +40,16 @@ export const DUSidebarBody = ({ PageContent, logoutSubmit, isAdmin }) => {
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
                 {createSidebarItem("Inicio", "/home", (<FaHome />), undefined)}
-                {isAdmin && createSidebarItem("Usuarios", "/users", (<FaUsers />), undefined)}
+                {isAdmin && createSidebarItem(shallChangeName() ? "Alumnos" : "Usuarios", "/users", (<FaUsers />), undefined)}
                 {/* createSidebarItem("Electivos A", "/electivo", (<MdLibraryBooks />), undefined) */}
                 {createSidebarItem("Electivos", "/electivos", (<FaBook />), undefined)}
-                {isAdmin && createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
+                {canCrudCareers && createSidebarItem("Carreras", "/carreras", (<MdClass />), undefined)}
                 {createSidebarItem("Inscripciones", "/inscripciones", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Horarios", "/horarios", (<AiFillCalendar />), undefined)}
                 {createSidebarItem("Perfil", "/profile", (<CgProfile />), undefined)}
+                {createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />), undefined)}
+                {createSidebarItem("Solicitudes", "/Solicitudes", (<HiPencilAlt />), undefined)}
                 {createSidebarItem("Cerrar Sesión", "/login", (<FaSignOutAlt />), logoutSubmit)}
-                {createSidebarItem("Nueva Solicitud", "/NuevaSolicitud", (<HiPencilAlt />))}
-                {createSidebarItem("Solicitudes", "/Solicitudes", (<HiPencilAlt />))}
             {/* button to open/close drawer */}
             </ul>
             <div className="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Abrir">

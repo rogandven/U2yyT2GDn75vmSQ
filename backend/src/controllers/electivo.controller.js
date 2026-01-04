@@ -75,6 +75,10 @@ export async function getElectivosSinAprobar(req, res) {
   );
 }
 
+export async function getElectivosProfesor(req, res) {
+  
+}
+
 /* ===========================
    CREAR ELECTIVO (HELPER)
 =========================== */

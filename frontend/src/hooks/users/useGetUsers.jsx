@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getUsers } from '@services/user.service.js';
 import { getUsersJefeDeCarrera } from '../../services/user.service.js';
 import { CAREER_HEAD_ROLE, getUserRole } from '../../services/admin.service.js';
+import { TEACHER_ROLE } from '../../constants/PermissionsConstants.jsx';
 
 export const useGetUsers = () => { 
     const [users, setUsers] = useState([]);
@@ -9,7 +10,7 @@ export const useGetUsers = () => {
     const fetchUsers = async () => {
         let data = [];
         try {
-            if (getUserRole() === CAREER_HEAD_ROLE) {
+            if ([CAREER_HEAD_ROLE, TEACHER_ROLE].includes(getUserRole())) {
                 data = await getUsersJefeDeCarrera();
             } else {
                 data = await getUsers();

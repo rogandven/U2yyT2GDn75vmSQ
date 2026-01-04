@@ -1,4 +1,4 @@
-import { CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
+import { CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
 
 export const TEACHER_ROLE = 'PROFESOR';
 export const STUDENT_ROLE = 'ESTUDIANTE';
@@ -89,6 +89,10 @@ export const canCrudUsers = (role) => {
 
 export const canCrudElectivos = (role) => {
     return CAN_DO_CRUD_ON_SUBJECTS.includes(String(role));
+}
+
+export const canCrudCareers = (role) => {
+    return CAN_DO_CRUD_ON_CAREERS.includes(String(role));
 }
 
 /*
