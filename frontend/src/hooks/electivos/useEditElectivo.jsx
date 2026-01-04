@@ -183,6 +183,8 @@ export const useEditElectivo = (fetchElectivos) => {
       if (!values) return;
 
       const response = await editElectivo(id, values);
+      console.log(response);
+      
       await fetchElectivos();
       fireDynamicSwal(response.status, null, response?.data?.message);
     } catch (error) {

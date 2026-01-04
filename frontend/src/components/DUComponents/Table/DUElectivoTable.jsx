@@ -177,7 +177,7 @@ export const DUElectivoTable = ({
               return (
                 electivo &&
                 mustBeDisplayed(electivo, isAdmin) && (
-                  <tr key={"ELECTIVO" + String(numero)}>
+                  <tr key={"ELECTIVO" + String(electivo.id)}>
                     {/* <th>{numero++}</th> */}
                     <td>{electivo.nombre || "N/A"}</td>
                     <td>
