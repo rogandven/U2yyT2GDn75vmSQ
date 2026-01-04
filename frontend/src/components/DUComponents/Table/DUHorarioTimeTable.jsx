@@ -8,7 +8,7 @@ import { GiGraduateCap } from 'react-icons/gi';
 // const isAdmin = isAdminOrProfesor();
 // const isJefe = isJefeDeCarrera();
 
-const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdmin) => {
+const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdmin, canCrudTimeTables) => {
   if (Array.isArray(data) && data.length > 0) {
       return data.map((Timetable) => (
                   <tr key={"Timetable-"+Timetable.id_horario}>
@@ -26,7 +26,7 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdm
                           {String(Timetable.dia).toUpperCase()}
                         </div>
                       </td>
-                      {isAdmin && (
+                      {canCrudTimeTables && (
                       <td>
                       <button className="btn btn-primary m-1" onClick={() => {handleEditTimetable(Timetable.id_horario, Timetable)}}><IoMdSettings></IoMdSettings></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteTimetable(Timetable.id_horario)}}><MdDelete></MdDelete></button>
@@ -43,7 +43,7 @@ const mostrarHorarios = (data, handleEditTimetable, handleDeleteTimetable, isAdm
   }
 }
 
-export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe}) => {
+export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe, canCrudTimeTables}) => {
     /* const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -61,11 +61,11 @@ export const DUHorarioTable = ({data, handleEditTimetable, handleDeleteTimetable
                 <th>Hora Término</th>
                 <th>Sala</th>
                 <th>Día</th>
-                {isAdmin && (<th>Acciones</th>)}             
+                {canCrudTimeTables && (<th>Acciones</th>)}             
             </tr>
             </thead>
             <tbody>
-              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin, isJefe)}
+              {mostrarHorarios(data, handleEditTimetable, handleDeleteTimetable, isAdmin, canCrudTimeTables)}
             </tbody>
         </table>
         </div>

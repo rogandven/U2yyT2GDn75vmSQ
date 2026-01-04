@@ -227,7 +227,7 @@ export async function RAW_getAllApprovedElectivos() {
 export async function RAW_getElectivosProfesor(req) {
   const BASE_CASE = [];
   try {
-    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, carreraIdCarrera: req.user.id_carrera}});
+    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id}});
     if (!electivos || !Array.isArray(electivos)) {
       return BASE_CASE;
     }
@@ -240,7 +240,8 @@ export async function RAW_getElectivosProfesor(req) {
 export async function RAW_getElectivosAprobadosProfesor(req) {
   const BASE_CASE = [];
   try {
-    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, carreraIdCarrera: req.user.id_carrera, estado: ESTADOS_VALIDOS.APROBADO}});
+    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, estado: ESTADOS_VALIDOS.APROBADO}});
+    console.log(electivos);
     if (!electivos || !Array.isArray(electivos)) {
       return BASE_CASE;
     }

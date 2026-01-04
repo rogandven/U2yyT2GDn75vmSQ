@@ -12,11 +12,13 @@ import { getUserRole } from "../services/admin.service.js";
 import { isAdminOrProfesor } from "../services/admin.service.js";
 import { isJefeDeCarrera } from "../services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
+import { CAN_DO_CRUD_ON_TIMETABLES } from "../admin/permissions.admin.jsx";
 
 const Timetable = () => {
     const userRole = getUserRole();
     const isAdmin = isAdminOrProfesor(userRole);
     const isJefe = isJefeDeCarrera(userRole);
+    const canCrudTimeTables = CAN_DO_CRUD_ON_TIMETABLES.includes(userRole);
 
     const [horarioData, setHorarioData] = useState([]);
 
@@ -76,9 +78,8 @@ const Timetable = () => {
           </button>
         )}
             <div className="timetable2-page">
-                <DUHorarioTable data={timetables?.data || []} electivosEncontrados={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
+              <DUHorarioTable data={currentPageContent || []} electivosEncontrados={electivosEncontrados} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} canCrudTimeTables={canCrudTimeTables}/>
             </div>
-            <DUHorarioTable data={currentPageContent || []} handleEditTimetable={handleEditTimetable} handleDeleteTimetable={handleDeleteTimetable} />
             <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
         </div>
     );
