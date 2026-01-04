@@ -143,6 +143,7 @@ export const approveElectivoValidation = Joi.object({
     plazo_renovacion: Joi.any(),
 }).unknown(false).min(1).messages({
     "any.unknown": "No se permiten campos adicionales",
+    "object.unknown": "No se permiten campos adicionales",
     "object.min": "Debe proporcionar los campos correspondientes",
     "any.required": "El plazo de renovación es obligatorio",
 });
