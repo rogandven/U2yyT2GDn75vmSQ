@@ -118,16 +118,18 @@ export const integrityValidation = Joi.object({
       "string.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`,
       "any.valid": `Solo se permiten los siguientes estados: ${ARRAY_ESTADOS_VALIDOS.join(", ")}`
   }),
-   motivo_rechazo: Joi.string().max(500).allow('', null).messages({
-        "string.base": "El motivo debe ser texto",
-        "string.max": "El motivo no puede exceder los 500 caracteres",
-    }),
+  motivo: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).allow('', null).pattern(FULLNAME_REGEX).messages({
+      "string.base": "El motivo debe ser texto",
+      "string.max": "El motivo no puede exceder los 500 caracteres",
+      "string.pattern.base": "El motivo solo puede tener letras y números",
+  }),
   semestre_minimo: Joi.custom(validateGeneration),
-  //lo que si funciona
-  //carreras: Joi.custom(careerArrayValidationFunction),
   carreraIdCarrera: Joi.custom(idValidationFunction),
-  usuariosId: Joi.custom(idValidationFunction)
+  usuariosId: Joi.custom(idValidationFunction),
+  plazo_renovacion: Joi.custom(validateGeneration),
 });
+
+/*
 export const rejectElectivoValidation = Joi.object({
   motivo_rechazo: Joi.string().min(MIN_STATUS).required().messages({
    "string.base": "El estado debe ser tipo texto",
@@ -135,7 +137,29 @@ export const rejectElectivoValidation = Joi.object({
    "string.required":"El estado es obligatorio"
   })
 });
+*/
 
+export const approveElectivoValidation = Joi.object({
+    plazo_renovacion: Joi.any(),
+}).unknown(false).min(1).messages({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.min": "Debe proporcionar los campos correspondientes",
+    "any.required": "El plazo de renovación es obligatorio",
+});
+
+export const rejectElectivoValidation = Joi.object ({
+    motivo: Joi.string().min(MIN_FULLNAME).max(MAX_FULLNAME).regex(FULLNAME_REGEX).messages({
+      "any.string": "El motivo debe ser un string",
+      "string.base": "El motivo debe ser un string",
+      "string.min": `El motivo debe tener por lo menos ${MIN_FULLNAME} caracteres`,
+      "string.max": `El motivo debe tener menos de ${MAX_FULLNAME} caracteres`,
+      "string.pattern.base": "El motivo solo puede tener letras y números",
+    })
+}).unknown(false).min(1).messages({
+    "any.unknown": "No se permiten campos adicionales",
+    "object.min": "Debe proporcionar los campos correspondientes",
+    "any.required": "El plazo de renovación es obligatorio",
+});
 
 export const createValidation = Joi.object({
   nombre: Joi.any().required().messages({
@@ -187,7 +211,6 @@ export const updateValidation = Joi.object({
   carreraIdCarrera: Joi.any(),
   usuariosId: Joi.any(),
   creditos_requeridos: Joi.any(),
-  motivo_rechazo: Joi.any(),
 }).min(1).messages({
   "object.min":"Debe proporcionar un campo para actualizar",
   "any.min":"Debe proporcionar un campo para actualizar",

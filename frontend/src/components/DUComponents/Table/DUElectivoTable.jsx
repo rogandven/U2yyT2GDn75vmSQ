@@ -242,7 +242,7 @@ export const DUElectivoTable = ({
                               onClick={() =>
                                 handleApproveElectivo(
                                   electivo.id,
-                                  "minecraft",
+                                  null,
                                   true,
                                   isJefe
                                 )
@@ -256,7 +256,7 @@ export const DUElectivoTable = ({
                               onClick={() =>
                                 handleRejectElectivo(
                                   electivo.id,
-                                  {"motivo":"Las buenas prácticas"},
+                                  null,
                                   false,
                                   isJefe
                                 )

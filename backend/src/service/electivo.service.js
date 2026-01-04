@@ -139,90 +139,23 @@ export async function updateElectivoFromService(id_instancia, data, electivo) {
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_id, user_career, user_role, plazo = null, motivo = null) {
+export async function changeElectivoEstadoFromService(newData, electivo) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
+    Object.assign(electivo, newData);
+    const id = electivo.id;
+    delete electivo.id;
 
-    if (!electivo) {
-      return getServiceResult(false, null, "Electivo no encontrado", 0);
-    }
-    if (electivo.estado === nuevo_estado) {
-      return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
-    }
-    const array = breakDownCarreraArray(electivo.carreras);
-    // Normalize user_career: accept object with 'sigla' or 'nombre', or string
-    let userCareerString = "";
-    try {
-      if (typeof user_career === 'string') {
-        userCareerString = user_career;
-      } else if (user_career && typeof user_career === 'object') {
-        userCareerString = (user_career.sigla || user_career.nombre || user_career.id_carrera || "");
-      } else {
-        userCareerString = String(user_career || "");
-      }
-    } catch (e) {
-      userCareerString = String(user_career || "");
-    }
-    const normalizedUserCareer = String(userCareerString || "").trim().toUpperCase();
-    const careerMatch = array.some((c) => String(c || "").trim().toUpperCase() === normalizedUserCareer);
-    if ((user_role !== ADMIN_ROLE) && (Number(user_id) !== Number(electivo.id_profesor)) && (!careerMatch)) {
-      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
-    }
+    console.log(electivo);
 
-    Object.assign(electivo, { estado: nuevo_estado });
-    // If a motivo is provided (e.g. on rejection), store it
-    if (motivo) {
-      Object.assign(electivo, { motivo: String(motivo) });
+    const result = await electivoRepo.update({id: id}, electivo);
+    console.log(result.affected);
+    if (result.affected !== 1) {
+      throw new Error(`Se actualizaron ${result.affected} electivos`);
     }
-    // If approving, accept either a period string like '2026-1' or a numeric plazo (days)
-    if (String(nuevo_estado) === String(ESTADOS_VALIDOS.APROBADO)) {
-      const periodPattern = /^\d{4}-[12]$/; // e.g. 2026-1 or 2026-2
-      if (plazo && typeof plazo === 'string' && periodPattern.test(plazo.trim())) {
-        // store period as plazo_renovacion string
-        Object.assign(electivo, { plazo_renovacion: String(plazo).trim() });
-        // fecha_renovacion left null when using period semantics
-        Object.assign(electivo, { fecha_renovacion: null });
-      } else {
-        // fallback: numeric days behavior (existing logic)
-        if (plazo && !isNaN(Number(plazo)) && Number(plazo) > 0) {
-          Object.assign(electivo, { plazo_renovacion: Number(plazo) });
-        }
-        const days = Number(electivo.plazo_renovacion) && Number(electivo.plazo_renovacion) > 0 ? Number(electivo.plazo_renovacion) : 30;
-        try {
-          const now = new Date();
-          now.setDate(now.getDate() + days);
-          // store as YYYY-MM-DD
-          const isoDate = now.toISOString().split('T')[0];
-          Object.assign(electivo, { fecha_renovacion: isoDate });
-        } catch (e) {
-          // ignore date set errors
-        }
-      }
-    }
-    await electivoRepo.save(electivo);
-
-    const creador = (await RAW_getUserById(electivo.id_profesor))?.email;
-    try {
-      let subject = `Estado electivo: ${String(nuevo_estado).toUpperCase()}`;
-      let text = `Su electivo ${String(electivo.nombre).toUpperCase()} ha cambiado de estado a ${String(nuevo_estado).toUpperCase()}.`;
-      if (String(nuevo_estado) === String(ESTADOS_VALIDOS.RECHAZADO)) {
-        subject = "Rechazo";
-        const motivoText = motivo ? `\n\nMotivo: ${String(motivo)}` : "";
-        text = `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido rechazado.${motivoText}`;
-      } else if (String(nuevo_estado) === String(ESTADOS_VALIDOS.APROBADO)) {
-        subject = "Aprobación";
-        const renovText = electivo.fecha_renovacion ? `\n\nPlazo de renovación hasta: ${String(electivo.fecha_renovacion)}` : "";
-        text = `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido aprobado.${renovText}`;
-      }
-      sendMail(creador, subject, text);
-    } catch (error) {
-      console.error('Error enviando correo de notificación de estado:', error);
-    }
-
-    return getServiceResult(false, electivo, `Electivo ${nuevo_estado} correctamente`, 1);
+    return getServiceResult(false, electivo, `Electivo ${newData.estado} correctamente`, 1);
   } catch (error) {
-    console.error(`Error al ${nuevo_estado} electivo:`, error);
-    return getServiceResult(true, null, error.message ? error.message : `Error al ${nuevo_estado} electivo`, 0);
+    console.error("Error al cambiar estado del electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al cambiar estado del electivo", 0);
   }
 }
 

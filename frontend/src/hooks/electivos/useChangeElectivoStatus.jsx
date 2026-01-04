@@ -33,44 +33,44 @@ export const useChangeElectivoStatus = (fetchElectivos) => {
         if (!periodo) {
           return;
         }
-        response = await approveElectivo(electivoId, { periodo_renovacion: periodo });
+        response = await approveElectivo(electivoId, { plazo_renovacion: periodo });
       } else { 
-        const formValues = await RejectElectivoInfo();
-        if (!formValues) return;
-        response = await rejectElectivo(electivoId, formValues);
+        // const formValues = await RejectElectivoInfo();
+        // if (!formValues) return;
+       //  response = await rejectElectivo(electivoId, formValues);
         let motivoData = motivo;
                 
-                if (!motivoData) {
-                  const { value: motivoInput } = await Swal.fire({
-                    title: 'Motivo del rechazo',
-                    input: 'textarea',
-                    inputLabel: 'Ingrese el motivo del rechazo (mínimo 5 caracteres)',
-                    inputPlaceholder: 'Ej: El electivo está completo...',
-                    inputAttributes: {
-                      maxlength: 500,
-                      'aria-label': 'Motivo del rechazo'
-                    },
-                    showCancelButton: true,
-                    confirmButtonText: 'Confirmar rechazo',
-                    cancelButtonText: 'Cancelar',
-                    inputValidator: (value) => {
-                      if (!value || value.trim().length < 5) {
-                        return 'El motivo debe tener al menos 5 caracteres';
-                      }
-                      if (value.length > 500) {
-                        return 'El motivo no puede exceder 500 caracteres';
-                      }
-                      return null;
-                    }
-                  });
-        
-                  if (!motivoInput) {
-                    return; // Usuario canceló
-                  }
-                  motivoData = { motivo_rechazo: motivoInput };
-                }
+        if (!motivoData) {
+          const { value: motivoInput } = await Swal.fire({
+            title: 'Motivo del rechazo',
+            input: 'textarea',
+            inputLabel: 'Ingrese el motivo del rechazo (mínimo 5 caracteres)',
+            inputPlaceholder: 'Ej: El electivo está completo...',
+            inputAttributes: {
+              maxlength: 500,
+              'aria-label': 'Motivo del rechazo'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar rechazo',
+            cancelButtonText: 'Cancelar',
+            inputValidator: (value) => {
+              if (!value || value.trim().length < 5) {
+                return 'El motivo debe tener al menos 5 caracteres';
+              }
+              if (value.length > 500) {
+                return 'El motivo no puede exceder 500 caracteres';
+              }
+              return null;
+            }
+          });
+
+          if (!motivoInput) {
+            return; // Usuario canceló
+          }
+          motivoData = { motivo: motivoInput };
+        }
                 
-                response = await rejectElectivo(electivoId, motivoData);
+        response = await rejectElectivo(electivoId, motivoData);
       }
       // // console.log(response);
       if (response) {
