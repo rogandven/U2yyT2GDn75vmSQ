@@ -8,9 +8,9 @@ const useGetSolicitudes = (isJefe = false) => {
     const response = isJefe
       ? await getSolicitudesJefe()
       : await getSolicitudesAlumno();
-
-    if (response?.data?.details) {
-      setSolicitudes(response.data.details); 
+      
+    if (response.data) {
+      setSolicitudes(response.data); 
     } else {
       setSolicitudes([]); 
     }

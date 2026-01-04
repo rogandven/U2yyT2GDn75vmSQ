@@ -2,10 +2,9 @@ import { private_approveInscripcion, private_rejectInscripcion } from "../../ser
 import Swal from "sweetalert2";
 import { fireDynamicSwal } from "../utils/dynamicSwal.jsx";
 
-
 export const useChangeInscripcionStatus = (fetchInscripciones) => {
-  const handleChangeInscripcionStatus = async (inscripcionId, motivo, approve, isAdmin) => {
-    if (!isAdmin) {
+  const handleChangeInscripcionStatus = async (inscripcionId, motivo, approve, isAdmin, isJefe) => {
+    if (!isAdmin || !isJefe) {
       return fireDynamicSwal(500, null, "Acceso denegado");
     }
 

@@ -30,7 +30,7 @@ export const useRejectElectivo = (fetchElectivos) => {
     const handleRejectElectivo2 = async (isAdmin, isJefe, id) => {
         try {
             if (!isAdmin){
-                return fireDynamicSwal(500, null, "Acceso denegado por ser idiota");
+                return fireDynamicSwal(500, null, "Acceso denegado");
             }
             
             let response = null;
@@ -41,7 +41,7 @@ export const useRejectElectivo = (fetchElectivos) => {
             if(isJefe){
                 response = await rejectElectivo(id, formValues);
             }else{
-                return fireDynamicSwal(500, null, "Acceso denegado eres un estudiante que va a ser expulsado por intentar ser Jefe");
+                return fireDynamicSwal(500, null, "Acceso denegado");
             }
             if (response) {
                 await fetchElectivos();

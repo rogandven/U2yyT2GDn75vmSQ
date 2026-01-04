@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useGetElectivos } from "@hooks/electivos/useGetElectivos.jsx";
-import { useCreateSolicitud } from "@hooks/solicitudes/usecreateSolicitud.jsx";
+import { useCreateSolicitud } from "@hooks/solicitudes/useCreateSolicitud.jsx";
 
 const NuevaSolicitud = () => {
   const [tipo, setTipo] = useState("");
   const [motivo, setMotivo] = useState("");
   const [electivoId, setElectivoId] = useState("");
+  const [creditos, setCreditos] = useState("");
 
   const { electivos, fetchElectivos } = useGetElectivos();
-  const { createSolicitud } = useCreateSolicitud();
+  const { handleCreateSolicitud } = useCreateSolicitud();
 
   useEffect(() => {
     fetchElectivos(); 
@@ -25,14 +26,20 @@ const NuevaSolicitud = () => {
     if (tipo === "inscripcion_asignatura" && !electivoId) {
       return Swal.fire("Error", "Debe seleccionar un electivo", "error");
     }
+    if (tipo === "mas_creditos") {
+      if (!creditos || Number(creditos) <= 0 || Number(creditos) !== Number(Math.ceil(Number(creditos)))) {
+        return Swal.fire("Error", "La cantidad de créditos no es válida", "error");
+      }
+    }
 
     const payload = {
       tipo,
       motivo,
-      id_electivo: tipo === "inscripcion_asignatura" ? electivoId : null
+      id_electivo: tipo === "inscripcion_asignatura" ? electivoId : null,
+      creditos_solicitados: creditos ? creditos : null,
     };
 
-    const response = await createSolicitud(payload);
+    const response = await handleCreateSolicitud(payload);
 
     if (response?.status === 201) {
       Swal.fire("Éxito", "Solicitud enviada correctamente", "success");
@@ -75,13 +82,24 @@ const NuevaSolicitud = () => {
                 onChange={(e) => setElectivoId(e.target.value)}
               >
                 <option value="">Seleccione electivo</option>
-                {electivos.map((e) => (
+                {electivos?.data?.map((e) => (
                   <option key={e.id} value={e.id}>
                     {e.nombre}
                   </option>
                 ))}
               </select>
             </>
+          )}
+          {tipo === "mas_creditos" && (
+            <>
+              <label className="label mt-4">Créditos</label>
+              <input
+                className="input input-bordered w-full"
+                rows={4}
+                value={creditos}
+                onChange={(e) => setCreditos(e.target.value)}
+              />
+          </>
           )}
 
           <button className="btn btn-primary mt-6" onClick={handleSubmit}>

@@ -7,6 +7,7 @@ import InscripcionEntity from '../entity/inscripcion.entity.js';
 import UserEntity from '../entity/user.entity.js';
 import HorarioEntity from "../entity/horario.entity.js";
 import carreraEntity from "../entity/carrera.entity.js";
+import SolicitudEntity from "../entity/solicitud.entity.js";
 
 // Configuración de la conexión a la base de datos
 export const AppDataSource = new DataSource({
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
     username: `${DB_USERNAME}`,
     password: `${PASSWORD}`,
     database: `${DATABASE}`,
-    entities: [ElectivoEntity, InscripcionEntity, UserEntity, HorarioEntity, carreraEntity],
+    entities: [ElectivoEntity, InscripcionEntity, UserEntity, HorarioEntity, carreraEntity, SolicitudEntity],
     synchronize: true,
     logging: false,
 });

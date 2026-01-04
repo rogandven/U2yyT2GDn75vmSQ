@@ -2,9 +2,13 @@ import {createSolicitudService,getSolicitudesAlumnoService,getSolicitudesJefeSer
 import {createSolicitudValidation,rechazarSolicitudValidation} from "../validations/solicitud.validation.js";
 import { getControllerResult_NEW } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
-
+import { TIPOS_SOLICITUD } from "../constants/solicitud.constants.js";
 
 export async function crearSolicitudAlumno(req, res) {
+  if (req?.body?.tipo !== TIPOS_SOLICITUD.INSCRIPCION_ASIGNATURA) {
+    delete req.body.id_electivo;
+  }
+
   const { error } = createSolicitudValidation.validate(req.body);
   if (error) {
     return res.status(400).json(

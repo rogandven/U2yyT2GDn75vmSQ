@@ -14,13 +14,14 @@ export const DUSolicitudTable = ({
   handleChangeSolicitudStatus
 }) => {
   let numero = 1;
+  console.log("SOLICITUDES: " + JSON.stringify(solicitudes));
 
   return (
     <div className="overflow-x-auto rounded-box border bg-base-100 m-3">
       <table className="table">
         <thead>
           <tr>
-            <th></th>
+            {/* <th></th> */}
             <th>Tipo</th>
             <th>Electivo</th>
             <th>Créditos</th>
@@ -31,8 +32,8 @@ export const DUSolicitudTable = ({
         </thead>
         <tbody>
           {solicitudes.map((s) => (
-            <tr key={`SOL-${numero}`}>
-              <th>{numero++}</th>
+            <tr key={`SOL-${numero++}`}>
+              {/* <th>{numero++}</th> */}
               <td>{s.tipo}</td>
               <td>{s.id_electivo || "-"}</td>
               <td>{s.creditos_solicitados || "-"}</td>

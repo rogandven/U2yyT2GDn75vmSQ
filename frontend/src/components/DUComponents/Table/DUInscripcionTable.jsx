@@ -16,7 +16,7 @@ import { GiGraduateCap } from 'react-icons/gi';
 import { getUserRole } from '../../../services/admin.service.js';
 import { STUDENT_ROLE } from '../../../constants/PermissionsConstants.jsx';
 
-export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe}) => {
+export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handleDeleteInscripcion, handleChangeInscripcionStatus, electivoNames, userNames, isAdmin, isJefe, canCrudInscriptions}) => {
     const userRole = getUserRole();
     let numero = 1;
     const data = (inscripciones || []);
@@ -49,10 +49,10 @@ export const DUInscripcionTable = ({inscripciones, handleEditInscripcion, handle
                 </td>
                  <td> {inscripcion.estado === ESTADOS_VALIDOS.RECHAZADO && inscripcion.motivo_rechazo ? inscripcion.motivo_rechazo : "-"}</td>
                 <td>
-                    <button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>
-                    <button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>
-                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true, isAdmin)}}><ImCheckmark/></button>}
-                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false, isAdmin)}}><TiTimes/></button>}
+                    {canCrudInscriptions && (<button className="btn btn-primary m-1" onClick={() => {handleEditInscripcion(inscripcion.id_inscripcion, inscripcion, electivoNames, userNames, isAdmin)}}><IoMdSettings></IoMdSettings></button>)}
+                    {canCrudInscriptions && (<button className="btn btn-secondary m-1" onClick={() => {handleDeleteInscripcion(inscripcion.id_inscripcion, isAdmin)}}><MdDelete></MdDelete></button>)}
+                    {isJefe && <button className="btn btn-success m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, true, isAdmin, canCrudInscriptions)}}><ImCheckmark/></button>}
+                    {isJefe && <button className="btn btn-error m-1" onClick={() => {handleChangeInscripcionStatus(inscripcion.id_inscripcion, false, isAdmin, canCrudInscriptions)}}><TiTimes/></button>}
                 </td>
                 </tr>  
             )})}
