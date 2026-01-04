@@ -76,7 +76,7 @@ export async function canCrudUsers(req, res, next) {
 }
 
 export async function canViewUsers(req, res, next) {
-  return await isAdminHelper(req, res, next, CAN_VIEW_USERS);
+  return await isAdminHelper(req, res, next, CAN_VIEW_USERS.concat(CAN_DO_CRUD_ON_USERS));
 }
 
 export async function canMakeRequests(req, res, next) {

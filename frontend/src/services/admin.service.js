@@ -1,3 +1,5 @@
+import { CAN_VIEW_USERS } from "../admin/permissions.admin.jsx";
+
 export const TEACHER_ROLE = 'PROFESOR';
 export const STUDENT_ROLE = 'ESTUDIANTE';
 export const ADMIN_ROLE = 'ADMINISTRADOR';
@@ -77,6 +79,10 @@ export const isStudent = (role) => {
     return STUDENT_ROLE === String(role);
 }
 
+export const canViewUsers = (role) => {
+    return CAN_VIEW_USERS.includes(String(role));
+}
+
 /*
 export const getAllowedRoles = () => {
     return VALID_ADMIN_ROLES;
@@ -114,5 +120,4 @@ export const isJefeDeCarrera = () => {
     const result = (userRole && (userRole === CAREER_HEAD_ROLE)) || false;
     // console.log(result);
     return result;
-}
-*/
+} */ 

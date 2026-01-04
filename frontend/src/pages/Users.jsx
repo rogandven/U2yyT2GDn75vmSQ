@@ -6,16 +6,15 @@ import { useEffect } from "react";
 import { DUUserTable } from "../components/DUComponents/Table/DUUserTable.jsx";
 import useCreateUser from "../hooks/users/useCreateUser.jsx";
 import useGetProfile from "@hooks/profile/useGetProfile.jsx";
-import { getUserRole, isJefeDeCarrera, ADMIN_ROLE } from "@services/admin.service.js";
+import { getUserRole, ADMIN_ROLE } from "@services/admin.service.js";
 import { DUPageBrowser } from "../components/DUComponents/DUPageBrowser.jsx";
 import { useState } from "react";
 import useGetCarreraNames from "../hooks/carreras/useGetCarreraNames.jsx";
-import { CAN_DO_CRUD_ON_USERS, CAN_VIEW_USERS } from "../admin/permissions.admin.js";
-import { getUserCareerId } from "../services/admin.service.js";
+import { canViewUsers as s_canViewUsers } from "../services/admin.service.js";
 
 const Users = () => {
   const role = getUserRole();
-  const isJefe = isJefeDeCarrera(role);
+  const canViewUsers = s_canViewUsers(role);
 
   const { users, fetchUsers, setUsers } = useGetUsers();
   const { handleDeleteUser } = useDeleteUser(fetchUsers);
@@ -51,7 +50,7 @@ const Users = () => {
         <button className="btn btn-primary m-3 mb-0" onClick={() => {handleCreateUser(fetchUsers, carreraNames)}}>Crear Usuario</button>
       )}
       <div className="users-table">
-        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames, isJefe, role)}
+        {DUUserTable(currentPageContent, handleDeleteUser, handleEditUser, carreraNames, canViewUsers, role)}
         <DUPageBrowser setCurrentPageNumber={setCurrentPage} currentPageNumber={currentPage} pageAmount={pageAmount}></DUPageBrowser>
       </div>
     </div>

@@ -59,9 +59,6 @@ export async function updateUserById(req, res) {
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(newData.fullname);
   }
-  if (newData.carrera) {
-    newData.carrera = processCarrera(newData.carrera);  
-  }
   if (newData.role) {
     newData.role = processRole(newData.role);
   }

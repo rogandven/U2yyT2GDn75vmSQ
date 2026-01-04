@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io'
 import { getUserRole, ADMIN_ROLE } from '@services/admin.service.js';
 
-export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames, isJefe, role) => {
+export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraNames, canViewUsers, role) => {
     const coalesceData = (data) => {
         if (data === null || data === "null" || data === undefined || data === "undefined") {
             return "";
@@ -19,9 +19,9 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                 <th>Nombre</th>
                 <th>Apodo</th>
                 <th>Correo</th>
-                {!isJefe && (<th>Rol</th>)}
+                {!canViewUsers && (<th>Rol</th>)}
                 <th>Generación</th>
-                {!isJefe && (<th>Carrera</th>)} 
+                {!canViewUsers && (<th>Carrera</th>)} 
                 <th>Créditos</th>
                 {getUserRole() === ADMIN_ROLE && (<th>Acciones</th>)}
             </tr>
@@ -35,7 +35,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                     <td>{(coalesceData(String(usuario && usuario.fullname)) || "N/A")}</td>
                     <td>{coalesceData(String(usuario && usuario.username)) || "N/A"}</td>
                     <td>{coalesceData(String(usuario && usuario.email)) || "N/A"}</td>
-                    {!isJefe && (<td>
+                    {!canViewUsers && (<td>
                         <div className="badge badge-primary">
                             {coalesceData(String(usuario && usuario.role).toUpperCase().replaceAll("_", " ")) || "usuario"}
                         </div>
@@ -45,7 +45,7 @@ export const DUUserTable = (usuarios, handleDeleteUser, handleEditUser, carreraN
                             {coalesceData(String(usuario && usuario.generation)) || "N/A"}
                         </div>
                     </td>
-                    {!isJefe && (<td>
+                    {!canViewUsers && (<td>
                         <div className="badge badge-accent">
                             {(() => {
                                 console.log(usuario);

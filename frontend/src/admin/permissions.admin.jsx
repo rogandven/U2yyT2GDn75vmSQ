@@ -2,7 +2,7 @@ import { ADMIN_ROLE, STUDENT_ROLE, CAREER_HEAD_ROLE, TEACHER_ROLE } from "../con
 
 export const CAN_DO_CRUD_ON_CAREERS = [ADMIN_ROLE];
 export const CAN_DO_CRUD_ON_USERS = [ADMIN_ROLE];
-export const CAN_VIEW_USERS = [ADMIN_ROLE, CAREER_HEAD_ROLE];
+export const CAN_VIEW_USERS = [CAREER_HEAD_ROLE, TEACHER_ROLE];
 // Solo profesores y administradores pueden crear/editar/eliminar electivos
 export const CAN_DO_CRUD_ON_SUBJECTS = [TEACHER_ROLE, ADMIN_ROLE];
 export const CAN_DO_CRUD_ON_TIMETABLES = CAN_DO_CRUD_ON_SUBJECTS;
@@ -14,3 +14,5 @@ export const CAN_SIGN_UP_TO_SUBJECTS = [STUDENT_ROLE];
 
 export const CAN_MAKE_REQUESTS = [STUDENT_ROLE];
 export const CAN_CRUD_REQUEST = [CAREER_HEAD_ROLE];
+
+export default null;
