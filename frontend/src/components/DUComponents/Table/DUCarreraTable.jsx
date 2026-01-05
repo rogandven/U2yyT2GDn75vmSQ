@@ -1,9 +1,11 @@
 import { IoMdSettings } from 'react-icons/io';
 import { MdDelete } from "react-icons/md";
-import { isAdminOrProfesor } from '../../../services/admin.service.js';
+import { getUserRole } from '../../../services/admin.service.js';
+import { CAN_DO_CRUD_ON_CAREERS } from '../../../admin/permissions.admin.jsx';
 //import { isJefeDeCarrera } from '../../../services/admin.service.js';
 
-const esAdmininstardor = isAdminOrProfesor();
+const userRole = getUserRole();
+const puedeEditarCarreras = CAN_DO_CRUD_ON_CAREERS.includes(userRole);
 
 
 const mostrarCarreras = (data, handleEditCarrera, handleDeleteCarrera) => {
@@ -13,7 +15,7 @@ const mostrarCarreras = (data, handleEditCarrera, handleDeleteCarrera) => {
                       
                       <td>{Carrera.sigla}</td>
                       <td>{Carrera.nombre}</td>
-                      {esAdmininstardor && (
+                      {puedeEditarCarreras && (
                       <td>
                       <button className="btn btn-primary m-1" onClick={() => {handleEditCarrera(Carrera.id_carrera, Carrera)}}><IoMdSettings></IoMdSettings></button>
                       <button className="btn btn-secondary m-1" onClick={() => {handleDeleteCarrera(Carrera.id_carrera)}}><MdDelete></MdDelete></button>
@@ -38,7 +40,7 @@ export const DUCarreraTable = ({data, handleEditCarrera, handleDeleteCarrera}) =
             <tr>
                 <th>Sigla</th>
                 <th>Nombre</th>
-                {esAdmininstardor && (<th>Acciones</th>)}             
+                {puedeEditarCarreras && (<th>Acciones</th>)}             
             </tr>
             </thead>
             <tbody>

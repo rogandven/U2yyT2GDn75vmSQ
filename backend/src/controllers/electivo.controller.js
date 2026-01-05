@@ -140,6 +140,9 @@ const createElectivoHelper = async (req, res, estadoNuevo) => {
 };
 
 export async function createElectivoProfesor(req, res) {
+  if (req?.body) {
+    req.body.carreraIdCarrera = req.user.id_carrera;
+  }
   if (req.body?.estado) {
     return res.status(400).json(
       getControllerResult_NEW("No se puede autoasignar un estado", null)

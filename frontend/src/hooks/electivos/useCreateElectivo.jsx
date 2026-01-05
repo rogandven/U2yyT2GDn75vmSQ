@@ -162,6 +162,7 @@ import { StaticDropdownList } from "../utils/DropdownList.jsx";
 import { AREAS_PERMITIDAS_EN_MAYUSCULA } from "../../constants/ElectivoConstants.jsx";
 import { CARRERAS_PERMITIDAS } from "../../constants/CareerConstants.jsx";
 import { CAREER_HEAD_ROLE, getAllowedRoles, getUserRole } from "../../services/admin.service.js";
+import { TEACHER_ROLE } from "../../constants/PermissionsConstants.jsx";
 
 async function createElectivoInfo(carreraNames) {
   const { value } = await Swal.fire({
@@ -196,13 +197,50 @@ async function createElectivoInfo(carreraNames) {
   return value;
 }
 
+async function createElectivoInfoProfesor() {
+  const { value } = await Swal.fire({
+    title: "Crear Electivo",
+    html: `
+      ${createSwalField(1, "Nombre")}
+      ${createSwalField(2, "Descripción")}
+      ${createSwalField(3, "Cupos")}
+      ${createSwalField(4, "Créditos Requeridos")}
+      ${createSwalField(5, "Semestre Mínimo")}
+      ${createSwalDateField(6, "Apertura")}
+      ${createSwalDateField(7, "Cierre")}
+      ${StaticDropdownList(AREAS_PERMITIDAS_EN_MAYUSCULA, "Área", "swal2-input8", "m-1")}
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Crear",
+    theme: "dark",
+    preConfirm: () => ({
+      nombre: gebi("swal2-input1")?.value,
+      descripcion: gebi("swal2-input2")?.value,
+      cupos: Number(gebi("swal2-input3")?.value),
+      creditos_requeridos: Number(gebi("swal2-input4")?.value),
+      semestre_minimo: gebi("swal2-input5")?.value,
+      apertura: gebi("swal2-input6")?.value,
+      cierre: gebi("swal2-input7")?.value,
+      area: gebi("swal2-input8")?.value,
+    }),
+  });
+
+  return value;
+}
+
 export const useCreateElectivo = (fetchElectivos) => {
   const handleCreateElectivo = async (isAdmin, isJefe, carreraNames) => {
     try {
-      const formValues = await createElectivoInfo(carreraNames);
+      let formValues = null;
+      const role = getUserRole();
+      if (role === TEACHER_ROLE) {
+        formValues = await createElectivoInfoProfesor(carreraNames);
+      } else {
+        formValues = await createElectivoInfo(carreraNames);
+      }
       if (!formValues) return;
 
-      const role = getUserRole();
+      
       let response = null;
 
       if (role === CAREER_HEAD_ROLE) {
