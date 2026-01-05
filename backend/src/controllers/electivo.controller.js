@@ -272,8 +272,8 @@ const changeElectivoEstado = async (req, res, estado) => {
     if (!electivo) {
       return res.status(404).json(getControllerResult_NEW("Electivo no encontrado", null));
     }
-    if (req.user.id_carrera !== electivo.carreraIdCarrera) {
-      return res.status(401).json(getControllerResult_NEW("No pertenece a la carrera del electivo", null));
+    if (req.user.id !== electivo.usuariosId) {
+      return res.status(401).json(getControllerResult_NEW("Este electivo no le pertenece", null));
     }
 
     if (estado === ESTADOS_VALIDOS.APROBADO) {
