@@ -38,7 +38,7 @@ async function confirmError() {
 }
 
 export const useDeleteInscripcion = (fetchInscripciones) => {
-  const handleDeleteInscripcion = async (inscripcionId, isAdmin, isJefe) => {
+  const handleDeleteInscripcion = async (inscripcionId, isAdmin, canModerateInscriptions) => {
     try {
       let response = null;
       const isConfirmed = await confirmDeleteInscripcion();

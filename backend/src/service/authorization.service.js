@@ -1,6 +1,7 @@
 import UserEntity from "../entity/user.entity.js";
 import { getServiceResult } from "./utils/utils.service.js";
 import { AppDataSource } from "../config/configDb.js";
+import { VALID_ADMIN_ROLES } from "../constants/user.constants.js";
 
 export async function isAdminFromService(VALID_ADMIN_ROLES, email) {
   try {

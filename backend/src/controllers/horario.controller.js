@@ -9,6 +9,8 @@ import { HORARIO_NO_ENCONTRADO } from "../constants/horarioConstants.js";
 import { getElectivoName } from "./electivo.controller.js";
 import { EMAIL_getAllCareerChiefs } from "../service/user.service.js";
 import sendMail from "../services/email.service.js";
+import {getControllerResult_NEW} from "./utils/utils.controller.js";
+import {getElectivoByIdFromService} from "../service/electivo.service.js"
 import { ADMIN_ROLE, CAREER_HEAD_ROLE } from "../constants/user.constants.js";
 
 
@@ -102,24 +104,21 @@ export async function asignarHorario(req, res) {
     } 
 
     const electivo = await RAW_getElectivoById(id_electivo);
-    console.log(electivo);
+    // console.log(electivo);
     if (!electivo) {
       return handleErrorClient(res, 404, "Electivo no encontrado");
     }
 
     const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
-    console.log(req.user.id);
+    /* console.log(req.user.id);
     console.log(electivo.id_profesor);
     console.log(electivo.carreras);
-    console.log(req.user.carrera);
+    console.log(req.user.carrera); */
 
     if (!canSkipChecks) {
-       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
-        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
-       }
-      if ((req.user.role !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
-        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      if (electivo.usuariosId !== req.user.id) {
+        return handleErrorClient(res, 401, "El electivo no es suyo");
       }
     }
 
@@ -150,6 +149,19 @@ export async function asignarHorario(req, res) {
     console.error("Error en auth.controller.js -> register(): ", error);
     return res.status(500).json({ message: "Error al registrar el horario" });
   }
+}
+
+export async function getHorariosByIdElectivo(req, res) {
+    const { id_electivo } = req.params;
+    const validationResult = idValidation.validate({id_electivo: id_electivo});
+    if (validationResult.error) {
+      return res.status(400).json(getControllerResult_NEW(validationResult.error.message, null));
+    }
+    const serviceResult = await getElectivoByIdFromService(id_electivo);
+    if (serviceResult.error) {
+      return res.status(500).json(getControllerResult_NEW(serviceResult.details, serviceResult));
+    }
+    return res.status(200).json(getControllerResult_NEW(serviceResult.details, serviceResult));
 }
 
 export async function patchHorario(req, res) {
@@ -191,11 +203,8 @@ export async function patchHorario(req, res) {
     const canSkipChecks = ((req.user.role || req.user.rol) === ADMIN_ROLE);
 
     if (!canSkipChecks) {
-       if (!(String(electivo.carreras).split(",").includes(req.user.carrera))) {
-        return handleErrorClient(res, 401, "Debe pertenecer a una de las carreras del electivo");
-       }
-      if (((req.user.role || req.user.rol) !== CAREER_HEAD_ROLE) && (req.user.id !== electivo.id_profesor)) {
-        return handleErrorClient(res, 401, "No puede crear un horario para un electivo que no es suyo");
+      if (electivo.usuariosId !== req.user.id) {
+        return handleErrorClient(res, 401, "El electivo no es suyo");
       }
     }
     
@@ -231,6 +240,21 @@ export function getPublicClass(req, res) {
   handleSuccess(res, 200, "Horarios obtenidas exitosamente", {
     message: "¡Hola! Este es un perfil público. Cualquiera puede verlo.",
   });
+}
+
+export async function getElectivoById(id_electivo) {
+try {
+    const electivos = await electivoRepo.findOne({ where: { id: id_instancia } });
+
+    if (!electivos) {
+        return getServiceResult(false, null, "Electivo no encontrado", 0);
+    }
+
+    return getServiceResult(false, electivos, "Electivo encontrado", 1);
+  } catch (error) {
+    console.error("Error en electivo.controller.js -> getUserById(): ", error);
+    return getServiceResult(true, null, error.message? error.message : "Error al encontrar electivo", 0);
+  }
 }
 
 export async function getHorarios(req, res) {

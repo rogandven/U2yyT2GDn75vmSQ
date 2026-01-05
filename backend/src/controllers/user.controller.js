@@ -1,5 +1,5 @@
 "use strict";
-import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById, RAW_getAllStudents } from "../service/user.service.js";
+import { getUsersFromService, getUserByIdFromService, updateUserByIdFromService, deleteUserByIdFromService, registerUserFromService, loginUserFromService, logoutUserFromService, RAW_getUserById, RAW_getAllStudents, RAW_getAllStudentsByCareer } from "../service/user.service.js";
 import { getControllerResult_NEW, fullNameProcessor, robustErrorMessage } from "./utils/utils.controller.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { updateValidation, integrityValidation, createValidation, loginValidation } from "../validations/user.validation.js";
@@ -59,9 +59,6 @@ export async function updateUserById(req, res) {
   if (newData.fullname) {
     newData.fullname = fullNameProcessor(newData.fullname);
   }
-  if (newData.carrera) {
-    newData.carrera = processCarrera(newData.carrera);  
-  }
   if (newData.role) {
     newData.role = processRole(newData.role);
   }
@@ -83,7 +80,7 @@ export async function updateUserById(req, res) {
   if (validationResult.error) {
     return res.status(400).json(getControllerResult_NEW(robustErrorMessage(validationResult.error.message, "Datos inválidos")));
   }  
-  const editedUser = await updateUserByIdFromService(id, newData, req.user.role || req.user.rol, req.user.carrera);
+  const editedUser = await updateUserByIdFromService(id, newData, req.user.role || req.user.rol, req.user.id_carrera);
   if (editedUser.error) {
     return res.status(500).json(getControllerResult_NEW("Error interno del servidor", editedUser));
   }
@@ -146,10 +143,11 @@ export async function getProfile(req, res) {
 }
 
 export async function registerPrivate(req, res) {
+  console.log(req.body);
   if (!req.body) {
     return res.status(400).json(getControllerResult_NEW("No se ha proporcionado ningún dato", null));
   }
-  req.body.carrera = processCarrera(req.body.carrera);
+  // req.body.carrera = processCarrera(req.body.carrera);
   req.body.fullname = fullNameProcessor(req.body.fullname);
   req.body.role = processRole(req.body.role);
 
@@ -260,5 +258,15 @@ export const getAllStudentNames = async (req, res) => {
     return res.status(200).json({lista: names});
   } catch (error) {
     return res.status(200).json({lista: BASE_CASE});
+  }
+}
+
+export const getAllStudentsByCareer = async (req, res) => {
+  const BASE_CASE = [];
+  try {
+    const users = await RAW_getAllStudentsByCareer(req.user.id_carrera);
+    return res.status(200).json({users: users});
+  } catch (error) {
+    return res.status(500).json({users: BASE_CASE});
   }
 }

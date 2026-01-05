@@ -2,6 +2,7 @@
 
 import { EntitySchema } from "typeorm";
 import { USER_ID_TYPE } from "../constants/entity.constants.js";
+import { carreraEntity} from "./carrera.entity.js"
 
 export const UserEntity = new EntitySchema({
     name: "User",
@@ -51,15 +52,24 @@ export const UserEntity = new EntitySchema({
             default: () => "CURRENT_TIMESTAMP",
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
-        carrera: {
-            type: String,
-            nullable: true,
-        },
         creditos: {
             type: Number,
             default: 0
-        }
+        },       
+        id_carrera: {
+            primary:false,
+            type: "integer",
+            nullable: true,
+        },
     },
+    relations:{
+        carrera:{
+            type:"many-to-one",
+            target: carreraEntity,
+            joinColumn:{name:"id_carrera"},
+            inverseSide: "users"
+        }
+    }
 });
 
 export default UserEntity;

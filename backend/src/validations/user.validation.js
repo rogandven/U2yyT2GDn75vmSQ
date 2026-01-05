@@ -7,7 +7,7 @@ import { roleValidationFunction } from "./modules/role.validation.js";
 import { rutValidationFunction } from "./modules/rut.validation.js";
 import { MAX_FULLNAME, MIN_FULLNAME, GENERATION_REGEX, FULLNAME_REGEX, MIN_CREDITOS, MAX_CREDITOS } from "../constants/user.constants.js";
 import { MIN_DATE_LENGTH, MAX_DATE_LENGTH } from "../constants/user.constants.js";
-import { careerValidationFunction } from "./modules/carrera.validation.js";
+import { careerValidationFunction } from "./carrera.validation.js";
 /*
         id
         fullname
@@ -82,7 +82,7 @@ export const integrityValidation = Joi.object({
         "string.empty": "La fecha de actualización no puede ser vacía",
         "string.max": `La fecha debe ser de menos de ${MAX_DATE_LENGTH}`,        
     }),
-    carrera: Joi.custom(careerValidationFunction),
+    id_carrera: Joi.custom(idValidationFunction),
     creditos: Joi.number().integer().min(MIN_CREDITOS).max(MAX_CREDITOS).messages({
         "number.base": "El número de créditos debe ser un número",
         "number.integer": "El número de créditos debe ser un entero",
@@ -102,7 +102,7 @@ export const updateValidation = Joi.object({
     password: Joi.any(),
     role: Joi.any(),
     generation: Joi.any(),
-    carrera: Joi.any(),
+    id_carrera: Joi.any(),
     creditos: Joi.any(),    
 }).min(1).unknown(false).messages({
     "object.min":"Debe proporcionar al menos un campo para actualizar",
@@ -133,7 +133,7 @@ export const createValidation = Joi.object({
     generation: Joi.any().required().messages({
         "any.required":"La generación es obligatoria"
     }),
-    carrera: Joi.any().required().messages({
+    id_carrera: Joi.any().required().messages({
         "any.required":"La carrera es obligatoria"
     }),
     creditos: Joi.any().required().messages({

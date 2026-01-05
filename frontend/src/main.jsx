@@ -14,6 +14,11 @@ import Electivos from '@pages/Electivos'
 import Timetable from '@pages/Timetable'
 import { VALID_ADMIN_ROLES } from "./services/admin.service.js";
 import Inscripciones from '@pages/Inscripciones';
+import Carreras from "@pages/Carreras";
+import Solicitudes from "./pages/Solicitudes.jsx";
+import NuevaSolicitud from "./pages/Nuevasolicitud.jsx";
+import { STUDENT_ROLE } from "./constants/PermissionsConstants.jsx";
+
 
 
 const router = createBrowserRouter([
@@ -34,9 +39,21 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
+      { 
        path: "/inscripciones", 
        element: <Inscripciones/>,
+      },
+       { 
+       path: "/Solicitudes", 
+       element: <Solicitudes/>,
+      },
+       { 
+       path: "/NuevaSolicitud",
+       element: (
+        <ProtectedRoute allowedRoles={[STUDENT_ROLE]}>
+          <NuevaSolicitud/>
+        </ProtectedRoute>
+       ),
       },
       {
         path: "/electivos",
@@ -49,6 +66,14 @@ const router = createBrowserRouter([
       {
         path: "/horarios",
         element: <Timetable />,
+      },
+      {
+        path: "/carreras",
+        element: (
+          <ProtectedRoute allowedRoles={VALID_ADMIN_ROLES}>
+            <Carreras />
+          </ProtectedRoute>
+        ),
       }
     ],
   },

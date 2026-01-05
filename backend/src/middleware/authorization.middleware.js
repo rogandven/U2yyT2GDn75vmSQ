@@ -2,6 +2,7 @@
 import { getTrueMiddlewareResponse } from "./utils/middleware.utils.js";
 import { isAdminFromService } from "../service/authorization.service.js";
 import { CAREER_HEAD_ROLE, VALID_ADMIN_ROLES } from "../constants/user.constants.js";
+import { CAN_VIEW_USERS, CAN_APPROVE_SUBJECTS, CAN_DO_CRUD_ON_CAREERS, CAN_DO_CRUD_ON_INSCRIPTIONS, CAN_DO_CRUD_ON_SUBJECTS, CAN_DO_CRUD_ON_TIMETABLES, CAN_DO_CRUD_ON_USERS, CAN_MODERATE_INSCRIPTIONS, CAN_SIGN_UP_TO_SUBJECTS, CAN_MAKE_REQUESTS, CAN_CRUD_REQUEST } from "../admin/permissions.admin.js";
 
 const isAdminHelper = async (req, res, next, ALLOWED_ROLES) => {
   const email = (req && req.user && req.user.email) || null;
@@ -41,6 +42,51 @@ export function authorizeRoles(rolesPermitidos) {
     return await isAdminHelper(req, res, next, rolesPermitidos);
   };
 }
+
+export async function canCrudCareers(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_CAREERS);
+}
+
+export async function canCrudElectivos(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_SUBJECTS);
+}
+
+export async function canApproveElectivos(req, res, next){
+  return await isAdminHelper(req, res, next, CAN_APPROVE_SUBJECTS);
+}
+
+export async function canCrudHorarios(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_TIMETABLES);
+}
+
+export async function canCrudInscripciones(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_INSCRIPTIONS);
+}
+
+export async function canModerateInscripciones(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_MODERATE_INSCRIPTIONS);
+}
+
+export async function canSignUpToElectivos(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_SIGN_UP_TO_SUBJECTS);
+}
+
+export async function canCrudUsers(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_DO_CRUD_ON_USERS);
+}
+
+export async function canViewUsers(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_VIEW_USERS.concat(CAN_DO_CRUD_ON_USERS));
+}
+
+export async function canMakeRequests(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_MAKE_REQUESTS);
+}
+
+export async function canCrudRequests(req, res, next) {
+  return await isAdminHelper(req, res, next, CAN_CRUD_REQUEST);
+} 
+
 
 /*
 export function authorizeRoles(rolesPermitidos) {

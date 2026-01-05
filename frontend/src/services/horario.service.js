@@ -10,6 +10,16 @@ export const getTimetables = async () => {
     }
 };
 
+/*export async function getHorariosByIdElectivo(id) {
+  try{
+    const response = await axios.get(`/horarios/${id}`);
+    return response.data;
+  }catch(error){
+    console.error('Error al obtener los horarios:', error);
+        throw error;
+  }
+}*/
+
 export const assignTimetable = async (horarioData) => {
     try {
         // console.log(horarioData);
@@ -19,7 +29,9 @@ export const assignTimetable = async (horarioData) => {
         const status = {status: response?.status || 500};
         try {
             Object.assign(response.data, status);
-        } catch (error) {}
+        } catch (error) {
+            
+        }
         return response.data;
     } catch (error) {
         // console.error('Error al asignar el horario:', error);
@@ -55,4 +67,4 @@ export const deleteTimetable = async (id_horario) => {
         // console.error('Error al eliminar el horario:', error);
         throw error;
     }
-};
+}

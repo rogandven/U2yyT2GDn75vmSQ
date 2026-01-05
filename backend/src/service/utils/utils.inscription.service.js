@@ -27,23 +27,32 @@ export const userExists = async (id) => {
 export const isValidDate = async (electivo, req) => {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(electivo.apertura) < 0) {
-        return true;
+        return false;
     }
     if (today.localeCompare(electivo.cierre) > 0) {
         return false;
     }
+<<<<<<< HEAD
     const inscripciones = await countInscripcionesAprobadas(electivo.id);
+=======
+    return true;
+}
+
+export const conditionsToSignUp = async (electivoId) => {
+    const inscripciones = await countInscripciones(electivoId);
+    const electivo = await electivoRepository.findOne({where: {id: id}});
+>>>>>>> MERGE-02-01-2026-2
     if (electivo.cupos >= inscripciones) {
-        return false;
+        return "No hay suficientes cupos";
     }
     if (electivo.creditos_requeridos > req.user.creditos) {
         return false;
     }
     if (String(electivo.semestre_minimo).localeCompare(String(req.user.generacion)) < 0) {
-        return false;
+        return "No pertenece a la generación correspondiente";
     }
     if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
-        return false;
+        return "No tiene los créditos requeridos";
     }
     return true;
 }*/

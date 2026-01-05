@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export async function registerService(datauser) {
     try {
-        const response = await axios.post("/auth/register", {
+        const response = await ("/auth/register", {
             username: datauser.username,
             email: datauser.email,
             rut: datauser.rut,
@@ -44,7 +44,7 @@ export async function loginService(datauser) {
         }
     } catch (error) {
         // console.error("Error en auth.service");
-        console.log(error.response);
+        // console.log(error.response);
         return error.response;
     }
 }

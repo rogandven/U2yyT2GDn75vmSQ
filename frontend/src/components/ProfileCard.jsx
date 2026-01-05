@@ -48,7 +48,7 @@ const ProfileCard = ({ user }) => {
           <p><b>RUT</b>: {String((user && (user.rut)) || "123456789-0").toUpperCase()}</p>
           <p><b>CORREO</b>: {String((user && (user.email)) || "JUANITOPEREZ123@EMAIL.COM").toUpperCase()}</p>
           <p><b>CRÉDITOS</b>: {(String(user.creditos || "0")).toUpperCase()}</p>
-          {Badge("CARRERA", String((user && (user.carrera)) || "IECI").toUpperCase(), "badge-primary")}
+          {Badge("CARRERA", String((user && (user.carrera?.sigla)) || "IECI").toUpperCase(), "badge-primary")}
           {Badge("ROL", String((user && (user.role || user.rol)) || "ESTUDIANTE").toUpperCase().replaceAll("_", " "), "badge-secondary")}
         </div>
       </div>

@@ -5,6 +5,7 @@ import ElectivoEntity from "../entity/electivo.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
 import { EXMAPLE_EMAIL_1, EXMAPLE_EMAIL_2, EXMAPLE_EMAIL_3, EXMAPLE_EMAIL_4, EXMAPLE_EMAIL_5, EXMAPLE_EMAIL_6, EXMAPLE_EMAIL_7 } from "./configEnv.js";
+import carreraEntity from "../entity/carrera.entity.js";
 
 /*
 if (!AppDataSource.isInitialized) {
@@ -27,7 +28,7 @@ export async function createUsers() {
         password: await encryptPassword("roger123"),
         role: "JEFE_DE_CARRERA",
         generation: "2023-1",
-        carrera: "IECI",
+        id_carrera: 1,
         creditos: 0
       },
       {
@@ -38,7 +39,7 @@ export async function createUsers() {
         password: await encryptPassword("seba123"),
         role: "PROFESOR",
         generation: "2023-1",
-        carrera: "IECI",
+        id_carrera: 1,
         creditos: 0
       },
       {
@@ -49,7 +50,7 @@ export async function createUsers() {
         password: await encryptPassword("carlos123"),
         role: "ESTUDIANTE",
         generation: "2023-1",
-        carrera: "IECI",
+        id_carrera: 1,
         creditos: 300
       },
       {
@@ -60,7 +61,7 @@ export async function createUsers() {
         password: await encryptPassword("rodri123"),
         role: "JEFE_DE_CARRERA",
         generation: "2023-1",
-        carrera: "ICINF",
+        id_carrera: 2,
         creditos: 300
       },
       {
@@ -71,7 +72,7 @@ export async function createUsers() {
         password: await encryptPassword("fermin123"),
         role: "PROFESOR",
         generation: "2023-1",
-        carrera: "ICINF",
+        id_carrera: 2,
         creditos: 0
       },
       {
@@ -82,7 +83,7 @@ export async function createUsers() {
         password: await encryptPassword("andres123"),
         role: "ESTUDIANTE",
         generation: "2023-1",
-        carrera: "ICINF",
+        id_carrera: 2,
         creditos: 0
       },
       {
@@ -93,7 +94,7 @@ export async function createUsers() {
         password: await encryptPassword("renegas123"),
         role: "ADMINISTRADOR",
         generation: "2023-1",
-        carrera: "ICINF",
+        id_carrera: 2,
         creditos: 0
       },                
     ];
@@ -106,6 +107,39 @@ export async function createUsers() {
     }
   } catch (error) {
     console.error("Error al crear usuarios base: ", error);
+    process.exit(1);
+  }
+}
+
+export async function createCarreras() {
+  try {
+    const carreraRepository = AppDataSource.getRepository(carreraEntity);
+    const count = await carreraRepository.count();
+    if (count > 0) return;
+
+    const carreras = [
+      {
+        "nombre": "INGENIERÍA DE EJECUCIÓN EN COMPUTACIÓN E INFORMÁTICA",
+        "sigla": "IECI",
+      },
+      {
+        "nombre": "INGENIERÍA CIVIL INFORMÁTICA",
+        "sigla": "ICINF",
+      },
+      {
+        "nombre": "INGENIERÍA DE EJECUCIÓN EN ELECTRÓNICA",
+        "sigla": "IEEE",
+      },             
+    ];
+
+    console.log("Creando carreras base...");
+
+    for (const carrera of carreras) {
+      await carreraRepository.save(carreraRepository.create(carrera));
+      console.log(`Carrera '${carrera.sigla}' creada exitosamente.`);
+    }
+  } catch (error) {
+    console.error("Error al crear carreras base: ", error);
     process.exit(1);
   }
 }

@@ -19,12 +19,12 @@ const processElectivoArray = async (resultados) => {
         try {
           current = await RAW_getUserById(resultados[i].id_profesor);
           nombre_profesor = String((current && current.fullname) || "JUANITO PÉREZ").toUpperCase();
-          current = await countInscripcionesAprobadas(resultados.id);
+          current = await countInscripcionesAprobadas(resultados[i].id);
           // console.log(current);
           inscritos = Number(current) || 0;
           Object.assign(resultados[i], {nombre_profesor: nombre_profesor, inscritos: inscritos});
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       }
     }
@@ -51,8 +51,7 @@ export async function getElectivosFromService(data) {
         if (data.cierre) {
             query = query.andWhere("DATE(electivo.cierre) = :cierre", { cierre });
         }
-        query = query.orderBy("electivo.id", "ASC");
-
+        query = query.addOrderBy("electivo.nombre", "ASC");
         let resultados = await query.getMany();
 
         if (!Array.isArray(resultados)) {
@@ -69,7 +68,7 @@ export async function getElectivosFromService(data) {
 
 export async function getElectivosSinAprobarFromService() {
   try {
-      let resultados = await electivoRepo.find();
+      let resultados = await electivoRepo.find({relations: {usuarios: true}});
 
       if (!Array.isArray(resultados)) {
           throw Error("No se pudieron parsear los electivos como arreglo");
@@ -108,7 +107,7 @@ export async function createElectivoFromService(data) {
 
 export async function getElectivoByIdFromService(id_instancia) {
 try {
-    const electivos = await electivoRepo.findOne({ where: { id: id_instancia } });
+    const electivos = await electivoRepo.findOne({ where: { id: id_instancia }, relations: {usuarios: true} });
 
     if (!electivos) {
         return getServiceResult(false, null, "Electivo no encontrado", 0);
@@ -121,16 +120,16 @@ try {
   }
 }
 
-export async function updateElectivoFromService(id_instancia, data, carrera, user_role, careerString, electivo) {
-  if (!careerString) {
-    throw new Error("Función mal llamada");
-  }
-  
+export async function updateElectivoFromService(id_instancia, data, electivo, userId) {
   try {
     Object.assign(electivo, data);
 
+    if (electivo.usuariosId !== userId) {
+      return getServiceResult(false, null, "No tiene permiso para actualizar este electivo.", 0);
+    }
+
     if (String(electivo.apertura).localeCompare(String(electivo.cierre)) > 0) {
-      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre");
+      return getServiceResult(false, null, "La fecha de apertura debe ser menor a la fecha de cierre", 0);
     }
 
     delete electivo.id;
@@ -144,31 +143,23 @@ export async function updateElectivoFromService(id_instancia, data, carrera, use
   }
 }
 
-export async function changeElectivoEstadoFromService(id_instancia, nuevo_estado, user_career, user_role) {
+export async function changeElectivoEstadoFromService(newData, electivo) {
   try {
-    const electivo = await electivoRepo.findOneBy({ id: id_instancia });
+    Object.assign(electivo, newData);
+    const id = electivo.id;
+    delete electivo.id;
 
-    if (!electivo) {
-      return getServiceResult(false, null, "Electivo no encontrado", 0);
+    console.log(electivo);
+
+    const result = await electivoRepo.update({id: id}, electivo);
+    console.log(result.affected);
+    if (result.affected !== 1) {
+      throw new Error(`Se actualizaron ${result.affected} electivos`);
     }
-    if (electivo.estado === nuevo_estado) {
-      return getServiceResult(false, null, `Electivo ya ${nuevo_estado}`, 0);
-    }
-    const array = breakDownCarreraArray(electivo.carreras);
-    if ((user_role !== ADMIN_ROLE) && (!(array.includes(String(user_career))))) {
-      return getServiceResult(false, null, "No pertenece a la carrera del electivo", 0);
-    }
-
-    Object.assign(electivo, { estado: nuevo_estado });
-    await electivoRepo.save(electivo);
-
-    const creador = (await RAW_getUserById(electivo.id_profesor))?.email;
-    sendMail(creador, "Rechazo", `Su electivo ${String(electivo.nombre).toUpperCase()} ha sido rechazado.`);
-
-    return getServiceResult(false, electivo, `Electivo ${nuevo_estado} correctamente`, 1);
+    return getServiceResult(false, electivo, `Electivo ${newData.estado} correctamente`, 1);
   } catch (error) {
-    console.error(`Error al ${nuevo_estado} electivo:`, error);
-    return getServiceResult(true, null, error.message ? error.message : `Error al ${nuevo_estado} electivo`, 0);
+    console.error("Error al cambiar estado del electivo:", error);
+    return getServiceResult(true, null, error.message ? error.message : "Error al cambiar estado del electivo", 0);
   }
 }
 
@@ -179,17 +170,16 @@ export async function deleteElectivoFromService(id_instancia, user_id, user_role
     if (!electivo) {
         return getServiceResult(true, null, "Electivo no encontrado", 0);
     }
-
-    if ((user_role !== ADMIN_ROLE) && (!(String(electivo.carreras).split(",").includes(String(user_career))))) {
-      return getServiceResult(true, null, "No pertenece a la carrera del electivo", 0);
+    if ((user_role !== ADMIN_ROLE) && (user_id !== electivo.usuariosId)) {
+      return getServiceResult(true, null, "No puede eliminar un electivo que no es suyo", 0);
     }
 
-    if ((electivo.id_profesor !== user_id) && user_role !== CAREER_HEAD_ROLE) {
+    if ((electivo.usuariosId !== user_id) && user_role !== CAREER_HEAD_ROLE) {
       return getServiceResult(true, null, "No tiene permiso para borrar este electivo", 0);
     }
 
-    await electivoRepo.remove(electivo);
-    return getServiceResult(false, null, "Electivo eliminado correctamente", 0);
+    const result = await electivoRepo.remove(electivo);
+    return getServiceResult(false, result, "Electivo eliminado correctamente", 1);
   } catch (error) {
     console.error("Error al eliminar electivo:", error);
     return getServiceResult(true, null, error.message ? error.message : "Error al eliminar electivo", 0);
@@ -224,12 +214,40 @@ export async function RAW_getElectivoById(id) {
 export async function RAW_getAllApprovedElectivos() {
   const BASE_CASE = [];
   try {
-    const electivos = await electivoRepo.find();
+    const electivos = await electivoRepo.find({where: {estado: ESTADOS_VALIDOS.APROBADO}});
     if (!electivos) {
       return BASE_CASE;
     }
     return electivos;
   } catch (error) {
+    return BASE_CASE;
+  }
+}
+
+export async function RAW_getElectivosProfesor(req) {
+  const BASE_CASE = [];
+  try {
+    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id}});
+    if (!electivos || !Array.isArray(electivos)) {
+      return BASE_CASE;
+    }
+    return electivos;
+  } catch (error) {
+    console.error(error);
+    return BASE_CASE;
+  }
+}
+
+export async function RAW_getElectivosAprobadosProfesor(req) {
+  const BASE_CASE = [];
+  try {
+    const electivos = await electivoRepo.find({where: {usuariosId: req.user.id, estado: ESTADOS_VALIDOS.APROBADO}});
+    if (!electivos || !Array.isArray(electivos)) {
+      return BASE_CASE;
+    }
+    return electivos;
+  } catch (error) {
+    console.error(error);
     return BASE_CASE;
   }
 }

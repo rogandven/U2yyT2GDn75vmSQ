@@ -16,6 +16,15 @@ import { AWAITING } from "../constants/inscripcion.constants.js";
 const inscripcionRepo = AppDataSource.getRepository(InscripcionEntity);
 // const userRepository = AppDataSource.getRepository(UserEntity);
 // const electivoRepo = AppDataSource.getRepository(ElectivoEntity);
+export async function inscribirAlumnoElectivo(id_estudiante, id_electivo) {
+  const data = {
+    id_usuario: id_estudiante,
+    id_electivo: id_electivo,
+    estado: AWAITING
+  };
+
+  return await createInscripcion(data);
+}
 
 export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, user_PARAM) => {
   let user = null;
@@ -36,9 +45,10 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
   if (user.role !== STUDENT_ROLE){
     return `El usuario ${user.fullname || user.username || user.id} no es un estudiante.`;
   }
-  if (!(String(electivo.carreras).split(",").includes(user.carrera))) {
-    return `El usuario ${user.fullname || user.username || user.id} no pertenece a ninguna de las carreras requeridas`;
+  if (req.user.id_carrera !== electivo.carreraIdCarrera) {
+    return `El usuario ${user.fullname || user.username || user.id} no pertenece a la carrera`;
   }
+/*
   if (addtionalChecks) {
     const today = String(parseUnixDate_ALT(Date.now().toString()));
     if (today.localeCompare(electivo.cierre) > 0) {
@@ -55,9 +65,32 @@ export const isInvalidInscripcion = async (inscripcion, addtionalChecks, req, us
         return "No posee los suficientes créditos para inscribir este electivo";
       }
     }
+  }*/
+  
+
+ //tree: Validaciones de fecha en formato Date
+
+  if (addtionalChecks) {
+  const today = new Date();
+  const apertura = new Date(electivo.apertura);
+  const cierre = new Date(electivo.cierre);
+
+  if (today < apertura) {
+    return "Las inscripciones aún no se encuentran abiertas para este electivo";
   }
-  return null;
+  if (today > cierre) {
+    return "Ya se cerraron las inscripciones para este electivo";
+  }
+  if (Number(electivo.creditos_requeridos) > Number(req.user.creditos)) {
+    return "No posee los suficientes créditos para inscribir este electivo";
+  }
+  if (Number(req.user.generacion) < Number(electivo.semestre_minimo)) {
+    return "No pertenece a la generación establecida";
+  }
 }
+return null;
+}
+
 
 export const shallDisplayWarning = async (usuario_id, electivo_id) => {
   const electivo = await RAW_getElectivoById(electivo_id);
@@ -88,7 +121,7 @@ const cleanUpInscripcionArray = async (array, req) => {
   let current = null;
   for (let i = 0; i < array.length; i++) {
     current = array[i];
-    if (await isInvalidInscripcion(current, false, req)) {
+    if (await isInvalidInscripcion(current, false, req, req.user)) {
       array[i] = undefined;
     }
   }
@@ -111,7 +144,7 @@ export async function getInscripciones(req) {
     if (!inscripciones) {
       return formatMessage(BASE_CASE, dynamicMessage(BASE_CASE));
     }
-    inscripciones = await cleanUpInscripcionArray(inscripciones, req);
+    // inscripciones = await cleanUpInscripcionArray(inscripciones, req);
     return formatMessage(inscripciones, dynamicMessage(inscripciones));
   } catch (error) {
     console.error(error);
@@ -137,11 +170,9 @@ export async function createInscripcion(data) {
   const dynamicMessage = (inscripcion) => {
     return inscripcion ? "¡Inscripcion creada!" : "No se pudo crear la inscripción";
   }
-
   try {
     let nuevaInscripcion = inscripcionRepo.create(data);
     nuevaInscripcion = await inscripcionRepo.save(nuevaInscripcion);
-    // console.log(JSON.stringify(nuevaInscripcion));
     return formatMessage(nuevaInscripcion, dynamicMessage(nuevaInscripcion));
   } catch (error) {
     console.error(error);
@@ -214,3 +245,16 @@ export async function deleteInscripcion(inscripcion) {
 export async function inscripcionAlreadyExists(id_inscripcion, id_usuario, id_electivo) {
   return await IAE_helper(id_inscripcion, id_usuario, id_electivo);
 }
+
+/*
+export async function getInscripcionesProfesor_NOWARNING(req) {
+  const BASE_CASE = [];
+  
+  try {
+    const 
+    const inscripciones = await inscripcionRepo.find({where: {id_electivo}}) 
+  } catch (error) {
+
+  }
+  
+} */

@@ -3,7 +3,7 @@
 import { APPROVED, AWAITING, MAX_INSCRIPCIONES, REJECTED } from "../constants/inscripcion.constants.js";
 import { createInscripcion, deleteInscripcion, getInscripcion, getInscripciones, inscripcionAlreadyExists, isInvalidInscripcion, updateInscripcion } from "../service/inscripcion.service.js";
 import { userExists as _userExists, countInscripcionesByUser } from "../service/utils/utils.inscription.service.js";
-import { createValidation, integrityValidation, updateValidation, warningValidation } from "../validations/inscripcion.validation.js";
+import { createValidation, integrityValidation, updateValidation, warningValidation, rejectInscripcionValidation } from "../validations/inscripcion.validation.js";
 import { idValidation } from "../validations/modules/id.validation.js";
 import { validationFunctionHelper } from "./utils/utils.controller.js";
 import { getElectivoName } from "./electivo.controller.js";
@@ -239,12 +239,14 @@ export const private_deleteInscripcion = async (req, res) => {
     return deleteInscripcionHelper(req, res, false);
 }
 
-const changeInscriptionStatusHelper = async (req, res, status) => {
+const changeInscriptionStatusHelper = async (req, res, status, motivo = null) => {
     try {
-        if (req.body) {
-            return res.status(400).json(getGenericResult(null, "No se pueden pasar parámetros a este endpoint"));
+       
+        if (motivo) {
+            req.body = {estado: status, motivo_rechazo: motivo};
+        } else {
+            req.body = {estado: status};
         }
-        req.body = {estado: status};
         return private_updateInscripcion(req, res);
     } catch (error) {
         console.error(error);
@@ -253,11 +255,32 @@ const changeInscriptionStatusHelper = async (req, res, status) => {
 } 
 
 export const private_approveInscripcion = async (req, res) => {
-    return await changeInscriptionStatusHelper(req, res, APPROVED);
+    return await changeInscriptionStatusHelper(req, res, APPROVED, null);
 }
 
 export const private_rejectInscripcion = async (req, res) => {
-    return await changeInscriptionStatusHelper(req, res, REJECTED);
+    try {
+        console.log(req?.body || {});
+        if (!req?.body) {
+            throw Error("Función mal llamada");
+        }
+        const {error} = rejectInscripcionValidation.validate(req.body);
+        
+        if(error){
+            return res.status(400).json({
+                message: "Error de validación",
+                errors: error.details.map(e => e.message)
+            });
+        }
+        
+
+        req.body.estado = REJECTED;
+        
+        return await changeInscriptionStatusHelper(req, res, REJECTED, req.body?.motivo_rechazo);
+    } catch(error) {
+        console.error("Error en private_rejectInscripcion:", error);
+        return res.status(500).json({ message: "Error interno del servidor" });
+    }
 }
 
 export const public_getInscripcion = async (req, res) => {

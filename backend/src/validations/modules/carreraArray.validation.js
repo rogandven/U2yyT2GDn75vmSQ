@@ -1,5 +1,5 @@
 import { SEPARATOR } from "../../constants/career.constants.js";
-import { joiCareerValidation } from "./carrera.validation.js";
+import { joiCareerValidation } from "../carrera.validation.js";
 
 const isCareerArrayValid = (string) => {
     if (!string || (typeof(string) !== "string")) {

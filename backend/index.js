@@ -5,7 +5,7 @@ import morgan from "morgan";
 import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
-import { createElectivos, createUsers } from "./src/config/initDb.js";
+import { createElectivos, createUsers, createCarreras } from "./src/config/initDb.js";
 
 async function setupServer() {
   // Crea la instancia de Express
@@ -41,6 +41,7 @@ async function setupAPI() {
     // Conecta la base de datos
     await connectDB();
     // Crea los usuarios iniciales
+    await createCarreras();
     await createUsers();
     // await createElectivos();
     // Configura el servidor

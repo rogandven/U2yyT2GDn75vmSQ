@@ -4,6 +4,8 @@
 import { EntitySchema } from "typeorm";
 import { obtenerEstadosValidosComoArray } from "../helpers/electivo.helper.js";
 import { arrayDeStringAArrayDeSQL } from "../helpers/sql.helpers.js";
+import { UserEntity } from "./user.entity.js";
+import carreraEntity from "./carrera.entity.js";
 /* export enum EstadoElectivo{
     PENDIENTE = 'pendiente'
 }*/ 
@@ -224,18 +226,38 @@ export const ElectivoEntity = new EntitySchema({
       type: "varchar",
       length: 100,
     },
-    id_profesor: {
+    usuariosId: {
       type: "int",
       nullable: false,
     },
-    carreras: {
-      type: String,
+    carreraIdCarrera: {
+      type: "int",
       nullable: false,
     },
+    plazo_renovacion: {
+      type: "varchar",
+      nullable: true,
+    },
+    motivo: {
+      type: String,
+      nullable: true,  
+    },
   },
-  checks: [
-      { expression: `"estado" IN ${arrayDeStringAArrayDeSQL(ARRAY_ESTADOS_VALIDOS)}` },
-  ],
+  relations:{
+    usuarios:{
+      type:"many-to-one",
+      target:UserEntity,
+      JoinColumn:{name:"id_profesor"},
+      onDelete:"CASCADE", 
+    },
+    carrera:{
+      type:"many-to-one",
+      target: carreraEntity,
+      joinColumn:{name:"carreraIdCarrera"},
+      onDelete:"CASCADE",
+      inverseSide: 'electivo',
+    }
+  }
 });
 
 export default ElectivoEntity;
