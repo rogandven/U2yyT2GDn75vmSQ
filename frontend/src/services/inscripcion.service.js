@@ -83,11 +83,11 @@ const SDWrouteHelper = async (URL, body) => {
     response = await axios.get(URL, body, { withCredentials: true });
     return Boolean(response?.result) || false;
   } catch (error) {
-    return true;
+    console.error(error);
   }
 }
 
-const routeHelper_2 = async (URL, body, axiosFunction) => {
+/*const routeHelper_2 = async (URL, body, axiosFunction) => {
   try {
     let response = null;
     if (!body) {
@@ -102,7 +102,7 @@ const routeHelper_2 = async (URL, body, axiosFunction) => {
     // console.error(error);
     return {status: 500, data: error.response?.data || undefined, message: error.response?.message};
   }
-}
+}*/
 
 export async function private_getInscripciones_2() {
   return await routeHelper("/inscripciones/admin/", undefined, axios.get);
@@ -170,6 +170,6 @@ const SDWrouteHelper_2 = async (URL, body) => {
     response = await axios.get(URL, body, { withCredentials: true });
     return Boolean(response?.result) || false;
   } catch (error) {
-    return true;
+    console.error(error);
   }
 }
