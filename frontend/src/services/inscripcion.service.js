@@ -109,7 +109,7 @@ export async function private_getInscripciones_2() {
 }
 
 export async function private_getInscripcionesByUser_2(id) {
-  return await routeHelper(`/inscripciones/admin/user/${id}`, undefined, axios.get);
+  return await routeHelper(`/inscripciones/admin/${id}`, undefined, axios.get);
 }
 
 export async function private_getInscripcion_2(id) {
