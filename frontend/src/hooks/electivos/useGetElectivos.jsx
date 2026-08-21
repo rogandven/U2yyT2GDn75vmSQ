@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getElectivos } from '@services/electivo.service.js';
-import { TEACHER_ROLE } from '../../../../backend/src/constants/user.constants';
+import { TEACHER_ROLE } from '../../constants/UserConstants.jsx';
 import { getElectivosProfesor } from '../../services/electivo.service';
 import { getUserRole } from '../../services/admin.service';
 

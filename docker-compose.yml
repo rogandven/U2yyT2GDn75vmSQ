@@ -1,5 +1,7 @@
 services:
   backend:
+    depends_on:
+      - database
     build: ./backend
     ports:
       - "${PORT}:${PORT}"
@@ -27,6 +29,19 @@ services:
       - EXAMPLE_EMAIL_5=${EXAMPLE_EMAIL_5}
       - EXAMPLE_EMAIL_6=${EXAMPLE_EMAIL_6}
       - EXAMPLE_EMAIL_7=${EXAMPLE_EMAIL_7}
+  frontend:
+    depends_on:
+      - backend  
+    build: ./frontend
+    ports:
+      - "443:80"
+    restart: on-failure
+    networks:
+      app:
+        ipv4_address: 1.0.0.3
+    environment:
+      - API_URL=http://1.0.0.1
+      - API_PORT=443
   database:
     image: postgres:16.15-trixie
     environment:

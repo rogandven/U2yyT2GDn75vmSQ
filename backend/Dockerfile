@@ -1,15 +1,13 @@
 FROM debian:bookworm
+
 USER root
 RUN useradd -m -s /bin/bash roger
-
-ADD . /home/roger/app
-
 RUN apt update && apt upgrade -y
 RUN apt install nodejs npm -y
-RUN chmod 745 /home/roger/*
 
+ADD . /home/roger/app
 WORKDIR "/home/roger/app"
-
+RUN chown roger /home/roger/*
 RUN npm i
 
 RUN echo "" >  ./src/config/.env
@@ -32,7 +30,5 @@ RUN echo "EXMAPLE_EMAIL_4=${EXAMPLE_EMAIL_4}" >> ./src/config/.env
 RUN echo "EXMAPLE_EMAIL_5=${EXAMPLE_EMAIL_5}" >> ./src/config/.env
 RUN echo "EXMAPLE_EMAIL_6=${EXAMPLE_EMAIL_6}" >> ./src/config/.env
 RUN echo "EXMAPLE_EMAIL_7=${EXAMPLE_EMAIL_7}" >> ./src/config/.env
-
-USER roger
 
 ENTRYPOINT node /home/roger/app/index.js
