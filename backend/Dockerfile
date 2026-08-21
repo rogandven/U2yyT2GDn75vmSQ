@@ -13,25 +13,25 @@ WORKDIR "/home/roger/app"
 RUN npm i
 
 RUN echo "" >  ./src/config/.env
-RUN echo "PORT = 80" >> ./src/config/.env
-RUN echo "HOST = localhost" >> ./src/config/.env
-RUN echo "DB_USERNAME = dbadmin" >> ./src/config/.env
-RUN echo "PASSWORD = super_secure_password" >> ./src/config/.env
-RUN echo "DATABASE = postgres" >> ./src/config/.env
-RUN echo "DB_PORT = 5432" >> ./src/config/.env
-RUN echo "DB_HOST = 127.0.0.1" >> ./src/config/.env
-RUN echo "SESSION_SECRET = somethingsomething" >> ./src/config/.env
-RUN echo "EMAIL = null" >> ./src/config/.env
-RUN echo "EMAIL_PROVIDER = gmail" >> ./src/config/.env
-RUN echo "EMAIL_PASSWORD = null" >> ./src/config/.env
-RUN echo "JWT_SECRET = minecraft" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_1 = rogerroger1@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_2 = rogerroger2@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_3 = rogerroger3@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_4 = rogerroger4@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_5 = rogerroger5@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_6 = rogerroger6@gmail.com" >> ./src/config/.env
-RUN echo "EXMAPLE_EMAIL_7 = rogerroger7@gmail.com" >> ./src/config/.env
+RUN echo "PORT=${PORT}" >> ./src/config/.env
+RUN echo "HOST=${HOST}" >> ./src/config/.env
+RUN echo "DB_USERNAME=${DB_USERNAME}" >> ./src/config/.env
+RUN echo "PASSWORD=${PASSWORD}" >> ./src/config/.env
+RUN echo "DATABASE=${DATABASE}" >> ./src/config/.env
+RUN echo "DB_PORT=${DB_PORT}" >> ./src/config/.env
+RUN echo "DB_HOST=${DB_HOST}" >> ./src/config/.env
+RUN echo "SESSION_SECRET=${SESSION_SECRET}" >> ./src/config/.env
+RUN echo "EMAIL=${EMAIL}" >> ./src/config/.env
+RUN echo "EMAIL_PROVIDER=${EMAIL_PROVIDER}" >> ./src/config/.env
+RUN echo "EMAIL_PASSWORD=${EMAIL_PASSWORD}" >> ./src/config/.env
+RUN echo "JWT_SECRET=${JWT_SECRET}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_1=${EXAMPLE_EMAIL_1}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_2=${EXAMPLE_EMAIL_2}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_3=${EXAMPLE_EMAIL_3}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_4=${EXAMPLE_EMAIL_4}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_5=${EXAMPLE_EMAIL_5}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_6=${EXAMPLE_EMAIL_6}" >> ./src/config/.env
+RUN echo "EXMAPLE_EMAIL_7=${EXAMPLE_EMAIL_7}" >> ./src/config/.env
 
 USER roger
 

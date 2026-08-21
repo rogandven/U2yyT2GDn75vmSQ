@@ -1,6 +1,6 @@
 "use strict";
 import { DataSource } from "typeorm"
-import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD, DB_HOST, PORT } from "./configEnv.js";
+import { DATABASE, DB_USERNAME, DB_PORT, HOST, PASSWORD, DB_HOST, PORT, EMAIL } from "./configEnv.js";
 // import ClaseEntity from "../entity/clase.entity.js";
 import ElectivoEntity from "../entity/electivo.entity.js";
 import InscripcionEntity from '../entity/inscripcion.entity.js';

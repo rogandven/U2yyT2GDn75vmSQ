@@ -1,0 +1,49 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "${PORT}:${PORT}"
+    restart: on-failure
+    networks:
+      app:
+        ipv4_address: 1.0.0.1
+    environment:
+      - PORT=${PORT}
+      - HOST=1.0.0.1
+      - DB_USERNAME=postgres
+      - PASSWORD=${PASSWORD}
+      - DATABASE=postgres
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=1.0.0.2
+      - SESSION_SECRET=${SESSION_SECRET}
+      - EMAIL=${EMAIL}
+      - EMAIL_PROVIDER=${EMAIL_PROVIDER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - EXAMPLE_EMAIL_1=${EXAMPLE_EMAIL_1}
+      - EXAMPLE_EMAIL_2=${EXAMPLE_EMAIL_2}
+      - EXAMPLE_EMAIL_3=${EXAMPLE_EMAIL_3}
+      - EXAMPLE_EMAIL_4=${EXAMPLE_EMAIL_4}
+      - EXAMPLE_EMAIL_5=${EXAMPLE_EMAIL_5}
+      - EXAMPLE_EMAIL_6=${EXAMPLE_EMAIL_6}
+      - EXAMPLE_EMAIL_7=${EXAMPLE_EMAIL_7}
+  database:
+    image: postgres:16.15-trixie
+    environment:
+      - POSTGRES_PASSWORD=${PASSWORD}
+    restart: on-failure
+    volumes:
+      - type: volume
+        target: /app/data
+    networks:
+      app:
+        ipv4_address: 1.0.0.2
+    ports:
+      - "${DB_PORT}:5432"
+networks:
+  app:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 1.0.0.0/29
+          gateway: 1.0.0.4
